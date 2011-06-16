@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/kr.ac.kaist.se.aom/src"
+    modelPluginID="kr.ac.kaist.se.aom" modelName="Aom" booleanFlagsField="eFlags"
+    booleanFlagsReservedBits="8" importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0"
+    copyrightFields="false">
+  <foreignModel>aom.ecore</foreignModel>
+  <genPackages prefix="Aom" basePackage="kr.ac.kaist.se" resource="XMI" disposableProviderFactory="true"
+      contentTypeIdentifier="" ecorePackage="aom.ecore#/">
+    <genClasses ecoreClass="aom.ecore#//AbstractObjectModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//AbstractObjectModel/classes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//AbstractObjectModel/externalTypes"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="aom.ecore#//MeasurableElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference aom.ecore#//MeasurableElement/measuredDataSet"/>
+    </genClasses>
+    <genClasses ecoreClass="aom.ecore#//StringToObject">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//StringToObject/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//StringToObject/value"/>
+    </genClasses>
+    <nestedGenPackages prefix="Structure" basePackage="kr.ac.kaist.se.aom" resource="XMI"
+        disposableProviderFactory="true" ecorePackage="aom.ecore#//structure">
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="aom.ecore#//structure/AOMModifier">
+        <genEnumLiterals ecoreEnumLiteral="aom.ecore#//structure/AOMModifier/public"/>
+        <genEnumLiterals ecoreEnumLiteral="aom.ecore#//structure/AOMModifier/private"/>
+        <genEnumLiterals ecoreEnumLiteral="aom.ecore#//structure/AOMModifier/protected"/>
+        <genEnumLiterals ecoreEnumLiteral="aom.ecore#//structure/AOMModifier/package"/>
+      </genEnums>
+      <genClasses image="false" ecoreClass="aom.ecore#//structure/AOMElement"/>
+      <genClasses image="false" ecoreClass="aom.ecore#//structure/AOMNamedElement">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMNamedElement/name"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="aom.ecore#//structure/AOMTypedElement">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//structure/AOMTypedElement/type"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="aom.ecore#//structure/AOMType">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//structure/AOMType/referer"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMType/fqdn"/>
+      </genClasses>
+      <genClasses ecoreClass="aom.ecore#//structure/AOMClass">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMClass/fields"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMClass/methods"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//structure/AOMClass/ancestor"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//structure/AOMClass/descendant"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMClass/abstract"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMClass/interface"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMClass/innerClass"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMClass/anonymousClass"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMClass/modifier"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMClass/remainingLOC"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMClass/LOC"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMClass/static"/>
+      </genClasses>
+      <genClasses ecoreClass="aom.ecore#//structure/AOMField">
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMField/owner"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//structure/AOMField/referer"/>
+      </genClasses>
+      <genClasses ecoreClass="aom.ecore#//structure/AOMMethod">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMMethod/parameters"/>
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMMethod/owner"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMMethod/signature"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//structure/AOMMethod/staticReferer"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//structure/AOMMethod/overriding"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//structure/AOMMethod/overridedBy"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMMethod/ownedScope"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//structure/AOMMethod/dynamicReferer"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMMethod/methodId"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMMethod/startLine"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMMethod/endLine"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMMethod/abstract"/>
+        <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMMethod/LOC"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMMethod/static"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMMethod/constructor"/>
+      </genClasses>
+      <genClasses ecoreClass="aom.ecore#//structure/AOMScope">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/variables"/>
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/owner"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/staticMethodCalls"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/referringFields"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/dynamicMethodCalls"/>
+      </genClasses>
+      <genClasses ecoreClass="aom.ecore#//structure/AOMParameter">
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMParameter/owner"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="aom.ecore#//structure/AOMVariableDef"/>
+      <genClasses ecoreClass="aom.ecore#//structure/AOMLocalVariable">
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMLocalVariable/owner"/>
+      </genClasses>
+      <genClasses ecoreClass="aom.ecore#//structure/AOMExternalType"/>
+    </nestedGenPackages>
+    <nestedGenPackages prefix="Staticmodel" basePackage="kr.ac.kaist.se.aom" resource="XMI"
+        disposableProviderFactory="true" ecorePackage="aom.ecore#//staticmodel">
+      <genClasses ecoreClass="aom.ecore#//staticmodel/StaticMethodCall">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//staticmodel/StaticMethodCall/caller"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//staticmodel/StaticMethodCall/callee"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//staticmodel/StaticMethodCall/callingType"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//staticmodel/StaticMethodCall/lineNumber"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//staticmodel/StaticMethodCall/columnNumber"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//staticmodel/StaticMethodCall/fileName"/>
+      </genClasses>
+      <genClasses ecoreClass="aom.ecore#//staticmodel/StaticDependency"/>
+    </nestedGenPackages>
+    <nestedGenPackages prefix="Dynamicmodel" basePackage="kr.ac.kaist.se.aom" resource="XMI"
+        disposableProviderFactory="true" ecorePackage="aom.ecore#//dynamicmodel">
+      <genClasses image="false" ecoreClass="aom.ecore#//dynamicmodel/DynamicDependency"/>
+      <genClasses ecoreClass="aom.ecore#//dynamicmodel/DynamicMethodCall">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//dynamicmodel/DynamicMethodCall/caller"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//dynamicmodel/DynamicMethodCall/callee"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//dynamicmodel/DynamicMethodCall/previousCall"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//dynamicmodel/DynamicMethodCall/nextCalls"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//dynamicmodel/DynamicMethodCall/static"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//dynamicmodel/DynamicMethodCall/tid"/>
+      </genClasses>
+    </nestedGenPackages>
+  </genPackages>
+</genmodel:GenModel>

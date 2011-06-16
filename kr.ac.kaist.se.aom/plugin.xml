@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id: plugin.xml,v 1.3 2011-01-18 07:51:59 igsong Exp $
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://se.kaist.ac.kr/aom"
+            class="kr.ac.kaist.se.aom.AomPackage"
+            genModel="model/aom.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://se.kaist.ac.kr/aom/structure"
+            class="kr.ac.kaist.se.aom.structure.StructurePackage"
+            genModel="model/aom.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://se.kaist.ac.kr/aom/staticmodel"
+            class="kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage"
+            genModel="model/aom.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://se.kaist.ac.kr/aom/dynamicmodel"
+            class="kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelPackage"
+            genModel="model/aom.genmodel"/>
+   </extension>
+   <extension
+         point="org.eclipse.emf.ecore.extension_parser">
+      <parser
+            class="kr.ac.kaist.se.aom.util.AomResourceFactoryImpl"
+            type="aom">
+      </parser>
+   </extension>
+   <extension
+         point="org.eclipse.emf.ecore.extension_parser">
+      <parser
+            class="kr.ac.kaist.se.aom.structure.util.StructureResourceFactoryImpl"
+            type="structure">
+      </parser>
+   </extension>
+      <extension
+         point="org.eclipse.emf.ecore.extension_parser">
+      <parser
+            class="kr.ac.kaist.se.aom.staticmodel.util.StaticmodelResourceFactoryImpl"
+            type="staticmodel">
+      </parser>
+   </extension>
+      <extension
+         point="org.eclipse.emf.ecore.extension_parser">
+      <parser
+            class="kr.ac.kaist.se.aom.dynamicmodel.util.DynamicmodelResourceFactoryImpl"
+            type="dynamicmodel">
+      </parser>
+   </extension>
+</plugin>

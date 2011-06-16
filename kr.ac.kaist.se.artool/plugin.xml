@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="kr.ac.kaist.se.artool.metricExtension" name="Metric Exkr.ac.kaist.se.artool.metricExtensiontension" schema="schema/metricExtension.exsd"/>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="kr.ac.kaist.se.artool.contribution1"
+            objectClass="org.eclipse.jdt.core.IJavaProject">
+         <action
+               class="kr.ac.kaist.se.artool.staticmodeling.StaticModel2AOMAction"
+               enablesFor="1"
+               id="kr.ac.kaist.se.artool.AnalysisAction"
+  		    label="Transforming to AOM"
+               menubarPath="additions">
+
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="kr.ac.kaist.se.artool.objectContribution1"
+            objectClass="java.lang.Object">
+         <action
+               class="kr.ac.kaist.se.artool.util.ProbingClassType"
+               id="kr.ac.kaist.se.artool.action1"
+               label="Probing Class Type"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="kr.ac.kaist.se.artool.engine"
+            objectClass="org.eclipse.core.resources.IFile">
+         <action
+               class="kr.ac.kaist.se.artool.engine.BootStrapAction"
+               id="kr.ac.kaist.se.artool.engine.MainAction"
+               label="Run ARTool "
+               menubarPath="additions">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.launchDelegates">
+      <launchDelegate
+            delegate="kr.ac.kaist.se.artool.dynamicprofile.LaunchConfigurationDelegate"
+            id="kr.ac.kaist.se.artool.launchDelegate1"
+            modes="run, profile"
+            name="ARTOOL Java Profiling"
+            type="org.eclipse.jdt.launching.localJavaApplication">
+      </launchDelegate>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="kr.ac.kaist.se.artool.category1"
+            name="ARTool Views">
+      </category>
+      <view
+            class="kr.ac.kaist.se.artool.dynamicprofile.viewer.DynamicProfileViewer"
+            id="kr.ac.kaist.se.artool.DynamicProfileViewer"
+            name="Dynamic Profile Viewer"
+            restorable="true">
+      </view>
+      <view
+            class="kr.ac.kaist.se.artool.measuring.viewer.BasicMetricsViewer"
+            id="kr.ac.kaist.se.artool.measuring.viewer.BasicMetricsViewer"
+            name="Basic Metrics Viewer"
+            restorable="true">
+      </view>
+            <view
+            class="kr.ac.kaist.se.artool.measuring.viewer.ClassTupleMetricsViewer"
+            id="kr.ac.kaist.se.artool.measuring.viewer.ClassTupleMetricsViewer"
+            name="Class Tuple Metrics Viewer"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            id="kr.ac.kaist.se.artool.refresh"
+            targetID="kr.ac.kaist.se.artool.DynamicProfileViewer">
+         <action
+               class="kr.ac.kaist.se.artool.dynamicprofile.viewer.RefreshAction"
+               enablesFor="*"
+               icon="icons/refresh.png"
+               id="kr.ac.kaist.se.artool.action1"
+               label="Refresh"
+               menubarPath="additions"
+               style="push"
+               toolbarPath="additions"
+               tooltip="refresh">
+         </action>
+         <action
+               class="kr.ac.kaist.se.artool.dynamicprofile.viewer.ClearAction"
+               icon="icons/clear.png"
+               id="kr.ac.kaist.se.artool.action2"
+               label="Clear"
+               menubarPath="additions"
+               style="push"
+               toolbarPath="additions"
+               tooltip="clear">
+         </action>
+      </viewContribution>
+   </extension>
+
+</plugin>

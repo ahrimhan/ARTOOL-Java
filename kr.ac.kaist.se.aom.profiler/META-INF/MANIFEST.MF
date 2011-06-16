@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Premain-Class: kr.ac.kaist.se.aom.profiler.AOMProfiler
+Can-Retransform-Classes: false 
+Can-Redefine-Classes: true 
+Boot-Class-Path: javassist.jar

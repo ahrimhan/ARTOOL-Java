@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id: plugin.xml,v 1.1 2010-12-26 12:08:40 igsong Exp $
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="kr.ac.kaist.se.aom.presentation.AomModelWizardID"
+            name="%_UI_AomModelWizard_label"
+            class="kr.ac.kaist.se.aom.presentation.AomModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/AomModelFile.gif">
+         <description>%_UI_AomModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <editor
+            id="kr.ac.kaist.se.aom.presentation.AomEditorID"
+            name="%_UI_AomEditor_label"
+            icon="icons/full/obj16/AomModelFile.gif"
+            extensions="aom"
+            class="kr.ac.kaist.se.aom.presentation.AomEditor"
+            contributorClass="kr.ac.kaist.se.aom.presentation.AomActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="kr.ac.kaist.se.aom.structure.presentation.StructureModelWizardID"
+            name="%_UI_StructureModelWizard_label"
+            class="kr.ac.kaist.se.aom.structure.presentation.StructureModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/StructureModelFile.gif">
+         <description>%_UI_StructureModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <editor
+            id="kr.ac.kaist.se.aom.structure.presentation.StructureEditorID"
+            name="%_UI_StructureEditor_label"
+            icon="icons/full/obj16/StructureModelFile.gif"
+            extensions="structure"
+            class="kr.ac.kaist.se.aom.structure.presentation.StructureEditor"
+            contributorClass="kr.ac.kaist.se.aom.structure.presentation.StructureActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="kr.ac.kaist.se.aom.staticmodel.presentation.StaticmodelModelWizardID"
+            name="%_UI_StaticmodelModelWizard_label"
+            class="kr.ac.kaist.se.aom.staticmodel.presentation.StaticmodelModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/StaticmodelModelFile.gif">
+         <description>%_UI_StaticmodelModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <editor
+            id="kr.ac.kaist.se.aom.staticmodel.presentation.StaticmodelEditorID"
+            name="%_UI_StaticmodelEditor_label"
+            icon="icons/full/obj16/StaticmodelModelFile.gif"
+            extensions="staticmodel"
+            class="kr.ac.kaist.se.aom.staticmodel.presentation.StaticmodelEditor"
+            contributorClass="kr.ac.kaist.se.aom.staticmodel.presentation.StaticmodelActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>
