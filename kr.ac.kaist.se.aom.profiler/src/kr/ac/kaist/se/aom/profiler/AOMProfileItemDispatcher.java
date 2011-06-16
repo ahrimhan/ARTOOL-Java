@@ -1,27 +1,27 @@
 package kr.ac.kaist.se.aom.profiler;
 
 import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.concurrent.SynchronousQueue;
+import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 public class AOMProfileItemDispatcher implements Runnable {
 
-	private SynchronousQueue<AOMLoggingItem> queue;
+	private BlockingQueue<AOMLoggingItem> queue;
 	private static PrintStream systemOut;
 	private PrintStream ps;
 	private static AOMProfileItemDispatcher instance = null;
 	private boolean isStarted;
-	private static Socket socket;
+//	private static Socket socket;
 	private static OutputStream outputStream;
 	private static DataOutputStream dos;
 
 	private AOMProfileItemDispatcher() {
-		queue = new SynchronousQueue<AOMLoggingItem>();
+		queue = new ArrayBlockingQueue<AOMLoggingItem>(5000);
 		ps = systemOut;
 		isStarted = false;
 	}
@@ -48,40 +48,48 @@ public class AOMProfileItemDispatcher implements Runnable {
 	public void run() {
 
 		while (true) {
-			if (socket == null) {
+			if (outputStream == null) {
 				try {
-					socket = new Socket("127.0.0.1", 54321);
-					outputStream = socket.getOutputStream();
+					outputStream = new FileOutputStream(AOMProfiler.getLogPath() + java.io.File.separator + "log.txt");
 					dos = new DataOutputStream(outputStream);
-				} catch (UnknownHostException e) {
-					e.printStackTrace(systemOut);
-					socket = null;
-					dos = null;
 				} catch (IOException e) {
 					e.printStackTrace(systemOut);
-					socket = null;
 					dos = null;
 				}
 			}
 			try {
+				ArrayList<AOMLoggingItem> al = new ArrayList<AOMLoggingItem>(100);
 				while (true) {
-					AOMMethodCallItem item = (AOMMethodCallItem)queue.take();
+					al.clear();
+					while( queue.isEmpty() )
+					{
+						Thread.currentThread().sleep(200);
+					}
 
-					if (item != null && dos != null) {
+					int c = queue.drainTo(al, 100);
+
+
+					
+					if( dos != null) {
 						try {
-							item.write(dos);
-							
-//							AOMProfilingLogger.getErrorStream().println(item.toString());
+							for( int i = 0; i < c; i++ )
+							{
+								AOMLoggingItem li = al.get(i);
+								if( li != null )
+								{
+									li.write(dos);
+									AOMMethodCallItem.returnInstance((AOMMethodCallItem)li);
+								}
+							}
+					
 						} catch (Throwable e) {
 							try {
 								dos.close();
 								outputStream.close();
-								socket.close();
 								break;
 							} catch (IOException e1) {
 								dos = null;
 								outputStream = null;
-								socket = null;
 								break;
 							}
 						}

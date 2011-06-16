@@ -15,7 +15,8 @@ import org.eclipse.jdt.launching.ExecutionArguments;
 import org.eclipse.jdt.launching.IVMRunner;
 import org.eclipse.jdt.launching.JavaLaunchDelegate;
 import org.eclipse.jdt.launching.VMRunnerConfiguration;
-import org.eclipse.ui.IViewPart;
+import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
 public class LaunchConfigurationDelegate extends JavaLaunchDelegate
@@ -24,6 +25,8 @@ public class LaunchConfigurationDelegate extends JavaLaunchDelegate
 	public LaunchConfigurationDelegate() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	private String logdir;
 
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode,
@@ -55,7 +58,22 @@ public class LaunchConfigurationDelegate extends JavaLaunchDelegate
 			// Program & VM arguments
 			String pgmArgs = getProgramArguments(configuration);
 			String vmArgs = getVMArguments(configuration);
-			vmArgs = vmArgs + VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(" -javaagent:${project_loc}/lib/aomprofiler.jar");
+			
+
+
+			
+			Display display = PlatformUI.getWorkbench().getDisplay();
+			display.syncExec( 
+					new Runnable() { 
+						public void run(){ 
+							DirectoryDialog pathdialog = new DirectoryDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
+							pathdialog.setMessage("Select the directory will be used to save logs");
+							logdir = pathdialog.open();
+						} 
+					}
+			);
+			  
+			vmArgs = vmArgs + VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(" -javaagent:${project_loc}/lib/aomprofiler.jar=accept=org/gjt/sp&logdir=" + logdir);
 			ExecutionArguments execArgs = new ExecutionArguments(vmArgs, pgmArgs);
 			
 			// VM-specific attributes

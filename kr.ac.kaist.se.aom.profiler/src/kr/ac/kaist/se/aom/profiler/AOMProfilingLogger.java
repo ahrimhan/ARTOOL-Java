@@ -39,6 +39,7 @@ public class AOMProfilingLogger {
 	{
 		AOMMethodCallItem item = AOMMethodCallItem.getInstance();
 
+		
 		item.callerClassName = callerClassName;
 		item.callerMethodName = callerMethodName;
 		item.callerMethodSignature = callerMethodSignature;
@@ -72,11 +73,6 @@ public class AOMProfilingLogger {
 
 		if( item != null )
 		{
-//			if( item.calleeMethodName.endsWith("init>") || item.callerMethodName.endsWith("init>") )
-//			{
-//				AOMProfilingLogger.getErrorStream().print(">>>>");
-//				AOMProfilingLogger.getErrorStream().println(item.toString());
-//			}
 			
 			if((item.calleeMethodName.equals(calleeMethodName) || item.calleeMethodName.equals("super") ||
 					item.calleeMethodName.equals("this")) && 
@@ -107,31 +103,7 @@ public class AOMProfilingLogger {
 
 				}
 			}
-//			else if( !calleeMethodName.endsWith("init>"))
-//			{
-//				AOMProfilingLogger.getErrorStream().print("@@@@@");
-//				AOMProfilingLogger.getErrorStream().print(item.toString());
-//				AOMProfilingLogger.getErrorStream().print(" >> ");
-//				
-//				StackTraceElement[] stackTraces = Thread.currentThread().getStackTrace();
-//				for( int i = 3; i < stackTraces.length ; i++ )
-//				{
-//					AOMProfilingLogger.getErrorStream().print(stackTraces[i].getClassName());
-//					AOMProfilingLogger.getErrorStream().print('.');
-//					AOMProfilingLogger.getErrorStream().print(stackTraces[i].getMethodName());
-//					AOMProfilingLogger.getErrorStream().print('(');
-//					AOMProfilingLogger.getErrorStream().print(stackTraces[i].getFileName());
-//					AOMProfilingLogger.getErrorStream().print(':');
-//					AOMProfilingLogger.getErrorStream().print(stackTraces[i].getLineNumber());
-//					AOMProfilingLogger.getErrorStream().println(')');				
-//				}
-//
-//				AOMProfilingLogger.getErrorStream().print(dynamicCalleeClass);
-//				AOMProfilingLogger.getErrorStream().print('.');
-//				AOMProfilingLogger.getErrorStream().print(calleeMethodName);
-//				AOMProfilingLogger.getErrorStream().print(calleeMethodSignature);
-//				AOMProfilingLogger.getErrorStream().println();
-//			}
+
 		}
 		prevStack.push(AOMMethodCallItem.nullItem);
 		return;

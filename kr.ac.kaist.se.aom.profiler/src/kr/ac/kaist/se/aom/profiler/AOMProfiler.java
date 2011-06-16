@@ -1,5 +1,8 @@
 package kr.ac.kaist.se.aom.profiler;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
@@ -22,8 +25,44 @@ public class AOMProfiler implements ClassFileTransformer{
 	{
 		if( agentArgument != null )
 		{
-			String[] args = agentArgument.split(",");
-			accept = args;
+			String[] args = agentArgument.split("&");
+			if( args != null && args.length != 0 )
+			{
+				for( String arg : args )
+				{
+					String[] nv = arg.split("=");
+					if( nv.length != 2 ) continue;
+					String name = nv[0];
+					String value = nv[1];
+					
+					if( name.equals("accept") )
+					{
+						accept = value.split(":");
+
+					}
+					
+					if( name.equals("logdir") )
+					{
+						logpath = value;
+						try
+						{
+							PrintStream ps  = new PrintStream(new FileOutputStream(logpath + "initial_log.txt"));
+							ps.println("accept list");
+							for( String ae : accept )
+							{
+								ps.println(ae);
+							}
+							
+							ps.println("logpath:" + logpath);
+						}
+						catch(IOException ex)
+						{
+							
+						}
+					}
+				}
+			}
+			
 			setAcceptDot();
 		}
 		instrumentation.addTransformer(new AOMProfiler());
@@ -31,6 +70,7 @@ public class AOMProfiler implements ClassFileTransformer{
 	
 	private static void setAcceptDot()
 	{
+		accept_dot = new String[accept.length];
 		for( int i = 0; i < accept.length ; i++ )
 		{
 			accept_dot[i] = accept[i].replace('/', '.');
@@ -39,10 +79,16 @@ public class AOMProfiler implements ClassFileTransformer{
 	
 	private static final String[] deny = new String[] {"sun/",  "java/", "javax/"};
 	private static  String[] accept = new String[] {"org/gjt/sp"};
-	private static  String[] accept_dot = new String[accept.length];
+	private static  String[] accept_dot;
+	private static String logpath = null;
 	static
 	{
 		setAcceptDot();
+	}
+	
+	public static String getLogPath()
+	{
+		return logpath;
 	}
 
 	@Override

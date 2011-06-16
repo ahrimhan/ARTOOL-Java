@@ -3,6 +3,9 @@ package kr.ac.kaist.se.aom.profiler;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class AOMMethodCallItem implements AOMLoggingItem {
 
@@ -24,7 +27,10 @@ public class AOMMethodCallItem implements AOMLoggingItem {
 	
 	public boolean isSynthetic;
 	
+	private static Queue<AOMMethodCallItem> pool;
+	
 	public static final AOMMethodCallItem nullItem = new AOMMethodCallItem();
+	
 	static{
 		nullItem.methodCallId =-1;
 	}
@@ -54,7 +60,49 @@ public class AOMMethodCallItem implements AOMLoggingItem {
 	
 	public static AOMMethodCallItem getInstance()
 	{
-		return new AOMMethodCallItem();
+		if( pool == null )
+		{
+			pool = new ConcurrentLinkedQueue<AOMMethodCallItem>();
+		}
+		
+		if( pool.size() == 0 )
+		{
+			AOMProfilingLogger.getErrorStream().println("pool size is 0!!");
+			for( int i = 0; i < 20000; i++ )
+			{
+				pool.add(new AOMMethodCallItem());
+			}
+			AOMProfilingLogger.getErrorStream().println("20000 elements are added");
+			
+		}
+//		else
+//		{
+//			if( pool != null )
+//			{
+//				AOMProfilingLogger.getErrorStream().println("pool size:" + pool.size());
+//			}
+//		}
+		return pool.poll();
+//		return new AOMMethodCallItem();
+	}
+	
+	public static void returnInstance(AOMMethodCallItem item)
+	{
+//		AOMProfilingLogger.getErrorStream().println("item is returned");
+		pool.add(item);
+	}
+	
+	public static void returnInstance(Collection<AOMMethodCallItem> item)
+	{
+//		AOMProfilingLogger.getErrorStream().println("item is returned");
+		pool.addAll(item);
+	}
+	
+	
+	public void writeAndReturn(DataOutputStream ds) throws IOException
+	{
+		write(ds);
+		returnInstance(this);
 	}
 	
 	public static AOMMethodCallItem getInstance(DataInputStream di) throws IOException
