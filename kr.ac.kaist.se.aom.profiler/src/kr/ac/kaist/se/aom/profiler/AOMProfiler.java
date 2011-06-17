@@ -16,6 +16,7 @@ import javassist.NotFoundException;
 import javassist.bytecode.AccessFlag;
 import javassist.expr.ConstructorCall;
 import javassist.expr.ExprEditor;
+import javassist.expr.FieldAccess;
 import javassist.expr.MethodCall;
 import javassist.expr.NewExpr;
 
@@ -233,6 +234,36 @@ public class AOMProfiler implements ClassFileTransformer{
 						throw ex;
 					}
 				}
+
+				@Override
+				public void edit(FieldAccess f) throws CannotCompileException {
+
+
+					String stat = "{ kr.ac.kaist.se.aom.profiler.AOMProfilingLogger.logFieldAccess(" +
+					"\"" + f.getEnclosingClass().getName() + "\", " +
+					"\"" + f.where().getName() + "\", " +
+					"\"" + f.where().getSignature() + "\", " +
+					"\"" + f.getFileName() + "\", " +
+					f.getLineNumber() + "," +
+					"\"" + f.getClassName() + "\", " +
+					"\"" + f.getFieldName() + "\", " +
+					f.isReader() + ", " +
+					f.isWriter() +
+					");" +
+					"$_ = $proceed($$); " +
+					"}";
+					try
+					{
+						f.replace(stat);
+					}
+					catch(CannotCompileException ex)
+					{
+						AOMProfilingLogger.getErrorStream().println(stat);
+						throw ex;
+					}
+				}
+				
+				
 			});
 			
 			//TODO : abstract method 

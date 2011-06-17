@@ -1,16 +1,13 @@
 package kr.ac.kaist.se.aom.profiler;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class AOMMethodCallItem implements AOMLoggingItem {
-
-	private static final long serialVersionUID = -3648086293739497068L;
-
+public class AOMMethodCallItem extends AOMLoggingItem {
 	public String callerClassName;
 	public String callerMethodName;
 	public String callerMethodSignature;
@@ -29,35 +26,11 @@ public class AOMMethodCallItem implements AOMLoggingItem {
 	
 	private static Queue<AOMMethodCallItem> pool;
 	
-	public static final AOMMethodCallItem nullItem = new AOMMethodCallItem();
-	
-	static{
-		nullItem.methodCallId =-1;
-	}
-	
-	public void write(DataOutputStream ds) throws IOException
+	public static int getPoolSize()
 	{
-		ds.writeUTF(callerClassName);
-		ds.writeUTF(callerMethodName);
-		ds.writeUTF(callerMethodSignature);
-		ds.writeUTF(callerFileName);
-		ds.writeInt(callerLineNumber);
+		return pool.size();
+	}
 
-		
-		ds.writeUTF(calleeDynamicClassName);
-		ds.writeUTF(calleeMethodName);
-		ds.writeUTF(calleeMethodSignature);
-		
-		ds.writeLong(threadId);
-		ds.writeInt(methodCallId);
-		ds.writeInt(prevMethodCallId);
-	}
-	
-	private AOMMethodCallItem()
-	{
-		
-	}
-	
 	public static AOMMethodCallItem getInstance()
 	{
 		if( pool == null )
@@ -67,67 +40,92 @@ public class AOMMethodCallItem implements AOMLoggingItem {
 		
 		if( pool.size() == 0 )
 		{
-			AOMProfilingLogger.getErrorStream().println("pool size is 0!!");
 			for( int i = 0; i < 20000; i++ )
 			{
 				pool.add(new AOMMethodCallItem());
 			}
 			AOMProfilingLogger.getErrorStream().println("20000 elements are added");
-			
 		}
-//		else
-//		{
-//			if( pool != null )
-//			{
-//				AOMProfilingLogger.getErrorStream().println("pool size:" + pool.size());
-//			}
-//		}
+
 		return pool.poll();
-//		return new AOMMethodCallItem();
 	}
 	
 	public static void returnInstance(AOMMethodCallItem item)
 	{
-//		AOMProfilingLogger.getErrorStream().println("item is returned");
 		pool.add(item);
 	}
 	
 	public static void returnInstance(Collection<AOMMethodCallItem> item)
 	{
-//		AOMProfilingLogger.getErrorStream().println("item is returned");
 		pool.addAll(item);
 	}
 	
+	public static final AOMMethodCallItem nullItem = new AOMMethodCallItem();
 	
-	public void writeAndReturn(DataOutputStream ds) throws IOException
-	{
-		write(ds);
-		returnInstance(this);
+	static{
+		nullItem.methodCallId =-1;
 	}
 	
-	public static AOMMethodCallItem getInstance(DataInputStream di) throws IOException
+	public void write(PrintWriter ds) throws IOException
+	{
+		if( callerClassName.endsWith("y$ErrorHighlight") ) return;
+		
+		ds.print(callerClassName);
+		ds.print(',');
+		ds.print(callerMethodName);
+		ds.print(',');
+		ds.print(callerMethodSignature);
+		ds.print(',');
+		ds.print(callerFileName);
+		ds.print(',');
+		ds.print(callerLineNumber);
+		ds.print(',');
+		
+		ds.print(calleeDynamicClassName);
+		ds.print(',');
+		ds.print(calleeMethodName);
+		ds.print(',');
+		ds.print(calleeMethodSignature);
+		ds.print(',');
+		
+		ds.print(threadId);
+		ds.print(',');
+		ds.print(methodCallId);
+		ds.print(',');
+		ds.print(prevMethodCallId);
+		ds.println();
+	}
+	
+	private AOMMethodCallItem()
+	{
+	}
+	
+	public static AOMMethodCallItem getInstance(BufferedReader di) throws IOException
 	{
 		AOMMethodCallItem item = new AOMMethodCallItem();
 		item.read(di);
 		return item;
 	}
 	
-
-	@Override
-	public void read(DataInputStream di) throws IOException{
-		callerClassName = di.readUTF();
-		callerMethodName = di.readUTF();
-		callerMethodSignature = di.readUTF();
-		callerFileName = di.readUTF();
-		callerLineNumber = di.readInt();
+	public void read(BufferedReader reader) throws IOException{
+		String line = reader.readLine();
+		String[] items = line.split(",");
 		
-		calleeDynamicClassName = di.readUTF();
-		calleeMethodName = di.readUTF();
-		calleeMethodSignature = di.readUTF();
+		if( items.length < 11) return;
 		
-		threadId = di.readLong();
-		methodCallId = di.readInt();
-		prevMethodCallId = di.readInt();
+		callerClassName = items[0];
+		callerMethodName = items[1];
+		callerMethodSignature = items[2];
+		callerFileName = items[3];
+		callerLineNumber = Integer.parseInt(items[4]);
+		
+		calleeDynamicClassName = items[5];
+		calleeMethodName = items[6];
+		calleeMethodSignature = items[7];
+		
+		threadId = Long.parseLong(items[8]);
+		methodCallId = Integer.parseInt(items[9]);
+		prevMethodCallId = Integer.parseInt(items[10]);
 	}
 	
 	public String toString()
@@ -153,6 +151,5 @@ public class AOMMethodCallItem implements AOMLoggingItem {
 		
 		return sb.toString();
 	}
-	
 }
 

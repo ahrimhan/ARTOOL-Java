@@ -1,10 +1,9 @@
 package kr.ac.kaist.se.aom.profiler;
 
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -17,11 +16,14 @@ public class AOMProfileItemDispatcher implements Runnable {
 	private static AOMProfileItemDispatcher instance = null;
 	private boolean isStarted;
 //	private static Socket socket;
-	private static OutputStream outputStream;
-	private static DataOutputStream dos;
-
+	private static FileWriter mcWriter;
+	private static PrintWriter mcPrintWriter;
+	private static FileWriter faWriter;
+	private static PrintWriter faPrintWriter;
+	
 	private AOMProfileItemDispatcher() {
 		queue = new ArrayBlockingQueue<AOMLoggingItem>(5000);
+	
 		ps = systemOut;
 		isStarted = false;
 	}
@@ -48,17 +50,28 @@ public class AOMProfileItemDispatcher implements Runnable {
 	public void run() {
 
 		while (true) {
-			if (outputStream == null) {
+			if (mcWriter == null) {
 				try {
-					outputStream = new FileOutputStream(AOMProfiler.getLogPath() + java.io.File.separator + "log.txt");
-					dos = new DataOutputStream(outputStream);
+					mcWriter = new FileWriter(AOMProfiler.getLogPath() + java.io.File.separator + "DynamicMethodCallLog.txt");
+					mcPrintWriter = new PrintWriter(mcWriter);
 				} catch (IOException e) {
 					e.printStackTrace(systemOut);
-					dos = null;
+					mcPrintWriter = null;
 				}
 			}
+			
+			if (faWriter == null) {
+				try {
+					faWriter = new FileWriter(AOMProfiler.getLogPath() + java.io.File.separator + "DynamicFieldAccessLog.txt");
+					faPrintWriter = new PrintWriter(faWriter);
+				} catch (IOException e) {
+					e.printStackTrace(systemOut);
+					faPrintWriter = null;
+				}
+			}
+			
 			try {
-				ArrayList<AOMLoggingItem> al = new ArrayList<AOMLoggingItem>(100);
+				ArrayList<AOMLoggingItem> al = new ArrayList<AOMLoggingItem>(500);
 				while (true) {
 					al.clear();
 					while( queue.isEmpty() )
@@ -66,32 +79,49 @@ public class AOMProfileItemDispatcher implements Runnable {
 						Thread.currentThread().sleep(200);
 					}
 
-					int c = queue.drainTo(al, 100);
-
+					int c = queue.drainTo(al, 500);
 
 					
-					if( dos != null) {
+					if( mcPrintWriter != null && faPrintWriter != null ) {
 						try {
 							for( int i = 0; i < c; i++ )
 							{
 								AOMLoggingItem li = al.get(i);
 								if( li != null )
 								{
-									li.write(dos);
-									AOMMethodCallItem.returnInstance((AOMMethodCallItem)li);
+									if( li instanceof AOMMethodCallItem )
+									{
+										li.write(mcPrintWriter);
+										((AOMMethodCallItem)li).setOccupied(false);
+										AOMMethodCallItem.returnInstance((AOMMethodCallItem)li);
+									}
+									else if(li instanceof AOMFieldAccessItem )
+									{
+										li.write(faPrintWriter);
+										((AOMFieldAccessItem)li).setOccupied(false);
+										AOMFieldAccessItem.returnInstance((AOMFieldAccessItem)li);	
+									}
 								}
 							}
 					
 						} catch (Throwable e) {
 							try {
-								dos.close();
-								outputStream.close();
-								break;
+								mcPrintWriter.close();
+								mcWriter.close();
 							} catch (IOException e1) {
-								dos = null;
-								outputStream = null;
-								break;
+								mcPrintWriter = null;
+								mcWriter = null;
 							}
+
+							try {
+								faPrintWriter.close();
+								faWriter.close();
+							} catch (IOException e1) {
+								faPrintWriter = null;
+								faWriter = null;
+							}								
+							
+							break;
 						}
 					}
 				}

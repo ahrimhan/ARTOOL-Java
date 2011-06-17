@@ -57,8 +57,47 @@ public class AOMProfilingLogger {
 	public static void logMethodCallEnd()
 	{
 		Stack<AOMMethodCallItem> prevMethodCallStack = prevMethodCall.get();		
-		if( !prevMethodCallStack.isEmpty() ) prevMethodCallStack.pop();
+		if( !prevMethodCallStack.isEmpty() )
+		{
+			AOMMethodCallItem item = prevMethodCallStack.pop();
+			if( !item.isOccupied() )
+			{
+				AOMMethodCallItem.returnInstance(item);
+			}
+		}
 	}
+	
+	public static void logFieldAccess(
+			String accessorClassName,
+			String accessorMethodName,
+			String accessorMethodSignature,
+			String accessorFileName,
+			int accessorLineNumber,
+			String referencedClassName, 
+			String referencedFieldName,
+			boolean isReadAccess,
+			boolean isWriteAccess)
+	{
+		AOMFieldAccessItem item = AOMFieldAccessItem.getInstance();
+		item.accessorClassName = accessorClassName;
+		item.accessorMethodName = accessorMethodName;
+		item.accessorMethodSignature = accessorMethodSignature;
+		item.accessorFileName = accessorFileName;
+		item.accessorLineNumber = accessorLineNumber;
+		item.referencedClassName = referencedClassName;
+		item.referencedFieldName = referencedFieldName;
+		item.isReadAccess = isReadAccess;
+		item.isWriteAccess = isWriteAccess;
+		
+		try {
+			item.setOccupied(true);
+			workingQueue.put(item);
+			return;
+		} catch (InterruptedException e) {
+
+		}
+	}
+	
 
 	public static void logMethodEnter(String dynamicCalleeClass, String calleeMethodName, String calleeMethodSignature, boolean isSynthetic)
 	{
@@ -96,6 +135,7 @@ public class AOMProfilingLogger {
 				item.calleeMethodSignature = calleeMethodSignature;
 
 				try {
+					item.setOccupied(true);
 					workingQueue.put(item);
 					prevStack.push(item);
 					return;
@@ -103,7 +143,6 @@ public class AOMProfilingLogger {
 
 				}
 			}
-
 		}
 		prevStack.push(AOMMethodCallItem.nullItem);
 		return;

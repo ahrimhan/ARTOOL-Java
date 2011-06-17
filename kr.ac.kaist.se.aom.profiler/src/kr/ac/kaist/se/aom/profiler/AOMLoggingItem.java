@@ -1,11 +1,34 @@
 package kr.ac.kaist.se.aom.profiler;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.Serializable;
+import java.io.PrintWriter;
 
-public interface AOMLoggingItem extends Serializable {
-	public void write(DataOutputStream ds) throws IOException;
-	public void read(DataInputStream ds) throws IOException;
+public abstract class AOMLoggingItem  {
+	public abstract void write(PrintWriter ds) throws IOException;
+	public abstract void read(BufferedReader ds) throws IOException;
+	
+	private boolean occupied = false;
+	
+	public void setOccupied(boolean occupied)
+	{
+		synchronized(this)
+		{
+			this.occupied = occupied;
+		}
+	}
+	
+	public boolean isOccupied()
+	{
+		boolean occupied;
+		synchronized(this)
+		{
+			occupied = this.occupied;
+		}
+		return occupied;
+	}
+	
+
+	
+
 }
