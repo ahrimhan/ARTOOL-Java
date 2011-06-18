@@ -37,6 +37,10 @@
                label="Run ARTool "
                menubarPath="additions">
          </action>
+         <action
+               class="kr.ac.kaist.se.artool.dynamicprofile.DynamicProfile2AOMAction"
+               id="kr.ac.kaist.se.artool.dynamicprofile.profileaction">
+         </action>
       </objectContribution>
    </extension>
    <extension
@@ -56,12 +60,6 @@
             name="ARTool Views">
       </category>
       <view
-            class="kr.ac.kaist.se.artool.dynamicprofile.viewer.DynamicProfileViewer"
-            id="kr.ac.kaist.se.artool.DynamicProfileViewer"
-            name="Dynamic Profile Viewer"
-            restorable="true">
-      </view>
-      <view
             class="kr.ac.kaist.se.artool.measuring.viewer.BasicMetricsViewer"
             id="kr.ac.kaist.se.artool.measuring.viewer.BasicMetricsViewer"
             name="Basic Metrics Viewer"
@@ -73,34 +71,6 @@
             name="Class Tuple Metrics Viewer"
             restorable="true">
       </view>
-   </extension>
-   <extension
-         point="org.eclipse.ui.viewActions">
-      <viewContribution
-            id="kr.ac.kaist.se.artool.refresh"
-            targetID="kr.ac.kaist.se.artool.DynamicProfileViewer">
-         <action
-               class="kr.ac.kaist.se.artool.dynamicprofile.viewer.RefreshAction"
-               enablesFor="*"
-               icon="icons/refresh.png"
-               id="kr.ac.kaist.se.artool.action1"
-               label="Refresh"
-               menubarPath="additions"
-               style="push"
-               toolbarPath="additions"
-               tooltip="refresh">
-         </action>
-         <action
-               class="kr.ac.kaist.se.artool.dynamicprofile.viewer.ClearAction"
-               icon="icons/clear.png"
-               id="kr.ac.kaist.se.artool.action2"
-               label="Clear"
-               menubarPath="additions"
-               style="push"
-               toolbarPath="additions"
-               tooltip="clear">
-         </action>
-      </viewContribution>
    </extension>
 
 </plugin>
