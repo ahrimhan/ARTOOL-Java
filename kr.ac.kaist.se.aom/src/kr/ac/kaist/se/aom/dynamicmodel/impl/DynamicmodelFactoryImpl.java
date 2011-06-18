@@ -61,6 +61,7 @@ public class DynamicmodelFactoryImpl extends EFactoryImpl implements Dynamicmode
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case DynamicmodelPackage.DYNAMIC_METHOD_CALL: return createDynamicMethodCall();
+			case DynamicmodelPackage.DYNAMIC_FIELD_ACCESS: return createDynamicFieldAccess();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -74,6 +75,16 @@ public class DynamicmodelFactoryImpl extends EFactoryImpl implements Dynamicmode
 	public DynamicMethodCall createDynamicMethodCall() {
 		DynamicMethodCallImpl dynamicMethodCall = new DynamicMethodCallImpl();
 		return dynamicMethodCall;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DynamicFieldAccess createDynamicFieldAccess() {
+		DynamicFieldAccessImpl dynamicFieldAccess = new DynamicFieldAccessImpl();
+		return dynamicFieldAccess;
 	}
 
 	/**

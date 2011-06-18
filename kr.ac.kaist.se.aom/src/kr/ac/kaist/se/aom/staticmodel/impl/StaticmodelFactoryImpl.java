@@ -61,6 +61,7 @@ public class StaticmodelFactoryImpl extends EFactoryImpl implements StaticmodelF
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case StaticmodelPackage.STATIC_METHOD_CALL: return createStaticMethodCall();
+			case StaticmodelPackage.STATIC_FIELD_ACCESS: return createStaticFieldAccess();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -74,6 +75,16 @@ public class StaticmodelFactoryImpl extends EFactoryImpl implements StaticmodelF
 	public StaticMethodCall createStaticMethodCall() {
 		StaticMethodCallImpl staticMethodCall = new StaticMethodCallImpl();
 		return staticMethodCall;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public StaticFieldAccess createStaticFieldAccess() {
+		StaticFieldAccessImpl staticFieldAccess = new StaticFieldAccessImpl();
+		return staticFieldAccess;
 	}
 
 	/**

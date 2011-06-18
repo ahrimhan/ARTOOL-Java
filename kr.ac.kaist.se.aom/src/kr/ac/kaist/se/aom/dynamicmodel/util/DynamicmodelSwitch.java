@@ -100,6 +100,13 @@ public class DynamicmodelSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case DynamicmodelPackage.DYNAMIC_FIELD_ACCESS: {
+				DynamicFieldAccess dynamicFieldAccess = (DynamicFieldAccess)theEObject;
+				T result = caseDynamicFieldAccess(dynamicFieldAccess);
+				if (result == null) result = caseDynamicDependency(dynamicFieldAccess);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -131,6 +138,21 @@ public class DynamicmodelSwitch<T> {
 	 * @generated
 	 */
 	public T caseDynamicMethodCall(DynamicMethodCall object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Dynamic Field Access</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Dynamic Field Access</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDynamicFieldAccess(DynamicFieldAccess object) {
 		return null;
 	}
 

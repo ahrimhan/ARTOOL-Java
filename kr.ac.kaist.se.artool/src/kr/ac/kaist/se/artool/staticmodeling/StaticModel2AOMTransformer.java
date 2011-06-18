@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.AomFactory;
+import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMField;
@@ -29,7 +30,6 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTRequestor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.IBinding;
-import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 
@@ -192,9 +192,12 @@ public class StaticModel2AOMTransformer {
 						{
 							if( varBinding.isField() )
 							{
-								AOMField aomField = visitor.getAOMField(varBinding);
-								if( aomField != null )
-									scope.getReferringFields().add(aomField);
+//								AOMField aomField = visitor.getAOMField(varBinding);
+//								if( aomField != null )
+//								{
+//									
+//									scope.getReferringFields().add(aomField);
+//								}
 							}
 							else if( varBinding.isParameter() )
 							{
@@ -207,6 +210,34 @@ public class StaticModel2AOMTransformer {
 							}
 						}
 					
+						
+						Vector<StaticFieldAccess> removeStaticFieldAccess = new Vector<StaticFieldAccess>();
+						for( StaticFieldAccess fieldAccess : scope.getStaticFieldAccesses() )
+						{
+							AOMField aomField = visitor.getAOMField(fieldAccess.getVariableBinding());
+							AOMClass aomCallingClass = visitor.getAOMClass(fieldAccess.getTypeBinding());
+							
+							if( aomField == null ) 
+							{
+								removeStaticFieldAccess.add(fieldAccess);
+							}
+							else if( aomCallingClass == null )
+							{
+								removeStaticFieldAccess.add(fieldAccess);
+							}
+							else
+							{
+								fieldAccess.setAccessedField(aomField);
+								fieldAccess.setAccessingType(aomCallingClass);
+							}
+						}
+						
+						for( StaticFieldAccess smc : removeStaticFieldAccess )
+						{
+							smc.setAccessingScope(null);
+						}
+						
+						
 						
 						Vector<StaticMethodCall> removeMethodCall = new Vector<StaticMethodCall>();
 						for( StaticMethodCall methodCall : scope.getStaticMethodCalls() )

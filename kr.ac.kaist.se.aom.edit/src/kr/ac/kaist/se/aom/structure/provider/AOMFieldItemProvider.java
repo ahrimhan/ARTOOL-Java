@@ -64,7 +64,8 @@ public class AOMFieldItemProvider
 
 			addNamePropertyDescriptor(object);
 			addMeasuredDataSetPropertyDescriptor(object);
-			addRefererPropertyDescriptor(object);
+			addStaticRefererPropertyDescriptor(object);
+			addDynamicRefererPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -114,19 +115,41 @@ public class AOMFieldItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Referer feature.
+	 * This adds a property descriptor for the Static Referer feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addRefererPropertyDescriptor(Object object) {
+	protected void addStaticRefererPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_AOMField_referer_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AOMField_referer_feature", "_UI_AOMField_type"),
-				 StructurePackage.Literals.AOM_FIELD__REFERER,
+				 getString("_UI_AOMField_staticReferer_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AOMField_staticReferer_feature", "_UI_AOMField_type"),
+				 StructurePackage.Literals.AOM_FIELD__STATIC_REFERER,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Dynamic Referer feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDynamicRefererPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AOMField_dynamicReferer_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AOMField_dynamicReferer_feature", "_UI_AOMField_type"),
+				 StructurePackage.Literals.AOM_FIELD__DYNAMIC_REFERER,
 				 true,
 				 false,
 				 true,

@@ -15,6 +15,7 @@ import kr.ac.kaist.se.aom.dynamicmodel.impl.DynamicmodelPackageImpl;
 import kr.ac.kaist.se.aom.impl.AomPackageImpl;
 
 import kr.ac.kaist.se.aom.staticmodel.StaticDependency;
+import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.staticmodel.StaticmodelFactory;
 import kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage;
@@ -50,6 +51,13 @@ public class StaticmodelPackageImpl extends EPackageImpl implements StaticmodelP
 	 * @generated
 	 */
 	private EClass staticDependencyEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass staticFieldAccessEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -200,6 +208,69 @@ public class StaticmodelPackageImpl extends EPackageImpl implements StaticmodelP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getStaticFieldAccess() {
+		return staticFieldAccessEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getStaticFieldAccess_AccessingScope() {
+		return (EReference)staticFieldAccessEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getStaticFieldAccess_AccessedField() {
+		return (EReference)staticFieldAccessEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getStaticFieldAccess_AccessingType() {
+		return (EReference)staticFieldAccessEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getStaticFieldAccess_LineNumber() {
+		return (EAttribute)staticFieldAccessEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getStaticFieldAccess_ColumnNumber() {
+		return (EAttribute)staticFieldAccessEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getStaticFieldAccess_FileName() {
+		return (EAttribute)staticFieldAccessEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public StaticmodelFactory getStaticmodelFactory() {
 		return (StaticmodelFactory)getEFactoryInstance();
 	}
@@ -232,6 +303,14 @@ public class StaticmodelPackageImpl extends EPackageImpl implements StaticmodelP
 		createEAttribute(staticMethodCallEClass, STATIC_METHOD_CALL__FILE_NAME);
 
 		staticDependencyEClass = createEClass(STATIC_DEPENDENCY);
+
+		staticFieldAccessEClass = createEClass(STATIC_FIELD_ACCESS);
+		createEReference(staticFieldAccessEClass, STATIC_FIELD_ACCESS__ACCESSING_SCOPE);
+		createEReference(staticFieldAccessEClass, STATIC_FIELD_ACCESS__ACCESSED_FIELD);
+		createEReference(staticFieldAccessEClass, STATIC_FIELD_ACCESS__ACCESSING_TYPE);
+		createEAttribute(staticFieldAccessEClass, STATIC_FIELD_ACCESS__LINE_NUMBER);
+		createEAttribute(staticFieldAccessEClass, STATIC_FIELD_ACCESS__COLUMN_NUMBER);
+		createEAttribute(staticFieldAccessEClass, STATIC_FIELD_ACCESS__FILE_NAME);
 	}
 
 	/**
@@ -266,6 +345,7 @@ public class StaticmodelPackageImpl extends EPackageImpl implements StaticmodelP
 
 		// Add supertypes to classes
 		staticMethodCallEClass.getESuperTypes().add(this.getStaticDependency());
+		staticFieldAccessEClass.getESuperTypes().add(this.getStaticDependency());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(staticMethodCallEClass, StaticMethodCall.class, "StaticMethodCall", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -277,6 +357,14 @@ public class StaticmodelPackageImpl extends EPackageImpl implements StaticmodelP
 		initEAttribute(getStaticMethodCall_FileName(), ecorePackage.getEString(), "fileName", null, 0, 1, StaticMethodCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(staticDependencyEClass, StaticDependency.class, "StaticDependency", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(staticFieldAccessEClass, StaticFieldAccess.class, "StaticFieldAccess", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getStaticFieldAccess_AccessingScope(), theStructurePackage.getAOMScope(), theStructurePackage.getAOMScope_StaticFieldAccesses(), "accessingScope", null, 0, 1, StaticFieldAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getStaticFieldAccess_AccessedField(), theStructurePackage.getAOMField(), theStructurePackage.getAOMField_StaticReferer(), "accessedField", null, 0, 1, StaticFieldAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getStaticFieldAccess_AccessingType(), theStructurePackage.getAOMClass(), null, "accessingType", null, 0, 1, StaticFieldAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStaticFieldAccess_LineNumber(), ecorePackage.getEInt(), "lineNumber", null, 0, 1, StaticFieldAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStaticFieldAccess_ColumnNumber(), ecorePackage.getEInt(), "columnNumber", null, 0, 1, StaticFieldAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStaticFieldAccess_FileName(), ecorePackage.getEString(), "fileName", null, 0, 1, StaticFieldAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //StaticmodelPackageImpl

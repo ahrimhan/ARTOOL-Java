@@ -154,6 +154,98 @@ public interface DynamicmodelPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link kr.ac.kaist.se.aom.dynamicmodel.impl.DynamicFieldAccessImpl <em>Dynamic Field Access</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kr.ac.kaist.se.aom.dynamicmodel.impl.DynamicFieldAccessImpl
+	 * @see kr.ac.kaist.se.aom.dynamicmodel.impl.DynamicmodelPackageImpl#getDynamicFieldAccess()
+	 * @generated
+	 */
+	int DYNAMIC_FIELD_ACCESS = 2;
+
+	/**
+	 * The feature id for the '<em><b>Accessing Scope</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DYNAMIC_FIELD_ACCESS__ACCESSING_SCOPE = DYNAMIC_DEPENDENCY_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Accessed Field</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DYNAMIC_FIELD_ACCESS__ACCESSED_FIELD = DYNAMIC_DEPENDENCY_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Line Number</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DYNAMIC_FIELD_ACCESS__LINE_NUMBER = DYNAMIC_DEPENDENCY_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Column Number</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DYNAMIC_FIELD_ACCESS__COLUMN_NUMBER = DYNAMIC_DEPENDENCY_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>File Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DYNAMIC_FIELD_ACCESS__FILE_NAME = DYNAMIC_DEPENDENCY_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Static Field Access</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DYNAMIC_FIELD_ACCESS__STATIC_FIELD_ACCESS = DYNAMIC_DEPENDENCY_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Is Reader</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DYNAMIC_FIELD_ACCESS__IS_READER = DYNAMIC_DEPENDENCY_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Is Writer</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DYNAMIC_FIELD_ACCESS__IS_WRITER = DYNAMIC_DEPENDENCY_FEATURE_COUNT + 7;
+
+	/**
+	 * The number of structural features of the '<em>Dynamic Field Access</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DYNAMIC_FIELD_ACCESS_FEATURE_COUNT = DYNAMIC_DEPENDENCY_FEATURE_COUNT + 8;
+
+
+	/**
 	 * Returns the meta object for class '{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicDependency <em>Dynamic Dependency</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -240,6 +332,104 @@ public interface DynamicmodelPackage extends EPackage {
 	EAttribute getDynamicMethodCall_Tid();
 
 	/**
+	 * Returns the meta object for class '{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess <em>Dynamic Field Access</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Dynamic Field Access</em>'.
+	 * @see kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess
+	 * @generated
+	 */
+	EClass getDynamicFieldAccess();
+
+	/**
+	 * Returns the meta object for the reference '{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getAccessingScope <em>Accessing Scope</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Accessing Scope</em>'.
+	 * @see kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getAccessingScope()
+	 * @see #getDynamicFieldAccess()
+	 * @generated
+	 */
+	EReference getDynamicFieldAccess_AccessingScope();
+
+	/**
+	 * Returns the meta object for the reference '{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getAccessedField <em>Accessed Field</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Accessed Field</em>'.
+	 * @see kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getAccessedField()
+	 * @see #getDynamicFieldAccess()
+	 * @generated
+	 */
+	EReference getDynamicFieldAccess_AccessedField();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getLineNumber <em>Line Number</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Line Number</em>'.
+	 * @see kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getLineNumber()
+	 * @see #getDynamicFieldAccess()
+	 * @generated
+	 */
+	EAttribute getDynamicFieldAccess_LineNumber();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getColumnNumber <em>Column Number</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Column Number</em>'.
+	 * @see kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getColumnNumber()
+	 * @see #getDynamicFieldAccess()
+	 * @generated
+	 */
+	EAttribute getDynamicFieldAccess_ColumnNumber();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getFileName <em>File Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>File Name</em>'.
+	 * @see kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getFileName()
+	 * @see #getDynamicFieldAccess()
+	 * @generated
+	 */
+	EAttribute getDynamicFieldAccess_FileName();
+
+	/**
+	 * Returns the meta object for the reference '{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getStaticFieldAccess <em>Static Field Access</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Static Field Access</em>'.
+	 * @see kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getStaticFieldAccess()
+	 * @see #getDynamicFieldAccess()
+	 * @generated
+	 */
+	EReference getDynamicFieldAccess_StaticFieldAccess();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#isIsReader <em>Is Reader</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Is Reader</em>'.
+	 * @see kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#isIsReader()
+	 * @see #getDynamicFieldAccess()
+	 * @generated
+	 */
+	EAttribute getDynamicFieldAccess_IsReader();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#isIsWriter <em>Is Writer</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Is Writer</em>'.
+	 * @see kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#isIsWriter()
+	 * @see #getDynamicFieldAccess()
+	 * @generated
+	 */
+	EAttribute getDynamicFieldAccess_IsWriter();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -321,6 +511,71 @@ public interface DynamicmodelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DYNAMIC_METHOD_CALL__TID = eINSTANCE.getDynamicMethodCall_Tid();
+		/**
+		 * The meta object literal for the '{@link kr.ac.kaist.se.aom.dynamicmodel.impl.DynamicFieldAccessImpl <em>Dynamic Field Access</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kr.ac.kaist.se.aom.dynamicmodel.impl.DynamicFieldAccessImpl
+		 * @see kr.ac.kaist.se.aom.dynamicmodel.impl.DynamicmodelPackageImpl#getDynamicFieldAccess()
+		 * @generated
+		 */
+		EClass DYNAMIC_FIELD_ACCESS = eINSTANCE.getDynamicFieldAccess();
+		/**
+		 * The meta object literal for the '<em><b>Accessing Scope</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DYNAMIC_FIELD_ACCESS__ACCESSING_SCOPE = eINSTANCE.getDynamicFieldAccess_AccessingScope();
+		/**
+		 * The meta object literal for the '<em><b>Accessed Field</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DYNAMIC_FIELD_ACCESS__ACCESSED_FIELD = eINSTANCE.getDynamicFieldAccess_AccessedField();
+		/**
+		 * The meta object literal for the '<em><b>Line Number</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DYNAMIC_FIELD_ACCESS__LINE_NUMBER = eINSTANCE.getDynamicFieldAccess_LineNumber();
+		/**
+		 * The meta object literal for the '<em><b>Column Number</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DYNAMIC_FIELD_ACCESS__COLUMN_NUMBER = eINSTANCE.getDynamicFieldAccess_ColumnNumber();
+		/**
+		 * The meta object literal for the '<em><b>File Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DYNAMIC_FIELD_ACCESS__FILE_NAME = eINSTANCE.getDynamicFieldAccess_FileName();
+		/**
+		 * The meta object literal for the '<em><b>Static Field Access</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DYNAMIC_FIELD_ACCESS__STATIC_FIELD_ACCESS = eINSTANCE.getDynamicFieldAccess_StaticFieldAccess();
+		/**
+		 * The meta object literal for the '<em><b>Is Reader</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DYNAMIC_FIELD_ACCESS__IS_READER = eINSTANCE.getDynamicFieldAccess_IsReader();
+		/**
+		 * The meta object literal for the '<em><b>Is Writer</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DYNAMIC_FIELD_ACCESS__IS_WRITER = eINSTANCE.getDynamicFieldAccess_IsWriter();
 
 	}
 

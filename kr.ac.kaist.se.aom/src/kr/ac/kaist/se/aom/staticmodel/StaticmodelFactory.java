@@ -35,6 +35,15 @@ public interface StaticmodelFactory extends EFactory {
 	StaticMethodCall createStaticMethodCall();
 
 	/**
+	 * Returns a new object of class '<em>Static Field Access</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Static Field Access</em>'.
+	 * @generated
+	 */
+	StaticFieldAccess createStaticFieldAccess();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

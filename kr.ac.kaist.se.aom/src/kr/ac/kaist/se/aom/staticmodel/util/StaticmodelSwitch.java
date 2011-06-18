@@ -100,6 +100,13 @@ public class StaticmodelSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case StaticmodelPackage.STATIC_FIELD_ACCESS: {
+				StaticFieldAccess staticFieldAccess = (StaticFieldAccess)theEObject;
+				T result = caseStaticFieldAccess(staticFieldAccess);
+				if (result == null) result = caseStaticDependency(staticFieldAccess);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -131,6 +138,21 @@ public class StaticmodelSwitch<T> {
 	 * @generated
 	 */
 	public T caseStaticDependency(StaticDependency object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Static Field Access</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Static Field Access</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseStaticFieldAccess(StaticFieldAccess object) {
 		return null;
 	}
 

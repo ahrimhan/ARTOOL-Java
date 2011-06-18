@@ -6,7 +6,9 @@
  */
 package kr.ac.kaist.se.aom.structure;
 
+import kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
+import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,8 +31,9 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMScope#getVariables <em>Variables</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMScope#getOwner <em>Owner</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMScope#getStaticMethodCalls <em>Static Method Calls</em>}</li>
- *   <li>{@link kr.ac.kaist.se.aom.structure.AOMScope#getReferringFields <em>Referring Fields</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMScope#getDynamicMethodCalls <em>Dynamic Method Calls</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.AOMScope#getStaticFieldAccesses <em>Static Field Accesses</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.AOMScope#getDynamicFieldAccesses <em>Dynamic Field Accesses</em>}</li>
  * </ul>
  * </p>
  *
@@ -104,24 +107,6 @@ public interface AOMScope extends EObject {
 	EList<StaticMethodCall> getStaticMethodCalls();
 
 	/**
-	 * Returns the value of the '<em><b>Referring Fields</b></em>' reference list.
-	 * The list contents are of type {@link kr.ac.kaist.se.aom.structure.AOMField}.
-	 * It is bidirectional and its opposite is '{@link kr.ac.kaist.se.aom.structure.AOMField#getReferer <em>Referer</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Referring Fields</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Referring Fields</em>' reference list.
-	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMScope_ReferringFields()
-	 * @see kr.ac.kaist.se.aom.structure.AOMField#getReferer
-	 * @model opposite="referer"
-	 * @generated
-	 */
-	EList<AOMField> getReferringFields();
-	
-	/**
 	 * Returns the value of the '<em><b>Dynamic Method Calls</b></em>' containment reference list.
 	 * The list contents are of type {@link kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall}.
 	 * It is bidirectional and its opposite is '{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall#getCaller <em>Caller</em>}'.
@@ -138,6 +123,42 @@ public interface AOMScope extends EObject {
 	 * @generated
 	 */
 	EList<DynamicMethodCall> getDynamicMethodCalls();
+
+	/**
+	 * Returns the value of the '<em><b>Static Field Accesses</b></em>' reference list.
+	 * The list contents are of type {@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess}.
+	 * It is bidirectional and its opposite is '{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getAccessingScope <em>Accessing Scope</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Static Field Accesses</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Static Field Accesses</em>' reference list.
+	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMScope_StaticFieldAccesses()
+	 * @see kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getAccessingScope
+	 * @model opposite="accessingScope"
+	 * @generated
+	 */
+	EList<StaticFieldAccess> getStaticFieldAccesses();
+
+	/**
+	 * Returns the value of the '<em><b>Dynamic Field Accesses</b></em>' reference list.
+	 * The list contents are of type {@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess}.
+	 * It is bidirectional and its opposite is '{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getAccessingScope <em>Accessing Scope</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Dynamic Field Accesses</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Dynamic Field Accesses</em>' reference list.
+	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMScope_DynamicFieldAccesses()
+	 * @see kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getAccessingScope
+	 * @model opposite="accessingScope"
+	 * @generated
+	 */
+	EList<DynamicFieldAccess> getDynamicFieldAccesses();
 
 	List<IVariableBinding> getVariableBindings();
 	

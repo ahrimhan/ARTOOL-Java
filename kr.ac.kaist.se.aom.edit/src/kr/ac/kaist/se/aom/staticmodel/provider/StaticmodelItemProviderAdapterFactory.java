@@ -99,6 +99,29 @@ public class StaticmodelItemProviderAdapterFactory extends StaticmodelAdapterFac
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected StaticFieldAccessItemProvider staticFieldAccessItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createStaticFieldAccessAdapter() {
+		if (staticFieldAccessItemProvider == null) {
+			staticFieldAccessItemProvider = new StaticFieldAccessItemProvider(this);
+		}
+
+		return staticFieldAccessItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -198,6 +221,7 @@ public class StaticmodelItemProviderAdapterFactory extends StaticmodelAdapterFac
 	 */
 	public void dispose() {
 		if (staticMethodCallItemProvider != null) staticMethodCallItemProvider.dispose();
+		if (staticFieldAccessItemProvider != null) staticFieldAccessItemProvider.dispose();
 	}
 
 }

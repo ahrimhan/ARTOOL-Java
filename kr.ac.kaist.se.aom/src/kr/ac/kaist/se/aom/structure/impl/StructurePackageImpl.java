@@ -417,8 +417,17 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAOMField_Referer() {
+	public EReference getAOMField_StaticReferer() {
 		return (EReference)aomFieldEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAOMField_DynamicReferer() {
+		return (EReference)aomFieldEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -606,7 +615,7 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAOMScope_ReferringFields() {
+	public EReference getAOMScope_DynamicMethodCalls() {
 		return (EReference)aomScopeEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -615,8 +624,17 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAOMScope_DynamicMethodCalls() {
+	public EReference getAOMScope_StaticFieldAccesses() {
 		return (EReference)aomScopeEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAOMScope_DynamicFieldAccesses() {
+		return (EReference)aomScopeEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -738,7 +756,8 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 
 		aomFieldEClass = createEClass(AOM_FIELD);
 		createEReference(aomFieldEClass, AOM_FIELD__OWNER);
-		createEReference(aomFieldEClass, AOM_FIELD__REFERER);
+		createEReference(aomFieldEClass, AOM_FIELD__STATIC_REFERER);
+		createEReference(aomFieldEClass, AOM_FIELD__DYNAMIC_REFERER);
 
 		aomMethodEClass = createEClass(AOM_METHOD);
 		createEReference(aomMethodEClass, AOM_METHOD__PARAMETERS);
@@ -761,8 +780,9 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 		createEReference(aomScopeEClass, AOM_SCOPE__VARIABLES);
 		createEReference(aomScopeEClass, AOM_SCOPE__OWNER);
 		createEReference(aomScopeEClass, AOM_SCOPE__STATIC_METHOD_CALLS);
-		createEReference(aomScopeEClass, AOM_SCOPE__REFERRING_FIELDS);
 		createEReference(aomScopeEClass, AOM_SCOPE__DYNAMIC_METHOD_CALLS);
+		createEReference(aomScopeEClass, AOM_SCOPE__STATIC_FIELD_ACCESSES);
+		createEReference(aomScopeEClass, AOM_SCOPE__DYNAMIC_FIELD_ACCESSES);
 
 		aomParameterEClass = createEClass(AOM_PARAMETER);
 		createEReference(aomParameterEClass, AOM_PARAMETER__OWNER);
@@ -856,7 +876,8 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 
 		initEClass(aomFieldEClass, AOMField.class, "AOMField", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAOMField_Owner(), this.getAOMClass(), this.getAOMClass_Fields(), "owner", null, 0, 1, AOMField.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getAOMField_Referer(), this.getAOMScope(), this.getAOMScope_ReferringFields(), "referer", null, 0, -1, AOMField.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAOMField_StaticReferer(), theStaticmodelPackage.getStaticFieldAccess(), theStaticmodelPackage.getStaticFieldAccess_AccessedField(), "staticReferer", null, 0, -1, AOMField.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAOMField_DynamicReferer(), theDynamicmodelPackage.getDynamicFieldAccess(), theDynamicmodelPackage.getDynamicFieldAccess_AccessedField(), "dynamicReferer", null, 0, -1, AOMField.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(aomMethodEClass, AOMMethod.class, "AOMMethod", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAOMMethod_Parameters(), this.getAOMParameter(), this.getAOMParameter_Owner(), "parameters", null, 0, -1, AOMMethod.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -879,8 +900,9 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 		initEReference(getAOMScope_Variables(), this.getAOMLocalVariable(), this.getAOMLocalVariable_Owner(), "variables", null, 0, -1, AOMScope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAOMScope_Owner(), this.getAOMMethod(), this.getAOMMethod_OwnedScope(), "owner", null, 0, 1, AOMScope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAOMScope_StaticMethodCalls(), theStaticmodelPackage.getStaticMethodCall(), theStaticmodelPackage.getStaticMethodCall_Caller(), "staticMethodCalls", null, 0, -1, AOMScope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getAOMScope_ReferringFields(), this.getAOMField(), this.getAOMField_Referer(), "referringFields", null, 0, -1, AOMScope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAOMScope_DynamicMethodCalls(), theDynamicmodelPackage.getDynamicMethodCall(), theDynamicmodelPackage.getDynamicMethodCall_Caller(), "dynamicMethodCalls", null, 0, -1, AOMScope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAOMScope_StaticFieldAccesses(), theStaticmodelPackage.getStaticFieldAccess(), theStaticmodelPackage.getStaticFieldAccess_AccessingScope(), "staticFieldAccesses", null, 0, -1, AOMScope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAOMScope_DynamicFieldAccesses(), theDynamicmodelPackage.getDynamicFieldAccess(), theDynamicmodelPackage.getDynamicFieldAccess_AccessingScope(), "dynamicFieldAccesses", null, 0, -1, AOMScope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(aomParameterEClass, AOMParameter.class, "AOMParameter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAOMParameter_Owner(), this.getAOMMethod(), this.getAOMMethod_Parameters(), "owner", null, 0, 1, AOMParameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

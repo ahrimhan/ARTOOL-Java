@@ -99,6 +99,29 @@ public class DynamicmodelItemProviderAdapterFactory extends DynamicmodelAdapterF
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DynamicFieldAccessItemProvider dynamicFieldAccessItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDynamicFieldAccessAdapter() {
+		if (dynamicFieldAccessItemProvider == null) {
+			dynamicFieldAccessItemProvider = new DynamicFieldAccessItemProvider(this);
+		}
+
+		return dynamicFieldAccessItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -198,6 +221,7 @@ public class DynamicmodelItemProviderAdapterFactory extends DynamicmodelAdapterF
 	 */
 	public void dispose() {
 		if (dynamicMethodCallItemProvider != null) dynamicMethodCallItemProvider.dispose();
+		if (dynamicFieldAccessItemProvider != null) dynamicFieldAccessItemProvider.dispose();
 	}
 
 }

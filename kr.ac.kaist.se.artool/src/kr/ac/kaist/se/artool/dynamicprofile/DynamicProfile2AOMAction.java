@@ -1,4 +1,4 @@
-package kr.ac.kaist.se.artool.dynamicprofile.viewer;
+package kr.ac.kaist.se.artool.dynamicprofile;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -12,7 +12,6 @@ import kr.ac.kaist.se.aom.profiler.AOMMethodCallItem;
 import kr.ac.kaist.se.aom.provider.AomItemProviderAdapterFactory;
 import kr.ac.kaist.se.aom.staticmodel.provider.StaticmodelItemProviderAdapterFactory;
 import kr.ac.kaist.se.aom.structure.provider.StructureItemProviderAdapterFactory;
-import kr.ac.kaist.se.artool.dynamicprofile.DynamicProfile2AOMTransformer;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;

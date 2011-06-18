@@ -10,7 +10,11 @@ import java.util.Collection;
 
 import kr.ac.kaist.se.aom.AomPackage;
 import kr.ac.kaist.se.aom.MeasurableElement;
+import kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess;
+import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelPackage;
 import kr.ac.kaist.se.aom.impl.StringToObjectImpl;
+import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
+import kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMNamedElement;
@@ -44,7 +48,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getName <em>Name</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getMeasuredDataSet <em>Measured Data Set</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getOwner <em>Owner</em>}</li>
- *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getReferer <em>Referer</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getStaticReferer <em>Static Referer</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getDynamicReferer <em>Dynamic Referer</em>}</li>
  * </ul>
  * </p>
  *
@@ -82,14 +87,24 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 	protected EMap<String, Object> measuredDataSet;
 
 	/**
-	 * The cached value of the '{@link #getReferer() <em>Referer</em>}' reference list.
+	 * The cached value of the '{@link #getStaticReferer() <em>Static Referer</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getReferer()
+	 * @see #getStaticReferer()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<AOMScope> referer;
+	protected EList<StaticFieldAccess> staticReferer;
+
+	/**
+	 * The cached value of the '{@link #getDynamicReferer() <em>Dynamic Referer</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDynamicReferer()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<DynamicFieldAccess> dynamicReferer;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -189,11 +204,23 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<AOMScope> getReferer() {
-		if (referer == null) {
-			referer = new EObjectWithInverseResolvingEList.ManyInverse<AOMScope>(AOMScope.class, this, StructurePackage.AOM_FIELD__REFERER, StructurePackage.AOM_SCOPE__REFERRING_FIELDS);
+	public EList<StaticFieldAccess> getStaticReferer() {
+		if (staticReferer == null) {
+			staticReferer = new EObjectWithInverseResolvingEList<StaticFieldAccess>(StaticFieldAccess.class, this, StructurePackage.AOM_FIELD__STATIC_REFERER, StaticmodelPackage.STATIC_FIELD_ACCESS__ACCESSED_FIELD);
 		}
-		return referer;
+		return staticReferer;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<DynamicFieldAccess> getDynamicReferer() {
+		if (dynamicReferer == null) {
+			dynamicReferer = new EObjectWithInverseResolvingEList<DynamicFieldAccess>(DynamicFieldAccess.class, this, StructurePackage.AOM_FIELD__DYNAMIC_REFERER, DynamicmodelPackage.DYNAMIC_FIELD_ACCESS__ACCESSED_FIELD);
+		}
+		return dynamicReferer;
 	}
 
 	/**
@@ -209,8 +236,10 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 				if (eInternalContainer() != null)
 					msgs = eBasicRemoveFromContainer(msgs);
 				return basicSetOwner((AOMClass)otherEnd, msgs);
-			case StructurePackage.AOM_FIELD__REFERER:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getReferer()).basicAdd(otherEnd, msgs);
+			case StructurePackage.AOM_FIELD__STATIC_REFERER:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getStaticReferer()).basicAdd(otherEnd, msgs);
+			case StructurePackage.AOM_FIELD__DYNAMIC_REFERER:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getDynamicReferer()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -227,8 +256,10 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 				return ((InternalEList<?>)getMeasuredDataSet()).basicRemove(otherEnd, msgs);
 			case StructurePackage.AOM_FIELD__OWNER:
 				return basicSetOwner(null, msgs);
-			case StructurePackage.AOM_FIELD__REFERER:
-				return ((InternalEList<?>)getReferer()).basicRemove(otherEnd, msgs);
+			case StructurePackage.AOM_FIELD__STATIC_REFERER:
+				return ((InternalEList<?>)getStaticReferer()).basicRemove(otherEnd, msgs);
+			case StructurePackage.AOM_FIELD__DYNAMIC_REFERER:
+				return ((InternalEList<?>)getDynamicReferer()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -262,8 +293,10 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 				else return getMeasuredDataSet().map();
 			case StructurePackage.AOM_FIELD__OWNER:
 				return getOwner();
-			case StructurePackage.AOM_FIELD__REFERER:
-				return getReferer();
+			case StructurePackage.AOM_FIELD__STATIC_REFERER:
+				return getStaticReferer();
+			case StructurePackage.AOM_FIELD__DYNAMIC_REFERER:
+				return getDynamicReferer();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -286,9 +319,13 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 			case StructurePackage.AOM_FIELD__OWNER:
 				setOwner((AOMClass)newValue);
 				return;
-			case StructurePackage.AOM_FIELD__REFERER:
-				getReferer().clear();
-				getReferer().addAll((Collection<? extends AOMScope>)newValue);
+			case StructurePackage.AOM_FIELD__STATIC_REFERER:
+				getStaticReferer().clear();
+				getStaticReferer().addAll((Collection<? extends StaticFieldAccess>)newValue);
+				return;
+			case StructurePackage.AOM_FIELD__DYNAMIC_REFERER:
+				getDynamicReferer().clear();
+				getDynamicReferer().addAll((Collection<? extends DynamicFieldAccess>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -311,8 +348,11 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 			case StructurePackage.AOM_FIELD__OWNER:
 				setOwner((AOMClass)null);
 				return;
-			case StructurePackage.AOM_FIELD__REFERER:
-				getReferer().clear();
+			case StructurePackage.AOM_FIELD__STATIC_REFERER:
+				getStaticReferer().clear();
+				return;
+			case StructurePackage.AOM_FIELD__DYNAMIC_REFERER:
+				getDynamicReferer().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -332,8 +372,10 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 				return measuredDataSet != null && !measuredDataSet.isEmpty();
 			case StructurePackage.AOM_FIELD__OWNER:
 				return getOwner() != null;
-			case StructurePackage.AOM_FIELD__REFERER:
-				return referer != null && !referer.isEmpty();
+			case StructurePackage.AOM_FIELD__STATIC_REFERER:
+				return staticReferer != null && !staticReferer.isEmpty();
+			case StructurePackage.AOM_FIELD__DYNAMIC_REFERER:
+				return dynamicReferer != null && !dynamicReferer.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

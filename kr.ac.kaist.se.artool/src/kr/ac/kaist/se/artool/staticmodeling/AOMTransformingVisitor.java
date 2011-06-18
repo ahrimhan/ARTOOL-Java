@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
+import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.staticmodel.StaticmodelFactory;
 import kr.ac.kaist.se.aom.structure.AOMClass;
@@ -131,11 +132,11 @@ public class AOMTransformingVisitor extends ASTVisitor {
 	{
 		private AOMScope scope;
 		private AbstractObjectModel aom;
-		private HashMap<Integer, HashMap<IMethodBinding, StaticMethodCall>> methodCallMap;
+
 		
 		private MethodVisitor()
 		{
-			methodCallMap = new HashMap<Integer, HashMap<IMethodBinding, StaticMethodCall>>();
+
 		}
 		
 		private static MethodVisitor instance;
@@ -147,7 +148,7 @@ public class AOMTransformingVisitor extends ASTVisitor {
 			}
 			instance.scope = scope;
 			instance.aom = aom;
-			instance.methodCallMap.clear();
+			
 			return instance;
 		}
 		
@@ -170,17 +171,14 @@ public class AOMTransformingVisitor extends ASTVisitor {
 
 			CompilationUnit cu = (CompilationUnit)node.getRoot();
 			int lineNumber = cu.getLineNumber(node.getStartPosition());
-			
-			HashMap<IMethodBinding, StaticMethodCall> subMap = null;
 
-				methodCall = StaticmodelFactory.eINSTANCE.createStaticMethodCall();
-				methodCall.setCaller(scope);
-				methodCall.setTypeBinding(typeBinding);
-				methodCall.setMethodBinding(methodBinding);
-				methodCall.setLineNumber(lineNumber);
-				methodCall.setColumnNumber(cu.getColumnNumber(node.getStartPosition()));
-				methodCall.setFileName(cu.getTypeRoot().getPath().lastSegment());
-
+			methodCall = StaticmodelFactory.eINSTANCE.createStaticMethodCall();
+			methodCall.setCaller(scope);
+			methodCall.setTypeBinding(typeBinding);
+			methodCall.setMethodBinding(methodBinding);
+			methodCall.setLineNumber(lineNumber);
+			methodCall.setColumnNumber(cu.getColumnNumber(node.getStartPosition()));
+			methodCall.setFileName(cu.getTypeRoot().getPath().lastSegment());
 	
 			return super.visit(node);
 		}
@@ -246,7 +244,32 @@ public class AOMTransformingVisitor extends ASTVisitor {
 		
 		public boolean visit(FieldAccess node)
 		{
-			scope.getVariableBindings().add(node.resolveFieldBinding());
+			ITypeBinding typeBinding = null;
+			if( node.getExpression() != null )
+			{
+				typeBinding = node.getExpression().resolveTypeBinding().getErasure();
+			}
+			else
+			{
+				TypeDeclaration td = getEnclosingTypeDeclaration(node);
+				typeBinding = td.resolveBinding().getErasure();	
+			}
+
+			
+			StaticFieldAccess fieldAccess = null;
+			IVariableBinding variableBinding = node.resolveFieldBinding();
+
+			CompilationUnit cu = (CompilationUnit)node.getRoot();
+			int lineNumber = cu.getLineNumber(node.getStartPosition());
+
+			fieldAccess = StaticmodelFactory.eINSTANCE.createStaticFieldAccess();
+			fieldAccess.setAccessingScope(scope);
+			fieldAccess.setTypeBinding(typeBinding);
+			fieldAccess.setVariableBinding(variableBinding);
+			fieldAccess.setLineNumber(lineNumber);
+			fieldAccess.setColumnNumber(cu.getColumnNumber(node.getStartPosition()));
+			fieldAccess.setFileName(cu.getTypeRoot().getPath().lastSegment());
+	
 			return super.visit(node);
 		}
 		

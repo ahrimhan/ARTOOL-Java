@@ -3,10 +3,14 @@ package kr.ac.kaist.se.artool.dynamicprofile;
 import java.util.Vector;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
+import kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelFactory;
+import kr.ac.kaist.se.aom.profiler.AOMFieldAccessItem;
 import kr.ac.kaist.se.aom.profiler.AOMMethodCallItem;
+import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
+import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.util.AOMIndex;
 import kr.ac.kaist.se.artool.util.DynamicMethodCallLinker;
@@ -31,15 +35,19 @@ public class DynamicProfile2AOMTransformer {
 	}
 	
 	
-	public void transform(AbstractObjectModel aom, Vector<AOMMethodCallItem> methodCallItems, IProgressMonitor monitor)
+	public void transform(AbstractObjectModel aom, Vector<AOMMethodCallItem> methodCallItems, 
+			Vector<AOMFieldAccessItem> fieldAccessItems, IProgressMonitor monitor)
 	{
 		monitor.beginTask("Transforming Dynamic Profile to AOM", 100);
 		try
 		{
-			SubProgressMonitor subMonitor1 = new SubProgressMonitor(monitor, 30);
+			SubProgressMonitor subMonitor1 = new SubProgressMonitor(monitor, 20);
 			AOMIndex index = AOMIndex.getInstance(aom, subMonitor1);
-			SubProgressMonitor subMonitor2 = new SubProgressMonitor(monitor, 70);
-			transform(aom, index, methodCallItems, subMonitor2);
+			SubProgressMonitor subMonitor2 = new SubProgressMonitor(monitor, 40);
+			transformMethodCalls(aom, index, methodCallItems, subMonitor2);
+			SubProgressMonitor subMonitor3 = new SubProgressMonitor(monitor, 40);
+			transformFieldAccesses(aom, index, fieldAccessItems, subMonitor3);
+
 		}
 		finally 
 		{
@@ -51,10 +59,65 @@ public class DynamicProfile2AOMTransformer {
 	{
 		return false;
 	}
+	
+	private void transformFieldAccesses(AbstractObjectModel aom, AOMIndex index,
+			Vector<AOMFieldAccessItem> fieldAccessItems, IProgressMonitor monitor) {
+		monitor.beginTask("Transforming Dynamic Profile for Field Accesses to AOM with Indices", fieldAccessItems.size());
+		DynamicMethodCallLinker linker = new DynamicMethodCallLinker();
+//		UbigraphClient ubiGraph = new UbigraphClient();
+//		int edgeStyleId = ubiGraph.newEdgeStyle(0);
+//		ubiGraph.setEdgeStyleAttribute(edgeStyleId, "arrow", "true");
+		try
+		{
+			for( AOMFieldAccessItem item : fieldAccessItems )
+			{
+				
+				AOMMethod accessingMethod = index.getMethod(item.accessorClassName, item.accessorMethodName,
+						item.accessorMethodSignature.replace('/', '.').replace('$', '.'));
+				AOMField referencedField = index.getField(item.referencedClassName,
+						item.referencedFieldName);
 
-	private void transform(AbstractObjectModel aom, AOMIndex index,
+				if( accessingMethod == null || referencedField == null )
+				{
+				}
+				else
+				{
+					DynamicFieldAccess dmc = DynamicmodelFactory.eINSTANCE.createDynamicFieldAccess();
+					accessingMethod.getOwnedScope().getDynamicFieldAccesses().add(dmc);
+					dmc.setAccessedField(referencedField);
+			
+					StaticFieldAccess smc = null;
+					for( StaticFieldAccess t : accessingMethod.getOwnedScope().getStaticFieldAccesses() )
+					{
+						if( t.getAccessedField().getName().equals(referencedField.getName()) && t.getLineNumber() == item.accessorLineNumber )
+						{
+							smc = t;
+						}
+					}
+					
+					if( smc == null )
+					{
+						System.err.println("(" + (accessingMethod != null ? "true " : "false") + "," + (referencedField != null ? "true " : "false") + ")" + item.accessorClassName + "." + item.accessorMethodName + ":" + item.accessorMethodSignature + "(" + item.accessorLineNumber + ") -> " + item.referencedClassName + "." + item.referencedFieldName);
+					}
+					dmc.setStaticFieldAccess(smc);
+					dmc.setLineNumber(item.accessorLineNumber);
+					dmc.setFileName(item.accessorFileName);
+					dmc.setIsReader(item.isReadAccess);
+					dmc.setIsWriter(item.isWriteAccess);
+				}
+				monitor.worked(1);				
+			}
+		}
+		finally
+		{
+			monitor.done();
+		}
+	}
+	
+
+	private void transformMethodCalls(AbstractObjectModel aom, AOMIndex index,
 			Vector<AOMMethodCallItem> methodCallItems, IProgressMonitor monitor) {
-		monitor.beginTask("Transforming Dynamic Profile to AOM with Indices", methodCallItems.size());
+		monitor.beginTask("Transforming Dynamic Profile for Method Calls to AOM with Indices", methodCallItems.size());
 		DynamicMethodCallLinker linker = new DynamicMethodCallLinker();
 //		UbigraphClient ubiGraph = new UbigraphClient();
 //		int edgeStyleId = ubiGraph.newEdgeStyle(0);

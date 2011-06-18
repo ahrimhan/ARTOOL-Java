@@ -153,6 +153,80 @@ public interface StaticmodelPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link kr.ac.kaist.se.aom.staticmodel.impl.StaticFieldAccessImpl <em>Static Field Access</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kr.ac.kaist.se.aom.staticmodel.impl.StaticFieldAccessImpl
+	 * @see kr.ac.kaist.se.aom.staticmodel.impl.StaticmodelPackageImpl#getStaticFieldAccess()
+	 * @generated
+	 */
+	int STATIC_FIELD_ACCESS = 2;
+
+	/**
+	 * The feature id for the '<em><b>Accessing Scope</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STATIC_FIELD_ACCESS__ACCESSING_SCOPE = STATIC_DEPENDENCY_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Accessed Field</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STATIC_FIELD_ACCESS__ACCESSED_FIELD = STATIC_DEPENDENCY_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Accessing Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STATIC_FIELD_ACCESS__ACCESSING_TYPE = STATIC_DEPENDENCY_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Line Number</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STATIC_FIELD_ACCESS__LINE_NUMBER = STATIC_DEPENDENCY_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Column Number</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STATIC_FIELD_ACCESS__COLUMN_NUMBER = STATIC_DEPENDENCY_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>File Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STATIC_FIELD_ACCESS__FILE_NAME = STATIC_DEPENDENCY_FEATURE_COUNT + 5;
+
+	/**
+	 * The number of structural features of the '<em>Static Field Access</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STATIC_FIELD_ACCESS_FEATURE_COUNT = STATIC_DEPENDENCY_FEATURE_COUNT + 6;
+
+
+	/**
 	 * Returns the meta object for class '{@link kr.ac.kaist.se.aom.staticmodel.StaticMethodCall <em>Static Method Call</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -237,6 +311,82 @@ public interface StaticmodelPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getStaticDependency();
+
+	/**
+	 * Returns the meta object for class '{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess <em>Static Field Access</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Static Field Access</em>'.
+	 * @see kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess
+	 * @generated
+	 */
+	EClass getStaticFieldAccess();
+
+	/**
+	 * Returns the meta object for the reference '{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getAccessingScope <em>Accessing Scope</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Accessing Scope</em>'.
+	 * @see kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getAccessingScope()
+	 * @see #getStaticFieldAccess()
+	 * @generated
+	 */
+	EReference getStaticFieldAccess_AccessingScope();
+
+	/**
+	 * Returns the meta object for the reference '{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getAccessedField <em>Accessed Field</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Accessed Field</em>'.
+	 * @see kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getAccessedField()
+	 * @see #getStaticFieldAccess()
+	 * @generated
+	 */
+	EReference getStaticFieldAccess_AccessedField();
+
+	/**
+	 * Returns the meta object for the reference '{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getAccessingType <em>Accessing Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Accessing Type</em>'.
+	 * @see kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getAccessingType()
+	 * @see #getStaticFieldAccess()
+	 * @generated
+	 */
+	EReference getStaticFieldAccess_AccessingType();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getLineNumber <em>Line Number</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Line Number</em>'.
+	 * @see kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getLineNumber()
+	 * @see #getStaticFieldAccess()
+	 * @generated
+	 */
+	EAttribute getStaticFieldAccess_LineNumber();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getColumnNumber <em>Column Number</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Column Number</em>'.
+	 * @see kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getColumnNumber()
+	 * @see #getStaticFieldAccess()
+	 * @generated
+	 */
+	EAttribute getStaticFieldAccess_ColumnNumber();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getFileName <em>File Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>File Name</em>'.
+	 * @see kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getFileName()
+	 * @see #getStaticFieldAccess()
+	 * @generated
+	 */
+	EAttribute getStaticFieldAccess_FileName();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -327,6 +477,64 @@ public interface StaticmodelPackage extends EPackage {
 		 * @generated
 		 */
 		EClass STATIC_DEPENDENCY = eINSTANCE.getStaticDependency();
+
+		/**
+		 * The meta object literal for the '{@link kr.ac.kaist.se.aom.staticmodel.impl.StaticFieldAccessImpl <em>Static Field Access</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kr.ac.kaist.se.aom.staticmodel.impl.StaticFieldAccessImpl
+		 * @see kr.ac.kaist.se.aom.staticmodel.impl.StaticmodelPackageImpl#getStaticFieldAccess()
+		 * @generated
+		 */
+		EClass STATIC_FIELD_ACCESS = eINSTANCE.getStaticFieldAccess();
+
+		/**
+		 * The meta object literal for the '<em><b>Accessing Scope</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference STATIC_FIELD_ACCESS__ACCESSING_SCOPE = eINSTANCE.getStaticFieldAccess_AccessingScope();
+
+		/**
+		 * The meta object literal for the '<em><b>Accessed Field</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference STATIC_FIELD_ACCESS__ACCESSED_FIELD = eINSTANCE.getStaticFieldAccess_AccessedField();
+
+		/**
+		 * The meta object literal for the '<em><b>Accessing Type</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference STATIC_FIELD_ACCESS__ACCESSING_TYPE = eINSTANCE.getStaticFieldAccess_AccessingType();
+
+		/**
+		 * The meta object literal for the '<em><b>Line Number</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute STATIC_FIELD_ACCESS__LINE_NUMBER = eINSTANCE.getStaticFieldAccess_LineNumber();
+
+		/**
+		 * The meta object literal for the '<em><b>Column Number</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute STATIC_FIELD_ACCESS__COLUMN_NUMBER = eINSTANCE.getStaticFieldAccess_ColumnNumber();
+
+		/**
+		 * The meta object literal for the '<em><b>File Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute STATIC_FIELD_ACCESS__FILE_NAME = eINSTANCE.getStaticFieldAccess_FileName();
 
 	}
 

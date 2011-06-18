@@ -7,6 +7,8 @@
 package kr.ac.kaist.se.aom.structure;
 
 import kr.ac.kaist.se.aom.MeasurableElement;
+import kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess;
+import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import org.eclipse.emf.common.util.EList;
 
 /**
@@ -18,7 +20,8 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMField#getOwner <em>Owner</em>}</li>
- *   <li>{@link kr.ac.kaist.se.aom.structure.AOMField#getReferer <em>Referer</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.AOMField#getStaticReferer <em>Static Referer</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.AOMField#getDynamicReferer <em>Dynamic Referer</em>}</li>
  * </ul>
  * </p>
  *
@@ -56,21 +59,39 @@ public interface AOMField extends AOMVariableDef, MeasurableElement {
 	void setOwner(AOMClass value);
 
 	/**
-	 * Returns the value of the '<em><b>Referer</b></em>' reference list.
-	 * The list contents are of type {@link kr.ac.kaist.se.aom.structure.AOMScope}.
-	 * It is bidirectional and its opposite is '{@link kr.ac.kaist.se.aom.structure.AOMScope#getReferringFields <em>Referring Fields</em>}'.
+	 * Returns the value of the '<em><b>Static Referer</b></em>' reference list.
+	 * The list contents are of type {@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess}.
+	 * It is bidirectional and its opposite is '{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getAccessedField <em>Accessed Field</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Referer</em>' reference list isn't clear,
+	 * If the meaning of the '<em>Static Referer</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Referer</em>' reference list.
-	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMField_Referer()
-	 * @see kr.ac.kaist.se.aom.structure.AOMScope#getReferringFields
-	 * @model opposite="referringFields"
+	 * @return the value of the '<em>Static Referer</em>' reference list.
+	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMField_StaticReferer()
+	 * @see kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getAccessedField
+	 * @model opposite="accessedField"
 	 * @generated
 	 */
-	EList<AOMScope> getReferer();
+	EList<StaticFieldAccess> getStaticReferer();
+
+	/**
+	 * Returns the value of the '<em><b>Dynamic Referer</b></em>' reference list.
+	 * The list contents are of type {@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess}.
+	 * It is bidirectional and its opposite is '{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getAccessedField <em>Accessed Field</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Dynamic Referer</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Dynamic Referer</em>' reference list.
+	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMField_DynamicReferer()
+	 * @see kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getAccessedField
+	 * @model opposite="accessedField"
+	 * @generated
+	 */
+	EList<DynamicFieldAccess> getDynamicReferer();
 
 } // AOMField
