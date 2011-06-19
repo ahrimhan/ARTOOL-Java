@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
+import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMField;
@@ -410,7 +411,7 @@ public class BasicMetricSuite {
 		for( AOMField field : clazz.getFields() )
 		{
 			measure(field);
-			sum_mA += field.getReferer().size();
+			sum_mA += field.getStaticReferer().size();
 		}
 		
 		if( num_methods * num_attributes != 0 )
@@ -449,8 +450,21 @@ public class BasicMetricSuite {
 				AOMMethod method2 = clazz.getMethods().get(j);
 				if( method1.getOwnedScope() != null && method2.getOwnedScope() != null )
 				{
-					EList<AOMField> referringField1 = method1.getOwnedScope().getReferringFields();
-					EList<AOMField> referringField2 = method2.getOwnedScope().getReferringFields();
+					EList<StaticFieldAccess> fieldAccess1 = method1.getOwnedScope().getStaticFieldAccesses();
+					EList<StaticFieldAccess> fieldAccess2 = method2.getOwnedScope().getStaticFieldAccesses();
+					
+					HashSet<AOMField> referringField1 = new HashSet<AOMField>();
+					HashSet<AOMField> referringField2 = new HashSet<AOMField>();
+					
+					for( StaticFieldAccess sfa : fieldAccess1 )
+					{
+						referringField1.add(sfa.getAccessedField());
+					}
+					
+					for( StaticFieldAccess sfa : fieldAccess2 )
+					{
+						referringField2.add(sfa.getAccessedField());
+					}
 					
 					unionSize = referringField1.size() + referringField2.size();
 					intersectSize = 0;

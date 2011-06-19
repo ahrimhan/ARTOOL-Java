@@ -39,7 +39,9 @@
          </action>
          <action
                class="kr.ac.kaist.se.artool.dynamicprofile.DynamicProfile2AOMAction"
-               id="kr.ac.kaist.se.artool.dynamicprofile.profileaction">
+               id="kr.ac.kaist.se.artool.dynamicprofile.profileaction"
+               label="Transform Dynamic Profiles to AOM"
+               menubarPath="additions">
          </action>
       </objectContribution>
    </extension>

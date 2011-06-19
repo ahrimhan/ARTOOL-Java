@@ -6,7 +6,7 @@ import java.io.PrintWriter;
 
 public abstract class AOMLoggingItem  {
 	public abstract void write(PrintWriter ds) throws IOException;
-	public abstract void read(BufferedReader ds) throws IOException;
+	public abstract boolean read(BufferedReader ds) throws IOException;
 	
 	private boolean occupied = false;
 	

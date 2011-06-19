@@ -2,7 +2,6 @@ package kr.ac.kaist.se.aom.profiler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collection;
@@ -88,15 +87,16 @@ public class AOMFieldAccessItem extends AOMLoggingItem {
 	public static AOMFieldAccessItem getInstance(BufferedReader di) throws IOException
 	{
 		AOMFieldAccessItem item = new AOMFieldAccessItem();
-		item.read(di);
+		if( !item.read(di) ) return null;
 		return item;
 	}
 	
-	public void read(BufferedReader reader) throws IOException{
+	public boolean read(BufferedReader reader) throws IOException{
 		String line = reader.readLine();
+		if( line == null ) return false;
 		String[] items = line.split(",");
 		
-		if( items.length < 9) return;
+		if( items.length < 9) return false;
 
 		accessorClassName = items[0];
 		accessorMethodName = items[1];
@@ -108,6 +108,8 @@ public class AOMFieldAccessItem extends AOMLoggingItem {
 		referencedFieldName = items[6];
 		isReadAccess = Boolean.parseBoolean(items[7]);
 		isWriteAccess = Boolean.parseBoolean(items[8]);
+		
+		return true;
 	}
 	
 	public String toString()

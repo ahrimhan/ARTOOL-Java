@@ -103,15 +103,16 @@ public class AOMMethodCallItem extends AOMLoggingItem {
 	public static AOMMethodCallItem getInstance(BufferedReader di) throws IOException
 	{
 		AOMMethodCallItem item = new AOMMethodCallItem();
-		item.read(di);
+		if( !item.read(di) ) return null;
 		return item;
 	}
 	
-	public void read(BufferedReader reader) throws IOException{
+	public boolean read(BufferedReader reader) throws IOException{
 		String line = reader.readLine();
+		if( line == null ) return false;
 		String[] items = line.split(",");
 		
-		if( items.length < 11) return;
+		if( items.length < 11) return false;
 		
 		callerClassName = items[0];
 		callerMethodName = items[1];
@@ -126,6 +127,7 @@ public class AOMMethodCallItem extends AOMLoggingItem {
 		threadId = Long.parseLong(items[8]);
 		methodCallId = Integer.parseInt(items[9]);
 		prevMethodCallId = Integer.parseInt(items[10]);
+		return true;
 	}
 	
 	public String toString()
