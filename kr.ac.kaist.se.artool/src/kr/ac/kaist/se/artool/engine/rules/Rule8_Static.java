@@ -24,17 +24,23 @@ public class Rule8_Static extends AbstractRule {
 	private AOMClass[] aomClasses;
 	private AOMClass newParentRelocatingClass;
 	
-	public Rule8_Static(AbstractObjectModel aom, int cutline) {
+	public Rule8_Static(AbstractObjectModel aom, int cutline, int pick) {
 		// TODO Auto-generated constructor stub
-		super(aom);
-		rule8list = new BasicEMap<HashSet<AOMClass>, Integer>();
-		rule8list2 = getRule8List();
+		super(aom, pick);
 		newParentRelocatingClass = null;
-
-		sortedRule8list = UtilityFunctions.getInstance().__getSortedIBDP(rule8list2, cutline);
+		
+		if( (sortedRule8list = ListCache.getInstance().getClassList(getRuleName())) == null )
+		{
+			rule8list = new BasicEMap<HashSet<AOMClass>, Integer>();
+			rule8list2 = getRule8List();
+	
+			sortedRule8list = UtilityFunctions.getInstance().__getSortedIBDP(rule8list2, cutline);
+			ListCache.getInstance().putClassList(getRuleName(), sortedRule8list);
+		}
+		
 		if( sortedRule8list != null && sortedRule8list.length > 0 )
 		{
-			aomClasses = sortedRule8list[0].getKey().toArray(new AOMClass[0]);
+			aomClasses = sortedRule8list[pick].getKey().toArray(new AOMClass[0]);
 		}
 		ClassStat.getStaticStat().countOnClassEntries(sortedRule8list);
 	}
@@ -113,7 +119,7 @@ public class Rule8_Static extends AbstractRule {
 	}
 
 	@Override
-	public String getName() {
+	public String getRuleName() {
 		// TODO Auto-generated method stub
 		return "Rule8";
 	}

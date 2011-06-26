@@ -19,10 +19,10 @@ public class Rule3_Static extends AbstractRule {
 	private AOMMethod[] aomMethods;
 	
 	public Rule3_Static(AbstractObjectModel aom,
-			Entry<HashSet<AOMMethod>, Integer>[] n_IBDPM) {
-		super(aom);
+			Entry<HashSet<AOMMethod>, Integer>[] n_IBDPM, int pick) {
+		super(aom, pick);
 		this.n_IBDPM = n_IBDPM;
-		aomMethods = n_IBDPM[0].getKey().toArray(new AOMMethod[0]);
+		aomMethods = n_IBDPM[pick].getKey().toArray(new AOMMethod[0]);
 		
 		ClassStat.getStaticStat().countOnMethodEntries(n_IBDPM);
 	}
@@ -40,7 +40,7 @@ public class Rule3_Static extends AbstractRule {
 	}
 	
 	@Override
-	public String getName()
+	public String getRuleName()
 	{
 		return "Rule3";
 	}

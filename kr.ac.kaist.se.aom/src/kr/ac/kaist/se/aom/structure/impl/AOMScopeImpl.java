@@ -87,7 +87,7 @@ public class AOMScopeImpl extends EObjectImpl implements AOMScope {
 	protected EList<DynamicMethodCall> dynamicMethodCalls;
 
 	/**
-	 * The cached value of the '{@link #getStaticFieldAccesses() <em>Static Field Accesses</em>}' reference list.
+	 * The cached value of the '{@link #getStaticFieldAccesses() <em>Static Field Accesses</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getStaticFieldAccesses()
@@ -97,7 +97,7 @@ public class AOMScopeImpl extends EObjectImpl implements AOMScope {
 	protected EList<StaticFieldAccess> staticFieldAccesses;
 
 	/**
-	 * The cached value of the '{@link #getDynamicFieldAccesses() <em>Dynamic Field Accesses</em>}' reference list.
+	 * The cached value of the '{@link #getDynamicFieldAccesses() <em>Dynamic Field Accesses</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getDynamicFieldAccesses()
@@ -209,7 +209,7 @@ public class AOMScopeImpl extends EObjectImpl implements AOMScope {
 	 */
 	public EList<StaticFieldAccess> getStaticFieldAccesses() {
 		if (staticFieldAccesses == null) {
-			staticFieldAccesses = new EObjectWithInverseResolvingEList<StaticFieldAccess>(StaticFieldAccess.class, this, StructurePackage.AOM_SCOPE__STATIC_FIELD_ACCESSES, StaticmodelPackage.STATIC_FIELD_ACCESS__ACCESSING_SCOPE);
+			staticFieldAccesses = new EObjectContainmentWithInverseEList<StaticFieldAccess>(StaticFieldAccess.class, this, StructurePackage.AOM_SCOPE__STATIC_FIELD_ACCESSES, StaticmodelPackage.STATIC_FIELD_ACCESS__ACCESSING_SCOPE);
 		}
 		return staticFieldAccesses;
 	}
@@ -221,7 +221,7 @@ public class AOMScopeImpl extends EObjectImpl implements AOMScope {
 	 */
 	public EList<DynamicFieldAccess> getDynamicFieldAccesses() {
 		if (dynamicFieldAccesses == null) {
-			dynamicFieldAccesses = new EObjectWithInverseResolvingEList<DynamicFieldAccess>(DynamicFieldAccess.class, this, StructurePackage.AOM_SCOPE__DYNAMIC_FIELD_ACCESSES, DynamicmodelPackage.DYNAMIC_FIELD_ACCESS__ACCESSING_SCOPE);
+			dynamicFieldAccesses = new EObjectContainmentWithInverseEList<DynamicFieldAccess>(DynamicFieldAccess.class, this, StructurePackage.AOM_SCOPE__DYNAMIC_FIELD_ACCESSES, DynamicmodelPackage.DYNAMIC_FIELD_ACCESS__ACCESSING_SCOPE);
 		}
 		return dynamicFieldAccesses;
 	}

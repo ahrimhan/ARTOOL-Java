@@ -163,7 +163,7 @@ public interface StaticmodelPackage extends EPackage {
 	int STATIC_FIELD_ACCESS = 2;
 
 	/**
-	 * The feature id for the '<em><b>Accessing Scope</b></em>' reference.
+	 * The feature id for the '<em><b>Accessing Scope</b></em>' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -323,10 +323,10 @@ public interface StaticmodelPackage extends EPackage {
 	EClass getStaticFieldAccess();
 
 	/**
-	 * Returns the meta object for the reference '{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getAccessingScope <em>Accessing Scope</em>}'.
+	 * Returns the meta object for the container reference '{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getAccessingScope <em>Accessing Scope</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Accessing Scope</em>'.
+	 * @return the meta object for the container reference '<em>Accessing Scope</em>'.
 	 * @see kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getAccessingScope()
 	 * @see #getStaticFieldAccess()
 	 * @generated
@@ -489,7 +489,7 @@ public interface StaticmodelPackage extends EPackage {
 		EClass STATIC_FIELD_ACCESS = eINSTANCE.getStaticFieldAccess();
 
 		/**
-		 * The meta object literal for the '<em><b>Accessing Scope</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Accessing Scope</b></em>' container reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

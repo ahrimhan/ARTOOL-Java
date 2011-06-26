@@ -269,7 +269,7 @@ public class AOMTransformingVisitor extends ASTVisitor {
 			fieldAccess.setLineNumber(lineNumber);
 			fieldAccess.setColumnNumber(cu.getColumnNumber(node.getStartPosition()));
 			fieldAccess.setFileName(cu.getTypeRoot().getPath().lastSegment());
-	
+			
 			return super.visit(node);
 		}
 		

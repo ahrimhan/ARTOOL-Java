@@ -164,7 +164,7 @@ public interface DynamicmodelPackage extends EPackage {
 	int DYNAMIC_FIELD_ACCESS = 2;
 
 	/**
-	 * The feature id for the '<em><b>Accessing Scope</b></em>' reference.
+	 * The feature id for the '<em><b>Accessing Scope</b></em>' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -342,10 +342,10 @@ public interface DynamicmodelPackage extends EPackage {
 	EClass getDynamicFieldAccess();
 
 	/**
-	 * Returns the meta object for the reference '{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getAccessingScope <em>Accessing Scope</em>}'.
+	 * Returns the meta object for the container reference '{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getAccessingScope <em>Accessing Scope</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Accessing Scope</em>'.
+	 * @return the meta object for the container reference '<em>Accessing Scope</em>'.
 	 * @see kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getAccessingScope()
 	 * @see #getDynamicFieldAccess()
 	 * @generated
@@ -521,7 +521,7 @@ public interface DynamicmodelPackage extends EPackage {
 		 */
 		EClass DYNAMIC_FIELD_ACCESS = eINSTANCE.getDynamicFieldAccess();
 		/**
-		 * The meta object literal for the '<em><b>Accessing Scope</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Accessing Scope</b></em>' container reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

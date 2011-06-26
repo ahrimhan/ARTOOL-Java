@@ -26,13 +26,19 @@ public class Rule10 extends AbstractRule {
 	private AOMMethod[] aomMethods;
 	
 	
-	public Rule10(AbstractObjectModel aom, int cutline) {
+	public Rule10(AbstractObjectModel aom, int cutline, int pick) {
 		// TODO Auto-generated constructor stub
-		super(aom);
-		rule10list = new BasicEMap<HashSet<AOMMethod>, Integer>();
-		rule10list2 = getRule10List();
-		sortedRule10list = UtilityFunctions.getInstance().__getSortedIBDP(rule10list2, cutline);
-		aomMethods = sortedRule10list[0].getKey().toArray(new AOMMethod[0]);
+		super(aom, pick);
+		
+		if( (sortedRule10list = ListCache.getInstance().getMethodList(getRuleName())) == null )
+		{
+			rule10list = new BasicEMap<HashSet<AOMMethod>, Integer>();
+			rule10list2 = getRule10List();
+			sortedRule10list = UtilityFunctions.getInstance().__getSortedIBDP(rule10list2, cutline);
+			ListCache.getInstance().putMethodList(getRuleName(), sortedRule10list);
+		}
+		
+		aomMethods = sortedRule10list[pick].getKey().toArray(new AOMMethod[0]);
 		
 		ClassStat.getDynamicStat().countOnMethodEntries(sortedRule10list);
 	}
@@ -243,7 +249,7 @@ public class Rule10 extends AbstractRule {
 	}
 
 	@Override
-	public String getName() {
+	public String getRuleName() {
 		// TODO Auto-generated method stub
 		return "Rule10";
 	}

@@ -14,11 +14,12 @@ import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.metrics.BasicMetricSuite;
-import kr.ac.kaist.se.artool.engine.metrics.N_DCICM;
+import kr.ac.kaist.se.artool.engine.metrics.N_DCICM_Dynamic;
 import kr.ac.kaist.se.artool.engine.metrics.N_DCICM_Static;
 import kr.ac.kaist.se.artool.engine.metrics.N_IBDPC;
 import kr.ac.kaist.se.artool.engine.metrics.N_IBDPC_Static;
 import kr.ac.kaist.se.artool.engine.rules.AbstractRule;
+import kr.ac.kaist.se.artool.engine.rules.ListCache;
 import kr.ac.kaist.se.artool.engine.rules.Rule1;
 import kr.ac.kaist.se.artool.engine.rules.Rule10;
 import kr.ac.kaist.se.artool.engine.rules.Rule10_Static;
@@ -58,6 +59,7 @@ public class ARToolMain {
 	private static ARToolMain instance;
 	private static final int INTERACTIVE_CHOICE = 0;
 	private static final int BEST_CHOICE = 1;
+	private int pickUntil = 3;
 	// FIXME: 
 	private int chosenSelector = INTERACTIVE_CHOICE;
 	
@@ -213,7 +215,7 @@ public class ARToolMain {
 //		return rule4list;
 //	}
 	
-	public EMap[] getRule4List(AbstractObjectModel aom, N_DCICM n_dcicm)
+	public EMap[] getRule4List(AbstractObjectModel aom, N_DCICM_Dynamic n_dcicm)
 	{
 		int ndcicm = 0;
 		int numDynamicMethodCalls = 0;
@@ -282,25 +284,29 @@ public class ARToolMain {
 		return ret;
 	}
 	
-	public EMap<HashSet<AOMClass>, Integer> getRule4List_Static(AbstractObjectModel aom, N_DCICM_Static n_dcicm_static)
+	public EMap[] getRule4List_Static(AbstractObjectModel aom, N_DCICM_Static n_dcicm_static)
 	{
 		int ndcicm_static = 0;
 		int numStaticMethodCalls = 0;
 		
-		EMap<HashSet<AOMClass>, Integer> rule4list = new BasicEMap<HashSet<AOMClass>, Integer>();
-		
+		EMap<HashSet<AOMClass>, Integer> rule4list_Class = new BasicEMap<HashSet<AOMClass>, Integer>();
+		EMap<HashSet<AOMMethod>, Integer> rule4list_Method = new BasicEMap<HashSet<AOMMethod>, Integer>();	
+		EMap[] ret = new EMap[2];
+		ret[0] = rule4list_Class;
+		ret[1] = rule4list_Method;
 		
 		AOMClass[] aomClasses;
-		
+		AOMMethod[] aomMethods;
 		AOMClass[] source_targetClasses = new AOMClass[2]; 
+		AOMMethod[] source_targetMethods  = new AOMMethod[2];
 		
 		for( AOMClass clazz : aom.getClasses() )
 		{
 			for( AOMMethod method : clazz.getMethods() )
 			{
 				ndcicm_static = BasicMetricSuite.getInt(method.getMeasuredDataSet().get("N_DCICM_Static"));
-				aomClasses = n_dcicm_static.getDCICM_Static().get(method).toArray(new AOMClass[ndcicm_static]);
-//				aomMethods = n_dcicm.getMap4N_DMICM().get(method).toArray(new AOMMethod[ndcicm]);
+				aomClasses = n_dcicm_static.getDCICM().get(method).toArray(new AOMClass[ndcicm_static]);
+				aomMethods = n_dcicm_static.getMap4N_DMICM().get(method).toArray(new AOMMethod[ndcicm_static]);
 				
 				if( method.getOwnedScope() != null )
 				{
@@ -312,7 +318,14 @@ public class ARToolMain {
 						{
 							source_targetClasses[0] = aomClasses[i];
 							source_targetClasses[1] = aomClasses[++i];
-							UtilityFunctions.getInstance().increase(rule4list, source_targetClasses[0], source_targetClasses[1]);
+							UtilityFunctions.getInstance().increase(rule4list_Class, source_targetClasses[0], source_targetClasses[1]);
+						}
+						
+						for(int i = 0; i < aomMethods.length - 1 ; )
+						{
+							source_targetMethods[0] = aomMethods[i];
+							source_targetMethods[1] = aomMethods[++i];
+							UtilityFunctions.getInstance().increase(rule4list_Method, source_targetMethods[0], source_targetMethods[1]);
 						}
 					}
 				}
@@ -320,7 +333,7 @@ public class ARToolMain {
 				numStaticMethodCalls = 0;
 			}
 		}
-		return rule4list;
+		return ret;
 	}
 	
 	public static int getInt(Object obj)
@@ -482,7 +495,7 @@ public class ARToolMain {
 				N_IBDPC n_ibdpc = new N_IBDPC();
 				n_ibdpc.measure(aom);
 				
-				N_DCICM n_dcicm = new N_DCICM();
+				N_DCICM_Dynamic n_dcicm = new N_DCICM_Dynamic();
 				n_dcicm.measure(aom);
 				
 				Map.Entry<HashSet<AOMClass>, Integer>[] n_IBDPC = n_ibdpc.getSortedIBDPC(cutline);
@@ -501,18 +514,21 @@ public class ARToolMain {
 				// rule setting
 				Vector<AbstractRule> rules = new Vector<AbstractRule>();
 				// my approach (dynamic)
-				rules.add(new Rule1(aom, n_IBDPC));
-				rules.add(new Rule2(aom, n_IBDPM));
-				rules.add(new Rule3(aom, n_IBDPM));
-				rules.add(new Rule4(aom, sortedRule4list_Class));
-				rules.add(new Rule4_MoveMethod_1(aom, sortedRule4list_Method));
-				rules.add(new Rule4_MoveMethod_2(aom, sortedRule4list_Method));
-				rules.add(new Rule5(aom, cutline));
-				rules.add(new Rule6(aom, cutline));
-				rules.add(new Rule7(aom, cutline));
-				rules.add(new Rule8(aom, cutline));
-				rules.add(new Rule9(aom, cutline));
-				rules.add(new Rule10(aom, cutline));
+				
+				ListCache.getInstance().reset();
+				
+				for(int i = 0; i < pickUntil; i++) rules.add(new Rule1(aom, n_IBDPC,i));
+				for(int i = 0; i < pickUntil; i++) rules.add(new Rule2(aom, n_IBDPM,i));
+				for(int i = 0; i < pickUntil; i++) rules.add(new Rule3(aom, n_IBDPM,i));
+				for(int i = 0; i < pickUntil; i++) rules.add(new Rule4(aom, sortedRule4list_Class,i));
+				for(int i = 0; i < pickUntil; i++) rules.add(new Rule4_MoveMethod_1(aom, sortedRule4list_Method,i));
+				for(int i = 0; i < pickUntil; i++) rules.add(new Rule4_MoveMethod_2(aom, sortedRule4list_Method,i));
+				for(int i = 0; i < pickUntil; i++) rules.add(new Rule5(aom, cutline,i));
+//				for(int i = 0; i < pickUntil; i++) rules.add(new Rule6(aom, cutline,i));
+				for(int i = 0; i < pickUntil; i++) rules.add(new Rule7(aom, cutline,i));
+//				for(int i = 0; i < pickUntil; i++) rules.add(new Rule8(aom, cutline,i));
+//				for(int i = 0; i < pickUntil; i++) rules.add(new Rule9(aom, cutline,i));
+//				for(int i = 0; i < pickUntil; i++) rules.add(new Rule10(aom, cutline,i));
 				
 				StatusLogger.getInstance().openTrialPhase();
 				// trial execution for rules
@@ -559,22 +575,30 @@ public class ARToolMain {
 				Map.Entry<HashSet<AOMMethod>, Integer>[] n_IBDPM_Static = n_ibdpc_static.getSortedIBDPM(cutline);
 				//
 				//AbstractRule rule4 = new Rule4(aom, sortedRule4list);
-				Map.Entry<HashSet<AOMClass>, Integer>[] sortedRule4list =
-					UtilityFunctions.getInstance().__getSortedIBDP(getRule4List_Static(aom, n_dcicm_static), cutline);
+//				Map.Entry<HashSet<AOMClass>, Integer>[] sortedRule4list =
+//					UtilityFunctions.getInstance().__getSortedIBDP(getRule4List_Static(aom, n_dcicm_static), cutline);
+				EMap[] staticRule4List = getRule4List_Static(aom, n_dcicm_static);
+				Map.Entry<HashSet<AOMClass>, Integer>[] sortedRule4list_Class=
+					UtilityFunctions.getInstance().__getSortedIBDP(staticRule4List[0], cutline);
+				Map.Entry<HashSet<AOMMethod>, Integer>[] sortedRule4list_Method =
+					UtilityFunctions.getInstance().__getSortedIBDP(staticRule4List[1], cutline);
 				
 				// rule setting
 				Vector<AbstractRule> rules = new Vector<AbstractRule>();
 				// static approach
-				rules.add(new Rule1_Static(aom, n_IBDPC_Static));
-				rules.add(new Rule2_Static(aom, n_IBDPM_Static));
-				rules.add(new Rule3_Static(aom, n_IBDPM_Static));
-				rules.add(new Rule4_Static(aom, sortedRule4list));
-				rules.add(new Rule5_Static(aom, cutline));
-				rules.add(new Rule6_Static(aom, cutline));
-				rules.add(new Rule7_Static(aom, cutline));
-				rules.add(new Rule8_Static(aom, cutline));
-				rules.add(new Rule9_Static(aom, cutline));
-				rules.add(new Rule10_Static(aom, cutline));
+				
+				for(int i = 0; i < pickUntil; i++) rules.add(new Rule1_Static(aom, n_IBDPC_Static,i));
+				for(int i = 0; i < pickUntil; i++) rules.add(new Rule2_Static(aom, n_IBDPM_Static,i));
+				for(int i = 0; i < pickUntil; i++) rules.add(new Rule3_Static(aom, n_IBDPM_Static,i));
+				for(int i = 0; i < pickUntil; i++) rules.add(new Rule4_Static(aom, sortedRule4list_Class,i));
+				for(int i = 0; i < pickUntil; i++) rules.add(new Rule4_MoveMethod_1(aom, sortedRule4list_Method,i));
+				for(int i = 0; i < pickUntil; i++) rules.add(new Rule4_MoveMethod_2(aom, sortedRule4list_Method,i));
+				for(int i = 0; i < pickUntil; i++) rules.add(new Rule5_Static(aom, cutline,i));
+//				for(int i = 0; i < pickUntil; i++) rules.add(new Rule6_Static(aom, cutline,i));
+				for(int i = 0; i < pickUntil; i++) rules.add(new Rule7_Static(aom, cutline,i));
+//				for(int i = 0; i < pickUntil; i++) rules.add(new Rule8_Static(aom, cutline,i));
+//				for(int i = 0; i < pickUntil; i++) rules.add(new Rule9_Static(aom, cutline,i));
+//				for(int i = 0; i < pickUntil; i++) rules.add(new Rule10_Static(aom, cutline,i));
 				
 				StatusLogger.getInstance().openTrialPhase();
 				// trial execution for rules

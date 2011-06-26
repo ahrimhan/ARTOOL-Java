@@ -94,9 +94,11 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="dynamicMethodCalls" upperBound="-1"
           eType="#//dynamicmodel/DynamicMethodCall" containment="true" eOpposite="#//dynamicmodel/DynamicMethodCall/caller"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="staticFieldAccesses"
-          upperBound="-1" eType="#//staticmodel/StaticFieldAccess" eOpposite="#//staticmodel/StaticFieldAccess/accessingScope"/>
+          upperBound="-1" eType="#//staticmodel/StaticFieldAccess" containment="true"
+          eOpposite="#//staticmodel/StaticFieldAccess/accessingScope"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="dynamicFieldAccesses"
-          upperBound="-1" eType="#//dynamicmodel/DynamicFieldAccess" eOpposite="#//dynamicmodel/DynamicFieldAccess/accessingScope"/>
+          upperBound="-1" eType="#//dynamicmodel/DynamicFieldAccess" containment="true"
+          eOpposite="#//dynamicmodel/DynamicFieldAccess/accessingScope"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="AOMParameter" eSuperTypes="#//structure/AOMVariableDef">
       <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//structure/AOMMethod"

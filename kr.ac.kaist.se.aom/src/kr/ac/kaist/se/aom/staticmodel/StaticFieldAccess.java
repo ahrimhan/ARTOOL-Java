@@ -37,7 +37,7 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
  */
 public interface StaticFieldAccess extends StaticDependency {
 	/**
-	 * Returns the value of the '<em><b>Accessing Scope</b></em>' reference.
+	 * Returns the value of the '<em><b>Accessing Scope</b></em>' container reference.
 	 * It is bidirectional and its opposite is '{@link kr.ac.kaist.se.aom.structure.AOMScope#getStaticFieldAccesses <em>Static Field Accesses</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -45,20 +45,20 @@ public interface StaticFieldAccess extends StaticDependency {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Accessing Scope</em>' reference.
+	 * @return the value of the '<em>Accessing Scope</em>' container reference.
 	 * @see #setAccessingScope(AOMScope)
 	 * @see kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage#getStaticFieldAccess_AccessingScope()
 	 * @see kr.ac.kaist.se.aom.structure.AOMScope#getStaticFieldAccesses
-	 * @model opposite="staticFieldAccesses"
+	 * @model opposite="staticFieldAccesses" transient="false"
 	 * @generated
 	 */
 	AOMScope getAccessingScope();
 
 	/**
-	 * Sets the value of the '{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getAccessingScope <em>Accessing Scope</em>}' reference.
+	 * Sets the value of the '{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getAccessingScope <em>Accessing Scope</em>}' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Accessing Scope</em>' reference.
+	 * @param value the new value of the '<em>Accessing Scope</em>' container reference.
 	 * @see #getAccessingScope()
 	 * @generated
 	 */

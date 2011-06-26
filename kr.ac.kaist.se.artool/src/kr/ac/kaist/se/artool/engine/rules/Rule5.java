@@ -22,14 +22,18 @@ public class Rule5 extends AbstractRule {
 	Map.Entry<HashSet<AOMClass>, Integer>[] sortedRule5list;
 	private AOMClass[] aomClasses;
 	
-	public Rule5(AbstractObjectModel aom, int cutline) {
+	public Rule5(AbstractObjectModel aom, int cutline, int pick) {
 		// TODO Auto-generated constructor stub
-		super(aom);
-		rule5list = new BasicEMap<HashSet<AOMClass>, Integer>();
-		rule5list2 = getRule5List();
-
-		sortedRule5list = UtilityFunctions.getInstance().__getSortedIBDP(rule5list2, cutline);
-		aomClasses = sortedRule5list[0].getKey().toArray(new AOMClass[0]);
+		super(aom, pick);
+		if( (sortedRule5list = ListCache.getInstance().getClassList(getRuleName())) == null )
+		{
+			rule5list = new BasicEMap<HashSet<AOMClass>, Integer>();
+			rule5list2 = getRule5List();
+	
+			sortedRule5list = UtilityFunctions.getInstance().__getSortedIBDP(rule5list2, cutline);
+			ListCache.getInstance().putClassList(getRuleName(), sortedRule5list);
+		}
+		aomClasses = sortedRule5list[pick].getKey().toArray(new AOMClass[0]);
 		
 		ClassStat.getDynamicStat().countOnClassEntries(sortedRule5list);
 	}
@@ -77,7 +81,7 @@ public class Rule5 extends AbstractRule {
 	}
 
 	@Override
-	public String getName() {
+	public String getRuleName() {
 		// TODO Auto-generated method stub
 		return "Rule5";
 	}

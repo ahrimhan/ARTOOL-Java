@@ -14,6 +14,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -28,12 +30,19 @@ public class RuleSelectionDialog extends Dialog {
 	private List<AbstractRule> rules;
 	private AbstractRule selectedRule = null;
 
-	protected RuleSelectionDialog(Shell parentShell, List<AbstractRule> rules) {
-		super(parentShell);
-		this.rules = rules;
+	private static NumberFormat nf;
+	
+	static
+	{
 		nf= NumberFormat.getInstance();
 		nf.setMaximumFractionDigits(8);
 		nf.setMinimumFractionDigits(8);
+	}
+
+	protected RuleSelectionDialog(Shell parentShell, List<AbstractRule> rules) {
+		super(parentShell);
+		this.rules = rules;
+		
 	}
 
 	@Override
@@ -77,7 +86,7 @@ public class RuleSelectionDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = ( Composite )super.createDialogArea(parent);
-		
+		comparator = new MyViewerComparator();
 		try 
 		{
 			createTableViewer(composite);
@@ -90,7 +99,7 @@ public class RuleSelectionDialog extends Dialog {
 
 		return composite;
 	}
-	private NumberFormat nf;
+
 	private void createTableViewer(Composite parent) {
 
 		
@@ -118,7 +127,7 @@ public class RuleSelectionDialog extends Dialog {
 		gridData.horizontalAlignment = GridData.FILL;
 		viewer.getControl().setLayoutData(gridData);
 		
-
+		viewer.setComparator(comparator);
 	}
 
 	@Override
@@ -139,7 +148,7 @@ public class RuleSelectionDialog extends Dialog {
 		return super.isResizable();
 	}
 
-	private static final String[] statusAttributes = { "fitness2", "fitness3", "fitness_static", "StaticBoth", "DynamicBoth", "MPCDBoth", "MSC", "LCOM2", "LCOM3" };
+	public static final String[] statusAttributes = { "fitness2", "fitness3", "fitness_static", "StaticBoth", "DynamicBoth", "MPCDBoth", "MSC", "LCOM2", "LCOM3" };
 
 	
 	private void createColumns(final TableViewer viewer) {
@@ -167,40 +176,69 @@ public class RuleSelectionDialog extends Dialog {
 		
 		for( int i = 0; i < statusAttributes.length ; i++ )
 		{
-			col = createTableViewerColumn(statusAttributes[i], 100, 2);
+			col = createTableViewerColumn(statusAttributes[i], 100, i + 2);
 			final String selectedAttr = statusAttributes[i];
 			col.setLabelProvider(new ColumnLabelProvider() {
 				@Override
 				public String getText(Object element) {
 					AbstractRule rule = (AbstractRule) element;
-					BasicEMap<String, Float> p = StatusLogger.getInstance().getTrialPhase(rule);
-					if( p == null ) return "-";
-					if( p.get(selectedAttr) == null ) return "-";
-					return nf.format(p.get(selectedAttr));
+					String ret = getAttrAsString(selectedAttr, rule);
+					return ret;
 				}
+
+
 			});
 		}
 		
 		for( int i = 0; i < statusAttributes.length ; i++ )
 		{
-			col = createTableViewerColumn("¡â" + statusAttributes[i], 100, 2);
+			col = createTableViewerColumn("¡â" + statusAttributes[i], 100, statusAttributes.length + i + 2);
 			final String selectedAttr = statusAttributes[i];
 			col.setLabelProvider(new ColumnLabelProvider() {
 				@Override
 				public String getText(Object element) {
 					AbstractRule rule = (AbstractRule) element;
-					BasicEMap<String, Float> p = StatusLogger.getInstance().getTrialPhase(rule);
-					if( p == null ) return "-";
-					if( p.get(selectedAttr) == null ) return "-";
-					float curValue =  p.get(selectedAttr);
-					float originalValue =  StatusLogger.getInstance().getOriginalPhase().get(selectedAttr);
-					float previousValue =  StatusLogger.getInstance().getPreviousPhase().get(selectedAttr);
-					return nf.format(curValue - previousValue);
+					String ret = calculateDeltaAsString(selectedAttr, rule);
+					return ret;
 				}
+
+
 			});
 		}
 	}
-
+	
+	public static float getAttr(final String selectedAttr,
+			AbstractRule rule) {
+		BasicEMap<String, Float> p = StatusLogger.getInstance().getTrialPhase(rule);
+		if( p == null ) return Float.NaN;
+		if( p.get(selectedAttr) == null ) return Float.NaN;
+		return p.get(selectedAttr);
+	}
+	
+	public static String getAttrAsString(final String selectedAttr,
+			AbstractRule rule) {
+		float f = getAttr(selectedAttr, rule);
+		if( f == Float.NaN ) return "-";
+		return nf.format(f);
+	}
+	
+	public static float calculateDelta(String selectedAttr,
+			AbstractRule rule) {
+		BasicEMap<String, Float> p = StatusLogger.getInstance().getTrialPhase(rule);
+		if( p == null ) return Float.NaN;
+		if( p.get(selectedAttr) == null ) return Float.NaN;
+		float curValue =  p.get(selectedAttr);
+		float originalValue =  StatusLogger.getInstance().getOriginalPhase().get(selectedAttr);
+		float previousValue =  StatusLogger.getInstance().getPreviousPhase().get(selectedAttr);
+		return curValue - previousValue;
+	}
+	public static String calculateDeltaAsString(String selectedAttr,
+			AbstractRule rule) {
+		float f = calculateDelta(selectedAttr, rule); 
+		if( f == Float.NaN ) return "-";
+		return nf.format(f);
+	}
+	
 	private TableViewerColumn createTableViewerColumn(String title, int bound,
 			final int colNumber) {
 		final TableViewerColumn viewerColumn = new TableViewerColumn(viewer,
@@ -210,8 +248,24 @@ public class RuleSelectionDialog extends Dialog {
 		column.setWidth(bound);
 		column.setResizable(true);
 		column.setMoveable(true);
+		column.addSelectionListener(getSelectionAdapter(column, colNumber));
 		return viewerColumn;
 
+	}
+	private MyViewerComparator comparator;
+
+	private SelectionAdapter getSelectionAdapter(final TableColumn column,
+			final int index) {
+		SelectionAdapter selectionAdapter = new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				comparator.setColumn(index);
+				int dir = comparator.getDirection();
+				viewer.getTable().setSortDirection(dir);
+				viewer.refresh();
+			}
+		};
+		return selectionAdapter;
 	}
 
 	@Override

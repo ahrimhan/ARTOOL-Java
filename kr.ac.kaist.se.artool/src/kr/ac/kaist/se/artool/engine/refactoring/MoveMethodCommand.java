@@ -59,14 +59,25 @@ public class MoveMethodCommand implements RefactoringCommand {
 		return null;
 	}
 	
+	boolean did = false;
+	
 	@Override
 	public void doCommand() throws RefactoringException {
-		for( AOMMethod lm : targetClass.getMethods() )
+		did = false;
+		try
 		{
-			if( isIdenticalMethod(lm, movingMethod) )
+			for( AOMMethod lm : targetClass.getMethods() )
 			{
-				throw new RefactoringException(targetClass.getFqdn() + " already has a method which has the same name and signature");
+				if( isIdenticalMethod(lm, movingMethod) )
+				{
+					throw new RefactoringException(targetClass.getFqdn() + " already has a method which has the same name and signature");
+				}
 			}
+		}
+		catch(Throwable ex)
+		{
+//			ex.printStackTrace();
+			return;
 		}
 		
 		originalOverriding = movingMethod.getOverriding();
@@ -76,12 +87,16 @@ public class MoveMethodCommand implements RefactoringCommand {
 		
 		originalClass = movingMethod.getOwner();
 		movingMethod.setOwner(targetClass);
+		did = true;
 	}
 
 	@Override
 	public void undoCommand() throws RefactoringException {
-		movingMethod.setOwner(originalClass);
-		movingMethod.setOverriding(originalOverriding);
+		if( did )
+		{
+			movingMethod.setOwner(originalClass);
+			movingMethod.setOverriding(originalOverriding);
+		}
 	}
 
 }

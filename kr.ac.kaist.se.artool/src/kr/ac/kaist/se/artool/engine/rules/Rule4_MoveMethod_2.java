@@ -18,10 +18,10 @@ public class Rule4_MoveMethod_2 extends AbstractRule {
 	private AOMMethod[] aomMethods;
 	
 	public Rule4_MoveMethod_2(AbstractObjectModel aom,
-			Entry<HashSet<AOMMethod>, Integer>[] n_IBDPM) {
-		super(aom);
+			Entry<HashSet<AOMMethod>, Integer>[] n_IBDPM, int pick) {
+		super(aom, pick);
 		this.n_IBDPM = n_IBDPM;
-		aomMethods = n_IBDPM[0].getKey().toArray(new AOMMethod[0]);
+		aomMethods = n_IBDPM[pick].getKey().toArray(new AOMMethod[0]);
 		
 		ClassStat.getDynamicStat().countOnMethodEntries(n_IBDPM);
 	}
@@ -37,12 +37,12 @@ public class Rule4_MoveMethod_2 extends AbstractRule {
 		}
 		
 		//aomMethod[1]을 aomMethods[0]를 정의하고 있는 class로 옮긴다.
-		MoveMethodCommand mmc = new MoveMethodCommand(aomMethods[1], aomMethods[0].getOwner());
+		MoveMethodCommand mmc = new MoveMethodCommand(aomMethods[0], aomMethods[1].getOwner());
 		return mmc;
 	}
 	
 	@Override
-	public String getName()
+	public String getRuleName()
 	{
 		return "Rule4_MoveMethod_2";
 	}

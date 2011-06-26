@@ -3,17 +3,15 @@ package kr.ac.kaist.se.artool.engine.rules;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.eclipse.emf.common.util.BasicEMap;
-import org.eclipse.emf.common.util.EMap;
-
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
-import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.metrics.BasicMetricSuite;
 import kr.ac.kaist.se.artool.engine.refactoring.CollapseClassHierarchyCommand;
 import kr.ac.kaist.se.artool.engine.refactoring.RefactoringCommand;
-import kr.ac.kaist.se.artool.engine.refactoring.RelocateGeneralizationCommand;
 import kr.ac.kaist.se.artool.util.UtilityFunctions;
+
+import org.eclipse.emf.common.util.BasicEMap;
+import org.eclipse.emf.common.util.EMap;
 
 public class Rule5_Static extends AbstractRule {
 
@@ -22,15 +20,19 @@ public class Rule5_Static extends AbstractRule {
 	Map.Entry<HashSet<AOMClass>, Integer>[] sortedRule5list;
 	private AOMClass[] aomClasses;
 	
-	public Rule5_Static(AbstractObjectModel aom, int cutline) {
+	public Rule5_Static(AbstractObjectModel aom, int cutline, int pick) {
 		// TODO Auto-generated constructor stub
-		super(aom);
-		rule5list = new BasicEMap<HashSet<AOMClass>, Integer>();
-		rule5list2 = getRule5List();
-
-		sortedRule5list =
-			UtilityFunctions.getInstance().__getSortedIBDP(rule5list2, cutline);
-		aomClasses = sortedRule5list[0].getKey().toArray(new AOMClass[0]);
+		super(aom, pick);
+		if( (sortedRule5list = ListCache.getInstance().getClassList(getRuleName())) == null )
+		{
+			rule5list = new BasicEMap<HashSet<AOMClass>, Integer>();
+			rule5list2 = getRule5List();
+	
+			sortedRule5list =
+				UtilityFunctions.getInstance().__getSortedIBDP(rule5list2, cutline);
+			ListCache.getInstance().putClassList(getRuleName(), sortedRule5list);
+		}
+		aomClasses = sortedRule5list[pick].getKey().toArray(new AOMClass[0]);
 		
 		ClassStat.getStaticStat().countOnClassEntries(sortedRule5list);
 
@@ -80,7 +82,7 @@ public class Rule5_Static extends AbstractRule {
 	}
 
 	@Override
-	public String getName() {
+	public String getRuleName() {
 		// TODO Auto-generated method stub
 		return "Rule5";
 	}

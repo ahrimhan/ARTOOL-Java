@@ -682,7 +682,7 @@ public interface StructurePackage extends EPackage {
 	int AOM_SCOPE__DYNAMIC_METHOD_CALLS = 3;
 
 	/**
-	 * The feature id for the '<em><b>Static Field Accesses</b></em>' reference list.
+	 * The feature id for the '<em><b>Static Field Accesses</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -691,7 +691,7 @@ public interface StructurePackage extends EPackage {
 	int AOM_SCOPE__STATIC_FIELD_ACCESSES = 4;
 
 	/**
-	 * The feature id for the '<em><b>Dynamic Field Accesses</b></em>' reference list.
+	 * The feature id for the '<em><b>Dynamic Field Accesses</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1355,10 +1355,10 @@ public interface StructurePackage extends EPackage {
 	EReference getAOMScope_DynamicMethodCalls();
 
 	/**
-	 * Returns the meta object for the reference list '{@link kr.ac.kaist.se.aom.structure.AOMScope#getStaticFieldAccesses <em>Static Field Accesses</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kr.ac.kaist.se.aom.structure.AOMScope#getStaticFieldAccesses <em>Static Field Accesses</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Static Field Accesses</em>'.
+	 * @return the meta object for the containment reference list '<em>Static Field Accesses</em>'.
 	 * @see kr.ac.kaist.se.aom.structure.AOMScope#getStaticFieldAccesses()
 	 * @see #getAOMScope()
 	 * @generated
@@ -1366,10 +1366,10 @@ public interface StructurePackage extends EPackage {
 	EReference getAOMScope_StaticFieldAccesses();
 
 	/**
-	 * Returns the meta object for the reference list '{@link kr.ac.kaist.se.aom.structure.AOMScope#getDynamicFieldAccesses <em>Dynamic Field Accesses</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kr.ac.kaist.se.aom.structure.AOMScope#getDynamicFieldAccesses <em>Dynamic Field Accesses</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Dynamic Field Accesses</em>'.
+	 * @return the meta object for the containment reference list '<em>Dynamic Field Accesses</em>'.
 	 * @see kr.ac.kaist.se.aom.structure.AOMScope#getDynamicFieldAccesses()
 	 * @see #getAOMScope()
 	 * @generated
@@ -1855,7 +1855,7 @@ public interface StructurePackage extends EPackage {
 		EReference AOM_SCOPE__DYNAMIC_METHOD_CALLS = eINSTANCE.getAOMScope_DynamicMethodCalls();
 
 		/**
-		 * The meta object literal for the '<em><b>Static Field Accesses</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Static Field Accesses</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -1863,7 +1863,7 @@ public interface StructurePackage extends EPackage {
 		EReference AOM_SCOPE__STATIC_FIELD_ACCESSES = eINSTANCE.getAOMScope_StaticFieldAccesses();
 
 		/**
-		 * The meta object literal for the '<em><b>Dynamic Field Accesses</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Dynamic Field Accesses</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

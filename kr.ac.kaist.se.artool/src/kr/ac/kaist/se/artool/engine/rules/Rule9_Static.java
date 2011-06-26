@@ -25,16 +25,20 @@ public class Rule9_Static extends AbstractRule {
 	private AOMMethod[] aomMethods;
 	
 	
-	public Rule9_Static(AbstractObjectModel aom, int cutline) {
+	public Rule9_Static(AbstractObjectModel aom, int cutline, int pick) {
 		// TODO Auto-generated constructor stub
-		super(aom);
-		rule9list = new BasicEMap<HashSet<AOMMethod>, Integer>();
-		rule9list2 = getRule9List();
-		
-		sortedRule9list = UtilityFunctions.getInstance().__getSortedIBDP(rule9list2, cutline);
+		super(aom, pick);
+		if( (sortedRule9list = ListCache.getInstance().getMethodList(getRuleName())) == null )
+		{
+			rule9list = new BasicEMap<HashSet<AOMMethod>, Integer>();
+			rule9list2 = getRule9List();
+	
+			sortedRule9list = UtilityFunctions.getInstance().__getSortedIBDP(rule9list2, cutline);
+			ListCache.getInstance().putMethodList(getRuleName(), sortedRule9list);
+		}
 		if( sortedRule9list != null && sortedRule9list.length > 0 )
 		{
-			aomMethods = sortedRule9list[0].getKey().toArray(new AOMMethod[0]);
+			aomMethods = sortedRule9list[pick].getKey().toArray(new AOMMethod[0]);
 		}
 		ClassStat.getStaticStat().countOnMethodEntries(sortedRule9list);
 	}
@@ -169,7 +173,7 @@ public class Rule9_Static extends AbstractRule {
 	}
 
 	@Override
-	public String getName() {
+	public String getRuleName() {
 		// TODO Auto-generated method stub
 		return "Rule9";
 	}

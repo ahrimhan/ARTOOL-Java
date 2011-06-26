@@ -125,7 +125,7 @@ public interface AOMScope extends EObject {
 	EList<DynamicMethodCall> getDynamicMethodCalls();
 
 	/**
-	 * Returns the value of the '<em><b>Static Field Accesses</b></em>' reference list.
+	 * Returns the value of the '<em><b>Static Field Accesses</b></em>' containment reference list.
 	 * The list contents are of type {@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess}.
 	 * It is bidirectional and its opposite is '{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getAccessingScope <em>Accessing Scope</em>}'.
 	 * <!-- begin-user-doc -->
@@ -134,16 +134,16 @@ public interface AOMScope extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Static Field Accesses</em>' reference list.
+	 * @return the value of the '<em>Static Field Accesses</em>' containment reference list.
 	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMScope_StaticFieldAccesses()
 	 * @see kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getAccessingScope
-	 * @model opposite="accessingScope"
+	 * @model opposite="accessingScope" containment="true"
 	 * @generated
 	 */
 	EList<StaticFieldAccess> getStaticFieldAccesses();
 
 	/**
-	 * Returns the value of the '<em><b>Dynamic Field Accesses</b></em>' reference list.
+	 * Returns the value of the '<em><b>Dynamic Field Accesses</b></em>' containment reference list.
 	 * The list contents are of type {@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess}.
 	 * It is bidirectional and its opposite is '{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getAccessingScope <em>Accessing Scope</em>}'.
 	 * <!-- begin-user-doc -->
@@ -152,10 +152,10 @@ public interface AOMScope extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Dynamic Field Accesses</em>' reference list.
+	 * @return the value of the '<em>Dynamic Field Accesses</em>' containment reference list.
 	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMScope_DynamicFieldAccesses()
 	 * @see kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getAccessingScope
-	 * @model opposite="accessingScope"
+	 * @model opposite="accessingScope" containment="true"
 	 * @generated
 	 */
 	EList<DynamicFieldAccess> getDynamicFieldAccesses();

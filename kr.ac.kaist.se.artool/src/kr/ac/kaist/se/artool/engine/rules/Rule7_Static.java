@@ -22,17 +22,25 @@ public class Rule7_Static extends AbstractRule {
 	Map.Entry<HashSet<AOMClass>, Integer>[] sortedRule7list;
 	private AOMClass[] aomClasses;
 	
-	public Rule7_Static(AbstractObjectModel aom, int cutline) {
+	public Rule7_Static(AbstractObjectModel aom, int cutline, int pick) {
 		// TODO Auto-generated constructor stub
-		super(aom);
-		rule7list = new BasicEMap<HashSet<AOMClass>, Integer>();
-		rule7list2 = getRule7List();
-
-		sortedRule7list = UtilityFunctions.getInstance().__getSortedIBDP(rule7list2, cutline);
+		super(aom, pick);
+		if( (sortedRule7list = ListCache.getInstance().getClassList(getRuleName())) == null )
+		{
+		
+			rule7list = new BasicEMap<HashSet<AOMClass>, Integer>();
+			rule7list2 = getRule7List();
+	
+			sortedRule7list = UtilityFunctions.getInstance().__getSortedIBDP(rule7list2, cutline);
+			ListCache.getInstance().putClassList(getRuleName(), sortedRule7list);
+		}
+		
+		
 		if( sortedRule7list != null && sortedRule7list.length > 0 )
 		{
-			aomClasses = sortedRule7list[0].getKey().toArray(new AOMClass[0]);
+			aomClasses = sortedRule7list[pick].getKey().toArray(new AOMClass[0]);
 		}
+		
 		ClassStat.getStaticStat().countOnClassEntries(sortedRule7list);
 	}
 
@@ -91,7 +99,7 @@ public class Rule7_Static extends AbstractRule {
 	}
 
 	@Override
-	public String getName() {
+	public String getRuleName() {
 		// TODO Auto-generated method stub
 		return "Rule7";
 	}

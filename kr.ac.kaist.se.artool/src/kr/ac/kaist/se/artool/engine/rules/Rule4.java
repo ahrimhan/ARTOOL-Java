@@ -11,7 +11,7 @@ import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.FitnessFunction;
-import kr.ac.kaist.se.artool.engine.metrics.N_DCICM;
+import kr.ac.kaist.se.artool.engine.metrics.N_DCICM_Dynamic;
 import kr.ac.kaist.se.artool.engine.refactoring.CollapseClassHierarchyCommand;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
 import kr.ac.kaist.se.artool.engine.refactoring.RefactoringCommand;
@@ -26,10 +26,10 @@ public class Rule4 extends AbstractRule {
 	
 	
 	public Rule4(AbstractObjectModel aom,
-			Entry<HashSet<AOMClass>, Integer>[] n_DCICM) {
-		super(aom);
+			Entry<HashSet<AOMClass>, Integer>[] n_DCICM,int pick) {
+		super(aom, pick);
 		this.n_IBDPC = n_DCICM;
-		aomClasses = n_DCICM[0].getKey().toArray(new AOMClass[0]);
+		aomClasses = n_DCICM[pick].getKey().toArray(new AOMClass[0]);
 		
 		ClassStat.getDynamicStat().countOnClassEntries(n_DCICM);
 	}
@@ -55,7 +55,7 @@ public class Rule4 extends AbstractRule {
 	}
 	
 	@Override
-	public String getName()
+	public String getRuleName()
 	{
 		return "Rule4";
 	}

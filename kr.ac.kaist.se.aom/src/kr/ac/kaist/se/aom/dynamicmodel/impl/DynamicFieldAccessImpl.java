@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 /**
  * <!-- begin-user-doc -->
@@ -44,16 +45,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * @generated
  */
 public class DynamicFieldAccessImpl extends DynamicDependencyImpl implements DynamicFieldAccess {
-	/**
-	 * The cached value of the '{@link #getAccessingScope() <em>Accessing Scope</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAccessingScope()
-	 * @generated
-	 * @ordered
-	 */
-	protected AOMScope accessingScope;
-
 	/**
 	 * The cached value of the '{@link #getAccessedField() <em>Accessed Field</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -199,24 +190,8 @@ public class DynamicFieldAccessImpl extends DynamicDependencyImpl implements Dyn
 	 * @generated
 	 */
 	public AOMScope getAccessingScope() {
-		if (accessingScope != null && accessingScope.eIsProxy()) {
-			InternalEObject oldAccessingScope = (InternalEObject)accessingScope;
-			accessingScope = (AOMScope)eResolveProxy(oldAccessingScope);
-			if (accessingScope != oldAccessingScope) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DynamicmodelPackage.DYNAMIC_FIELD_ACCESS__ACCESSING_SCOPE, oldAccessingScope, accessingScope));
-			}
-		}
-		return accessingScope;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AOMScope basicGetAccessingScope() {
-		return accessingScope;
+		if (eContainerFeatureID() != DynamicmodelPackage.DYNAMIC_FIELD_ACCESS__ACCESSING_SCOPE) return null;
+		return (AOMScope)eContainer();
 	}
 
 	/**
@@ -225,12 +200,7 @@ public class DynamicFieldAccessImpl extends DynamicDependencyImpl implements Dyn
 	 * @generated
 	 */
 	public NotificationChain basicSetAccessingScope(AOMScope newAccessingScope, NotificationChain msgs) {
-		AOMScope oldAccessingScope = accessingScope;
-		accessingScope = newAccessingScope;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DynamicmodelPackage.DYNAMIC_FIELD_ACCESS__ACCESSING_SCOPE, oldAccessingScope, newAccessingScope);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
+		msgs = eBasicSetContainer((InternalEObject)newAccessingScope, DynamicmodelPackage.DYNAMIC_FIELD_ACCESS__ACCESSING_SCOPE, msgs);
 		return msgs;
 	}
 
@@ -240,10 +210,12 @@ public class DynamicFieldAccessImpl extends DynamicDependencyImpl implements Dyn
 	 * @generated
 	 */
 	public void setAccessingScope(AOMScope newAccessingScope) {
-		if (newAccessingScope != accessingScope) {
+		if (newAccessingScope != eInternalContainer() || (eContainerFeatureID() != DynamicmodelPackage.DYNAMIC_FIELD_ACCESS__ACCESSING_SCOPE && newAccessingScope != null)) {
+			if (EcoreUtil.isAncestor(this, newAccessingScope))
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
 			NotificationChain msgs = null;
-			if (accessingScope != null)
-				msgs = ((InternalEObject)accessingScope).eInverseRemove(this, StructurePackage.AOM_SCOPE__DYNAMIC_FIELD_ACCESSES, AOMScope.class, msgs);
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
 			if (newAccessingScope != null)
 				msgs = ((InternalEObject)newAccessingScope).eInverseAdd(this, StructurePackage.AOM_SCOPE__DYNAMIC_FIELD_ACCESSES, AOMScope.class, msgs);
 			msgs = basicSetAccessingScope(newAccessingScope, msgs);
@@ -465,8 +437,8 @@ public class DynamicFieldAccessImpl extends DynamicDependencyImpl implements Dyn
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case DynamicmodelPackage.DYNAMIC_FIELD_ACCESS__ACCESSING_SCOPE:
-				if (accessingScope != null)
-					msgs = ((InternalEObject)accessingScope).eInverseRemove(this, StructurePackage.AOM_SCOPE__DYNAMIC_FIELD_ACCESSES, AOMScope.class, msgs);
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
 				return basicSetAccessingScope((AOMScope)otherEnd, msgs);
 			case DynamicmodelPackage.DYNAMIC_FIELD_ACCESS__ACCESSED_FIELD:
 				if (accessedField != null)
@@ -498,11 +470,24 @@ public class DynamicFieldAccessImpl extends DynamicDependencyImpl implements Dyn
 	 * @generated
 	 */
 	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+			case DynamicmodelPackage.DYNAMIC_FIELD_ACCESS__ACCESSING_SCOPE:
+				return eInternalContainer().eInverseRemove(this, StructurePackage.AOM_SCOPE__DYNAMIC_FIELD_ACCESSES, AOMScope.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case DynamicmodelPackage.DYNAMIC_FIELD_ACCESS__ACCESSING_SCOPE:
-				if (resolve) return getAccessingScope();
-				return basicGetAccessingScope();
+				return getAccessingScope();
 			case DynamicmodelPackage.DYNAMIC_FIELD_ACCESS__ACCESSED_FIELD:
 				if (resolve) return getAccessedField();
 				return basicGetAccessedField();
@@ -604,7 +589,7 @@ public class DynamicFieldAccessImpl extends DynamicDependencyImpl implements Dyn
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case DynamicmodelPackage.DYNAMIC_FIELD_ACCESS__ACCESSING_SCOPE:
-				return accessingScope != null;
+				return getAccessingScope() != null;
 			case DynamicmodelPackage.DYNAMIC_FIELD_ACCESS__ACCESSED_FIELD:
 				return accessedField != null;
 			case DynamicmodelPackage.DYNAMIC_FIELD_ACCESS__LINE_NUMBER:

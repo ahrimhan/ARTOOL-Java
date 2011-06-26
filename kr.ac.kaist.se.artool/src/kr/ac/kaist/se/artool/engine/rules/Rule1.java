@@ -21,11 +21,11 @@ public class Rule1 extends AbstractRule {
 	
 	
 	public Rule1(AbstractObjectModel aom,
-			Entry<HashSet<AOMClass>, Integer>[] n_IBDPC) {
-		super(aom);
+			Entry<HashSet<AOMClass>, Integer>[] n_IBDPC, int pick) {
+		super(aom, pick);
 		this.n_IBDPC = n_IBDPC;
-		aomClasses = n_IBDPC[0].getKey().toArray(new AOMClass[0]);
-		
+		aomClasses = n_IBDPC[pick].getKey().toArray(new AOMClass[0]);
+	
 		ClassStat.getDynamicStat().countOnClassEntries(n_IBDPC);
 	}
 
@@ -52,7 +52,7 @@ public class Rule1 extends AbstractRule {
 	}
 	
 	@Override
-	public String getName()
+	public String getRuleName()
 	{
 		return "Rule1";
 	}

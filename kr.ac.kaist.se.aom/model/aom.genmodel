@@ -89,9 +89,9 @@
         <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/owner"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/staticMethodCalls"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/dynamicMethodCalls"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+        <genFeatures children="true" createChild="true" propertySortChoices="true"
             ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/staticFieldAccesses"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+        <genFeatures children="true" createChild="true" propertySortChoices="true"
             ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/dynamicFieldAccesses"/>
       </genClasses>
       <genClasses ecoreClass="aom.ecore#//structure/AOMParameter">

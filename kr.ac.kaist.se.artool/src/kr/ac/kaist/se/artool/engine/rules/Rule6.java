@@ -31,15 +31,20 @@ public class Rule6 extends AbstractRule {
 		this.newParentRelocatingClass = newParentRelocatingClass;
 	}
 
-	public Rule6(AbstractObjectModel aom, int cutline) {
+	public Rule6(AbstractObjectModel aom, int cutline, int pick) {
 		// TODO Auto-generated constructor stub
-		super(aom);
-		rule6list = new BasicEMap<HashSet<AOMClass>, Integer>();
-		rule6list2 = getRule6List();
+		super(aom, pick);
 		newParentRelocatingClass = null;
 
-		sortedRule6list = UtilityFunctions.getInstance().__getSortedIBDP(rule6list2, cutline);
-		aomClasses = sortedRule6list[0].getKey().toArray(new AOMClass[0]);
+		if( (sortedRule6list = ListCache.getInstance().getClassList(getRuleName())) == null )
+		{
+			rule6list = new BasicEMap<HashSet<AOMClass>, Integer>();
+			rule6list2 = getRule6List();
+	
+			sortedRule6list = UtilityFunctions.getInstance().__getSortedIBDP(rule6list2, cutline);
+			ListCache.getInstance().putClassList(getRuleName(), sortedRule6list);
+		}
+		aomClasses = sortedRule6list[pick].getKey().toArray(new AOMClass[0]);
 
 		ClassStat.getDynamicStat().countOnClassEntries(sortedRule6list);
 	}
@@ -97,7 +102,7 @@ public class Rule6 extends AbstractRule {
 	}
 
 	@Override
-	public String getName() {
+	public String getRuleName() {
 		// TODO Auto-generated method stub
 		return "Rule6";
 	}
