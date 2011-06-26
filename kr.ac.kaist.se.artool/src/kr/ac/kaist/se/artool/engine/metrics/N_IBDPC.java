@@ -32,7 +32,6 @@ public class N_IBDPC {
 	
 	private HashSet key = new HashSet();
 	
-	
 	public <T> void increase(EMap<HashSet<T>, Integer> map, T aomElement1, T aomElement2)
 	{
 		key.clear();

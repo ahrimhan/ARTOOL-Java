@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Vector;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
+import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
+import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.metrics.BasicMetricSuite;
@@ -17,7 +19,6 @@ import kr.ac.kaist.se.artool.engine.metrics.N_DCICM_Static;
 import kr.ac.kaist.se.artool.engine.metrics.N_IBDPC;
 import kr.ac.kaist.se.artool.engine.metrics.N_IBDPC_Static;
 import kr.ac.kaist.se.artool.engine.rules.AbstractRule;
-import kr.ac.kaist.se.artool.engine.rules.ClassStat;
 import kr.ac.kaist.se.artool.engine.rules.Rule1;
 import kr.ac.kaist.se.artool.engine.rules.Rule10;
 import kr.ac.kaist.se.artool.engine.rules.Rule10_Static;
@@ -27,6 +28,8 @@ import kr.ac.kaist.se.artool.engine.rules.Rule2_Static;
 import kr.ac.kaist.se.artool.engine.rules.Rule3;
 import kr.ac.kaist.se.artool.engine.rules.Rule3_Static;
 import kr.ac.kaist.se.artool.engine.rules.Rule4;
+import kr.ac.kaist.se.artool.engine.rules.Rule4_MoveMethod_1;
+import kr.ac.kaist.se.artool.engine.rules.Rule4_MoveMethod_2;
 import kr.ac.kaist.se.artool.engine.rules.Rule4_Static;
 import kr.ac.kaist.se.artool.engine.rules.Rule5;
 import kr.ac.kaist.se.artool.engine.rules.Rule5_Static;
@@ -171,50 +174,10 @@ public class ARToolMain {
 		
 	}
 	
-	//FIXME: need to fix rule4 
-	public EMap<HashSet<AOMClass>, Integer> getRule4List(AbstractObjectModel aom, N_DCICM n_dcicm)
-	{
-		int ndcicm = 0;
-		int numStaticMethodCalls = 0;
-		
-		EMap<HashSet<AOMClass>, Integer> rule4list = new BasicEMap<HashSet<AOMClass>, Integer>();
-		
-		
-		AOMClass[] aomClasses;
-		AOMClass[] source_targetClasses = new AOMClass[2]; 
-		
-		for( AOMClass clazz : aom.getClasses() )
-		{
-			for( AOMMethod method : clazz.getMethods() )
-			{
-				ndcicm = BasicMetricSuite.getInt(method.getMeasuredDataSet().get("N_DCICM"));
-				aomClasses = n_dcicm.getDCICM().get(method).toArray(new AOMClass[ndcicm]);
-				
-				if( method.getOwnedScope() != null )
-				{
-					numStaticMethodCalls = method.getOwnedScope().getStaticMethodCalls().size();
-					if( ndcicm != 0 && numStaticMethodCalls != 0 &&
-							ndcicm == numStaticMethodCalls )
-					{
-						for( int i = 0; i < aomClasses.length - 1 ; )
-						{
-							source_targetClasses[0] = aomClasses[i];
-							source_targetClasses[1] = aomClasses[++i];
-							UtilityFunctions.getInstance().increase(rule4list, source_targetClasses[0], source_targetClasses[1]);
-						}
-					}
-				}
-				ndcicm =0;
-				numStaticMethodCalls = 0;
-			}
-		}
-		return rule4list;
-	}
-	
 //	public EMap<HashSet<AOMClass>, Integer> getRule4List(AbstractObjectModel aom, N_DCICM n_dcicm)
 //	{
 //		int ndcicm = 0;
-//		int numDynamicMethodCalls = 0;
+//		int numStaticMethodCalls = 0;
 //		
 //		EMap<HashSet<AOMClass>, Integer> rule4list = new BasicEMap<HashSet<AOMClass>, Integer>();
 //		
@@ -231,9 +194,9 @@ public class ARToolMain {
 //				
 //				if( method.getOwnedScope() != null )
 //				{
-//					numDynamicMethodCalls = method.getOwnedScope().getDynamicMethodCalls().size();
-//					if( ndcicm != 0 && numDynamicMethodCalls != 0 &&
-//							ndcicm == numDynamicMethodCalls )
+//					numStaticMethodCalls = method.getOwnedScope().getStaticMethodCalls().size();
+//					if( ndcicm >= 3 && numStaticMethodCalls != 0 &&
+//							ndcicm == numStaticMethodCalls )
 //					{
 //						for( int i = 0; i < aomClasses.length - 1 ; )
 //						{
@@ -244,11 +207,80 @@ public class ARToolMain {
 //					}
 //				}
 //				ndcicm =0;
-//				numDynamicMethodCalls = 0;
+//				numStaticMethodCalls = 0;
 //			}
 //		}
 //		return rule4list;
 //	}
+	
+	public EMap[] getRule4List(AbstractObjectModel aom, N_DCICM n_dcicm)
+	{
+		int ndcicm = 0;
+		int numDynamicMethodCalls = 0;
+		
+		EMap<HashSet<AOMClass>, Integer> rule4list_Class = new BasicEMap<HashSet<AOMClass>, Integer>();
+		EMap<HashSet<AOMMethod>, Integer> rule4list_Method = new BasicEMap<HashSet<AOMMethod>, Integer>();	
+		EMap[] ret = new EMap[2];
+		ret[0] = rule4list_Class;
+		ret[1] = rule4list_Method;
+		
+		AOMClass[] aomClasses;
+		AOMMethod[] aomMethods;
+		AOMClass[] source_targetClasses = new AOMClass[2];
+		AOMMethod[] source_targetMethods  = new AOMMethod[2];
+		
+		Vector<StaticMethodCall> containedDynamictoStaticMethodCall = new Vector<StaticMethodCall>();
+		
+		for( AOMClass clazz : aom.getClasses() )
+		{
+			for( AOMMethod method : clazz.getMethods() )
+			{
+				ndcicm = BasicMetricSuite.getInt(method.getMeasuredDataSet().get("N_DCICM"));
+				aomClasses = n_dcicm.getDCICM().get(method).toArray(new AOMClass[ndcicm]);
+				aomMethods = n_dcicm.getMap4N_DMICM().get(method).toArray(new AOMMethod[ndcicm]);
+				
+				if( method.getOwnedScope() != null )
+				{
+					//numDynamicMethodCalls = method.getOwnedScope().getDynamicMethodCalls().size();
+					//start: ignore quantity effect of dynamic (just count as one)
+					containedDynamictoStaticMethodCall.clear();
+					
+					for( DynamicMethodCall dmc : method.getOwnedScope().getDynamicMethodCalls() )
+					{
+						if(!containedDynamictoStaticMethodCall.contains(dmc.getStatic()))
+						{
+							containedDynamictoStaticMethodCall.add(dmc.getStatic());
+						}
+						
+					}
+					//end: ignore quantity effect of dynamic (just count as one)
+					numDynamicMethodCalls = containedDynamictoStaticMethodCall.size();
+					
+					//FIXME: 3 adjustable!
+					if( ndcicm >= 3 && numDynamicMethodCalls != 0 &&
+							ndcicm == numDynamicMethodCalls  )
+					{
+						for( int i = 0; i < aomClasses.length - 1 ; )
+						{
+							source_targetClasses[0] = aomClasses[i];
+							source_targetClasses[1] = aomClasses[++i];
+							UtilityFunctions.getInstance().increase(rule4list_Class, source_targetClasses[0], source_targetClasses[1]);
+						}
+						
+						for(int i = 0; i < aomMethods.length - 1 ; )
+						{
+							source_targetMethods[0] = aomMethods[i];
+							source_targetMethods[1] = aomMethods[++i];
+							UtilityFunctions.getInstance().increase(rule4list_Method, source_targetMethods[0], source_targetMethods[1]);
+						}
+					}
+				}
+				ndcicm =0;
+				numDynamicMethodCalls = 0;
+			}
+		}
+		return ret;
+	}
 	
 	public EMap<HashSet<AOMClass>, Integer> getRule4List_Static(AbstractObjectModel aom, N_DCICM_Static n_dcicm_static)
 	{
@@ -259,6 +291,7 @@ public class ARToolMain {
 		
 		
 		AOMClass[] aomClasses;
+		
 		AOMClass[] source_targetClasses = new AOMClass[2]; 
 		
 		for( AOMClass clazz : aom.getClasses() )
@@ -267,11 +300,12 @@ public class ARToolMain {
 			{
 				ndcicm_static = BasicMetricSuite.getInt(method.getMeasuredDataSet().get("N_DCICM_Static"));
 				aomClasses = n_dcicm_static.getDCICM_Static().get(method).toArray(new AOMClass[ndcicm_static]);
+//				aomMethods = n_dcicm.getMap4N_DMICM().get(method).toArray(new AOMMethod[ndcicm]);
 				
 				if( method.getOwnedScope() != null )
 				{
 					numStaticMethodCalls = method.getOwnedScope().getStaticMethodCalls().size();
-					if( ndcicm_static != 0 && numStaticMethodCalls!=0 &&
+					if( ndcicm_static >= 3 && numStaticMethodCalls!=0 &&
 							ndcicm_static == numStaticMethodCalls )
 					{
 						for( int i = 0; i < aomClasses.length - 1 ; )
@@ -455,8 +489,13 @@ public class ARToolMain {
 				Map.Entry<HashSet<AOMMethod>, Integer>[] n_IBDPM = n_ibdpc.getSortedIBDPM(cutline);
 
 				//AbstractRule rule4 = new Rule4(aom, sortedRule4list);
-				Map.Entry<HashSet<AOMClass>, Integer>[] sortedRule4list =
-					UtilityFunctions.getInstance().__getSortedIBDP(getRule4List(aom, n_dcicm), cutline);
+				
+				EMap[] dynamicRule4List = getRule4List(aom, n_dcicm);
+				Map.Entry<HashSet<AOMClass>, Integer>[] sortedRule4list_Class=
+					UtilityFunctions.getInstance().__getSortedIBDP(dynamicRule4List[0], cutline);
+				Map.Entry<HashSet<AOMMethod>, Integer>[] sortedRule4list_Method =
+					UtilityFunctions.getInstance().__getSortedIBDP(dynamicRule4List[1], cutline);
+				
 				
 				
 				// rule setting
@@ -465,7 +504,9 @@ public class ARToolMain {
 				rules.add(new Rule1(aom, n_IBDPC));
 				rules.add(new Rule2(aom, n_IBDPM));
 				rules.add(new Rule3(aom, n_IBDPM));
-				rules.add(new Rule4(aom, sortedRule4list));
+				rules.add(new Rule4(aom, sortedRule4list_Class));
+				rules.add(new Rule4_MoveMethod_1(aom, sortedRule4list_Method));
+				rules.add(new Rule4_MoveMethod_2(aom, sortedRule4list_Method));
 				rules.add(new Rule5(aom, cutline));
 				rules.add(new Rule6(aom, cutline));
 				rules.add(new Rule7(aom, cutline));
