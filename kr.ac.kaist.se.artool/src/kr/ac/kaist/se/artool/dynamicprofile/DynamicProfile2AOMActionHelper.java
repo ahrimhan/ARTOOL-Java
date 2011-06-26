@@ -59,12 +59,13 @@ public class DynamicProfile2AOMActionHelper {
 			monitor.beginTask("Transforming Dynamic Profile to AOM", 100);
 			try
 			{
-				SubProgressMonitor subMonitor1 = new SubProgressMonitor(monitor, 75);
-				transformer.transform(aom, methodCallItems, fieldAccessItems, subMonitor1);
-				SubProgressMonitor subMonitor2 = new SubProgressMonitor(monitor, 25);
-				Resource resource = aom.eResource();
 				try
 				{
+					SubProgressMonitor subMonitor1 = new SubProgressMonitor(monitor, 75);
+					transformer.transform(aom, methodCallItems, fieldAccessItems, subMonitor1);
+					SubProgressMonitor subMonitor2 = new SubProgressMonitor(monitor, 25);
+					Resource resource = aom.eResource();
+
 					Map<String, Object> options = new HashMap<String, Object>();
 					options.put(XMIResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl());
 					options.put(XMLResource.OPTION_USE_CACHED_LOOKUP_TABLE, new ArrayList<Object>());

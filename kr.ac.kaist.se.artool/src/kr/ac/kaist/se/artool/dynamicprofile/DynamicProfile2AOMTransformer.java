@@ -45,8 +45,8 @@ public class DynamicProfile2AOMTransformer {
 			AOMIndex index = AOMIndex.getInstance(aom, subMonitor1);
 			SubProgressMonitor subMonitor2 = new SubProgressMonitor(monitor, 40);
 			transformMethodCalls(aom, index, methodCallItems, subMonitor2);
-			SubProgressMonitor subMonitor3 = new SubProgressMonitor(monitor, 40);
-			transformFieldAccesses(aom, index, fieldAccessItems, subMonitor3);
+//			SubProgressMonitor subMonitor3 = new SubProgressMonitor(monitor, 40);
+//			transformFieldAccesses(aom, index, fieldAccessItems, subMonitor3);
 
 		}
 		finally 
@@ -149,14 +149,23 @@ public class DynamicProfile2AOMTransformer {
 					StaticMethodCall smc = null;
 					for( StaticMethodCall t : callerMethod.getOwnedScope().getStaticMethodCalls() )
 					{
-						if( t.getCallee().getName().equals(calleeMethod.getName()) && t.getLineNumber() == item.callerLineNumber )
+						if( t.getCallee().getName().equals(calleeMethod.getName()) ) 
 						{
-							smc = t;
+							if( (t.getLineNumber()) == item.callerLineNumber 
+									|| (t.getLineNumber() == item.callerLineNumber + 1))
+							{
+								smc = t;
+							}
+							else
+							{
+								System.err.println("line:" + t.getFileName() + "|" + t.getLineNumber() + " : " + item.callerLineNumber);
+							}
 						}
 					}
 					
 					if( smc == null )
 					{
+					
 						System.err.println("(" + (callerMethod != null ? "true " : "false") + "," + (calleeMethod != null ? "true " : "false") + ")" + item.callerClassName + "." + item.callerMethodName + ":" + item.callerMethodSignature + "(" + item.callerLineNumber + ") -> " + item.calleeDynamicClassName + "." + item.calleeMethodName + ":"+ item.calleeMethodSignature);
 					}
 					dmc.setStatic(smc);

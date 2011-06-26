@@ -48,16 +48,16 @@ public class DynamicProfile2AOMAction implements IObjectActionDelegate {
 			br.close();
 			fr.close();
 			
-			 fr = new FileReader(fieldAccessLogFile);
-			 br = new BufferedReader(fr);
-			
-			for(AOMFieldAccessItem fai = AOMFieldAccessItem.getInstance(br); fai != null;
-				fai = AOMFieldAccessItem.getInstance(br))
-			{
-				fieldAccessItems.add(fai);
-			}
-			br.close();
-			fr.close();
+//			 fr = new FileReader(fieldAccessLogFile);
+//			 br = new BufferedReader(fr);
+//			
+//			for(AOMFieldAccessItem fai = AOMFieldAccessItem.getInstance(br); fai != null;
+//				fai = AOMFieldAccessItem.getInstance(br))
+//			{
+//				fieldAccessItems.add(fai);
+//			}
+//			br.close();
+//			fr.close();
 		}
 		catch(Exception ex)
 		{

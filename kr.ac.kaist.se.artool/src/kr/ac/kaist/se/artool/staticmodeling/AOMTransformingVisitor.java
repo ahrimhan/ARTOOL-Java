@@ -170,7 +170,7 @@ public class AOMTransformingVisitor extends ASTVisitor {
 			IMethodBinding methodBinding = node.resolveMethodBinding().getMethodDeclaration();
 
 			CompilationUnit cu = (CompilationUnit)node.getRoot();
-			int lineNumber = cu.getLineNumber(node.getStartPosition());
+			int lineNumber = cu.getLineNumber(node.getStartPosition() + node.getLength());
 
 			methodCall = StaticmodelFactory.eINSTANCE.createStaticMethodCall();
 			methodCall.setCaller(scope);
@@ -192,8 +192,8 @@ public class AOMTransformingVisitor extends ASTVisitor {
 				IMethodBinding methodBinding = node.resolveConstructorBinding();
 
 				CompilationUnit cu = (CompilationUnit)node.getRoot();
-				int lineNumber = cu.getLineNumber(node.getStartPosition());
-				
+//				int lineNumber = cu.getLineNumber(node.getStartPosition());
+				int lineNumber = cu.getLineNumber(node.getStartPosition() + node.getLength());
 					methodCall = StaticmodelFactory.eINSTANCE.createStaticMethodCall();
 					methodCall.setCaller(scope);
 					methodCall.setTypeBinding(methodBinding.getDeclaringClass());
@@ -211,8 +211,8 @@ public class AOMTransformingVisitor extends ASTVisitor {
 				IMethodBinding methodBinding = node.resolveConstructorBinding();
 
 				CompilationUnit cu = (CompilationUnit)node.getRoot();
-				int lineNumber = cu.getLineNumber(node.getStartPosition());
-				
+//				int lineNumber = cu.getLineNumber(node.getStartPosition());
+				int lineNumber = cu.getLineNumber(node.getStartPosition() + node.getLength());
 					methodCall = StaticmodelFactory.eINSTANCE.createStaticMethodCall();
 					methodCall.setCaller(scope);
 					methodCall.setTypeBinding(methodBinding.getDeclaringClass());
@@ -230,8 +230,8 @@ public class AOMTransformingVisitor extends ASTVisitor {
 			IMethodBinding methodBinding = node.resolveConstructorBinding();
 
 			CompilationUnit cu = (CompilationUnit)node.getRoot();
-			int lineNumber = cu.getLineNumber(node.getStartPosition());
-			
+//			int lineNumber = cu.getLineNumber(node.getStartPosition());
+			int lineNumber = cu.getLineNumber(node.getStartPosition() + node.getLength());
 				methodCall = StaticmodelFactory.eINSTANCE.createStaticMethodCall();
 				methodCall.setCaller(scope);
 				methodCall.setTypeBinding(methodBinding.getDeclaringClass());
