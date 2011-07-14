@@ -1,6 +1,7 @@
 package kr.ac.kaist.se.aom.profiler;
 
 import java.io.PrintStream;
+import java.nio.ByteBuffer;
 import java.util.Stack;
 
 public class AOMProfilingLogger {
@@ -40,15 +41,15 @@ public class AOMProfilingLogger {
 		AOMMethodCallItem item = AOMMethodCallItem.getInstance();
 
 		
-		item.callerClassName = callerClassName;
-		item.callerMethodName = callerMethodName;
-		item.callerMethodSignature = callerMethodSignature;
-		item.callerFileName = callerFileName;
-		item.callerLineNumber = callerLineNumber;
+		item.setCallerClassName(callerClassName);
+		item.setCallerMethodName(callerMethodName);
+		item.setCallerMethodSignature(callerMethodSignature);
+		item.setCallerFileName(callerFileName);
+		item.setCallerLineNumber(callerLineNumber);
 
 
-		item.calleeMethodName = calleeMethodName;
-		item.calleeMethodSignature = calleeMethodSignature;
+		item.setCalleeMethodName(calleeMethodName);
+		item.setCalleeMethodSignature(calleeMethodSignature);
 
 		Stack<AOMMethodCallItem> prevMethodCallStack = prevMethodCall.get();
 		prevMethodCallStack.push(item);
@@ -79,19 +80,34 @@ public class AOMProfilingLogger {
 			boolean isWriteAccess)
 	{
 		AOMFieldAccessItem item = AOMFieldAccessItem.getInstance();
-		item.accessorClassName = accessorClassName;
-		item.accessorMethodName = accessorMethodName;
-		item.accessorMethodSignature = accessorMethodSignature;
-		item.accessorFileName = accessorFileName;
-		item.accessorLineNumber = accessorLineNumber;
-		item.referencedClassName = referencedClassName;
-		item.referencedFieldName = referencedFieldName;
-		item.isReadAccess = isReadAccess;
-		item.isWriteAccess = isWriteAccess;
+		item.setAccessorClassName(accessorClassName);
+		item.setAccessorMethodName(accessorMethodName);
+		item.setAccessorMethodSignature(accessorMethodSignature);
+		item.setAccessorFileName(accessorFileName);
+		item.setAccessorLineNumber(accessorLineNumber);
+		item.setReferencedClassName(referencedClassName);
+		item.setReferencedFieldName(referencedFieldName);
+		item.setReadAccess(isReadAccess);
+		item.setWriteAccess(isWriteAccess);
+		
+		ByteBuffer buffer = null;
 		
 		try {
-			item.setOccupied(true);
-			workingQueue.put(item);
+			buffer = workingQueue.getFreeBuffer();
+			if( !item.write(buffer) )
+			{
+				workingQueue.returnFreeBuffer(buffer);
+				buffer = null;
+			}
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		AOMFieldAccessItem.returnInstance(item);
+		
+		try {
+			if( buffer != null ) workingQueue.giveWork(buffer, false);
 			return;
 		} catch (InterruptedException e) {
 
@@ -113,31 +129,44 @@ public class AOMProfilingLogger {
 		if( item != null )
 		{
 			
-			if((item.calleeMethodName.equals(calleeMethodName) || item.calleeMethodName.equals("super") ||
-					item.calleeMethodName.equals("this")) && 
-					item.calleeMethodSignature.equals(calleeMethodSignature) )
+			if((item.getCalleeMethodName().equals(calleeMethodName) || item.getCalleeMethodName().equals("super") ||
+					item.getCalleeMethodName().equals("this")) && 
+					item.getCalleeMethodSignature().equals(calleeMethodSignature) )
 			{
-				item.threadId = Thread.currentThread().getId();
-				item.methodCallId = System.identityHashCode(item);
+				item.setThreadId(Thread.currentThread().getId());
+				item.setMethodCallId(System.identityHashCode(item));
 				if(!prevStack.isEmpty())
 				{
 					AOMMethodCallItem prevItem = prevStack.peek();
-					item.prevMethodCallId = prevItem.methodCallId;
+					item.setPrevMethodCallId(prevItem.getMethodCallId());
 				}
 				else
 				{
-					item.prevMethodCallId = -1;
+					item.setPrevMethodCallId(-1);
 				}
 
 
-				item.calleeDynamicClassName = dynamicCalleeClass;
-				item.calleeMethodName = calleeMethodName;
-				item.calleeMethodSignature = calleeMethodSignature;
-
+				item.setCalleeDynamicClassName(dynamicCalleeClass);
+				item.setCalleeMethodName(calleeMethodName);
+				item.setCalleeMethodSignature(calleeMethodSignature);
+				
+				ByteBuffer buffer = null;
+				
 				try {
-					item.setOccupied(true);
-					workingQueue.put(item);
-					prevStack.push(item);
+					buffer = workingQueue.getFreeBuffer();
+					if( !item.write(buffer) )
+					{
+						workingQueue.returnFreeBuffer(buffer);
+						buffer = null;
+					}
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+								
+				try {
+//					item.setOccupied(true);
+					if( buffer != null ) workingQueue.giveWork(buffer, true);
 					return;
 				} catch (InterruptedException e) {
 

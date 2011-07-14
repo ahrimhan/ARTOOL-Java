@@ -1,29 +1,43 @@
 package kr.ac.kaist.se.aom.profiler;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.io.PrintWriter;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.net.SocketException;
+import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class AOMProfileItemDispatcher implements Runnable {
 
-	private BlockingQueue<AOMLoggingItem> queue;
+	private BlockingQueue<ByteBuffer> faqueue;
+	private BlockingQueue<ByteBuffer> mcqueue;
+	private BlockingQueue<ByteBuffer> pool;
 	private static PrintStream systemOut;
 	private PrintStream ps;
 	private static AOMProfileItemDispatcher instance = null;
 	private boolean isStarted;
-//	private static Socket socket;
-	private static FileWriter mcWriter;
-	private static PrintWriter mcPrintWriter;
-	private static FileWriter faWriter;
-	private static PrintWriter faPrintWriter;
+	private DatagramChannel faSocket;
+	private DatagramChannel mcSocket;
+	public final static String HOST = "143.248.188.3";
 	
 	private AOMProfileItemDispatcher() {
-		queue = new ArrayBlockingQueue<AOMLoggingItem>(5000);
-	
+		mcqueue = new ArrayBlockingQueue<ByteBuffer>(5000);
+		faqueue = new ArrayBlockingQueue<ByteBuffer>(5000);
+//		pool = new ArrayBlockingQueue<ByteBuffer>(5000);
+//		
+//		for( int i = 0 ; i < 5000 ; i ++ )
+//		{
+//			try {
+//				pool.put(ByteBuffer.allocate(512));
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 		ps = systemOut;
 		isStarted = false;
 	}
@@ -40,87 +54,139 @@ public class AOMProfileItemDispatcher implements Runnable {
 
 		return instance;
 	}
+	
+	public ByteBuffer getFreeBuffer() throws InterruptedException
+	{
+		return ByteBuffer.allocate(512);
+//		return pool.take();
+	}
+	
+	public void returnFreeBuffer(ByteBuffer buffer) throws InterruptedException 
+	{
+		buffer.clear();
+//		pool.put(buffer);
+	}
 
-	public void put(AOMLoggingItem item) throws InterruptedException {
-
-		queue.put(item);
+	public void giveWork(ByteBuffer item, boolean isMC) throws InterruptedException {
+		if( isMC ) 
+		{
+			mcqueue.put(item);
+		}
+		else
+		{
+			faqueue.put(item);
+		}
 	}
 
 	@Override
 	public void run() {
 
 		while (true) {
-			if (mcWriter == null) {
+//			if (mcWriter == null) {
+//				try {
+//					mcWriter = new FileWriter(AOMProfiler.getLogPath() + java.io.File.separator + "DynamicMethodCallLog.txt");
+//					mcPrintWriter = new PrintWriter(mcWriter);
+//				} catch (IOException e) {
+//					e.printStackTrace(systemOut);
+//					mcPrintWriter = null;
+//				}
+//			}
+//			
+//			if (faWriter == null) {
+//				try {
+//					faWriter = new FileWriter(AOMProfiler.getLogPath() + java.io.File.separator + "DynamicFieldAccessLog.txt");
+//					faPrintWriter = new PrintWriter(faWriter);
+//				} catch (IOException e) {
+//					e.printStackTrace(systemOut);
+//					faPrintWriter = null;
+//				}
+//			}
+			
+			if( faSocket == null )
+			{
 				try {
-					mcWriter = new FileWriter(AOMProfiler.getLogPath() + java.io.File.separator + "DynamicMethodCallLog.txt");
-					mcPrintWriter = new PrintWriter(mcWriter);
+					faSocket = DatagramChannel.open();
+					
+				} catch (SocketException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				} catch (IOException e) {
-					e.printStackTrace(systemOut);
-					mcPrintWriter = null;
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
-			
-			if (faWriter == null) {
+
+			if( mcSocket == null )
+			{
 				try {
-					faWriter = new FileWriter(AOMProfiler.getLogPath() + java.io.File.separator + "DynamicFieldAccessLog.txt");
-					faPrintWriter = new PrintWriter(faWriter);
+					mcSocket = DatagramChannel.open();
+					
+
+				} catch (SocketException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				} catch (IOException e) {
-					e.printStackTrace(systemOut);
-					faPrintWriter = null;
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 			
 			try {
-				ArrayList<AOMLoggingItem> al = new ArrayList<AOMLoggingItem>(500);
+				ArrayList<ByteBuffer> al = new ArrayList<ByteBuffer>(500);
+				int c;
+				SocketAddress mcAddr = new InetSocketAddress(HOST, 18001);
+				SocketAddress faAddr = new InetSocketAddress(HOST, 18002);
 				while (true) {
-					al.clear();
-					while( queue.isEmpty() )
+					
+					while( faqueue.isEmpty() && mcqueue.isEmpty() )
 					{
 						Thread.currentThread().sleep(200);
 					}
-
-					int c = queue.drainTo(al, 500);
-
+					al.clear();
+					c = mcqueue.drainTo(al, 500);
 					
-					if( mcPrintWriter != null && faPrintWriter != null ) {
+					if(  mcSocket != null ) {
 						try {
 							for( int i = 0; i < c; i++ )
 							{
-								AOMLoggingItem li = al.get(i);
-								if( li != null )
-								{
-									if( li instanceof AOMMethodCallItem )
-									{
-										li.write(mcPrintWriter);
-										((AOMMethodCallItem)li).setOccupied(false);
-										AOMMethodCallItem.returnInstance((AOMMethodCallItem)li);
-									}
-									else if(li instanceof AOMFieldAccessItem )
-									{
-										li.write(faPrintWriter);
-										((AOMFieldAccessItem)li).setOccupied(false);
-										AOMFieldAccessItem.returnInstance((AOMFieldAccessItem)li);	
-									}
-								}
+								ByteBuffer li = al.get(i);
+								mcSocket.send(li, mcAddr);
+								this.returnFreeBuffer(li);
+							}
+						} catch (Throwable e) {
+							try {
+								mcSocket.disconnect();
+								mcSocket.close();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+
+							break;
+						}
+					}
+					
+					al.clear();
+					c = faqueue.drainTo(al, 500);
+					if(  faSocket != null ) {
+						try {
+							for( int i = 0; i < c; i++ )
+							{
+								ByteBuffer li = al.get(i);
+								faSocket.send(li, faAddr);
+								this.returnFreeBuffer(li);
+
 							}
 					
 						} catch (Throwable e) {
 							try {
-								mcPrintWriter.close();
-								mcWriter.close();
+								faSocket.disconnect();
+								faSocket.close();
 							} catch (IOException e1) {
-								mcPrintWriter = null;
-								mcWriter = null;
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
 							}
 
-							try {
-								faPrintWriter.close();
-								faWriter.close();
-							} catch (IOException e1) {
-								faPrintWriter = null;
-								faWriter = null;
-							}								
-							
 							break;
 						}
 					}
