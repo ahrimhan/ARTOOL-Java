@@ -22,7 +22,7 @@ public class AOMProfileItemDispatcher implements Runnable {
 	private boolean isStarted;
 	private DatagramChannel faSocket;
 	private DatagramChannel mcSocket;
-	public final static String HOST = "143.248.188.3";
+	public final static String HOST = "localhost";
 	
 	private AOMProfileItemDispatcher() {
 		mcqueue = new ArrayBlockingQueue<ByteBuffer>(5000);
@@ -57,7 +57,8 @@ public class AOMProfileItemDispatcher implements Runnable {
 	
 	public ByteBuffer getFreeBuffer() throws InterruptedException
 	{
-		return ByteBuffer.allocate(512);
+		return null;
+//		return ByteBuffer.allocate(1024);
 //		return pool.take();
 	}
 	

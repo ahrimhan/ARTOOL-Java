@@ -5,12 +5,20 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 
 public abstract class AOMLoggingItem  {
 	public abstract void write(PrintWriter ds) throws IOException;
 	public abstract boolean read(BufferedReader ds) throws IOException;
-	
+	private static Charset charset = Charset.forName("US-ASCII");
+	private static CharsetEncoder charEncoder;
 	private boolean occupied = false;
+	
+	static
+	{
+		charEncoder = charset.newEncoder();
+	}
 	
 	public void setOccupied(boolean occupied)
 	{
@@ -30,11 +38,12 @@ public abstract class AOMLoggingItem  {
 		return occupied;
 	}
 	
-	public boolean write(ByteBuffer buffer) {
+	public ByteBuffer write(ByteBuffer buffer) {
 		String str = toString();
-		if( str == null ) return false;
-		buffer.put(str.getBytes());
-		return true;
+		if( str == null ) return null;
+		return charset.encode(str);
+//		buffer.asCharBuffer().put(str);
+//		return null;
 	}
 	
 	public String toString()
@@ -46,7 +55,7 @@ public abstract class AOMLoggingItem  {
 		try {
 			write(ds);
 			ds.flush();		
-			
+			wr.flush();
 			ret = wr.toString();
 			ds.close();
 			wr.close();

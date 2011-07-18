@@ -94,7 +94,7 @@ public class AOMProfilingLogger {
 		
 		try {
 			buffer = workingQueue.getFreeBuffer();
-			if( !item.write(buffer) )
+			if( (buffer = item.write(buffer)) == null )
 			{
 				workingQueue.returnFreeBuffer(buffer);
 				buffer = null;
@@ -154,7 +154,7 @@ public class AOMProfilingLogger {
 				
 				try {
 					buffer = workingQueue.getFreeBuffer();
-					if( !item.write(buffer) )
+					if( (buffer = item.write(buffer)) == null )
 					{
 						workingQueue.returnFreeBuffer(buffer);
 						buffer = null;
