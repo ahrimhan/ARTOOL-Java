@@ -169,6 +169,9 @@ public class AOMProfileItemDispatcher implements Runnable {
 					
 					al.clear();
 					c = faqueue.drainTo(al, 500);
+					
+					
+					
 					if(  faSocket != null ) {
 						try {
 							for( int i = 0; i < c; i++ )
