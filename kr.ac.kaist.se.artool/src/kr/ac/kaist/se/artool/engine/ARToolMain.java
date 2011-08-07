@@ -414,6 +414,8 @@ public class ARToolMain {
 		this.setDynamic_mode(dialog.getToggleState());
 		StatusLogger.getInstance().clear();
 		ChangeImpactAnalysis cia = ChangeImpactAnalysis.getInstance();
+		String changeFile = "./resultARTool/modifiedMethod.csv";
+		cia.init(aom, changeFile);
 		
 		ps.print("Rule\t");
 		ps.print("fitness2\t");
@@ -438,9 +440,7 @@ public class ARToolMain {
 		printInitialItems();
 		printCouplingRelatedMetrics(aom, ARToolMain.getInstance().getPrintStream1());
 		
-		String changeFile = "./resultARTool/modifiedMethod.csv";
 		
-		cia.init(aom, changeFile);
 		
 		if( isDynamic_mode() )
 		{
@@ -509,8 +509,6 @@ public class ARToolMain {
 				Map.Entry<HashSet<AOMMethod>, Integer>[] sortedRule4list_Method =
 					UtilityFunctions.getInstance().__getSortedIBDP(dynamicRule4List[1], cutline);
 				
-				
-				
 				// rule setting
 				Vector<AbstractRule> rules = new Vector<AbstractRule>();
 				// my approach (dynamic)
@@ -534,7 +532,6 @@ public class ARToolMain {
 				// trial execution for rules
 				trialExecute(rules);
 			
-				
 				AbstractRule selectedRule = selectRule(rules);
 				StatusLogger.getInstance().selectSuite(selectedRule);
 				

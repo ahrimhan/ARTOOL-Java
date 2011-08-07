@@ -48,12 +48,14 @@ public class CollapseClassHierarchyCommand implements RefactoringCommand {
 		mergingClass.getDescendant().addAll(mergedClass.getDescendant());
 		
 		aomFields.addAll(mergedClass.getFields());
-		mergedClass.getFields().clear();
-		mergingClass.getFields().addAll(aomFields);
+		mergingClass.getFields().addAll(mergedClass.getFields());
+//		mergedClass.getFields().clear();
+//		mergingClass.getFields().addAll(aomFields);
 
 		aomMethods.addAll(mergedClass.getMethods());
-		mergedClass.getMethods().clear();
-		mergingClass.getMethods().addAll(aomMethods);
+		mergingClass.getMethods().addAll(mergedClass.getMethods());
+//		mergedClass.getMethods().clear();
+//		mergingClass.getMethods().addAll(aomMethods);
 		
 		
 		LOC = mergingClass.getRemainingLOC();
@@ -64,6 +66,12 @@ public class CollapseClassHierarchyCommand implements RefactoringCommand {
 		
 		name = mergingClass.getName();
 		mergingClass.setName(mergingClass.getName() + " Plus " + mergedClass.getName());
+		
+		for( AOMMethod method : aomMethods )
+		{
+			System.err.print( method.getOwner().getName() );
+		}
+		System.err.println();
 	}
 
 
@@ -92,6 +100,12 @@ public class CollapseClassHierarchyCommand implements RefactoringCommand {
 		mergingClass.setFqdn(fqdn);
 		
 		mergingClass.setName(name);
+		
+		for( AOMMethod method : mergedClass.getMethods() )
+		{
+			System.err.print( method.getOwner().getName() );
+		}
+		System.err.println();
 	}
 	
 	

@@ -86,6 +86,8 @@ public class BasicMetricSuite {
 				{
 					for( DynamicMethodCall dmc : method.getOwnedScope().getDynamicMethodCalls() )
 					{
+						
+						//used inherited methods
 						dynamicCalleeClass = dmc.getCallee().getOwner(); //c4
 						if( dynamicCalleeClass != null &&
 								dmc.getStatic() != null)
@@ -98,6 +100,7 @@ public class BasicMetricSuite {
 							}
 						}
 						
+						//used overriding methods
 						if( dmc.getCallee().getOverriding() != null)
 						{
 							increase(dynamicCalleeClass.getMeasuredDataSet().get(NUOM), 1);

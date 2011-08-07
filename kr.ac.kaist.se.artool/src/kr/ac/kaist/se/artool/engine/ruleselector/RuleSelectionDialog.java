@@ -148,7 +148,7 @@ public class RuleSelectionDialog extends Dialog {
 		return super.isResizable();
 	}
 
-	public static final String[] statusAttributes = { "fitness2", "fitness3", "fitness_static", "StaticBoth", "DynamicBoth", "MPCDBoth", "MSC", "LCOM2", "LCOM3" };
+	public static final String[] statusAttributes = { "ciaForClass", "ciaForMethod", "fitness2", "fitness3", "fitness_static", "StaticBoth", "DynamicBoth", "MPCDBoth", "MSC", "LCOM2", "LCOM3" };
 
 	
 	private void createColumns(final TableViewer viewer) {

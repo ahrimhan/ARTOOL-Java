@@ -23,14 +23,20 @@ public class ChangeImpactAnalysis {
 	//fieldImpactedMode 1 (only the method that is referring the field.)
 	//fieldImpactedMode 2 (include propagated methods from the method that is referring the field.)
 	
+	
 	public static ChangeImpactAnalysis getInstance()
+	//(AbstractObjectModel aom)
 	{
+		
+		//String changeFile = "./resultARTool/modifiedMethod.csv";
+		
 		if( instance == null )
 		{
 			instance = new ChangeImpactAnalysis();
 			
 		}
-	
+		
+		//init(aom, changeFile);
 		return instance;
 	}
 	
@@ -47,55 +53,55 @@ public class ChangeImpactAnalysis {
 		this.stepTwo = stepTwo;
 	}
 
-
-	//110425(월) 실제 change log 분석하여 string으로 된 parsing하여 하는 법 부터 여기 짜기.
 	public int numImpactedClasses(String methodSignature)
 	{
 		return 0;
 	}
 	
-
-	
-	public double analysisOnMethod(AOMMethod method)
-	{
-		HashSet<AOMMethod> firstImpact = new HashSet<AOMMethod>();
-		HashSet<AOMMethod> secondImpact = new HashSet<AOMMethod>();
-		this.getListImpactedMethods(method, firstImpact, secondImpact);
 		
-		return firstImpact.size()*1. + secondImpact.size()*0.5;
+	public void analysisOnMethod(AOMMethod method, HashSet<AOMMethod> firstImpact, HashSet<AOMMethod> secondImpact)
+	{
+//		HashSet<AOMMethod> firstImpact = new HashSet<AOMMethod>();
+//		HashSet<AOMMethod> secondImpact = new HashSet<AOMMethod>();
+		this.getListImpactedMethods(method, firstImpact, secondImpact);
 	}
 
-	public double analysisOnClass(AOMMethod method)
+	public void analysisOnClass(AOMMethod method, HashSet<AOMClass> firstImpact, HashSet<AOMClass> secondImpact )
 	{
-		HashSet<AOMClass> firstImpact = new HashSet<AOMClass>();
-		HashSet<AOMClass> secondImpact = new HashSet<AOMClass>();
 		this.getListImpactedClasses(method, firstImpact, secondImpact);
-		
-		return firstImpact.size()*1. + secondImpact.size()*0.5;
 	}
 	
 	public double analysisOnMethod()
 	{
-		double ret = 0;
-
+		HashSet<AOMMethod> firstImpact = new HashSet<AOMMethod>();
+		HashSet<AOMMethod> secondImpact = new HashSet<AOMMethod>();
 		for( AOMMethod method : changedMethod )
 		{
-			ret += analysisOnMethod(method);
+			analysisOnMethod(method, firstImpact, secondImpact);
 		}
 
-		return ret;
+//		for( AOMClass clazz : aom.getClasses() )
+//		{
+//			for( AOMMethod method : clazz.getMethods() )
+//			{
+//				ret += analysisOnMethod(method);
+//			}
+//		}
+		
+		return firstImpact.size() + secondImpact.size() * 0.0;
 	}
 	
 	public double analysisOnClass()
 	{
-		double ret = 0;
+		HashSet<AOMClass> firstImpact = new HashSet<AOMClass>();
+		HashSet<AOMClass> secondImpact = new HashSet<AOMClass>();
 
 		for( AOMMethod method : changedMethod )
 		{
-			ret += analysisOnClass(method);
+			analysisOnClass(method, firstImpact, secondImpact);
 		}
 
-		return ret;
+		return firstImpact.size() + secondImpact.size() * 0.0;
 	}
 	
 	private AOMMethod findMethod(String className, String methodName)
@@ -120,7 +126,7 @@ public class ChangeImpactAnalysis {
 	public void getListImpactedMethods(AOMMethod method, HashSet<AOMMethod> firstImpact, HashSet<AOMMethod> secondImpact)
 	{
 		AOMClass caller_class = null;
-		
+		int i = 0;
 		
 		for( StaticMethodCall smc1 : method.getStaticReferer() )
 		{
@@ -134,7 +140,8 @@ public class ChangeImpactAnalysis {
 				{
 					for ( StaticMethodCall smc2 : caller_method1.getStaticReferer() )
 					{
-						if( smc2.getCaller().getOwner() != caller_method1 )
+						if( smc2.getCaller().getOwner() != caller_method1 &&
+								smc2.getCaller().getOwner().getOwner() != caller_method1.getOwner())
 						{
 							AOMMethod caller_method2 = smc2.getCaller().getOwner();
 							secondImpact.add(caller_method2);
@@ -143,13 +150,14 @@ public class ChangeImpactAnalysis {
 				}
 			
 			}
+		
 		}
+		
 	}
 
 	
 	public void getListImpactedClasses(AOMMethod method, HashSet<AOMClass> firstImpact, HashSet<AOMClass> secondImpact)
 	{
-
 		HashSet<AOMMethod> firstImpactMethod = new HashSet<AOMMethod>();
 		HashSet<AOMMethod> secondImpactMethod = new HashSet<AOMMethod>();
 		getListImpactedMethods( method, firstImpactMethod, secondImpactMethod );

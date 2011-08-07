@@ -35,6 +35,7 @@ public class Rule5 extends AbstractRule {
 		}
 		aomClasses = sortedRule5list[pick].getKey().toArray(new AOMClass[0]);
 		
+		
 		ClassStat.getDynamicStat().countOnClassEntries(sortedRule5list);
 	}
 

@@ -583,50 +583,60 @@ public class FitnessFunction {
 		
 		float fitness2 = (float) (
 				( 
-					(1.0 * ( MSC_avg )/( MSC_MAX ))
+					(1.0 * (( MSC_avg )/( MSC_MAX )))
 					
 				) 
 				/
 				( 
-//					(0.25 * ( MPCDBoth_avg )/( MPCDBoth_MAX )) +
-//					(0.25 * ( MPCSBoth_avg )/( MPCSBoth_MAX )) +
-					(0.5 * ( DynamicBoth_avg )/( DynamicBoth_MAX )) +
-					(0.5 * ( MPCDBoth_avg )/( MPCDBoth_MAX ))
-//					(0.25 * ( StaticBoth_avg )/( StaticBoth_MAX ))
-//					(0.25 * (( LCOM2_avg )/( LCOM2_MAX ))) +
-//					(0.25 * (( LCOM3_avg )/( LCOM3_MAX ))) 
+					(0.5 * (( DynamicBoth_avg )/( DynamicBoth_MAX ))) +
+					(0.5 * (( MPCDBoth_avg )/( MPCDBoth_MAX )))
+
 				)
 				); 
 
 		//case6
 		float fitness3 = (float) (
 				( 
-					(1.0 * ( MSC_avg )/( MSC_MAX ))
+					(0.5 * (( MSC_avg )/( MSC_MAX ))) +
+					(0.25 * (( LCOM2_avg )/( LCOM2_MAX ))) +
+					(0.25 * (( LCOM3_avg )/( LCOM3_MAX )))
 					
 				) 
 				/
 				( 
-//					(0.25 * ( MPCDBoth_avg )/( MPCDBoth_MAX )) +
-//					(0.25 * ( MPCSBoth_avg )/( MPCSBoth_MAX )) +
-					(0.25 * ( DynamicBoth_avg )/( DynamicBoth_MAX )) +
-					(0.25 * ( StaticBoth_avg )/( StaticBoth_MAX )) +
-					(0.25 * (( LCOM2_avg )/( LCOM2_MAX ))) +
-					(0.25 * (( LCOM3_avg )/( LCOM3_MAX ))) 
+					//fix 20110802
+						//add in numerator
+						//(0.25 * (( LCOM2_avg )/( LCOM2_MAX ))) +
+						//(0.25 * (( LCOM3_avg )/( LCOM3_MAX )))
+						//add in denominator
+						//(0.25 * ( MPCDBoth_avg )/( MPCDBoth_MAX )) +
+						//(0.25 * ( MPCSBoth_avg )/( MPCSBoth_MAX )) +
+						//delete in denominator
+						//(0.25 * (( LCOM2_avg )/( LCOM2_MAX ))) +
+						//(0.25 * (( LCOM3_avg )/( LCOM3_MAX )))
+					(0.25 * (( MPCDBoth_avg )/( MPCDBoth_MAX ))) +
+					(0.25 * (( MPCSBoth_avg )/( MPCSBoth_MAX ))) +
+					(0.25 * (( DynamicBoth_avg )/( DynamicBoth_MAX ))) +
+					(0.25 * (( StaticBoth_avg )/( StaticBoth_MAX ))) 
+					
 				)
 			); 
 		
 		float fitness_static = (float) (
 			    ( 
-					(1.0 * ( MSC_avg )/( MSC_MAX )) 
-
+					(0.5 * ( MSC_avg )/( MSC_MAX )) +
+					(0.25 * (( LCOM2_avg )/( LCOM2_MAX ))) +
+					(0.25 * (( LCOM3_avg )/( LCOM3_MAX )))
+						
 				) 
 				/
 				( 
-					( 0.5 * StaticBoth_avg )/( StaticBoth_MAX ) +
-					(0.25 * (( LCOM2_avg )/( LCOM2_MAX ))) +
-					(0.25 * (( LCOM3_avg )/( LCOM3_MAX ))) 
+					(0.5 * ( MPCSBoth_avg )/( MPCSBoth_MAX )) +
+					(0.5 * ( StaticBoth_avg )/( StaticBoth_MAX )) 
 				)
 			); 
+		
+		
 		
 //		int weightValNum = metric_size;
 //		float[] weightFitness = new float[weightValNum];
@@ -695,6 +705,10 @@ public class FitnessFunction {
 		StatusLogger.getInstance().putVar("LCOM2", LCOM2_avg);
 		StatusLogger.getInstance().putVar("LCOM3", LCOM3_avg);
 		//
+		double ciaForClass = ChangeImpactAnalysis.getInstance().analysisOnClass();
+		double ciaForMethod = ChangeImpactAnalysis.getInstance().analysisOnMethod();
+		StatusLogger.getInstance().putVar("ciaForClass", (float) ciaForClass );
+		StatusLogger.getInstance().putVar("ciaForMethod", (float) ciaForMethod );
 //		StatusLogger.getInstance().putVar("normalizedDynamicBoth", ( DynamicBoth_avg )/( DynamicBoth_MAX ));
 //		StatusLogger.getInstance().putVar("normalizedStaticBoth", ( StaticBoth_avg )/( StaticBoth_MAX ));
 //		StatusLogger.getInstance().putVar("normalizedBothCoupling",
