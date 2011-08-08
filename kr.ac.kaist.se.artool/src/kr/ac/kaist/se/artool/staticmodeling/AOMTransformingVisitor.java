@@ -2,6 +2,7 @@ package kr.ac.kaist.se.artool.staticmodeling;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
@@ -52,6 +53,7 @@ public class AOMTransformingVisitor extends ASTVisitor {
 	private HashMap<ITypeBinding, AOMClass> typeBinding2AOMClass = null;
 	private HashMap<IMethodBinding, AOMMethod> methodBinding2AOMMethod = null;
 	private HashMap<IVariableBinding, AOMField> varBinding2AOMField = null;
+	private HashMap<VariableDeclarationFragment, AOMField> temporalMap = null;
 	
 	public AOMTransformingVisitor(AbstractObjectModel aom)
 	{
@@ -59,6 +61,7 @@ public class AOMTransformingVisitor extends ASTVisitor {
 		typeBinding2AOMClass = new HashMap<ITypeBinding, AOMClass>();
 		methodBinding2AOMMethod = new HashMap<IMethodBinding, AOMMethod>();
 		varBinding2AOMField = new HashMap<IVariableBinding, AOMField>();
+		temporalMap = new HashMap<VariableDeclarationFragment, AOMField>();
 	}
 	
 	public AOMType getInferredType(ITypeBinding binding, ExternalTypeGenerator ext)
@@ -104,6 +107,17 @@ public class AOMTransformingVisitor extends ASTVisitor {
 	{
 		return varBinding2AOMField.get(binding);
 	}
+	
+	public void buildVariableBinding()
+	{
+		Set<Entry<VariableDeclarationFragment, AOMField>> set = temporalMap.entrySet();
+		for( Entry<VariableDeclarationFragment, AOMField> entry : set )
+		{
+			VariableDeclarationFragment vdf = entry.getKey();
+			AOMField aomField = entry.getValue();
+			varBinding2AOMField.put(vdf.resolveBinding().getVariableDeclaration(), aomField);
+		}
+	}
 
 	@Override
 	public boolean visit(FieldDeclaration node) {
@@ -122,7 +136,8 @@ public class AOMTransformingVisitor extends ASTVisitor {
 			aomField.setTypeBinding(node.getType().resolveBinding());
 			aomClass.getFields().add(aomField);
 			
-			varBinding2AOMField.put(vdf.resolveBinding(), aomField);
+			temporalMap.put(vdf, aomField);
+			
 		}
 		
 		return super.visit(node);
@@ -242,6 +257,9 @@ public class AOMTransformingVisitor extends ASTVisitor {
 			return super.visit(node);
 		}
 		
+		
+		
+		
 		public boolean visit(FieldAccess node)
 		{
 			ITypeBinding typeBinding = null;
@@ -297,7 +315,30 @@ public class AOMTransformingVisitor extends ASTVisitor {
 			IBinding binding = node.resolveBinding();
 			if( binding != null && binding.getKind() == IBinding.VARIABLE && binding instanceof IVariableBinding )
 			{
-				scope.getVariableBindings().add((IVariableBinding)binding);
+				IVariableBinding varBinding = (IVariableBinding)binding;
+				if( varBinding.isField() )
+				{
+					ITypeBinding typeBinding = null;
+
+					TypeDeclaration td = getEnclosingTypeDeclaration(node);
+					typeBinding = td.resolveBinding().getErasure();	
+
+					
+					StaticFieldAccess fieldAccess = null;
+					
+					CompilationUnit cu = (CompilationUnit)node.getRoot();
+					int lineNumber = cu.getLineNumber(node.getStartPosition());
+
+					fieldAccess = StaticmodelFactory.eINSTANCE.createStaticFieldAccess();
+					fieldAccess.setAccessingScope(scope);
+					fieldAccess.setTypeBinding(typeBinding);
+					fieldAccess.setVariableBinding(varBinding);
+					fieldAccess.setLineNumber(lineNumber);
+					fieldAccess.setColumnNumber(cu.getColumnNumber(node.getStartPosition()));
+					fieldAccess.setFileName(cu.getTypeRoot().getPath().lastSegment());
+					
+				}
+//				scope.getVariableBindings().add((IVariableBinding)binding);
 			}
 		}
 

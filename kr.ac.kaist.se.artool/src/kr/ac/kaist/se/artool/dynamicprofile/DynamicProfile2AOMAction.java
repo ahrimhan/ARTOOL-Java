@@ -29,8 +29,8 @@ public class DynamicProfile2AOMAction implements IObjectActionDelegate {
 	@Override
 	public void run(IAction action) {
 		String workingDir = selectedFile.getProject().getLocation().makeAbsolute().toOSString() + File.separator + "dynamic_profile";
-		String methodCallLogFile = workingDir + File.separator + "DynamicMethodCallLog.txt";
-		String fieldAccessLogFile = workingDir + File.separator + "DynamicFieldAccessLog.txt";
+		String methodCallLogFile = workingDir + File.separator + "methodcall.log";
+		String fieldAccessLogFile = workingDir + File.separator + "fieldaccess.log";
 		
 		Vector<AOMMethodCallItem> methodCallItems = new Vector<AOMMethodCallItem>();
 		Vector<AOMFieldAccessItem> fieldAccessItems = new Vector<AOMFieldAccessItem>();
@@ -48,16 +48,16 @@ public class DynamicProfile2AOMAction implements IObjectActionDelegate {
 			br.close();
 			fr.close();
 			
-//			 fr = new FileReader(fieldAccessLogFile);
-//			 br = new BufferedReader(fr);
-//			
-//			for(AOMFieldAccessItem fai = AOMFieldAccessItem.getInstance(br); fai != null;
-//				fai = AOMFieldAccessItem.getInstance(br))
-//			{
-//				fieldAccessItems.add(fai);
-//			}
-//			br.close();
-//			fr.close();
+			fr = new FileReader(fieldAccessLogFile);
+			br = new BufferedReader(fr);
+
+			for(AOMFieldAccessItem fai = AOMFieldAccessItem.getInstance(br); fai != null;
+					fai = AOMFieldAccessItem.getInstance(br))
+			{
+				fieldAccessItems.add(fai);
+			}
+			br.close();
+			fr.close();
 		}
 		catch(Exception ex)
 		{

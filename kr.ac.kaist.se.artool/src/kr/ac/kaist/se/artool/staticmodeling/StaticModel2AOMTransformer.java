@@ -147,6 +147,8 @@ public class StaticModel2AOMTransformer {
 				}
 				
 				
+				visitor.buildVariableBinding();
+				
 				// restoring method related references
 				for( AOMMethod method : aomClass.getMethods() )
 				{
@@ -221,13 +223,13 @@ public class StaticModel2AOMTransformer {
 							{
 								removeStaticFieldAccess.add(fieldAccess);
 							}
-							else if( aomCallingClass == null )
-							{
-								removeStaticFieldAccess.add(fieldAccess);
-							}
 							else
 							{
 								fieldAccess.setAccessedField(aomField);
+								if( aomCallingClass == null )
+								{
+									aomCallingClass = aomClass;
+								}
 								fieldAccess.setAccessingType(aomCallingClass);
 							}
 						}

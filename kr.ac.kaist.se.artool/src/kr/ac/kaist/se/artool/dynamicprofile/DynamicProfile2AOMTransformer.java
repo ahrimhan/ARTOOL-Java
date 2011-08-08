@@ -3,13 +3,13 @@ package kr.ac.kaist.se.artool.dynamicprofile;
 import java.util.Vector;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
-import kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelFactory;
 import kr.ac.kaist.se.aom.profiler.AOMFieldAccessItem;
 import kr.ac.kaist.se.aom.profiler.AOMMethodCallItem;
 import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
+import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.util.AOMIndex;
@@ -45,8 +45,8 @@ public class DynamicProfile2AOMTransformer {
 			AOMIndex index = AOMIndex.getInstance(aom, subMonitor1);
 			SubProgressMonitor subMonitor2 = new SubProgressMonitor(monitor, 40);
 			transformMethodCalls(aom, index, methodCallItems, subMonitor2);
-//			SubProgressMonitor subMonitor3 = new SubProgressMonitor(monitor, 40);
-//			transformFieldAccesses(aom, index, fieldAccessItems, subMonitor3);
+			SubProgressMonitor subMonitor3 = new SubProgressMonitor(monitor, 40);
+			transformFieldAccesses(aom, index, fieldAccessItems, subMonitor3);
 
 		}
 		finally 
@@ -63,10 +63,23 @@ public class DynamicProfile2AOMTransformer {
 	private void transformFieldAccesses(AbstractObjectModel aom, AOMIndex index,
 			Vector<AOMFieldAccessItem> fieldAccessItems, IProgressMonitor monitor) {
 		monitor.beginTask("Transforming Dynamic Profile for Field Accesses to AOM with Indices", fieldAccessItems.size());
-		DynamicMethodCallLinker linker = new DynamicMethodCallLinker();
 //		UbigraphClient ubiGraph = new UbigraphClient();
 //		int edgeStyleId = ubiGraph.newEdgeStyle(0);
 //		ubiGraph.setEdgeStyleAttribute(edgeStyleId, "arrow", "true");
+		for(AOMClass clazz : aom.getClasses() )
+		{
+			for(AOMMethod method : clazz.getMethods() )
+			{
+				if( method.getOwnedScope() != null )
+				{
+					for(StaticFieldAccess sfa : method.getOwnedScope().getStaticFieldAccesses() )
+					{
+						sfa.setDynamicAccessCount(0);
+					}
+				}
+			}
+		}
+		
 		try
 		{
 			for( AOMFieldAccessItem item : fieldAccessItems )
@@ -82,16 +95,25 @@ public class DynamicProfile2AOMTransformer {
 				}
 				else
 				{
-					DynamicFieldAccess dmc = DynamicmodelFactory.eINSTANCE.createDynamicFieldAccess();
-					accessingMethod.getOwnedScope().getDynamicFieldAccesses().add(dmc);
-					dmc.setAccessedField(referencedField);
+//					DynamicFieldAccess dmc = DynamicmodelFactory.eINSTANCE.createDynamicFieldAccess();
+//					accessingMethod.getOwnedScope().getDynamicFieldAccesses().add(dmc);
+//					dmc.setAccessedField(referencedField);
 			
 					StaticFieldAccess smc = null;
 					for( StaticFieldAccess t : accessingMethod.getOwnedScope().getStaticFieldAccesses() )
 					{
-						if( t.getAccessedField().getName().equals(referencedField.getName()) && t.getLineNumber() == item.accessorLineNumber )
+						if( t.getAccessedField().getName().equals(referencedField.getName()) )
 						{
-							smc = t;
+							if( (t.getLineNumber()) == item.getAccessorLineNumber() 
+									|| (t.getLineNumber() == item.getAccessorLineNumber() + 1))
+							{
+								smc = t;
+							}
+							else
+							{
+								System.err.println("line:" + t.getFileName() + "|" + t.getLineNumber() + " : " + item.accessorLineNumber);
+							}
+							
 						}
 					}
 					
@@ -99,11 +121,10 @@ public class DynamicProfile2AOMTransformer {
 					{
 						System.err.println("(" + (accessingMethod != null ? "true " : "false") + "," + (referencedField != null ? "true " : "false") + ")" + item.accessorClassName + "." + item.accessorMethodName + ":" + item.accessorMethodSignature + "(" + item.accessorLineNumber + ") -> " + item.referencedClassName + "." + item.referencedFieldName);
 					}
-					dmc.setStaticFieldAccess(smc);
-					dmc.setLineNumber(item.accessorLineNumber);
-					dmc.setFileName(item.accessorFileName);
-					dmc.setIsReader(item.isReadAccess);
-					dmc.setIsWriter(item.isWriteAccess);
+					else
+					{
+						smc.setDynamicAccessCount(smc.getDynamicAccessCount() + 1);
+					}
 				}
 				monitor.worked(1);				
 			}

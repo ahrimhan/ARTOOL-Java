@@ -104,7 +104,7 @@ public class ChangeImpactAnalysis {
 		return firstImpact.size() + secondImpact.size() * 0.0;
 	}
 	
-	private AOMMethod findMethod(String className, String methodName)
+	private AOMMethod findMethod(String className, String methodName, int lineNumber)
 	{
 		for(AOMClass clazz : aom.getClasses() )
 		{
@@ -112,7 +112,12 @@ public class ChangeImpactAnalysis {
 			{
 				for( AOMMethod method : clazz.getMethods() )
 				{
-					if( method.getName().equals(methodName) )
+					if( method.getName().equals(methodName) 
+//							&&
+//							method.getStartLine() - 1 <= lineNumber 
+//							&&
+//							method.getStartLine() + 1 >= lineNumber 
+							)
 					{
 						return method;
 					}
@@ -209,7 +214,7 @@ public class ChangeImpactAnalysis {
 			for( String line = reader.readLine(); line != null; line = reader.readLine() )
 			{
 				String[] str = line.split(",");
-				AOMMethod method = findMethod(str[0], str[1]);
+				AOMMethod method = findMethod(str[0], str[1], Integer.parseInt(str[2]));
 				
 				if( method == null )
 				{

@@ -373,7 +373,7 @@ public class AOMClassItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((AOMClass)object).getName();
+		String label = ((AOMClass)object).getFqdn();
 		return label == null || label.length() == 0 ?
 			getString("_UI_AOMClass_type") :
 			getString("_UI_AOMClass_type") + " " + label;

@@ -116,9 +116,10 @@ public class ARToolMain {
 	private ARToolMain()
 	{
 		try {
-			ps = new PrintStream(new FileOutputStream("./resultARTool/metric_result1.txt"));
-			ps1 = new PrintStream(new FileOutputStream("./resultARTool/basicmetricsuite.txt"));
-			ps2 = new PrintStream(new FileOutputStream("./resultARTool/changeimpactanalysis.txt"));
+			
+			ps = new PrintStream(new FileOutputStream("/Users/ah-rimhan/Work/eclipse/resultARTool/metric_result1.txt"));
+			ps1 = new PrintStream(new FileOutputStream("/Users/ah-rimhan/Work/eclipse/resultARTool/basicmetricsuite.txt"));
+			ps2 = new PrintStream(new FileOutputStream("/Users/ah-rimhan/Work/eclipse/resultARTool/changeimpactanalysis.txt"));
 						
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -414,7 +415,7 @@ public class ARToolMain {
 		this.setDynamic_mode(dialog.getToggleState());
 		StatusLogger.getInstance().clear();
 		ChangeImpactAnalysis cia = ChangeImpactAnalysis.getInstance();
-		String changeFile = "./resultARTool/modifiedMethod.csv";
+		String changeFile = "/Users/ah-rimhan/Work/eclipse/resultARTool/modifiedMethod.csv";
 		cia.init(aom, changeFile);
 		
 		ps.print("Rule\t");
