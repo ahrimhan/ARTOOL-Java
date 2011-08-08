@@ -28,6 +28,7 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
  *   <li>{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getLineNumber <em>Line Number</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getColumnNumber <em>Column Number</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getFileName <em>File Name</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getDynamicAccessCount <em>Dynamic Access Count</em>}</li>
  * </ul>
  * </p>
  *
@@ -196,6 +197,32 @@ public interface StaticFieldAccess extends StaticDependency {
 	 */
 	void setFileName(String value);
 	
+	/**
+	 * Returns the value of the '<em><b>Dynamic Access Count</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Dynamic Access Count</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Dynamic Access Count</em>' attribute.
+	 * @see #setDynamicAccessCount(long)
+	 * @see kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage#getStaticFieldAccess_DynamicAccessCount()
+	 * @model
+	 * @generated
+	 */
+	long getDynamicAccessCount();
+
+	/**
+	 * Sets the value of the '{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getDynamicAccessCount <em>Dynamic Access Count</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Dynamic Access Count</em>' attribute.
+	 * @see #getDynamicAccessCount()
+	 * @generated
+	 */
+	void setDynamicAccessCount(long value);
+
 	IVariableBinding getVariableBinding();
 	void setVariableBinding(IVariableBinding binding);
 	

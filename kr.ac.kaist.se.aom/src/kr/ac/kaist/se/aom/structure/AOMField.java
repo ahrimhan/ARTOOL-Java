@@ -21,7 +21,6 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMField#getOwner <em>Owner</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMField#getStaticReferer <em>Static Referer</em>}</li>
- *   <li>{@link kr.ac.kaist.se.aom.structure.AOMField#getDynamicReferer <em>Dynamic Referer</em>}</li>
  * </ul>
  * </p>
  *
@@ -75,23 +74,5 @@ public interface AOMField extends AOMVariableDef, MeasurableElement {
 	 * @generated
 	 */
 	EList<StaticFieldAccess> getStaticReferer();
-
-	/**
-	 * Returns the value of the '<em><b>Dynamic Referer</b></em>' reference list.
-	 * The list contents are of type {@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess}.
-	 * It is bidirectional and its opposite is '{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getAccessedField <em>Accessed Field</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Dynamic Referer</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Dynamic Referer</em>' reference list.
-	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMField_DynamicReferer()
-	 * @see kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getAccessedField
-	 * @model opposite="accessedField"
-	 * @generated
-	 */
-	EList<DynamicFieldAccess> getDynamicReferer();
 
 } // AOMField

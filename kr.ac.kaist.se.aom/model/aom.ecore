@@ -55,8 +55,6 @@
           eOpposite="#//structure/AOMClass/fields"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="staticReferer" upperBound="-1"
           eType="#//staticmodel/StaticFieldAccess" eOpposite="#//staticmodel/StaticFieldAccess/accessedField"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="dynamicReferer" upperBound="-1"
-          eType="#//dynamicmodel/DynamicFieldAccess" eOpposite="#//dynamicmodel/DynamicFieldAccess/accessedField"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="AOMMethod" eSuperTypes="#//structure/AOMNamedElement #//structure/AOMTypedElement #//MeasurableElement">
       <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
@@ -96,9 +94,6 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="staticFieldAccesses"
           upperBound="-1" eType="#//staticmodel/StaticFieldAccess" containment="true"
           eOpposite="#//staticmodel/StaticFieldAccess/accessingScope"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="dynamicFieldAccesses"
-          upperBound="-1" eType="#//dynamicmodel/DynamicFieldAccess" containment="true"
-          eOpposite="#//dynamicmodel/DynamicFieldAccess/accessingScope"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="AOMParameter" eSuperTypes="#//structure/AOMVariableDef">
       <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//structure/AOMMethod"
@@ -139,6 +134,7 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="dynamicAccessCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="dynamicmodel" nsURI="http://se.kaist.ac.kr/aom/dynamicmodel"
@@ -156,18 +152,6 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="static" eType="#//staticmodel/StaticMethodCall"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="tid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
           transient="true"/>
-    </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="DynamicFieldAccess" eSuperTypes="#//dynamicmodel/DynamicDependency">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="accessingScope" eType="#//structure/AOMScope"
-          eOpposite="#//structure/AOMScope/dynamicFieldAccesses"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="accessedField" eType="#//structure/AOMField"
-          eOpposite="#//structure/AOMField/dynamicReferer"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="staticFieldAccess" eType="#//staticmodel/StaticFieldAccess"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isReader" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isWriter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eClassifiers>
   </eSubpackages>
 </ecore:EPackage>

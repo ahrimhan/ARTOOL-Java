@@ -40,7 +40,7 @@
             ecoreFeature="ecore:EReference aom.ecore#//structure/AOMType/referer"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMType/fqdn"/>
       </genClasses>
-      <genClasses ecoreClass="aom.ecore#//structure/AOMClass">
+      <genClasses ecoreClass="aom.ecore#//structure/AOMClass" labelFeature="#//aom/structure/AOMType/fqdn">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMClass/fields"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMClass/methods"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
@@ -60,8 +60,6 @@
         <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMField/owner"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference aom.ecore#//structure/AOMField/staticReferer"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference aom.ecore#//structure/AOMField/dynamicReferer"/>
       </genClasses>
       <genClasses ecoreClass="aom.ecore#//structure/AOMMethod">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMMethod/parameters"/>
@@ -89,10 +87,7 @@
         <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/owner"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/staticMethodCalls"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/dynamicMethodCalls"/>
-        <genFeatures children="true" createChild="true" propertySortChoices="true"
-            ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/staticFieldAccesses"/>
-        <genFeatures children="true" createChild="true" propertySortChoices="true"
-            ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/dynamicFieldAccesses"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/staticFieldAccesses"/>
       </genClasses>
       <genClasses ecoreClass="aom.ecore#//structure/AOMParameter">
         <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMParameter/owner"/>
@@ -127,6 +122,7 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//staticmodel/StaticFieldAccess/lineNumber"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//staticmodel/StaticFieldAccess/columnNumber"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//staticmodel/StaticFieldAccess/fileName"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//staticmodel/StaticFieldAccess/dynamicAccessCount"/>
       </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Dynamicmodel" basePackage="kr.ac.kaist.se.aom" resource="XMI"
@@ -144,19 +140,6 @@
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference aom.ecore#//dynamicmodel/DynamicMethodCall/static"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//dynamicmodel/DynamicMethodCall/tid"/>
-      </genClasses>
-      <genClasses ecoreClass="aom.ecore#//dynamicmodel/DynamicFieldAccess">
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference aom.ecore#//dynamicmodel/DynamicFieldAccess/accessingScope"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference aom.ecore#//dynamicmodel/DynamicFieldAccess/accessedField"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//dynamicmodel/DynamicFieldAccess/lineNumber"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//dynamicmodel/DynamicFieldAccess/columnNumber"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//dynamicmodel/DynamicFieldAccess/fileName"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference aom.ecore#//dynamicmodel/DynamicFieldAccess/staticFieldAccess"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//dynamicmodel/DynamicFieldAccess/isReader"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//dynamicmodel/DynamicFieldAccess/isWriter"/>
       </genClasses>
     </nestedGenPackages>
   </genPackages>

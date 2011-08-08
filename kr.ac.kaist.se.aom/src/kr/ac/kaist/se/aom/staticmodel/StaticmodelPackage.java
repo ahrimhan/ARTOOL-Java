@@ -217,13 +217,22 @@ public interface StaticmodelPackage extends EPackage {
 	int STATIC_FIELD_ACCESS__FILE_NAME = STATIC_DEPENDENCY_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Dynamic Access Count</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STATIC_FIELD_ACCESS__DYNAMIC_ACCESS_COUNT = STATIC_DEPENDENCY_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Static Field Access</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int STATIC_FIELD_ACCESS_FEATURE_COUNT = STATIC_DEPENDENCY_FEATURE_COUNT + 6;
+	int STATIC_FIELD_ACCESS_FEATURE_COUNT = STATIC_DEPENDENCY_FEATURE_COUNT + 7;
 
 
 	/**
@@ -389,6 +398,17 @@ public interface StaticmodelPackage extends EPackage {
 	EAttribute getStaticFieldAccess_FileName();
 
 	/**
+	 * Returns the meta object for the attribute '{@link kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getDynamicAccessCount <em>Dynamic Access Count</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Dynamic Access Count</em>'.
+	 * @see kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess#getDynamicAccessCount()
+	 * @see #getStaticFieldAccess()
+	 * @generated
+	 */
+	EAttribute getStaticFieldAccess_DynamicAccessCount();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -535,6 +555,14 @@ public interface StaticmodelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute STATIC_FIELD_ACCESS__FILE_NAME = eINSTANCE.getStaticFieldAccess_FileName();
+
+		/**
+		 * The meta object literal for the '<em><b>Dynamic Access Count</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute STATIC_FIELD_ACCESS__DYNAMIC_ACCESS_COUNT = eINSTANCE.getStaticFieldAccess_DynamicAccessCount();
 
 	}
 

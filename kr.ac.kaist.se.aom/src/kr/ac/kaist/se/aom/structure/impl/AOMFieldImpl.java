@@ -49,7 +49,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getMeasuredDataSet <em>Measured Data Set</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getOwner <em>Owner</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getStaticReferer <em>Static Referer</em>}</li>
- *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getDynamicReferer <em>Dynamic Referer</em>}</li>
  * </ul>
  * </p>
  *
@@ -95,16 +94,6 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 	 * @ordered
 	 */
 	protected EList<StaticFieldAccess> staticReferer;
-
-	/**
-	 * The cached value of the '{@link #getDynamicReferer() <em>Dynamic Referer</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDynamicReferer()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<DynamicFieldAccess> dynamicReferer;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -216,18 +205,6 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<DynamicFieldAccess> getDynamicReferer() {
-		if (dynamicReferer == null) {
-			dynamicReferer = new EObjectWithInverseResolvingEList<DynamicFieldAccess>(DynamicFieldAccess.class, this, StructurePackage.AOM_FIELD__DYNAMIC_REFERER, DynamicmodelPackage.DYNAMIC_FIELD_ACCESS__ACCESSED_FIELD);
-		}
-		return dynamicReferer;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -238,8 +215,6 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 				return basicSetOwner((AOMClass)otherEnd, msgs);
 			case StructurePackage.AOM_FIELD__STATIC_REFERER:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getStaticReferer()).basicAdd(otherEnd, msgs);
-			case StructurePackage.AOM_FIELD__DYNAMIC_REFERER:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getDynamicReferer()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -258,8 +233,6 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 				return basicSetOwner(null, msgs);
 			case StructurePackage.AOM_FIELD__STATIC_REFERER:
 				return ((InternalEList<?>)getStaticReferer()).basicRemove(otherEnd, msgs);
-			case StructurePackage.AOM_FIELD__DYNAMIC_REFERER:
-				return ((InternalEList<?>)getDynamicReferer()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -295,8 +268,6 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 				return getOwner();
 			case StructurePackage.AOM_FIELD__STATIC_REFERER:
 				return getStaticReferer();
-			case StructurePackage.AOM_FIELD__DYNAMIC_REFERER:
-				return getDynamicReferer();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -323,10 +294,6 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 				getStaticReferer().clear();
 				getStaticReferer().addAll((Collection<? extends StaticFieldAccess>)newValue);
 				return;
-			case StructurePackage.AOM_FIELD__DYNAMIC_REFERER:
-				getDynamicReferer().clear();
-				getDynamicReferer().addAll((Collection<? extends DynamicFieldAccess>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -351,9 +318,6 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 			case StructurePackage.AOM_FIELD__STATIC_REFERER:
 				getStaticReferer().clear();
 				return;
-			case StructurePackage.AOM_FIELD__DYNAMIC_REFERER:
-				getDynamicReferer().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -374,8 +338,6 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 				return getOwner() != null;
 			case StructurePackage.AOM_FIELD__STATIC_REFERER:
 				return staticReferer != null && !staticReferer.isEmpty();
-			case StructurePackage.AOM_FIELD__DYNAMIC_REFERER:
-				return dynamicReferer != null && !dynamicReferer.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

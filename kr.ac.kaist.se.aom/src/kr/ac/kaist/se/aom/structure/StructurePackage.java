@@ -437,22 +437,13 @@ public interface StructurePackage extends EPackage {
 	int AOM_FIELD__STATIC_REFERER = AOM_VARIABLE_DEF_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Dynamic Referer</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AOM_FIELD__DYNAMIC_REFERER = AOM_VARIABLE_DEF_FEATURE_COUNT + 3;
-
-	/**
 	 * The number of structural features of the '<em>AOM Field</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_FIELD_FEATURE_COUNT = AOM_VARIABLE_DEF_FEATURE_COUNT + 4;
+	int AOM_FIELD_FEATURE_COUNT = AOM_VARIABLE_DEF_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl <em>AOM Method</em>}' class.
@@ -691,22 +682,13 @@ public interface StructurePackage extends EPackage {
 	int AOM_SCOPE__STATIC_FIELD_ACCESSES = 4;
 
 	/**
-	 * The feature id for the '<em><b>Dynamic Field Accesses</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AOM_SCOPE__DYNAMIC_FIELD_ACCESSES = 5;
-
-	/**
 	 * The number of structural features of the '<em>AOM Scope</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_SCOPE_FEATURE_COUNT = 6;
+	int AOM_SCOPE_FEATURE_COUNT = 5;
 
 	/**
 	 * The meta object id for the '{@link kr.ac.kaist.se.aom.structure.impl.AOMParameterImpl <em>AOM Parameter</em>}' class.
@@ -1115,17 +1097,6 @@ public interface StructurePackage extends EPackage {
 	EReference getAOMField_StaticReferer();
 
 	/**
-	 * Returns the meta object for the reference list '{@link kr.ac.kaist.se.aom.structure.AOMField#getDynamicReferer <em>Dynamic Referer</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Dynamic Referer</em>'.
-	 * @see kr.ac.kaist.se.aom.structure.AOMField#getDynamicReferer()
-	 * @see #getAOMField()
-	 * @generated
-	 */
-	EReference getAOMField_DynamicReferer();
-
-	/**
 	 * Returns the meta object for class '{@link kr.ac.kaist.se.aom.structure.AOMMethod <em>AOM Method</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1364,17 +1335,6 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getAOMScope_StaticFieldAccesses();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link kr.ac.kaist.se.aom.structure.AOMScope#getDynamicFieldAccesses <em>Dynamic Field Accesses</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Dynamic Field Accesses</em>'.
-	 * @see kr.ac.kaist.se.aom.structure.AOMScope#getDynamicFieldAccesses()
-	 * @see #getAOMScope()
-	 * @generated
-	 */
-	EReference getAOMScope_DynamicFieldAccesses();
 
 	/**
 	 * Returns the meta object for class '{@link kr.ac.kaist.se.aom.structure.AOMParameter <em>AOM Parameter</em>}'.
@@ -1675,14 +1635,6 @@ public interface StructurePackage extends EPackage {
 		EReference AOM_FIELD__STATIC_REFERER = eINSTANCE.getAOMField_StaticReferer();
 
 		/**
-		 * The meta object literal for the '<em><b>Dynamic Referer</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference AOM_FIELD__DYNAMIC_REFERER = eINSTANCE.getAOMField_DynamicReferer();
-
-		/**
 		 * The meta object literal for the '{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl <em>AOM Method</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1861,14 +1813,6 @@ public interface StructurePackage extends EPackage {
 		 * @generated
 		 */
 		EReference AOM_SCOPE__STATIC_FIELD_ACCESSES = eINSTANCE.getAOMScope_StaticFieldAccesses();
-
-		/**
-		 * The meta object literal for the '<em><b>Dynamic Field Accesses</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference AOM_SCOPE__DYNAMIC_FIELD_ACCESSES = eINSTANCE.getAOMScope_DynamicFieldAccesses();
 
 		/**
 		 * The meta object literal for the '{@link kr.ac.kaist.se.aom.structure.impl.AOMParameterImpl <em>AOM Parameter</em>}' class.

@@ -271,6 +271,15 @@ public class StaticmodelPackageImpl extends EPackageImpl implements StaticmodelP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getStaticFieldAccess_DynamicAccessCount() {
+		return (EAttribute)staticFieldAccessEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public StaticmodelFactory getStaticmodelFactory() {
 		return (StaticmodelFactory)getEFactoryInstance();
 	}
@@ -311,6 +320,7 @@ public class StaticmodelPackageImpl extends EPackageImpl implements StaticmodelP
 		createEAttribute(staticFieldAccessEClass, STATIC_FIELD_ACCESS__LINE_NUMBER);
 		createEAttribute(staticFieldAccessEClass, STATIC_FIELD_ACCESS__COLUMN_NUMBER);
 		createEAttribute(staticFieldAccessEClass, STATIC_FIELD_ACCESS__FILE_NAME);
+		createEAttribute(staticFieldAccessEClass, STATIC_FIELD_ACCESS__DYNAMIC_ACCESS_COUNT);
 	}
 
 	/**
@@ -365,6 +375,7 @@ public class StaticmodelPackageImpl extends EPackageImpl implements StaticmodelP
 		initEAttribute(getStaticFieldAccess_LineNumber(), ecorePackage.getEInt(), "lineNumber", null, 0, 1, StaticFieldAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStaticFieldAccess_ColumnNumber(), ecorePackage.getEInt(), "columnNumber", null, 0, 1, StaticFieldAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStaticFieldAccess_FileName(), ecorePackage.getEString(), "fileName", null, 0, 1, StaticFieldAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStaticFieldAccess_DynamicAccessCount(), ecorePackage.getELong(), "dynamicAccessCount", null, 0, 1, StaticFieldAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //StaticmodelPackageImpl

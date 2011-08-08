@@ -49,7 +49,6 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMScopeImpl#getStaticMethodCalls <em>Static Method Calls</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMScopeImpl#getDynamicMethodCalls <em>Dynamic Method Calls</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMScopeImpl#getStaticFieldAccesses <em>Static Field Accesses</em>}</li>
- *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMScopeImpl#getDynamicFieldAccesses <em>Dynamic Field Accesses</em>}</li>
  * </ul>
  * </p>
  *
@@ -95,16 +94,6 @@ public class AOMScopeImpl extends EObjectImpl implements AOMScope {
 	 * @ordered
 	 */
 	protected EList<StaticFieldAccess> staticFieldAccesses;
-
-	/**
-	 * The cached value of the '{@link #getDynamicFieldAccesses() <em>Dynamic Field Accesses</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDynamicFieldAccesses()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<DynamicFieldAccess> dynamicFieldAccesses;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -219,18 +208,6 @@ public class AOMScopeImpl extends EObjectImpl implements AOMScope {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<DynamicFieldAccess> getDynamicFieldAccesses() {
-		if (dynamicFieldAccesses == null) {
-			dynamicFieldAccesses = new EObjectContainmentWithInverseEList<DynamicFieldAccess>(DynamicFieldAccess.class, this, StructurePackage.AOM_SCOPE__DYNAMIC_FIELD_ACCESSES, DynamicmodelPackage.DYNAMIC_FIELD_ACCESS__ACCESSING_SCOPE);
-		}
-		return dynamicFieldAccesses;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -247,8 +224,6 @@ public class AOMScopeImpl extends EObjectImpl implements AOMScope {
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getDynamicMethodCalls()).basicAdd(otherEnd, msgs);
 			case StructurePackage.AOM_SCOPE__STATIC_FIELD_ACCESSES:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getStaticFieldAccesses()).basicAdd(otherEnd, msgs);
-			case StructurePackage.AOM_SCOPE__DYNAMIC_FIELD_ACCESSES:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getDynamicFieldAccesses()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -271,8 +246,6 @@ public class AOMScopeImpl extends EObjectImpl implements AOMScope {
 				return ((InternalEList<?>)getDynamicMethodCalls()).basicRemove(otherEnd, msgs);
 			case StructurePackage.AOM_SCOPE__STATIC_FIELD_ACCESSES:
 				return ((InternalEList<?>)getStaticFieldAccesses()).basicRemove(otherEnd, msgs);
-			case StructurePackage.AOM_SCOPE__DYNAMIC_FIELD_ACCESSES:
-				return ((InternalEList<?>)getDynamicFieldAccesses()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -309,8 +282,6 @@ public class AOMScopeImpl extends EObjectImpl implements AOMScope {
 				return getDynamicMethodCalls();
 			case StructurePackage.AOM_SCOPE__STATIC_FIELD_ACCESSES:
 				return getStaticFieldAccesses();
-			case StructurePackage.AOM_SCOPE__DYNAMIC_FIELD_ACCESSES:
-				return getDynamicFieldAccesses();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -343,10 +314,6 @@ public class AOMScopeImpl extends EObjectImpl implements AOMScope {
 				getStaticFieldAccesses().clear();
 				getStaticFieldAccesses().addAll((Collection<? extends StaticFieldAccess>)newValue);
 				return;
-			case StructurePackage.AOM_SCOPE__DYNAMIC_FIELD_ACCESSES:
-				getDynamicFieldAccesses().clear();
-				getDynamicFieldAccesses().addAll((Collection<? extends DynamicFieldAccess>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -374,9 +341,6 @@ public class AOMScopeImpl extends EObjectImpl implements AOMScope {
 			case StructurePackage.AOM_SCOPE__STATIC_FIELD_ACCESSES:
 				getStaticFieldAccesses().clear();
 				return;
-			case StructurePackage.AOM_SCOPE__DYNAMIC_FIELD_ACCESSES:
-				getDynamicFieldAccesses().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -399,8 +363,6 @@ public class AOMScopeImpl extends EObjectImpl implements AOMScope {
 				return dynamicMethodCalls != null && !dynamicMethodCalls.isEmpty();
 			case StructurePackage.AOM_SCOPE__STATIC_FIELD_ACCESSES:
 				return staticFieldAccesses != null && !staticFieldAccesses.isEmpty();
-			case StructurePackage.AOM_SCOPE__DYNAMIC_FIELD_ACCESSES:
-				return dynamicFieldAccesses != null && !dynamicFieldAccesses.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

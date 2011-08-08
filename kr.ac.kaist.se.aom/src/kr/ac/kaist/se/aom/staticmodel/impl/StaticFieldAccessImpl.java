@@ -39,6 +39,7 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
  *   <li>{@link kr.ac.kaist.se.aom.staticmodel.impl.StaticFieldAccessImpl#getLineNumber <em>Line Number</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.staticmodel.impl.StaticFieldAccessImpl#getColumnNumber <em>Column Number</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.staticmodel.impl.StaticFieldAccessImpl#getFileName <em>File Name</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.staticmodel.impl.StaticFieldAccessImpl#getDynamicAccessCount <em>Dynamic Access Count</em>}</li>
  * </ul>
  * </p>
  *
@@ -124,6 +125,26 @@ public class StaticFieldAccessImpl extends StaticDependencyImpl implements Stati
 	 * @ordered
 	 */
 	protected String fileName = FILE_NAME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getDynamicAccessCount() <em>Dynamic Access Count</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDynamicAccessCount()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final long DYNAMIC_ACCESS_COUNT_EDEFAULT = 0L;
+
+	/**
+	 * The cached value of the '{@link #getDynamicAccessCount() <em>Dynamic Access Count</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDynamicAccessCount()
+	 * @generated
+	 * @ordered
+	 */
+	protected long dynamicAccessCount = DYNAMIC_ACCESS_COUNT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -351,6 +372,27 @@ public class StaticFieldAccessImpl extends StaticDependencyImpl implements Stati
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public long getDynamicAccessCount() {
+		return dynamicAccessCount;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDynamicAccessCount(long newDynamicAccessCount) {
+		long oldDynamicAccessCount = dynamicAccessCount;
+		dynamicAccessCount = newDynamicAccessCount;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StaticmodelPackage.STATIC_FIELD_ACCESS__DYNAMIC_ACCESS_COUNT, oldDynamicAccessCount, dynamicAccessCount));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -418,6 +460,8 @@ public class StaticFieldAccessImpl extends StaticDependencyImpl implements Stati
 				return getColumnNumber();
 			case StaticmodelPackage.STATIC_FIELD_ACCESS__FILE_NAME:
 				return getFileName();
+			case StaticmodelPackage.STATIC_FIELD_ACCESS__DYNAMIC_ACCESS_COUNT:
+				return getDynamicAccessCount();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -447,6 +491,9 @@ public class StaticFieldAccessImpl extends StaticDependencyImpl implements Stati
 				return;
 			case StaticmodelPackage.STATIC_FIELD_ACCESS__FILE_NAME:
 				setFileName((String)newValue);
+				return;
+			case StaticmodelPackage.STATIC_FIELD_ACCESS__DYNAMIC_ACCESS_COUNT:
+				setDynamicAccessCount((Long)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -478,6 +525,9 @@ public class StaticFieldAccessImpl extends StaticDependencyImpl implements Stati
 			case StaticmodelPackage.STATIC_FIELD_ACCESS__FILE_NAME:
 				setFileName(FILE_NAME_EDEFAULT);
 				return;
+			case StaticmodelPackage.STATIC_FIELD_ACCESS__DYNAMIC_ACCESS_COUNT:
+				setDynamicAccessCount(DYNAMIC_ACCESS_COUNT_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -502,6 +552,8 @@ public class StaticFieldAccessImpl extends StaticDependencyImpl implements Stati
 				return columnNumber != COLUMN_NUMBER_EDEFAULT;
 			case StaticmodelPackage.STATIC_FIELD_ACCESS__FILE_NAME:
 				return FILE_NAME_EDEFAULT == null ? fileName != null : !FILE_NAME_EDEFAULT.equals(fileName);
+			case StaticmodelPackage.STATIC_FIELD_ACCESS__DYNAMIC_ACCESS_COUNT:
+				return dynamicAccessCount != DYNAMIC_ACCESS_COUNT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -522,6 +574,8 @@ public class StaticFieldAccessImpl extends StaticDependencyImpl implements Stati
 		result.append(columnNumber);
 		result.append(", fileName: ");
 		result.append(fileName);
+		result.append(", dynamicAccessCount: ");
+		result.append(dynamicAccessCount);
 		result.append(')');
 		return result.toString();
 	}

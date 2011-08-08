@@ -33,7 +33,6 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMScope#getStaticMethodCalls <em>Static Method Calls</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMScope#getDynamicMethodCalls <em>Dynamic Method Calls</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMScope#getStaticFieldAccesses <em>Static Field Accesses</em>}</li>
- *   <li>{@link kr.ac.kaist.se.aom.structure.AOMScope#getDynamicFieldAccesses <em>Dynamic Field Accesses</em>}</li>
  * </ul>
  * </p>
  *
@@ -141,24 +140,6 @@ public interface AOMScope extends EObject {
 	 * @generated
 	 */
 	EList<StaticFieldAccess> getStaticFieldAccesses();
-
-	/**
-	 * Returns the value of the '<em><b>Dynamic Field Accesses</b></em>' containment reference list.
-	 * The list contents are of type {@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess}.
-	 * It is bidirectional and its opposite is '{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getAccessingScope <em>Accessing Scope</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Dynamic Field Accesses</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Dynamic Field Accesses</em>' containment reference list.
-	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMScope_DynamicFieldAccesses()
-	 * @see kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess#getAccessingScope
-	 * @model opposite="accessingScope" containment="true"
-	 * @generated
-	 */
-	EList<DynamicFieldAccess> getDynamicFieldAccesses();
 
 	List<IVariableBinding> getVariableBindings();
 	

@@ -35,15 +35,6 @@ public interface DynamicmodelFactory extends EFactory {
 	DynamicMethodCall createDynamicMethodCall();
 
 	/**
-	 * Returns a new object of class '<em>Dynamic Field Access</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Dynamic Field Access</em>'.
-	 * @generated
-	 */
-	DynamicFieldAccess createDynamicFieldAccess();
-
-	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

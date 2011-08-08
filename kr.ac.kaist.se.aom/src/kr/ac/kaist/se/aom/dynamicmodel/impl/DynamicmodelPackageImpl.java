@@ -53,13 +53,6 @@ public class DynamicmodelPackageImpl extends EPackageImpl implements Dynamicmode
 	private EClass dynamicMethodCallEClass = null;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass dynamicFieldAccessEClass = null;
-
-	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -208,87 +201,6 @@ public class DynamicmodelPackageImpl extends EPackageImpl implements Dynamicmode
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getDynamicFieldAccess() {
-		return dynamicFieldAccessEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getDynamicFieldAccess_AccessingScope() {
-		return (EReference)dynamicFieldAccessEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getDynamicFieldAccess_AccessedField() {
-		return (EReference)dynamicFieldAccessEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getDynamicFieldAccess_LineNumber() {
-		return (EAttribute)dynamicFieldAccessEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getDynamicFieldAccess_ColumnNumber() {
-		return (EAttribute)dynamicFieldAccessEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getDynamicFieldAccess_FileName() {
-		return (EAttribute)dynamicFieldAccessEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getDynamicFieldAccess_StaticFieldAccess() {
-		return (EReference)dynamicFieldAccessEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getDynamicFieldAccess_IsReader() {
-		return (EAttribute)dynamicFieldAccessEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getDynamicFieldAccess_IsWriter() {
-		return (EAttribute)dynamicFieldAccessEClass.getEStructuralFeatures().get(7);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public DynamicmodelFactory getDynamicmodelFactory() {
 		return (DynamicmodelFactory)getEFactoryInstance();
 	}
@@ -321,16 +233,6 @@ public class DynamicmodelPackageImpl extends EPackageImpl implements Dynamicmode
 		createEReference(dynamicMethodCallEClass, DYNAMIC_METHOD_CALL__NEXT_CALLS);
 		createEReference(dynamicMethodCallEClass, DYNAMIC_METHOD_CALL__STATIC);
 		createEAttribute(dynamicMethodCallEClass, DYNAMIC_METHOD_CALL__TID);
-
-		dynamicFieldAccessEClass = createEClass(DYNAMIC_FIELD_ACCESS);
-		createEReference(dynamicFieldAccessEClass, DYNAMIC_FIELD_ACCESS__ACCESSING_SCOPE);
-		createEReference(dynamicFieldAccessEClass, DYNAMIC_FIELD_ACCESS__ACCESSED_FIELD);
-		createEAttribute(dynamicFieldAccessEClass, DYNAMIC_FIELD_ACCESS__LINE_NUMBER);
-		createEAttribute(dynamicFieldAccessEClass, DYNAMIC_FIELD_ACCESS__COLUMN_NUMBER);
-		createEAttribute(dynamicFieldAccessEClass, DYNAMIC_FIELD_ACCESS__FILE_NAME);
-		createEReference(dynamicFieldAccessEClass, DYNAMIC_FIELD_ACCESS__STATIC_FIELD_ACCESS);
-		createEAttribute(dynamicFieldAccessEClass, DYNAMIC_FIELD_ACCESS__IS_READER);
-		createEAttribute(dynamicFieldAccessEClass, DYNAMIC_FIELD_ACCESS__IS_WRITER);
 	}
 
 	/**
@@ -366,7 +268,6 @@ public class DynamicmodelPackageImpl extends EPackageImpl implements Dynamicmode
 
 		// Add supertypes to classes
 		dynamicMethodCallEClass.getESuperTypes().add(this.getDynamicDependency());
-		dynamicFieldAccessEClass.getESuperTypes().add(this.getDynamicDependency());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(dynamicDependencyEClass, DynamicDependency.class, "DynamicDependency", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -378,16 +279,6 @@ public class DynamicmodelPackageImpl extends EPackageImpl implements Dynamicmode
 		initEReference(getDynamicMethodCall_NextCalls(), this.getDynamicMethodCall(), this.getDynamicMethodCall_PreviousCall(), "nextCalls", null, 0, -1, DynamicMethodCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDynamicMethodCall_Static(), theStaticmodelPackage.getStaticMethodCall(), null, "static", null, 0, 1, DynamicMethodCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDynamicMethodCall_Tid(), ecorePackage.getEInt(), "tid", null, 0, 1, DynamicMethodCall.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(dynamicFieldAccessEClass, DynamicFieldAccess.class, "DynamicFieldAccess", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDynamicFieldAccess_AccessingScope(), theStructurePackage.getAOMScope(), theStructurePackage.getAOMScope_DynamicFieldAccesses(), "accessingScope", null, 0, 1, DynamicFieldAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getDynamicFieldAccess_AccessedField(), theStructurePackage.getAOMField(), theStructurePackage.getAOMField_DynamicReferer(), "accessedField", null, 0, 1, DynamicFieldAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getDynamicFieldAccess_LineNumber(), ecorePackage.getEInt(), "lineNumber", null, 0, 1, DynamicFieldAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getDynamicFieldAccess_ColumnNumber(), ecorePackage.getEInt(), "columnNumber", null, 0, 1, DynamicFieldAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getDynamicFieldAccess_FileName(), ecorePackage.getEString(), "fileName", null, 0, 1, DynamicFieldAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getDynamicFieldAccess_StaticFieldAccess(), theStaticmodelPackage.getStaticFieldAccess(), null, "staticFieldAccess", null, 0, 1, DynamicFieldAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getDynamicFieldAccess_IsReader(), ecorePackage.getEBoolean(), "isReader", null, 0, 1, DynamicFieldAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getDynamicFieldAccess_IsWriter(), ecorePackage.getEBoolean(), "isWriter", null, 0, 1, DynamicFieldAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //DynamicmodelPackageImpl
