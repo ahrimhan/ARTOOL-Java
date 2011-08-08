@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: DynamicmodelItemProviderAdapterFactory.java,v 1.4 2011-01-04 00:56:35 igsong Exp $
+ * $Id$
  */
 package kr.ac.kaist.se.aom.dynamicmodel.provider;
 
@@ -96,29 +96,6 @@ public class DynamicmodelItemProviderAdapterFactory extends DynamicmodelAdapterF
 		}
 
 		return dynamicMethodCallItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected DynamicFieldAccessItemProvider dynamicFieldAccessItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createDynamicFieldAccessAdapter() {
-		if (dynamicFieldAccessItemProvider == null) {
-			dynamicFieldAccessItemProvider = new DynamicFieldAccessItemProvider(this);
-		}
-
-		return dynamicFieldAccessItemProvider;
 	}
 
 	/**
@@ -221,7 +198,6 @@ public class DynamicmodelItemProviderAdapterFactory extends DynamicmodelAdapterF
 	 */
 	public void dispose() {
 		if (dynamicMethodCallItemProvider != null) dynamicMethodCallItemProvider.dispose();
-		if (dynamicFieldAccessItemProvider != null) dynamicFieldAccessItemProvider.dispose();
 	}
 
 }

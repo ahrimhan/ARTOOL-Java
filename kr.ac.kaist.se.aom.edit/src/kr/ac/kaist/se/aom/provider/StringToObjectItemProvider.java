@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: StringToObjectItemProvider.java,v 1.1 2011-01-14 03:22:36 igsong Exp $
+ * $Id$
  */
 package kr.ac.kaist.se.aom.provider;
 

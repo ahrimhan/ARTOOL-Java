@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: StaticmodelItemProviderAdapterFactory.java,v 1.3 2010-12-27 16:36:31 igsong Exp $
+ * $Id$
  */
 package kr.ac.kaist.se.aom.staticmodel.provider;
 

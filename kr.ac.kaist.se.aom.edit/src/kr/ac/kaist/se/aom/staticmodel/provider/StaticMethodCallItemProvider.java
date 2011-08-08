@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: StaticMethodCallItemProvider.java,v 1.6 2011-01-05 02:48:55 igsong Exp $
+ * $Id$
  */
 package kr.ac.kaist.se.aom.staticmodel.provider;
 
@@ -15,6 +15,7 @@ import kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -217,11 +218,11 @@ public class StaticMethodCallItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		StaticMethodCall smc = (StaticMethodCall)object;
-		String label = smc.getFileName() + "(" + smc.getLineNumber() + "," + smc.getColumnNumber() + ")";
+		String label = ((StaticMethodCall)object).getFileName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_StaticMethodCall_type") :
 			getString("_UI_StaticMethodCall_type") + " " + label;

@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: AOMScopeItemProvider.java,v 1.5 2011-01-05 07:42:55 igsong Exp $
+ * $Id$
  */
 package kr.ac.kaist.se.aom.structure.provider;
 
@@ -11,11 +11,11 @@ import java.util.Collection;
 import java.util.List;
 
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelFactory;
+
 import kr.ac.kaist.se.aom.provider.AomEditPlugin;
 
 import kr.ac.kaist.se.aom.staticmodel.StaticmodelFactory;
-import kr.ac.kaist.se.aom.staticmodel.StaticDependency;
-import kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage;
+
 import kr.ac.kaist.se.aom.structure.AOMScope;
 import kr.ac.kaist.se.aom.structure.StructureFactory;
 import kr.ac.kaist.se.aom.structure.StructurePackage;
@@ -27,7 +27,6 @@ import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -72,54 +71,8 @@ public class AOMScopeItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addStaticFieldAccessesPropertyDescriptor(object);
-			addDynamicFieldAccessesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Static Field Accesses feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addStaticFieldAccessesPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_AOMScope_staticFieldAccesses_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AOMScope_staticFieldAccesses_feature", "_UI_AOMScope_type"),
-				 StructurePackage.Literals.AOM_SCOPE__STATIC_FIELD_ACCESSES,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Dynamic Field Accesses feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDynamicFieldAccessesPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_AOMScope_dynamicFieldAccesses_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AOMScope_dynamicFieldAccesses_feature", "_UI_AOMScope_type"),
-				 StructurePackage.Literals.AOM_SCOPE__DYNAMIC_FIELD_ACCESSES,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
 	}
 
 	/**
@@ -138,7 +91,6 @@ public class AOMScopeItemProvider
 			childrenFeatures.add(StructurePackage.Literals.AOM_SCOPE__STATIC_METHOD_CALLS);
 			childrenFeatures.add(StructurePackage.Literals.AOM_SCOPE__DYNAMIC_METHOD_CALLS);
 			childrenFeatures.add(StructurePackage.Literals.AOM_SCOPE__STATIC_FIELD_ACCESSES);
-			childrenFeatures.add(StructurePackage.Literals.AOM_SCOPE__DYNAMIC_FIELD_ACCESSES);
 		}
 		return childrenFeatures;
 	}
@@ -194,7 +146,6 @@ public class AOMScopeItemProvider
 			case StructurePackage.AOM_SCOPE__STATIC_METHOD_CALLS:
 			case StructurePackage.AOM_SCOPE__DYNAMIC_METHOD_CALLS:
 			case StructurePackage.AOM_SCOPE__STATIC_FIELD_ACCESSES:
-			case StructurePackage.AOM_SCOPE__DYNAMIC_FIELD_ACCESSES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -231,11 +182,6 @@ public class AOMScopeItemProvider
 			(createChildParameter
 				(StructurePackage.Literals.AOM_SCOPE__STATIC_FIELD_ACCESSES,
 				 StaticmodelFactory.eINSTANCE.createStaticFieldAccess()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(StructurePackage.Literals.AOM_SCOPE__DYNAMIC_FIELD_ACCESSES,
-				 DynamicmodelFactory.eINSTANCE.createDynamicFieldAccess()));
 	}
 
 	/**

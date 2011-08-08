@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: AomItemProviderAdapterFactory.java,v 1.7 2011-02-07 08:36:45 igsong Exp $
+ * $Id$
  */
 package kr.ac.kaist.se.aom.provider;
 

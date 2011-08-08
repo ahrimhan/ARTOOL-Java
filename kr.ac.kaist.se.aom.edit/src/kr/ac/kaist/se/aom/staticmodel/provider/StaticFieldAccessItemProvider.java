@@ -67,6 +67,7 @@ public class StaticFieldAccessItemProvider
 			addLineNumberPropertyDescriptor(object);
 			addColumnNumberPropertyDescriptor(object);
 			addFileNamePropertyDescriptor(object);
+			addDynamicAccessCountPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -204,6 +205,28 @@ public class StaticFieldAccessItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Dynamic Access Count feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDynamicAccessCountPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_StaticFieldAccess_dynamicAccessCount_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_StaticFieldAccess_dynamicAccessCount_feature", "_UI_StaticFieldAccess_type"),
+				 StaticmodelPackage.Literals.STATIC_FIELD_ACCESS__DYNAMIC_ACCESS_COUNT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns StaticFieldAccess.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -243,6 +266,7 @@ public class StaticFieldAccessItemProvider
 			case StaticmodelPackage.STATIC_FIELD_ACCESS__LINE_NUMBER:
 			case StaticmodelPackage.STATIC_FIELD_ACCESS__COLUMN_NUMBER:
 			case StaticmodelPackage.STATIC_FIELD_ACCESS__FILE_NAME:
+			case StaticmodelPackage.STATIC_FIELD_ACCESS__DYNAMIC_ACCESS_COUNT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

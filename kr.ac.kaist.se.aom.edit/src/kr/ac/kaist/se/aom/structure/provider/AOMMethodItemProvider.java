@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: AOMMethodItemProvider.java,v 1.10 2011-01-14 11:36:12 igsong Exp $
+ * $Id$
  */
 package kr.ac.kaist.se.aom.structure.provider;
 
@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 import kr.ac.kaist.se.aom.AomPackage;
+
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.aom.structure.StructureFactory;
 import kr.ac.kaist.se.aom.structure.StructurePackage;

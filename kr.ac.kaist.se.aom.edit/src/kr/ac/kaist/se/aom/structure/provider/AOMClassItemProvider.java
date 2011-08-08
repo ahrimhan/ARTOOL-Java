@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: AOMClassItemProvider.java,v 1.11 2011-01-14 03:22:36 igsong Exp $
+ * $Id$
  */
 package kr.ac.kaist.se.aom.structure.provider;
 
@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 import kr.ac.kaist.se.aom.AomPackage;
+
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.StructureFactory;
 import kr.ac.kaist.se.aom.structure.StructurePackage;
@@ -368,11 +369,11 @@ public class AOMClassItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((AOMClass)object).getFqdn();
+		String label = ((AOMClass)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_AOMClass_type") :
 			getString("_UI_AOMClass_type") + " " + label;

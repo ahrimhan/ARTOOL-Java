@@ -2,25 +2,19 @@
  * <copyright>
  * </copyright>
  *
- * $Id: AbstractObjectModelItemProvider.java,v 1.11 2011-02-07 08:36:45 igsong Exp $
+ * $Id$
  */
 package kr.ac.kaist.se.aom.provider;
 
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
-import kr.ac.kaist.se.aom.AomFactory;
 import kr.ac.kaist.se.aom.AomPackage;
-
-import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelFactory;
-import kr.ac.kaist.se.aom.staticmodel.StaticmodelFactory;
 
 import kr.ac.kaist.se.aom.structure.StructureFactory;
 
-import kr.ac.kaist.se.aom.util.MeasuredDataSet;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
@@ -35,7 +29,6 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 

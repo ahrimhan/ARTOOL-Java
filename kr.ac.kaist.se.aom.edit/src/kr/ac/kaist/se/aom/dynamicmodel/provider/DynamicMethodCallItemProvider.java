@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: DynamicMethodCallItemProvider.java,v 1.6 2011-01-18 13:56:44 igsong Exp $
+ * $Id$
  */
 package kr.ac.kaist.se.aom.dynamicmodel.provider;
 

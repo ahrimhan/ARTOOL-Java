@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: AOMTypeItemProvider.java,v 1.4 2011-01-05 02:48:55 igsong Exp $
+ * $Id$
  */
 package kr.ac.kaist.se.aom.structure.provider;
 

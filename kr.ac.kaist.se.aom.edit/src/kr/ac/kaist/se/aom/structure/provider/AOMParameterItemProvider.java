@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: AOMParameterItemProvider.java,v 1.4 2011-01-05 05:23:19 igsong Exp $
+ * $Id$
  */
 package kr.ac.kaist.se.aom.structure.provider;
 
@@ -11,11 +11,11 @@ import java.util.Collection;
 import java.util.List;
 
 import kr.ac.kaist.se.aom.structure.AOMParameter;
-import kr.ac.kaist.se.aom.structure.AOMType;
 import kr.ac.kaist.se.aom.structure.StructurePackage;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -103,12 +103,11 @@ public class AOMParameterItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		AOMParameter lv =(AOMParameter)object;
-		AOMType type = lv.getType();
-		String label = lv.getName() + ":" + type.getName();
+		String label = ((AOMParameter)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_AOMParameter_type") :
 			getString("_UI_AOMParameter_type") + " " + label;

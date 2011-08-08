@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: AOMExternalTypeItemProvider.java,v 1.2 2011-01-05 05:23:19 igsong Exp $
+ * $Id$
  */
 package kr.ac.kaist.se.aom.structure.provider;
 
@@ -76,10 +76,11 @@ public class AOMExternalTypeItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((AOMExternalType)object).getFqdn();
+		String label = ((AOMExternalType)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_AOMExternalType_type") :
 			getString("_UI_AOMExternalType_type") + " " + label;

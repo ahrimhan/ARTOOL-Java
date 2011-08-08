@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: AOMFieldItemProvider.java,v 1.6 2011-01-14 11:36:12 igsong Exp $
+ * $Id$
  */
 package kr.ac.kaist.se.aom.structure.provider;
 
@@ -11,12 +11,13 @@ import java.util.Collection;
 import java.util.List;
 
 import kr.ac.kaist.se.aom.AomPackage;
+
 import kr.ac.kaist.se.aom.structure.AOMField;
-import kr.ac.kaist.se.aom.structure.AOMType;
 import kr.ac.kaist.se.aom.structure.StructurePackage;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -65,7 +66,6 @@ public class AOMFieldItemProvider
 			addNamePropertyDescriptor(object);
 			addMeasuredDataSetPropertyDescriptor(object);
 			addStaticRefererPropertyDescriptor(object);
-			addDynamicRefererPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -137,28 +137,6 @@ public class AOMFieldItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Dynamic Referer feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDynamicRefererPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_AOMField_dynamicReferer_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AOMField_dynamicReferer_feature", "_UI_AOMField_type"),
-				 StructurePackage.Literals.AOM_FIELD__DYNAMIC_REFERER,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This returns AOMField.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -173,14 +151,11 @@ public class AOMFieldItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
+	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		AOMField af = (AOMField)object;
-		AOMType type = af.getType();
-		String label = af.getName() + ":" + type.getName();
-
+		String label = ((AOMField)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_AOMField_type") :
 			getString("_UI_AOMField_type") + " " + label;
