@@ -260,21 +260,28 @@ public class ARToolMain {
 					numDynamicMethodCalls = containedDynamictoStaticMethodCall.size();
 					
 					//FIXME: 3 adjustable!
-					if( ndcicm >= 3 && numDynamicMethodCalls != 0 &&
-							ndcicm == numDynamicMethodCalls  )
+					if( ndcicm >= 3 && numDynamicMethodCalls != 0 
+//							&& ndcicm == numDynamicMethodCalls  
+							)
 					{
-						for( int i = 0; i < aomClasses.length - 1 ; )
+						for( int i = 0; i < aomClasses.length - 1; i++)
 						{
-							source_targetClasses[0] = aomClasses[i];
-							source_targetClasses[1] = aomClasses[++i];
-							UtilityFunctions.getInstance().increase(rule4list_Class, source_targetClasses[0], source_targetClasses[1]);
+							for( int j = i + 1; j < aomClasses.length; j++  )
+							{
+								source_targetClasses[0] = aomClasses[i];
+								source_targetClasses[1] = aomClasses[j];
+								UtilityFunctions.getInstance().increase(rule4list_Class, source_targetClasses[0], source_targetClasses[1]);
+							}
 						}
 						
-						for(int i = 0; i < aomMethods.length - 1 ; )
+						for(int i = 0; i < aomMethods.length - 1 ; i++ )
 						{
-							source_targetMethods[0] = aomMethods[i];
-							source_targetMethods[1] = aomMethods[++i];
-							UtilityFunctions.getInstance().increase(rule4list_Method, source_targetMethods[0], source_targetMethods[1]);
+							for( int j = i + 1; j < aomMethods.length; j++  )
+							{
+								source_targetMethods[0] = aomMethods[i];
+								source_targetMethods[1] = aomMethods[j];
+								UtilityFunctions.getInstance().increase(rule4list_Method, source_targetMethods[0], source_targetMethods[1]);
+							}
 						}
 					}
 				}
@@ -554,6 +561,9 @@ public class ARToolMain {
 				}
 				
 				System.gc();
+				
+//				aom.eResource().save(null);
+
 			}while( askContinue(shell) );
 						
 			

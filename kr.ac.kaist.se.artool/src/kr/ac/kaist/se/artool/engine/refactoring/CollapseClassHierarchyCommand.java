@@ -48,14 +48,14 @@ public class CollapseClassHierarchyCommand implements RefactoringCommand {
 		mergingClass.getDescendant().addAll(mergedClass.getDescendant());
 		
 		aomFields.addAll(mergedClass.getFields());
-		mergingClass.getFields().addAll(mergedClass.getFields());
-//		mergedClass.getFields().clear();
-//		mergingClass.getFields().addAll(aomFields);
+//		mergingClass.getFields().addAll(mergedClass.getFields());
+		mergedClass.getFields().clear();
+		mergingClass.getFields().addAll(aomFields);
 
 		aomMethods.addAll(mergedClass.getMethods());
-		mergingClass.getMethods().addAll(mergedClass.getMethods());
-//		mergedClass.getMethods().clear();
-//		mergingClass.getMethods().addAll(aomMethods);
+//		mergingClass.getMethods().addAll(mergedClass.getMethods());
+		mergedClass.getMethods().clear();
+		mergingClass.getMethods().addAll(aomMethods);
 		
 		
 		LOC = mergingClass.getRemainingLOC();

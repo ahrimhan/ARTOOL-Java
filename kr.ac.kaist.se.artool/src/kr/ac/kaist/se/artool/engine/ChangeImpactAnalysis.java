@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Vector;
 
@@ -59,22 +60,30 @@ public class ChangeImpactAnalysis {
 	}
 	
 		
-	public void analysisOnMethod(AOMMethod method, HashSet<AOMMethod> firstImpact, HashSet<AOMMethod> secondImpact)
+	public void analysisOnMethod(AOMMethod method, Vector<AOMMethod> firstImpact, Vector<AOMMethod> secondImpact)
 	{
-//		HashSet<AOMMethod> firstImpact = new HashSet<AOMMethod>();
-//		HashSet<AOMMethod> secondImpact = new HashSet<AOMMethod>();
-		this.getListImpactedMethods(method, firstImpact, secondImpact);
+		HashSet<AOMMethod> firstImpactSet = new HashSet<AOMMethod>();
+		HashSet<AOMMethod> secondImpactSet = new HashSet<AOMMethod>();
+		this.getListImpactedMethods(method, firstImpactSet, secondImpactSet);
+		firstImpact.addAll(firstImpactSet);
+		secondImpact.addAll(secondImpactSet);
 	}
 
-	public void analysisOnClass(AOMMethod method, HashSet<AOMClass> firstImpact, HashSet<AOMClass> secondImpact )
+	public void analysisOnClass(AOMMethod method, Vector<AOMClass> firstImpact, Vector<AOMClass> secondImpact )
 	{
-		this.getListImpactedClasses(method, firstImpact, secondImpact);
+		HashSet<AOMClass> firstImpactSet = new HashSet<AOMClass>();
+		HashSet<AOMClass> secondImpactSet = new HashSet<AOMClass>();
+		
+		this.getListImpactedClasses(method, firstImpactSet, secondImpactSet);
+		
+		firstImpact.addAll(firstImpactSet);
+		secondImpact.addAll(secondImpactSet);
 	}
 	
 	public double analysisOnMethod()
 	{
-		HashSet<AOMMethod> firstImpact = new HashSet<AOMMethod>();
-		HashSet<AOMMethod> secondImpact = new HashSet<AOMMethod>();
+		Vector<AOMMethod> firstImpact = new Vector<AOMMethod>();
+		Vector<AOMMethod> secondImpact = new Vector<AOMMethod>();
 		for( AOMMethod method : changedMethod )
 		{
 			analysisOnMethod(method, firstImpact, secondImpact);
@@ -93,8 +102,8 @@ public class ChangeImpactAnalysis {
 	
 	public double analysisOnClass()
 	{
-		HashSet<AOMClass> firstImpact = new HashSet<AOMClass>();
-		HashSet<AOMClass> secondImpact = new HashSet<AOMClass>();
+		Vector<AOMClass> firstImpact = new Vector<AOMClass>();
+		Vector<AOMClass> secondImpact = new Vector<AOMClass>();
 
 		for( AOMMethod method : changedMethod )
 		{
@@ -128,7 +137,7 @@ public class ChangeImpactAnalysis {
 		return null;
 	}
 	
-	public void getListImpactedMethods(AOMMethod method, HashSet<AOMMethod> firstImpact, HashSet<AOMMethod> secondImpact)
+	public void getListImpactedMethods(AOMMethod method, Collection<AOMMethod> firstImpact, Collection<AOMMethod> secondImpact)
 	{
 		AOMClass caller_class = null;
 		int i = 0;
@@ -161,10 +170,10 @@ public class ChangeImpactAnalysis {
 	}
 
 	
-	public void getListImpactedClasses(AOMMethod method, HashSet<AOMClass> firstImpact, HashSet<AOMClass> secondImpact)
+	public void getListImpactedClasses(AOMMethod method, Collection<AOMClass> firstImpact, Collection<AOMClass> secondImpact)
 	{
-		HashSet<AOMMethod> firstImpactMethod = new HashSet<AOMMethod>();
-		HashSet<AOMMethod> secondImpactMethod = new HashSet<AOMMethod>();
+		Vector<AOMMethod> firstImpactMethod = new Vector<AOMMethod>();
+		Vector<AOMMethod> secondImpactMethod = new Vector<AOMMethod>();
 		getListImpactedMethods( method, firstImpactMethod, secondImpactMethod );
 		
 		for( AOMMethod am : firstImpactMethod)

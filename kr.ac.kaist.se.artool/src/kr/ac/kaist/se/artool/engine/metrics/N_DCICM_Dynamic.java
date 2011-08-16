@@ -37,10 +37,9 @@ public class N_DCICM_Dynamic extends N_DCICM{
 			if( !visitedClass.contains(dmc.getCallee().getOwner()) )
 			{
 				ndcicm++;
-				visitedClass.add(dmc.getCallee().getOwner());
-				visitedMethod.add(dmc.getCallee());
-			
+				visitedClass.add(dmc.getCallee().getOwner());			
 			}
+			visitedMethod.add(dmc.getCallee());
 		}
 		return ndcicm;
 	}

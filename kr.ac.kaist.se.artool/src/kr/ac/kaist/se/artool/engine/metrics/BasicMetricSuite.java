@@ -93,8 +93,9 @@ public class BasicMetricSuite {
 								dmc.getStatic() != null)
 						{
 							staticCalleeClass = dmc.getStatic().getCallingType(); //c3
-								
-							if( !staticCalleeClass.getFqdn().equals(dynamicCalleeClass.getFqdn()) ) //inherited
+							
+							if( staticCalleeClass != null &&
+									!staticCalleeClass.getFqdn().equals(dynamicCalleeClass.getFqdn()) ) //inherited
 							{
 								increase(staticCalleeClass.getMeasuredDataSet().get(NUIM), 1);
 							}
