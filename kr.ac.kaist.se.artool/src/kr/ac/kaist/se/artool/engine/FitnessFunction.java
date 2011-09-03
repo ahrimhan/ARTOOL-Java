@@ -583,7 +583,7 @@ public class FitnessFunction {
 		
 		float fitness2 = (float) (
 				( 
-					(1.0 * (( MSC_avg )/( MSC_MAX )))
+					((( MSC_avg )/( MSC_MAX )))
 					
 				) 
 				/
@@ -597,9 +597,10 @@ public class FitnessFunction {
 		//case6
 		float fitness3 = (float) (
 				( 
-					(0.5 * (( MSC_avg )/( MSC_MAX ))) +
-					(0.25 * (( LCOM2_avg )/( LCOM2_MAX ))) +
-					(0.25 * (( LCOM3_avg )/( LCOM3_MAX )))
+					((( MSC_avg )/( MSC_MAX )))
+					//(0.25 * (( LCOM2_avg )/( LCOM2_MAX ))) +
+					//(0.25 * (( LCOM3_avg )/( LCOM3_MAX )))
+					//LCOM 은 lack of cohesion in method라서 분모로 가야한다!
 					
 				) 
 				/
@@ -624,9 +625,9 @@ public class FitnessFunction {
 		
 		float fitness_static = (float) (
 			    ( 
-					(0.5 * ( MSC_avg )/( MSC_MAX )) +
-					(0.25 * (( LCOM2_avg )/( LCOM2_MAX ))) +
-					(0.25 * (( LCOM3_avg )/( LCOM3_MAX )))
+					( MSC_avg )/( MSC_MAX ))
+					//(0.25 * (( LCOM2_avg )/( LCOM2_MAX ))) +
+					//(0.25 * (( LCOM3_avg )/( LCOM3_MAX )))
 						
 				) 
 				/
