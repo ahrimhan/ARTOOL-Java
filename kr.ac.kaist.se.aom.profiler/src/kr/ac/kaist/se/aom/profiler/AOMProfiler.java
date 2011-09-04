@@ -79,7 +79,7 @@ public class AOMProfiler implements ClassFileTransformer{
 	}
 	
 	private static final String[] deny = new String[] {"sun/",  "java/", "javax/"};
-	private static  String[] accept = new String[] {"org/gjt/sp"};
+	private static  String[] accept = new String[] {"org/gjt/sp","org/apache/catalina", "org/apache/jasper", "org/apache/tomcat"};
 	private static  String[] accept_dot;
 	private static String logpath = null;
 	static

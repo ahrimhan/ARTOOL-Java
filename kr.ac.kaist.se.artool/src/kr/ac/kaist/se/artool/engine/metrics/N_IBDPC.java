@@ -60,6 +60,7 @@ public class N_IBDPC {
 		
 		for( int i = 0 ; i < cutline ; i++ )
 		{
+			if( entries.size() <= 0 ) break;
 			Map.Entry<HashSet<T>, Integer> maxEntry = Collections.max(entries, new Comparator<Map.Entry<HashSet<T>, Integer>>(){
 				@Override
 				public int compare(Map.Entry<HashSet<T>, Integer> arg0,
@@ -87,6 +88,7 @@ public class N_IBDPC {
 	public void measure(AbstractObjectModel aom) {
 		map4N_IBDPC.clear();
 		map4N_IBDPM.clear();
+		
 		
 		for( AOMClass clazz : aom.getClasses() )
 		{

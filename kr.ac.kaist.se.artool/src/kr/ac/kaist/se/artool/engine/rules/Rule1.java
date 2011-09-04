@@ -25,7 +25,6 @@ public class Rule1 extends AbstractRule {
 		super(aom, pick);
 		this.n_IBDPC = n_IBDPC;
 		aomClasses = n_IBDPC[pick].getKey().toArray(new AOMClass[0]);
-	
 		ClassStat.getDynamicStat().countOnClassEntries(n_IBDPC);
 	}
 

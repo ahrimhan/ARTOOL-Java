@@ -19,10 +19,9 @@ import kr.ac.kaist.se.artool.engine.metrics.N_DCICM_Static;
 import kr.ac.kaist.se.artool.engine.metrics.N_IBDPC;
 import kr.ac.kaist.se.artool.engine.metrics.N_IBDPC_Static;
 import kr.ac.kaist.se.artool.engine.rules.AbstractRule;
+import kr.ac.kaist.se.artool.engine.rules.ClassStat;
 import kr.ac.kaist.se.artool.engine.rules.ListCache;
 import kr.ac.kaist.se.artool.engine.rules.Rule1;
-import kr.ac.kaist.se.artool.engine.rules.Rule10;
-import kr.ac.kaist.se.artool.engine.rules.Rule10_Static;
 import kr.ac.kaist.se.artool.engine.rules.Rule1_Static;
 import kr.ac.kaist.se.artool.engine.rules.Rule2;
 import kr.ac.kaist.se.artool.engine.rules.Rule2_Static;
@@ -34,14 +33,8 @@ import kr.ac.kaist.se.artool.engine.rules.Rule4_MoveMethod_2;
 import kr.ac.kaist.se.artool.engine.rules.Rule4_Static;
 import kr.ac.kaist.se.artool.engine.rules.Rule5;
 import kr.ac.kaist.se.artool.engine.rules.Rule5_Static;
-import kr.ac.kaist.se.artool.engine.rules.Rule6;
-import kr.ac.kaist.se.artool.engine.rules.Rule6_Static;
 import kr.ac.kaist.se.artool.engine.rules.Rule7;
 import kr.ac.kaist.se.artool.engine.rules.Rule7_Static;
-import kr.ac.kaist.se.artool.engine.rules.Rule8;
-import kr.ac.kaist.se.artool.engine.rules.Rule8_Static;
-import kr.ac.kaist.se.artool.engine.rules.Rule9;
-import kr.ac.kaist.se.artool.engine.rules.Rule9_Static;
 import kr.ac.kaist.se.artool.engine.ruleselector.BestSelector;
 import kr.ac.kaist.se.artool.engine.ruleselector.InteractiveSelector;
 import kr.ac.kaist.se.artool.engine.ruleselector.RuleSelector;
@@ -117,9 +110,9 @@ public class ARToolMain {
 	{
 		try {
 			
-			ps = new PrintStream(new FileOutputStream("/Users/ah-rimhan/Work/eclipse/resultARTool/metric_result1.txt"));
-			ps1 = new PrintStream(new FileOutputStream("/Users/ah-rimhan/Work/eclipse/resultARTool/basicmetricsuite.txt"));
-			ps2 = new PrintStream(new FileOutputStream("/Users/ah-rimhan/Work/eclipse/resultARTool/changeimpactanalysis.txt"));
+			ps = new PrintStream(new FileOutputStream("/Users/wjsong/git/ARTOOL/resultARTool/metric_result1.txt"));
+			ps1 = new PrintStream(new FileOutputStream("/Users/wjsong/git/ARTOOL/resultARTool/basicmetricsuite.txt"));
+			ps2 = new PrintStream(new FileOutputStream("/Users/wjsong/git/ARTOOL/resultARTool/changeimpactanalysis.txt"));
 						
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -422,7 +415,7 @@ public class ARToolMain {
 		this.setDynamic_mode(dialog.getToggleState());
 		StatusLogger.getInstance().clear();
 		ChangeImpactAnalysis cia = ChangeImpactAnalysis.getInstance();
-		String changeFile = "/Users/ah-rimhan/Work/eclipse/resultARTool/modifiedMethod.csv";
+		String changeFile = "/Users/wjsong/git/ARTOOL/resultARTool/modifiedMethod.csv";
 		cia.init(aom, changeFile);
 		
 		ps.print("Rule\t");
@@ -523,18 +516,57 @@ public class ARToolMain {
 				
 				ListCache.getInstance().reset();
 				
-				for(int i = 0; i < pickUntil; i++) rules.add(new Rule1(aom, n_IBDPC,i));
-				for(int i = 0; i < pickUntil; i++) rules.add(new Rule2(aom, n_IBDPM,i));
-				for(int i = 0; i < pickUntil; i++) rules.add(new Rule3(aom, n_IBDPM,i));
-				for(int i = 0; i < pickUntil; i++) rules.add(new Rule4(aom, sortedRule4list_Class,i));
-				for(int i = 0; i < pickUntil; i++) rules.add(new Rule4_MoveMethod_1(aom, sortedRule4list_Method,i));
-				for(int i = 0; i < pickUntil; i++) rules.add(new Rule4_MoveMethod_2(aom, sortedRule4list_Method,i));
-				for(int i = 0; i < pickUntil; i++) rules.add(new Rule5(aom, cutline,i));
-//				for(int i = 0; i < pickUntil; i++) rules.add(new Rule6(aom, cutline,i));
-				for(int i = 0; i < pickUntil; i++) rules.add(new Rule7(aom, cutline,i));
-//				for(int i = 0; i < pickUntil; i++) rules.add(new Rule8(aom, cutline,i));
-//				for(int i = 0; i < pickUntil; i++) rules.add(new Rule9(aom, cutline,i));
-//				for(int i = 0; i < pickUntil; i++) rules.add(new Rule10(aom, cutline,i));
+				for(int i = 0; i < pickUntil; i++) {
+				    try {
+				        rules.add(new Rule1(aom, n_IBDPC,i));
+				    } catch(Exception ex) { }
+				}
+				for(int i = 0; i < pickUntil; i++) {
+				    try {
+				        rules.add(new Rule2(aom, n_IBDPM,i));
+				    } catch(Exception ex) { }
+				}
+				for(int i = 0; i < pickUntil; i++) {
+				    try {
+				        rules.add(new Rule3(aom, n_IBDPM,i));
+				    } catch(Exception ex) { }
+				}
+				for(int i = 0; i < pickUntil; i++) {
+				    try {
+				        rules.add(new Rule4(aom, sortedRule4list_Class,i));
+				    } catch(Exception ex) { }
+				}
+				for(int i = 0; i < pickUntil; i++) {
+				    try {
+				        rules.add(new Rule4_MoveMethod_1(aom, sortedRule4list_Method,i));
+				    } catch(Exception ex) { }
+				}
+				for(int i = 0; i < pickUntil; i++) {
+				    try {
+				        rules.add(new Rule4_MoveMethod_2(aom, sortedRule4list_Method,i));
+				    } catch(Exception ex) { }
+				}
+				for(int i = 0; i < pickUntil; i++) {
+				    try {
+				        rules.add(new Rule5(aom, cutline,i));
+				    } catch(Exception ex) { }
+				}
+				/*
+				for(int i = 0; i < pickUntil; i++) {
+				    try {
+				        rules.add(new Rule6(aom, cutline,i));
+				    } catch(Exception ex) { }
+				}
+				*/
+				for(int i = 0; i < pickUntil; i++) {
+				    try {
+				        rules.add(new Rule7(aom, cutline,i));
+				    } catch(Exception ex) { }
+				}
+//				              for(int i = 0; i < pickUntil; i++) rules.add(new
+//				              Rule8(aom, cutline,i));//              for(int i = 0; i < pickUntil; i++) rules.add(new
+//				              Rule9(aom, cutline,i));//              for(int i = 0; i < pickUntil; i++) rules.add(new
+//				              Rule10(aom, cutline,i));
 				
 				StatusLogger.getInstance().openTrialPhase();
 				// trial execution for rules
@@ -567,7 +599,7 @@ public class ARToolMain {
 			}while( askContinue(shell) );
 						
 			
-//			ClassStat.getDynamicStat().export("./resultARTool/ClassStat.");
+			ClassStat.getDynamicStat().export("./resultARTool/ClassStat.");
 		}
 		else //basically based on StaticMethodCall
 		{
@@ -641,7 +673,7 @@ public class ARToolMain {
 				System.gc();
 			}while( askContinue(shell) );
 			
-//			ClassStat.getStaticStat().export("./resultARTool/ClassStat.");
+			ClassStat.getStaticStat().export("./resultARTool/ClassStat.");
 		}
 
 		//igsong: 20110531

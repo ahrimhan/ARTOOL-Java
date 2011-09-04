@@ -172,7 +172,10 @@ public class AOMTransformingVisitor extends ASTVisitor {
 			ITypeBinding typeBinding = null;
 			if( node.getExpression() != null )
 			{
-				typeBinding = node.getExpression().resolveTypeBinding().getErasure();
+				if( node.getExpression().resolveTypeBinding() != null )
+				{
+					typeBinding = node.getExpression().resolveTypeBinding().getErasure();
+				}
 			}
 			else
 			{
@@ -182,19 +185,22 @@ public class AOMTransformingVisitor extends ASTVisitor {
 
 			
 			StaticMethodCall methodCall = null;
-			IMethodBinding methodBinding = node.resolveMethodBinding().getMethodDeclaration();
-
-			CompilationUnit cu = (CompilationUnit)node.getRoot();
-			int lineNumber = cu.getLineNumber(node.getStartPosition() + node.getLength());
-
-			methodCall = StaticmodelFactory.eINSTANCE.createStaticMethodCall();
-			methodCall.setCaller(scope);
-			methodCall.setTypeBinding(typeBinding);
-			methodCall.setMethodBinding(methodBinding);
-			methodCall.setLineNumber(lineNumber);
-			methodCall.setColumnNumber(cu.getColumnNumber(node.getStartPosition()));
-			methodCall.setFileName(cu.getTypeRoot().getPath().lastSegment());
+			
+			if( typeBinding != null && node.resolveMethodBinding() != null )
+			{
+				IMethodBinding methodBinding = node.resolveMethodBinding().getMethodDeclaration();
 	
+				CompilationUnit cu = (CompilationUnit)node.getRoot();
+				int lineNumber = cu.getLineNumber(node.getStartPosition() + node.getLength());
+	
+				methodCall = StaticmodelFactory.eINSTANCE.createStaticMethodCall();
+				methodCall.setCaller(scope);
+				methodCall.setTypeBinding(typeBinding);
+				methodCall.setMethodBinding(methodBinding);
+				methodCall.setLineNumber(lineNumber);
+				methodCall.setColumnNumber(cu.getColumnNumber(node.getStartPosition()));
+				methodCall.setFileName(cu.getTypeRoot().getPath().lastSegment());
+			}
 			return super.visit(node);
 		}
 		
@@ -205,17 +211,19 @@ public class AOMTransformingVisitor extends ASTVisitor {
 
 				StaticMethodCall methodCall = null;
 				IMethodBinding methodBinding = node.resolveConstructorBinding();
-
-				CompilationUnit cu = (CompilationUnit)node.getRoot();
-//				int lineNumber = cu.getLineNumber(node.getStartPosition());
-				int lineNumber = cu.getLineNumber(node.getStartPosition() + node.getLength());
-					methodCall = StaticmodelFactory.eINSTANCE.createStaticMethodCall();
-					methodCall.setCaller(scope);
-					methodCall.setTypeBinding(methodBinding.getDeclaringClass());
-					methodCall.setMethodBinding(methodBinding);
-					methodCall.setLineNumber(lineNumber);
-					methodCall.setColumnNumber(cu.getColumnNumber(node.getStartPosition()));
-					methodCall.setFileName(cu.getTypeRoot().getPath().lastSegment());
+				if( methodBinding != null )
+				{
+					CompilationUnit cu = (CompilationUnit)node.getRoot();
+	//				int lineNumber = cu.getLineNumber(node.getStartPosition());
+					int lineNumber = cu.getLineNumber(node.getStartPosition() + node.getLength());
+						methodCall = StaticmodelFactory.eINSTANCE.createStaticMethodCall();
+						methodCall.setCaller(scope);
+						methodCall.setTypeBinding(methodBinding.getDeclaringClass());
+						methodCall.setMethodBinding(methodBinding);
+						methodCall.setLineNumber(lineNumber);
+						methodCall.setColumnNumber(cu.getColumnNumber(node.getStartPosition()));
+						methodCall.setFileName(cu.getTypeRoot().getPath().lastSegment());
+				}
 			}
 			return super.visit(node);
 		}
@@ -224,10 +232,11 @@ public class AOMTransformingVisitor extends ASTVisitor {
 		{		
 				StaticMethodCall methodCall = null;
 				IMethodBinding methodBinding = node.resolveConstructorBinding();
-
-				CompilationUnit cu = (CompilationUnit)node.getRoot();
-//				int lineNumber = cu.getLineNumber(node.getStartPosition());
-				int lineNumber = cu.getLineNumber(node.getStartPosition() + node.getLength());
+				if( methodBinding != null )
+				{
+					CompilationUnit cu = (CompilationUnit)node.getRoot();
+					//				int lineNumber = cu.getLineNumber(node.getStartPosition());
+					int lineNumber = cu.getLineNumber(node.getStartPosition() + node.getLength());
 					methodCall = StaticmodelFactory.eINSTANCE.createStaticMethodCall();
 					methodCall.setCaller(scope);
 					methodCall.setTypeBinding(methodBinding.getDeclaringClass());
@@ -235,6 +244,7 @@ public class AOMTransformingVisitor extends ASTVisitor {
 					methodCall.setLineNumber(lineNumber);
 					methodCall.setColumnNumber(cu.getColumnNumber(node.getStartPosition()));
 					methodCall.setFileName(cu.getTypeRoot().getPath().lastSegment());
+				}
 			return super.visit(node);
 		}
 		
@@ -265,7 +275,10 @@ public class AOMTransformingVisitor extends ASTVisitor {
 			ITypeBinding typeBinding = null;
 			if( node.getExpression() != null )
 			{
-				typeBinding = node.getExpression().resolveTypeBinding().getErasure();
+				if( node.getExpression().resolveTypeBinding() != null )
+				{
+					typeBinding = node.getExpression().resolveTypeBinding().getErasure();
+				}
 			}
 			else
 			{
@@ -273,21 +286,23 @@ public class AOMTransformingVisitor extends ASTVisitor {
 				typeBinding = td.resolveBinding().getErasure();	
 			}
 
+			if( typeBinding != null )
+			{
 			
-			StaticFieldAccess fieldAccess = null;
-			IVariableBinding variableBinding = node.resolveFieldBinding();
-
-			CompilationUnit cu = (CompilationUnit)node.getRoot();
-			int lineNumber = cu.getLineNumber(node.getStartPosition());
-
-			fieldAccess = StaticmodelFactory.eINSTANCE.createStaticFieldAccess();
-			fieldAccess.setAccessingScope(scope);
-			fieldAccess.setTypeBinding(typeBinding);
-			fieldAccess.setVariableBinding(variableBinding);
-			fieldAccess.setLineNumber(lineNumber);
-			fieldAccess.setColumnNumber(cu.getColumnNumber(node.getStartPosition()));
-			fieldAccess.setFileName(cu.getTypeRoot().getPath().lastSegment());
-			
+				StaticFieldAccess fieldAccess = null;
+				IVariableBinding variableBinding = node.resolveFieldBinding();
+	
+				CompilationUnit cu = (CompilationUnit)node.getRoot();
+				int lineNumber = cu.getLineNumber(node.getStartPosition());
+	
+				fieldAccess = StaticmodelFactory.eINSTANCE.createStaticFieldAccess();
+				fieldAccess.setAccessingScope(scope);
+				fieldAccess.setTypeBinding(typeBinding);
+				fieldAccess.setVariableBinding(variableBinding);
+				fieldAccess.setLineNumber(lineNumber);
+				fieldAccess.setColumnNumber(cu.getColumnNumber(node.getStartPosition()));
+				fieldAccess.setFileName(cu.getTypeRoot().getPath().lastSegment());
+			}
 			return super.visit(node);
 		}
 		
@@ -356,13 +371,16 @@ public class AOMTransformingVisitor extends ASTVisitor {
 		
 		private void visitVariableDeclaration(List<VariableDeclarationFragment> fragments, Type type)
 		{
-			for( VariableDeclarationFragment vdf : fragments)
+			if( type.resolveBinding() != null )
 			{
-				AOMLocalVariable aomLocalVariable = StructureFactory.eINSTANCE.createAOMLocalVariable();
-				scope.getVariables().add(aomLocalVariable);
-				aomLocalVariable.setName(vdf.getName().toString());
-				aomLocalVariable.setTypeBinding(type.resolveBinding().getErasure());
-				scope.getVarBinding2AOMLocalVariable().put(vdf.resolveBinding(), aomLocalVariable);
+				for( VariableDeclarationFragment vdf : fragments)
+				{
+					AOMLocalVariable aomLocalVariable = StructureFactory.eINSTANCE.createAOMLocalVariable();
+					scope.getVariables().add(aomLocalVariable);
+					aomLocalVariable.setName(vdf.getName().toString());
+					aomLocalVariable.setTypeBinding(type.resolveBinding().getErasure());
+					scope.getVarBinding2AOMLocalVariable().put(vdf.resolveBinding(), aomLocalVariable);
+				}
 			}
 		}
 	}
