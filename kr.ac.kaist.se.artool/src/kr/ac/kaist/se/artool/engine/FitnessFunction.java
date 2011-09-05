@@ -3,6 +3,7 @@ package kr.ac.kaist.se.artool.engine;
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.artool.engine.metrics.BasicMetricSuite;
+import kr.ac.kaist.se.artool.engine.metrics.entityplacement.EntityPlacement;
 
 public class FitnessFunction {
 	private BasicMetricSuite bms;
@@ -724,6 +725,14 @@ public class FitnessFunction {
 //		StatusLogger.getInstance().putVar("MPCSE", MPCSE_avg);
 //		StatusLogger.getInstance().putVar("MPCSI", MPCSI_avg);
 //		StatusLogger.getInstance().putVar("MPCSBoth", MPCSBoth_avg);
+		
+		double static_entityplacement = EntityPlacement.calculate(aom, false);
+		double dynamic_entityplacement = EntityPlacement.calculate(aom, true);
+		
+		StatusLogger.getInstance().putVar("StaticEP", (float)static_entityplacement);
+		StatusLogger.getInstance().putVar("DynamicEP", (float)dynamic_entityplacement);
+
+		
 		
 		// file write - printCurrentSuite() ¸¸ ÇÔ.
 		StatusLogger.getInstance().printCurrentSuite();
