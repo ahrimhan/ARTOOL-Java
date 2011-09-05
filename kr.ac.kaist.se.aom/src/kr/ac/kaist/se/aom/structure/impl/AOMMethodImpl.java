@@ -17,6 +17,7 @@ import java.util.HashMap;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage;
 import kr.ac.kaist.se.aom.structure.AOMClass;
+import kr.ac.kaist.se.aom.structure.AOMEntity;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.aom.structure.AOMParameter;
 import kr.ac.kaist.se.aom.structure.AOMScope;
@@ -49,6 +50,7 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getType <em>Type</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getMeasuredDataSet <em>Measured Data Set</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getOccurrence <em>Occurrence</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getParameters <em>Parameters</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getOwner <em>Owner</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getSignature <em>Signature</em>}</li>
@@ -89,6 +91,26 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 	 * @ordered
 	 */
 	protected EMap<String, Object> measuredDataSet;
+
+	/**
+	 * The default value of the '{@link #getOccurrence() <em>Occurrence</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOccurrence()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int OCCURRENCE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getOccurrence() <em>Occurrence</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOccurrence()
+	 * @generated
+	 * @ordered
+	 */
+	protected int occurrence = OCCURRENCE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getParameters() <em>Parameters</em>}' containment reference list.
@@ -389,6 +411,27 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 			measuredDataSet = new EcoreEMap<String,Object>(AomPackage.Literals.STRING_TO_OBJECT, StringToObjectImpl.class, this, StructurePackage.AOM_METHOD__MEASURED_DATA_SET);
 		}
 		return measuredDataSet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getOccurrence() {
+		return occurrence;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOccurrence(int newOccurrence) {
+		int oldOccurrence = occurrence;
+		occurrence = newOccurrence;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructurePackage.AOM_METHOD__OCCURRENCE, oldOccurrence, occurrence));
 	}
 
 	/**
@@ -843,6 +886,8 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 			case StructurePackage.AOM_METHOD__MEASURED_DATA_SET:
 				if (coreType) return getMeasuredDataSet();
 				else return getMeasuredDataSet().map();
+			case StructurePackage.AOM_METHOD__OCCURRENCE:
+				return getOccurrence();
 			case StructurePackage.AOM_METHOD__PARAMETERS:
 				return getParameters();
 			case StructurePackage.AOM_METHOD__OWNER:
@@ -892,6 +937,9 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 				return;
 			case StructurePackage.AOM_METHOD__MEASURED_DATA_SET:
 				((EStructuralFeature.Setting)getMeasuredDataSet()).set(newValue);
+				return;
+			case StructurePackage.AOM_METHOD__OCCURRENCE:
+				setOccurrence((Integer)newValue);
 				return;
 			case StructurePackage.AOM_METHOD__PARAMETERS:
 				getParameters().clear();
@@ -960,6 +1008,9 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 			case StructurePackage.AOM_METHOD__MEASURED_DATA_SET:
 				getMeasuredDataSet().clear();
 				return;
+			case StructurePackage.AOM_METHOD__OCCURRENCE:
+				setOccurrence(OCCURRENCE_EDEFAULT);
+				return;
 			case StructurePackage.AOM_METHOD__PARAMETERS:
 				getParameters().clear();
 				return;
@@ -1021,6 +1072,8 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 				return type != null;
 			case StructurePackage.AOM_METHOD__MEASURED_DATA_SET:
 				return measuredDataSet != null && !measuredDataSet.isEmpty();
+			case StructurePackage.AOM_METHOD__OCCURRENCE:
+				return occurrence != OCCURRENCE_EDEFAULT;
 			case StructurePackage.AOM_METHOD__PARAMETERS:
 				return parameters != null && !parameters.isEmpty();
 			case StructurePackage.AOM_METHOD__OWNER:
@@ -1074,6 +1127,12 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 				default: return -1;
 			}
 		}
+		if (baseClass == AOMEntity.class) {
+			switch (derivedFeatureID) {
+				case StructurePackage.AOM_METHOD__OCCURRENCE: return StructurePackage.AOM_ENTITY__OCCURRENCE;
+				default: return -1;
+			}
+		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -1096,6 +1155,12 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 				default: return -1;
 			}
 		}
+		if (baseClass == AOMEntity.class) {
+			switch (baseFeatureID) {
+				case StructurePackage.AOM_ENTITY__OCCURRENCE: return StructurePackage.AOM_METHOD__OCCURRENCE;
+				default: return -1;
+			}
+		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
@@ -1109,7 +1174,9 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (signature: ");
+		result.append(" (occurrence: ");
+		result.append(occurrence);
+		result.append(", signature: ");
 		result.append(signature);
 		result.append(", methodId: ");
 		result.append(methodId);

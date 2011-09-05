@@ -45,7 +45,7 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
  * @model
  * @generated
  */
-public interface AOMMethod extends AOMNamedElement, AOMTypedElement, MeasurableElement {
+public interface AOMMethod extends AOMNamedElement, AOMTypedElement, MeasurableElement, AOMEntity {
 	/**
 	 * Returns the value of the '<em><b>Parameters</b></em>' containment reference list.
 	 * The list contents are of type {@link kr.ac.kaist.se.aom.structure.AOMParameter}.

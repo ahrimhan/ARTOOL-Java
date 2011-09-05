@@ -97,6 +97,9 @@
         <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMLocalVariable/owner"/>
       </genClasses>
       <genClasses ecoreClass="aom.ecore#//structure/AOMExternalType"/>
+      <genClasses ecoreClass="aom.ecore#//structure/AOMEntity">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMEntity/occurrence"/>
+      </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Staticmodel" basePackage="kr.ac.kaist.se.aom" resource="XMI"
         disposableProviderFactory="true" ecorePackage="aom.ecore#//staticmodel">

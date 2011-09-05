@@ -28,7 +28,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface AOMField extends AOMVariableDef, MeasurableElement {
+public interface AOMField extends AOMVariableDef, MeasurableElement, AOMEntity {
 	/**
 	 * Returns the value of the '<em><b>Owner</b></em>' container reference.
 	 * It is bidirectional and its opposite is '{@link kr.ac.kaist.se.aom.structure.AOMClass#getFields <em>Fields</em>}'.

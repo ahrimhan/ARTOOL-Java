@@ -50,13 +50,13 @@
           volatile="true" transient="true" derived="true"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="static" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="AOMField" eSuperTypes="#//structure/AOMVariableDef #//MeasurableElement">
+    <eClassifiers xsi:type="ecore:EClass" name="AOMField" eSuperTypes="#//structure/AOMVariableDef #//MeasurableElement #//structure/AOMEntity">
       <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//structure/AOMClass"
           eOpposite="#//structure/AOMClass/fields"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="staticReferer" upperBound="-1"
           eType="#//staticmodel/StaticFieldAccess" eOpposite="#//staticmodel/StaticFieldAccess/accessedField"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="AOMMethod" eSuperTypes="#//structure/AOMNamedElement #//structure/AOMTypedElement #//MeasurableElement">
+    <eClassifiers xsi:type="ecore:EClass" name="AOMMethod" eSuperTypes="#//structure/AOMNamedElement #//structure/AOMTypedElement #//MeasurableElement #//structure/AOMEntity">
       <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
           eType="#//structure/AOMParameter" containment="true" eOpposite="#//structure/AOMParameter/owner"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//structure/AOMClass"
@@ -111,6 +111,10 @@
       <eLiterals name="private" value="1"/>
       <eLiterals name="protected" value="2"/>
       <eLiterals name="package" value="3"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AOMEntity" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="occurrence" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          transient="true"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="staticmodel" nsURI="http://se.kaist.ac.kr/aom/staticmodel" nsPrefix="staticmodel">

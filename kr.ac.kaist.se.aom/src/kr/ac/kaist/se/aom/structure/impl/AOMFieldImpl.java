@@ -16,6 +16,7 @@ import kr.ac.kaist.se.aom.impl.StringToObjectImpl;
 import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage;
 import kr.ac.kaist.se.aom.structure.AOMClass;
+import kr.ac.kaist.se.aom.structure.AOMEntity;
 import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMNamedElement;
 import kr.ac.kaist.se.aom.structure.AOMScope;
@@ -47,6 +48,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getName <em>Name</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getMeasuredDataSet <em>Measured Data Set</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getOccurrence <em>Occurrence</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getOwner <em>Owner</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getStaticReferer <em>Static Referer</em>}</li>
  * </ul>
@@ -84,6 +86,26 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 	 * @ordered
 	 */
 	protected EMap<String, Object> measuredDataSet;
+
+	/**
+	 * The default value of the '{@link #getOccurrence() <em>Occurrence</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOccurrence()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int OCCURRENCE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getOccurrence() <em>Occurrence</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOccurrence()
+	 * @generated
+	 * @ordered
+	 */
+	protected int occurrence = OCCURRENCE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getStaticReferer() <em>Static Referer</em>}' reference list.
@@ -145,6 +167,27 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 			measuredDataSet = new EcoreEMap<String,Object>(AomPackage.Literals.STRING_TO_OBJECT, StringToObjectImpl.class, this, StructurePackage.AOM_FIELD__MEASURED_DATA_SET);
 		}
 		return measuredDataSet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getOccurrence() {
+		return occurrence;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOccurrence(int newOccurrence) {
+		int oldOccurrence = occurrence;
+		occurrence = newOccurrence;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructurePackage.AOM_FIELD__OCCURRENCE, oldOccurrence, occurrence));
 	}
 
 	/**
@@ -264,6 +307,8 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 			case StructurePackage.AOM_FIELD__MEASURED_DATA_SET:
 				if (coreType) return getMeasuredDataSet();
 				else return getMeasuredDataSet().map();
+			case StructurePackage.AOM_FIELD__OCCURRENCE:
+				return getOccurrence();
 			case StructurePackage.AOM_FIELD__OWNER:
 				return getOwner();
 			case StructurePackage.AOM_FIELD__STATIC_REFERER:
@@ -286,6 +331,9 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 				return;
 			case StructurePackage.AOM_FIELD__MEASURED_DATA_SET:
 				((EStructuralFeature.Setting)getMeasuredDataSet()).set(newValue);
+				return;
+			case StructurePackage.AOM_FIELD__OCCURRENCE:
+				setOccurrence((Integer)newValue);
 				return;
 			case StructurePackage.AOM_FIELD__OWNER:
 				setOwner((AOMClass)newValue);
@@ -312,6 +360,9 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 			case StructurePackage.AOM_FIELD__MEASURED_DATA_SET:
 				getMeasuredDataSet().clear();
 				return;
+			case StructurePackage.AOM_FIELD__OCCURRENCE:
+				setOccurrence(OCCURRENCE_EDEFAULT);
+				return;
 			case StructurePackage.AOM_FIELD__OWNER:
 				setOwner((AOMClass)null);
 				return;
@@ -334,6 +385,8 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case StructurePackage.AOM_FIELD__MEASURED_DATA_SET:
 				return measuredDataSet != null && !measuredDataSet.isEmpty();
+			case StructurePackage.AOM_FIELD__OCCURRENCE:
+				return occurrence != OCCURRENCE_EDEFAULT;
 			case StructurePackage.AOM_FIELD__OWNER:
 				return getOwner() != null;
 			case StructurePackage.AOM_FIELD__STATIC_REFERER:
@@ -361,6 +414,12 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 				default: return -1;
 			}
 		}
+		if (baseClass == AOMEntity.class) {
+			switch (derivedFeatureID) {
+				case StructurePackage.AOM_FIELD__OCCURRENCE: return StructurePackage.AOM_ENTITY__OCCURRENCE;
+				default: return -1;
+			}
+		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -383,6 +442,12 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 				default: return -1;
 			}
 		}
+		if (baseClass == AOMEntity.class) {
+			switch (baseFeatureID) {
+				case StructurePackage.AOM_ENTITY__OCCURRENCE: return StructurePackage.AOM_FIELD__OCCURRENCE;
+				default: return -1;
+			}
+		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
@@ -398,6 +463,8 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", occurrence: ");
+		result.append(occurrence);
 		result.append(')');
 		return result.toString();
 	}

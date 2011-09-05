@@ -116,6 +116,7 @@ public class StructureSwitch<T> extends Switch<T> {
 				T result = caseAOMField(aomField);
 				if (result == null) result = caseAOMVariableDef(aomField);
 				if (result == null) result = caseMeasurableElement(aomField);
+				if (result == null) result = caseAOMEntity(aomField);
 				if (result == null) result = caseAOMTypedElement(aomField);
 				if (result == null) result = caseAOMNamedElement(aomField);
 				if (result == null) result = caseAOMElement(aomField);
@@ -128,6 +129,7 @@ public class StructureSwitch<T> extends Switch<T> {
 				if (result == null) result = caseAOMNamedElement(aomMethod);
 				if (result == null) result = caseAOMTypedElement(aomMethod);
 				if (result == null) result = caseMeasurableElement(aomMethod);
+				if (result == null) result = caseAOMEntity(aomMethod);
 				if (result == null) result = caseAOMElement(aomMethod);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -173,6 +175,12 @@ public class StructureSwitch<T> extends Switch<T> {
 				if (result == null) result = caseAOMType(aomExternalType);
 				if (result == null) result = caseAOMNamedElement(aomExternalType);
 				if (result == null) result = caseAOMElement(aomExternalType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case StructurePackage.AOM_ENTITY: {
+				AOMEntity aomEntity = (AOMEntity)theEObject;
+				T result = caseAOMEntity(aomEntity);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -357,6 +365,21 @@ public class StructureSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAOMExternalType(AOMExternalType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>AOM Entity</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>AOM Entity</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAOMEntity(AOMEntity object) {
 		return null;
 	}
 

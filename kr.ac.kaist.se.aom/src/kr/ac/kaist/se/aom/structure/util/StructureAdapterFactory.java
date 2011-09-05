@@ -121,6 +121,10 @@ public class StructureAdapterFactory extends AdapterFactoryImpl {
 				return createAOMExternalTypeAdapter();
 			}
 			@Override
+			public Adapter caseAOMEntity(AOMEntity object) {
+				return createAOMEntityAdapter();
+			}
+			@Override
 			public Adapter caseMeasurableElement(MeasurableElement object) {
 				return createMeasurableElementAdapter();
 			}
@@ -309,6 +313,20 @@ public class StructureAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAOMExternalTypeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link kr.ac.kaist.se.aom.structure.AOMEntity <em>AOM Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kr.ac.kaist.se.aom.structure.AOMEntity
+	 * @generated
+	 */
+	public Adapter createAOMEntityAdapter() {
 		return null;
 	}
 

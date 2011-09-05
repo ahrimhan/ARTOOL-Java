@@ -14,6 +14,7 @@ import kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage;
 import kr.ac.kaist.se.aom.staticmodel.impl.StaticmodelPackageImpl;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMElement;
+import kr.ac.kaist.se.aom.structure.AOMEntity;
 import kr.ac.kaist.se.aom.structure.AOMExternalType;
 import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMLocalVariable;
@@ -125,6 +126,13 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 	 * @generated
 	 */
 	private EClass aomExternalTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass aomEntityEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -678,6 +686,24 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getAOMEntity() {
+		return aomEntityEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAOMEntity_Occurrence() {
+		return (EAttribute)aomEntityEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getAOMModifier() {
 		return aomModifierEEnum;
 	}
@@ -774,6 +800,9 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 
 		aomExternalTypeEClass = createEClass(AOM_EXTERNAL_TYPE);
 
+		aomEntityEClass = createEClass(AOM_ENTITY);
+		createEAttribute(aomEntityEClass, AOM_ENTITY__OCCURRENCE);
+
 		// Create enums
 		aomModifierEEnum = createEEnum(AOM_MODIFIER);
 	}
@@ -818,9 +847,11 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 		aomClassEClass.getESuperTypes().add(theAomPackage.getMeasurableElement());
 		aomFieldEClass.getESuperTypes().add(this.getAOMVariableDef());
 		aomFieldEClass.getESuperTypes().add(theAomPackage.getMeasurableElement());
+		aomFieldEClass.getESuperTypes().add(this.getAOMEntity());
 		aomMethodEClass.getESuperTypes().add(this.getAOMNamedElement());
 		aomMethodEClass.getESuperTypes().add(this.getAOMTypedElement());
 		aomMethodEClass.getESuperTypes().add(theAomPackage.getMeasurableElement());
+		aomMethodEClass.getESuperTypes().add(this.getAOMEntity());
 		aomParameterEClass.getESuperTypes().add(this.getAOMVariableDef());
 		aomVariableDefEClass.getESuperTypes().add(this.getAOMTypedElement());
 		aomVariableDefEClass.getESuperTypes().add(this.getAOMNamedElement());
@@ -891,6 +922,9 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 		initEReference(getAOMLocalVariable_Owner(), this.getAOMScope(), this.getAOMScope_Variables(), "owner", null, 0, 1, AOMLocalVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(aomExternalTypeEClass, AOMExternalType.class, "AOMExternalType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(aomEntityEClass, AOMEntity.class, "AOMEntity", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAOMEntity_Occurrence(), ecorePackage.getEInt(), "occurrence", null, 0, 1, AOMEntity.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(aomModifierEEnum, AOMModifier.class, "AOMModifier");

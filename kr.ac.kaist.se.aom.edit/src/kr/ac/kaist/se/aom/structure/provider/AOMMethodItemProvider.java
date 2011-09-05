@@ -68,6 +68,7 @@ public class AOMMethodItemProvider
 
 			addTypePropertyDescriptor(object);
 			addMeasuredDataSetPropertyDescriptor(object);
+			addOccurrencePropertyDescriptor(object);
 			addSignaturePropertyDescriptor(object);
 			addStaticRefererPropertyDescriptor(object);
 			addOverridingPropertyDescriptor(object);
@@ -124,6 +125,28 @@ public class AOMMethodItemProvider
 				 false,
 				 false,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Occurrence feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOccurrencePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AOMEntity_occurrence_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AOMEntity_occurrence_feature", "_UI_AOMEntity_type"),
+				 StructurePackage.Literals.AOM_ENTITY__OCCURRENCE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -461,6 +484,7 @@ public class AOMMethodItemProvider
 
 		switch (notification.getFeatureID(AOMMethod.class)) {
 			case StructurePackage.AOM_METHOD__MEASURED_DATA_SET:
+			case StructurePackage.AOM_METHOD__OCCURRENCE:
 			case StructurePackage.AOM_METHOD__SIGNATURE:
 			case StructurePackage.AOM_METHOD__METHOD_ID:
 			case StructurePackage.AOM_METHOD__START_LINE:
