@@ -603,7 +603,7 @@ public class FitnessFunction {
 					//(0.25 * (( LCOM3_avg )/( LCOM3_MAX )))
 					//LCOM 은 lack of cohesion in method라서 분모로 가야한다!
 					
-				) 
+				)  //test comment
 				/
 				( 
 					//fix 20110802
