@@ -1,25 +1,21 @@
 package kr.ac.kaist.se.artool.engine.rules;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.eclipse.emf.common.util.BasicEMap;
-import org.eclipse.emf.common.util.EMap;
-
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
-import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.metrics.BasicMetricSuite;
 import kr.ac.kaist.se.artool.engine.refactoring.CollapseClassHierarchyCommand;
 import kr.ac.kaist.se.artool.engine.refactoring.RefactoringCommand;
-import kr.ac.kaist.se.artool.engine.refactoring.RelocateGeneralizationCommand;
 import kr.ac.kaist.se.artool.util.UtilityFunctions;
 
 public class Rule5 extends AbstractRule {
 
-	EMap<HashSet<AOMClass>, Integer> rule5list;
-	EMap<HashSet<AOMClass>, Integer> rule5list2;
-	Map.Entry<HashSet<AOMClass>, Integer>[] sortedRule5list;
+	HashMap<HashSet<AOMClass>, int[]> rule5list;
+	HashMap<HashSet<AOMClass>, int[]> rule5list2;
+	Map.Entry<HashSet<AOMClass>, int[]>[] sortedRule5list;
 	private AOMClass[] aomClasses;
 	
 	public Rule5(AbstractObjectModel aom, int cutline, int pick) {
@@ -27,7 +23,7 @@ public class Rule5 extends AbstractRule {
 		super(aom, pick);
 		if( (sortedRule5list = ListCache.getInstance().getClassList(getRuleName())) == null )
 		{
-			rule5list = new BasicEMap<HashSet<AOMClass>, Integer>();
+			rule5list = new HashMap<HashSet<AOMClass>, int[]>();
 			rule5list2 = getRule5List();
 	
 			sortedRule5list = UtilityFunctions.getInstance().__getSortedIBDP(rule5list2, cutline);
@@ -39,7 +35,7 @@ public class Rule5 extends AbstractRule {
 		ClassStat.getDynamicStat().countOnClassEntries(sortedRule5list);
 	}
 
-	public EMap<HashSet<AOMClass>, Integer> getRule5List()
+	public HashMap<HashSet<AOMClass>, int[]> getRule5List()
 	{
 		AOMClass[] source_targetClasses = new AOMClass[2]; 
 		

@@ -137,313 +137,343 @@ public class FitnessFunction {
 		
 		for( AOMClass clazz : aom.getClasses() )
 		{
-			LOC += getInt(clazz.getMeasuredDataSet().get("LOC"));
-			NOM += getInt(clazz.getMeasuredDataSet().get("NOM"));
-			NOA += getInt(clazz.getMeasuredDataSet().get("NOA"));
-			NOCON += getInt(clazz.getMeasuredDataSet().get("NOCON"));
-			NOO += getInt(clazz.getMeasuredDataSet().get("NOO"));
-			DIT += getInt(clazz.getMeasuredDataSet().get("DIT"));
-			CLD += getInt(clazz.getMeasuredDataSet().get("CLD"));
-			NOC += getInt(clazz.getMeasuredDataSet().get("NOC"));
-			NOP += getInt(clazz.getMeasuredDataSet().get("NOP"));
-			NMO += getInt(clazz.getMeasuredDataSet().get("NMO"));
-			NMI += getInt(clazz.getMeasuredDataSet().get("NMI"));
-			NMA += getInt(clazz.getMeasuredDataSet().get("NMA"));
-			WMC += getInt(clazz.getMeasuredDataSet().get("WMC"));
-			DynamicImport += getInt(clazz.getMeasuredDataSet().get("DynamicImport"));
-			DynamicExport += getInt(clazz.getMeasuredDataSet().get("DynamicExport"));
-			StaticImport += getInt(clazz.getMeasuredDataSet().get("StaticImport"));
-			StaticExport += getInt(clazz.getMeasuredDataSet().get("StaticExport"));
-			DynamicBoth += getInt(clazz.getMeasuredDataSet().get("DynamicBoth"));
-			StaticBoth += getInt(clazz.getMeasuredDataSet().get("StaticBoth"));
-			LCOM2 += getFloat(clazz.getMeasuredDataSet().get("LCOM2"));
-			LCOM3 += getFloat(clazz.getMeasuredDataSet().get("LCOM3"));
-			MSC += getFloat(clazz.getMeasuredDataSet().get("MSC"));
-			MPCDE += getInt(clazz.getMeasuredDataSet().get("MPCDE"));
-			MPCDI += getInt(clazz.getMeasuredDataSet().get("MPCDI"));
-			MPCDBoth += getInt(clazz.getMeasuredDataSet().get("MPCDBoth"));
-			MPCSE += getInt(clazz.getMeasuredDataSet().get("MPCSE"));
-			MPCSI += getInt(clazz.getMeasuredDataSet().get("MPCSI"));
-			MPCSBoth += getInt(clazz.getMeasuredDataSet().get("MPCSBoth"));
+
+			int l_LOC = getInt(clazz.getMeasuredDataSet().get("LOC"));
+			int l_NOM = getInt(clazz.getMeasuredDataSet().get("NOM"));
+			int l_NOA = getInt(clazz.getMeasuredDataSet().get("NOA"));
+			int l_NOCON = getInt(clazz.getMeasuredDataSet().get("NOCON"));
+			int l_NOO = getInt(clazz.getMeasuredDataSet().get("NOO"));
+			int l_DIT = getInt(clazz.getMeasuredDataSet().get("DIT"));
+			int l_CLD = getInt(clazz.getMeasuredDataSet().get("CLD"));
+			int l_NOC = getInt(clazz.getMeasuredDataSet().get("NOC"));
+			int l_NOP = getInt(clazz.getMeasuredDataSet().get("NOP"));
+			int l_NMO = getInt(clazz.getMeasuredDataSet().get("NMO"));
+			int l_NMI = getInt(clazz.getMeasuredDataSet().get("NMI"));
+			int l_NMA = getInt(clazz.getMeasuredDataSet().get("NMA"));
+			int l_WMC = getInt(clazz.getMeasuredDataSet().get("WMC"));
+			int l_DynamicImport = getInt(clazz.getMeasuredDataSet().get("DynamicImport"));
+			int l_DynamicExport = getInt(clazz.getMeasuredDataSet().get("DynamicExport"));
+			int l_StaticImport = getInt(clazz.getMeasuredDataSet().get("StaticImport"));
+			int l_StaticExport = getInt(clazz.getMeasuredDataSet().get("StaticExport"));
+			int l_DynamicBoth = getInt(clazz.getMeasuredDataSet().get("DynamicBoth"));
+			int l_StaticBoth = getInt(clazz.getMeasuredDataSet().get("StaticBoth"));
+			float l_LCOM2 = getFloat(clazz.getMeasuredDataSet().get("LCOM2"));
+			float l_LCOM3 = getFloat(clazz.getMeasuredDataSet().get("LCOM3"));
+			float l_MSC = getFloat(clazz.getMeasuredDataSet().get("MSC"));
+			int l_MPCDE = getInt(clazz.getMeasuredDataSet().get("MPCDE"));
+			int l_MPCDI = getInt(clazz.getMeasuredDataSet().get("MPCDI"));
+			int l_MPCDBoth = getInt(clazz.getMeasuredDataSet().get("MPCDBoth"));
+			int l_MPCSE = getInt(clazz.getMeasuredDataSet().get("MPCSE"));
+			int l_MPCSI = getInt(clazz.getMeasuredDataSet().get("MPCSI"));
+			int l_MPCSBoth = getInt(clazz.getMeasuredDataSet().get("MPCSBoth"));
+
+			LOC += l_LOC;
+			NOM += l_NOM;
+			NOA += l_NOA;
+			NOCON += l_NOCON;
+			NOO += l_NOO;
+			DIT += l_DIT;
+			CLD += l_CLD;
+			NOC += l_NOC;
+			NOP += l_NOP;
+			NMO += l_NMO;
+			NMI += l_NMI;
+			NMA += l_NMA;
+			WMC += l_WMC;
+			DynamicImport += l_DynamicImport;
+			DynamicExport += l_DynamicExport;
+			StaticImport += l_StaticImport;
+			StaticExport += l_StaticExport;
+			DynamicBoth += l_DynamicBoth;
+			StaticBoth += l_StaticBoth;
+			LCOM2 += l_LCOM2;
+			LCOM3 += l_LCOM3;
+			MSC += l_MSC;
+			MPCDE += l_MPCDE;
+			MPCDI += l_MPCDI;
+			MPCDBoth += l_MPCDBoth;
+			MPCSE += l_MPCSE;
+			MPCSI += l_MPCSI;
+			MPCSBoth += l_MPCSBoth;
 			
 			//1
-			if( LOC_MIN > getInt(clazz.getMeasuredDataSet().get("LOC")) )
+			if( LOC_MIN > l_LOC )
 			{
-				LOC_MIN = getInt(clazz.getMeasuredDataSet().get("LOC"));
+				LOC_MIN = l_LOC;
 			}
-			if ( LOC_MAX < getInt(clazz.getMeasuredDataSet().get("LOC")) )
+			if ( LOC_MAX < l_LOC )
 			{
-				LOC_MAX = getInt(clazz.getMeasuredDataSet().get("LOC"));
+				LOC_MAX = l_LOC;
 			}
 			
 			//2
-			if( NOM_MIN > getInt(clazz.getMeasuredDataSet().get("NOM")) )
+			if( NOM_MIN > l_NOM )
 			{
-				NOM_MIN = getInt(clazz.getMeasuredDataSet().get("NOM"));
+				NOM_MIN = l_NOM;
 			}
-			if ( NOM_MAX < getInt(clazz.getMeasuredDataSet().get("NOM")) )
+			if ( NOM_MAX < l_NOM )
 			{
-				NOM_MAX = getInt(clazz.getMeasuredDataSet().get("NOM"));
+				NOM_MAX = l_NOM;
 			}
 			
 			//3
-			if( NOA_MIN > getInt(clazz.getMeasuredDataSet().get("NOA")) )
+			if( NOA_MIN > l_NOA )
 			{
-				NOA_MIN = getInt(clazz.getMeasuredDataSet().get("NOA"));
+				NOA_MIN = l_NOA;
 			}
-			if ( NOA_MAX < getInt(clazz.getMeasuredDataSet().get("NOA")) )
+			if ( NOA_MAX < l_NOA )
 			{
-				NOA_MAX = getInt(clazz.getMeasuredDataSet().get("NOA"));
+				NOA_MAX = l_NOA;
 			}
 			
 			//4
-			if( NOCON_MIN > getInt(clazz.getMeasuredDataSet().get("NOCON")) )
+			if( NOCON_MIN > l_NOCON )
 			{
-				NOCON_MIN = getInt(clazz.getMeasuredDataSet().get("NOCON"));
+				NOCON_MIN = l_NOCON;
 			}
-			if ( NOCON_MAX < getInt(clazz.getMeasuredDataSet().get("NOCON")) )
+			if ( NOCON_MAX < l_NOCON )
 			{
-				NOCON_MAX = getInt(clazz.getMeasuredDataSet().get("NOCON"));
+				NOCON_MAX = l_NOCON;
 			}
 			
 			//5
-			if( NOO_MIN > getInt(clazz.getMeasuredDataSet().get("NOO")) )
+			if( NOO_MIN > l_NOO )
 			{
-				NOO_MIN = getInt(clazz.getMeasuredDataSet().get("NOO"));
+				NOO_MIN = l_NOO;
 			}
-			if ( NOO_MAX < getInt(clazz.getMeasuredDataSet().get("NOO")) )
+			if ( NOO_MAX < l_NOO )
 			{
-				NOO_MAX = getInt(clazz.getMeasuredDataSet().get("NOO"));
+				NOO_MAX = l_NOO;
 			}
 			
 			//6
-			if( DIT_MIN > getInt(clazz.getMeasuredDataSet().get("DIT")) )
+			if( DIT_MIN > l_DIT )
 			{
-				DIT_MIN = getInt(clazz.getMeasuredDataSet().get("DIT"));
+				DIT_MIN = l_DIT;
 			}
-			if ( DIT_MAX < getInt(clazz.getMeasuredDataSet().get("DIT")) )
+			if ( DIT_MAX < l_DIT )
 			{
-				DIT_MAX = getInt(clazz.getMeasuredDataSet().get("DIT"));
+				DIT_MAX = l_DIT;
 			}
 
 			//7
-			if( CLD_MIN > getInt(clazz.getMeasuredDataSet().get("CLD")) )
+			if( CLD_MIN > l_CLD )
 			{
-				CLD_MIN = getInt(clazz.getMeasuredDataSet().get("CLD"));
+				CLD_MIN = l_CLD;
 			}
-			if ( CLD_MAX < getInt(clazz.getMeasuredDataSet().get("CLD")) )
+			if ( CLD_MAX < l_CLD )
 			{
-				CLD_MAX = getInt(clazz.getMeasuredDataSet().get("CLD"));
+				CLD_MAX = l_CLD;
 			}
 			
 			//8
-			if( NOC_MIN > getInt(clazz.getMeasuredDataSet().get("NOC")) )
+			if( NOC_MIN > l_NOC )
 			{
-				NOC_MIN = getInt(clazz.getMeasuredDataSet().get("NOC"));
+				NOC_MIN = l_NOC;
 			}
-			if ( NOC_MAX < getInt(clazz.getMeasuredDataSet().get("NOC")) )
+			if ( NOC_MAX < l_NOC )
 			{
-				NOC_MAX = getInt(clazz.getMeasuredDataSet().get("NOC"));
+				NOC_MAX = l_NOC;
 			}
 			
 			//9
-			if( NOP_MIN > getInt(clazz.getMeasuredDataSet().get("NOP")) )
+			if( NOP_MIN > l_NOP )
 			{
-				NOP_MIN = getInt(clazz.getMeasuredDataSet().get("NOP"));
+				NOP_MIN = l_NOP;
 			}
-			if ( NOP_MAX < getInt(clazz.getMeasuredDataSet().get("NOP")) )
+			if ( NOP_MAX < l_NOP )
 			{
-				NOP_MAX = getInt(clazz.getMeasuredDataSet().get("NOP"));
+				NOP_MAX = l_NOP;
 			}
 			
 			//10
-			if( NMO_MIN > getInt(clazz.getMeasuredDataSet().get("NMO")) )
+			if( NMO_MIN > l_NMO )
 			{
-				NMO_MIN = getInt(clazz.getMeasuredDataSet().get("NMO"));
+				NMO_MIN = l_NMO;
 			}
-			if ( NMO_MAX < getInt(clazz.getMeasuredDataSet().get("NMO")) )
+			if ( NMO_MAX < l_NMO )
 			{
-				NMO_MAX = getInt(clazz.getMeasuredDataSet().get("NMO"));
+				NMO_MAX = l_NMO;
 			}
 			
 			//11
-			if( NMI_MIN > getInt(clazz.getMeasuredDataSet().get("NMI")) )
+			if( NMI_MIN > l_NMI )
 			{
-				NMI_MIN = getInt(clazz.getMeasuredDataSet().get("NMI"));
+				NMI_MIN = l_NMI;
 			}
-			if ( NMI_MAX < getInt(clazz.getMeasuredDataSet().get("NMI")) )
+			if ( NMI_MAX < l_NMI )
 			{
-				NMI_MAX = getInt(clazz.getMeasuredDataSet().get("NMI"));
+				NMI_MAX = l_NMI;
 			}
 			
 			//12
-			if( NMA_MIN > getInt(clazz.getMeasuredDataSet().get("NMA")) )
+			if( NMA_MIN > l_NMA )
 			{
-				NMA_MIN = getInt(clazz.getMeasuredDataSet().get("NMA"));
+				NMA_MIN = l_NMA;
 			}
-			if ( NMA_MAX < getInt(clazz.getMeasuredDataSet().get("NMA")) )
+			if ( NMA_MAX < l_NMA )
 			{
-				NMA_MAX = getInt(clazz.getMeasuredDataSet().get("NMA"));
+				NMA_MAX = l_NMA;
 			}
 			
 			//13
-			if( WMC_MIN > getInt(clazz.getMeasuredDataSet().get("WMC")) )
+			if( WMC_MIN > l_WMC )
 			{
-				WMC_MIN = getInt(clazz.getMeasuredDataSet().get("WMC"));
+				WMC_MIN = l_WMC;
 			}
-			if ( WMC_MAX < getInt(clazz.getMeasuredDataSet().get("WMC")) )
+			if ( WMC_MAX < l_WMC )
 			{
-				WMC_MAX = getInt(clazz.getMeasuredDataSet().get("WMC"));
+				WMC_MAX = l_WMC;
 			}
 			
 			//14
-			if( DynamicImport_MIN > getInt(clazz.getMeasuredDataSet().get("DynamicImport")) )
+			if( DynamicImport_MIN > l_DynamicImport )
 			{
-				DynamicImport_MIN = getInt(clazz.getMeasuredDataSet().get("DynamicImport"));
+				DynamicImport_MIN = l_DynamicImport;
 			}
-			if ( DynamicImport_MAX < getInt(clazz.getMeasuredDataSet().get("DynamicImport")) )
+			if ( DynamicImport_MAX < l_DynamicImport )
 			{
-				DynamicImport_MAX = getInt(clazz.getMeasuredDataSet().get("DynamicImport"));
+				DynamicImport_MAX = l_DynamicImport;
 			}
 			
 			//15
-			if( DynamicExport_MIN > getInt(clazz.getMeasuredDataSet().get("DynamicExport")) )
+			if( DynamicExport_MIN > l_DynamicExport )
 			{
-				DynamicExport_MIN = getInt(clazz.getMeasuredDataSet().get("DynamicExport"));
+				DynamicExport_MIN = l_DynamicExport;
 			}
-			if ( DynamicExport_MAX < getInt(clazz.getMeasuredDataSet().get("DynamicExport")) )
+			if ( DynamicExport_MAX < l_DynamicExport )
 			{
-				DynamicExport_MAX = getInt(clazz.getMeasuredDataSet().get("DynamicExport"));
+				DynamicExport_MAX = l_DynamicExport;
 			}
 			
 			//16
-			if( StaticImport_MIN > getInt(clazz.getMeasuredDataSet().get("StaticImport")) )
+			if( StaticImport_MIN > l_StaticImport )
 			{
-				StaticImport_MIN = getInt(clazz.getMeasuredDataSet().get("StaticImport"));
+				StaticImport_MIN = l_StaticImport;
 			}
-			if ( StaticImport_MAX < getInt(clazz.getMeasuredDataSet().get("StaticImport")) )
+			if ( StaticImport_MAX < l_StaticImport )
 			{
-				StaticImport_MAX = getInt(clazz.getMeasuredDataSet().get("StaticImport"));
+				StaticImport_MAX = l_StaticImport;
 			}
 			
 			//17
-			if( StaticExport_MIN > getInt(clazz.getMeasuredDataSet().get("StaticExport")) )
+			if( StaticExport_MIN > l_StaticExport )
 			{
-				StaticExport_MIN = getInt(clazz.getMeasuredDataSet().get("StaticExport"));
+				StaticExport_MIN = l_StaticExport;
 			}
-			if ( StaticExport_MAX < getInt(clazz.getMeasuredDataSet().get("StaticExport")) )
+			if ( StaticExport_MAX < l_StaticExport )
 			{
-				StaticExport_MAX = getInt(clazz.getMeasuredDataSet().get("StaticExport"));
+				StaticExport_MAX = l_StaticExport;
 			}
 			
 			//18
-			if( DynamicBoth_MIN > getInt(clazz.getMeasuredDataSet().get("DynamicBoth")) )
+			if( DynamicBoth_MIN > l_DynamicBoth )
 			{
-				DynamicBoth_MIN = getInt(clazz.getMeasuredDataSet().get("DynamicBoth"));
+				DynamicBoth_MIN = l_DynamicBoth;
 			}
-			if ( DynamicBoth_MAX < getInt(clazz.getMeasuredDataSet().get("DynamicBoth")) )
+			if ( DynamicBoth_MAX < l_DynamicBoth )
 			{
-				DynamicBoth_MAX = getInt(clazz.getMeasuredDataSet().get("DynamicBoth"));
+				DynamicBoth_MAX = l_DynamicBoth;
 			}
 			
 			//19
-			if( StaticBoth_MIN > getInt(clazz.getMeasuredDataSet().get("StaticBoth")) )
+			if( StaticBoth_MIN > l_StaticBoth )
 			{
-				StaticBoth_MIN = getInt(clazz.getMeasuredDataSet().get("StaticBoth"));
+				StaticBoth_MIN = l_StaticBoth;
 			}
-			if ( StaticBoth_MAX < getInt(clazz.getMeasuredDataSet().get("StaticBoth")) )
+			if ( StaticBoth_MAX < l_StaticBoth )
 			{
-				StaticBoth_MAX = getInt(clazz.getMeasuredDataSet().get("StaticBoth"));
+				StaticBoth_MAX = l_StaticBoth;
 			}
 			
 			//20
-			if( LCOM2_MIN > getFloat(clazz.getMeasuredDataSet().get("LCOM2")) )
+			if( LCOM2_MIN > l_LCOM2 )
 			{
-				LCOM2_MIN = getFloat(clazz.getMeasuredDataSet().get("LCOM2"));
+				LCOM2_MIN = l_LCOM2;
 			}
-			if ( LCOM2_MAX < getFloat(clazz.getMeasuredDataSet().get("LCOM2")) )
+			if ( LCOM2_MAX < l_LCOM2 )
 			{
-				LCOM2_MAX = getFloat(clazz.getMeasuredDataSet().get("LCOM2"));
+				LCOM2_MAX = l_LCOM2;
 			}
 			
 			//21
-			if( LCOM3_MIN > getFloat(clazz.getMeasuredDataSet().get("LCOM3")) )
+			if( LCOM3_MIN > l_LCOM3 )
 			{
-				LCOM3_MIN = getFloat(clazz.getMeasuredDataSet().get("LCOM3"));
+				LCOM3_MIN = l_LCOM3;
 			}
-			if ( LCOM3_MAX < getFloat(clazz.getMeasuredDataSet().get("LCOM3")) )
+			if ( LCOM3_MAX < l_LCOM3 )
 			{
-				LCOM3_MAX = getFloat(clazz.getMeasuredDataSet().get("LCOM3"));
+				LCOM3_MAX = l_LCOM3;
 			}
 			
 			//21.5
-			if( MSC_MIN > getFloat(clazz.getMeasuredDataSet().get("MSC")) )
+			if( MSC_MIN > l_MSC )
 			{
-				MSC_MIN = getFloat(clazz.getMeasuredDataSet().get("MSC"));
+				MSC_MIN = l_MSC;
 			}
-			if ( MSC_MAX < getFloat(clazz.getMeasuredDataSet().get("MSC")) )
+			if ( MSC_MAX < l_MSC )
 			{
-				MSC_MAX = getFloat(clazz.getMeasuredDataSet().get("MSC"));
+				MSC_MAX = l_MSC;
 			}
 			
 			//22
-			if( MPCDE_MIN > getInt(clazz.getMeasuredDataSet().get("MPCDE")) )
+			if( MPCDE_MIN > l_MPCDE )
 			{
-				MPCDE_MIN = getInt(clazz.getMeasuredDataSet().get("MPCDE"));
+				MPCDE_MIN = l_MPCDE;
 			}
-			if ( MPCDE_MAX < getInt(clazz.getMeasuredDataSet().get("MPCDE")) )
+			if ( MPCDE_MAX < l_MPCDE )
 			{
-				MPCDE_MAX = getInt(clazz.getMeasuredDataSet().get("MPCDE"));
+				MPCDE_MAX = l_MPCDE;
 			}
 			
 			//23
-			if( MPCDI_MIN > getInt(clazz.getMeasuredDataSet().get("MPCDI")) )
+			if( MPCDI_MIN > l_MPCDI )
 			{
-				MPCDI_MIN = getInt(clazz.getMeasuredDataSet().get("MPCDI"));
+				MPCDI_MIN = l_MPCDI;
 			}
-			if ( MPCDI_MAX < getInt(clazz.getMeasuredDataSet().get("MPCDI")) )
+			if ( MPCDI_MAX < l_MPCDI )
 			{
-				MPCDI_MAX = getInt(clazz.getMeasuredDataSet().get("MPCDI"));
+				MPCDI_MAX = l_MPCDI;
 			}
 			
 			//24
-			if( MPCDBoth_MIN > getInt(clazz.getMeasuredDataSet().get("MPCDBoth")) )
+			if( MPCDBoth_MIN > l_MPCDBoth )
 			{
-				MPCDBoth_MIN = getInt(clazz.getMeasuredDataSet().get("MPCDBoth"));
+				MPCDBoth_MIN = l_MPCDBoth;
 			}
-			if ( MPCDBoth_MAX < getInt(clazz.getMeasuredDataSet().get("MPCDBoth")) )
+			if ( MPCDBoth_MAX < l_MPCDBoth )
 			{
-				MPCDBoth_MAX = getInt(clazz.getMeasuredDataSet().get("MPCDBoth"));
+				MPCDBoth_MAX = l_MPCDBoth;
 			}
 			
 			//25
-			if( MPCSE_MIN > getInt(clazz.getMeasuredDataSet().get("MPCSE")) )
+			if( MPCSE_MIN > l_MPCSE )
 			{
-				MPCSE_MIN = getInt(clazz.getMeasuredDataSet().get("MPCSE"));
+				MPCSE_MIN = l_MPCSE;
 			}
-			if ( MPCSE_MAX < getInt(clazz.getMeasuredDataSet().get("MPCSE")) )
+			if ( MPCSE_MAX < l_MPCSE )
 			{
-				MPCSE_MAX = getInt(clazz.getMeasuredDataSet().get("MPCSE"));
+				MPCSE_MAX = l_MPCSE;
 			}
 			
 			//26
-			if( MPCSI_MIN > getInt(clazz.getMeasuredDataSet().get("MPCSI")) )
+			if( MPCSI_MIN > l_MPCSI )
 			{
-				MPCSI_MIN = getInt(clazz.getMeasuredDataSet().get("MPCSI"));
+				MPCSI_MIN = l_MPCSI;
 			}
-			if ( MPCSI_MAX < getInt(clazz.getMeasuredDataSet().get("MPCSI")) )
+			if ( MPCSI_MAX < l_MPCSI )
 			{
-				MPCSI_MAX = getInt(clazz.getMeasuredDataSet().get("MPCSI"));
+				MPCSI_MAX = l_MPCSI;
 			}
 			
 			//27
-			if( MPCSBoth_MIN > getInt(clazz.getMeasuredDataSet().get("MPCSBoth")) )
+			if( MPCSBoth_MIN > l_MPCSBoth )
 			{
-				MPCSBoth_MIN = getInt(clazz.getMeasuredDataSet().get("MPCSBoth"));
+				MPCSBoth_MIN = l_MPCSBoth;
 			}
-			if ( MPCSBoth_MAX < getInt(clazz.getMeasuredDataSet().get("MPCSBoth")) )
+			if ( MPCSBoth_MAX < l_MPCSBoth )
 			{
-				MPCSBoth_MAX = getInt(clazz.getMeasuredDataSet().get("MPCSBoth"));
+				MPCSBoth_MAX = l_MPCSBoth;
 			}
 		
 		}
@@ -584,13 +614,13 @@ public class FitnessFunction {
 		
 		float fitness2 = (float) (
 				( 
-					((( MSC_avg )/( MSC_MAX )))
+					((( MSC_avg - MSC_MIN)/( MSC_MAX - MSC_MIN + 0.000001 )))
 					
 				) 
 				/
 				( 
-					(0.5 * (( DynamicBoth_avg )/( DynamicBoth_MAX ))) +
-					(0.5 * (( MPCDBoth_avg )/( MPCDBoth_MAX )))
+					(0.5 * (( DynamicBoth_avg - DynamicBoth_MIN)/( DynamicBoth_MAX - DynamicBoth_MIN + 0.000001 ))) +
+					(0.5 * (( MPCDBoth_avg - MPCDBoth_MIN )/( MPCDBoth_MAX - MPCDBoth_MIN + 0.000001 ))) + 0.000001
 
 				)
 				); 
@@ -724,13 +754,9 @@ public class FitnessFunction {
 		//20110511
 //		StatusLogger.getInstance().putVar("MPCSE", MPCSE_avg);
 //		StatusLogger.getInstance().putVar("MPCSI", MPCSI_avg);
-//		StatusLogger.getInstance().putVar("MPCSBoth", MPCSBoth_avg);
+		StatusLogger.getInstance().putVar("MPCSBoth", MPCSBoth_avg);
 		
-		double static_entityplacement = EntityPlacement.calculate(aom, false);
-		double dynamic_entityplacement = EntityPlacement.calculate(aom, true);
-		
-		StatusLogger.getInstance().putVar("StaticEP", (float)static_entityplacement);
-		StatusLogger.getInstance().putVar("DynamicEP", (float)dynamic_entityplacement);
+
 
 		
 		

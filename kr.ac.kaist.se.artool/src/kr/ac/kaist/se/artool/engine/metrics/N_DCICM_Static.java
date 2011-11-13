@@ -1,16 +1,7 @@
 package kr.ac.kaist.se.artool.engine.metrics;
 
-import java.awt.List;
 import java.util.HashSet;
-import java.util.Map;
 
-import org.eclipse.emf.common.util.BasicEList;
-import org.eclipse.emf.common.util.BasicEMap;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.EMap;
-
-import kr.ac.kaist.se.aom.AbstractObjectModel;
-import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;

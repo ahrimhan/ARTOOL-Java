@@ -185,8 +185,10 @@ public class BasicMetricSuite {
 	public int getNumAncestor(AOMClass clazz)
 	{
 		int numAncestor = 0;
-		Vector<AOMClass> queue = new Vector<AOMClass>(clazz.getAncestor());
-		Vector<AOMClass> visitedClass = new Vector<AOMClass>();
+		queue.clear();
+		visitedClass.clear();
+		
+		queue.addAll(clazz.getAncestor());
 		
 		while( !queue.isEmpty() )
 		{
@@ -205,11 +207,16 @@ public class BasicMetricSuite {
 		return numAncestor;
 	}
 	
+	Vector<AOMClass> queue = new Vector<AOMClass>();
+	Vector<AOMClass> visitedClass = new Vector<AOMClass>();
+	
+	
 	public Vector<AOMClass> getListAncestor(AOMClass clazz)
 	{
-		Vector<AOMClass> queue = new Vector<AOMClass>(clazz.getAncestor());
-		Vector<AOMClass> visitedClass = new Vector<AOMClass>();
-		
+		queue.clear();
+		visitedClass.clear();
+		queue.addAll(clazz.getAncestor());
+
 		while( !queue.isEmpty() )
 		{
 			AOMClass aomClass = queue.remove(0);
@@ -229,8 +236,10 @@ public class BasicMetricSuite {
 	public int getNumDescendant(AOMClass clazz)
 	{
 		int numDescendant = 0;
-		Vector<AOMClass> queue = new Vector<AOMClass>(clazz.getDescendant());
-		Vector<AOMClass> visitedClass = new Vector<AOMClass>();
+		queue.clear();
+		visitedClass.clear();
+		
+		queue.addAll(clazz.getDescendant());
 		
 		while( !queue.isEmpty() )
 		{
@@ -251,8 +260,10 @@ public class BasicMetricSuite {
 	
 	public Vector<AOMClass> getListDescendant(AOMClass clazz)
 	{
-		Vector<AOMClass> queue = new Vector<AOMClass>(clazz.getDescendant());
-		Vector<AOMClass> visitedClass = new Vector<AOMClass>();
+		queue.clear();
+		visitedClass.clear();
+		
+		queue.addAll(clazz.getDescendant());
 		
 		while( !queue.isEmpty() )
 		{
@@ -344,50 +355,74 @@ public class BasicMetricSuite {
         else if (n == 0) return 1;
         else             return n * factorial(n-1);
     }
+	
+	public void _initializeMetric(AOMClass clazz, String s, int intValue)
+	{
+		if( clazz.getMeasuredDataSet().get(s) == null )
+			clazz.getMeasuredDataSet().put(s, new int[] { intValue });
+		else
+		{
+			int[] i = (int[])clazz.getMeasuredDataSet().get(s);
+			i[0] = intValue;
+		}
+	}
+	
+	public void _initializeMetric(AOMClass clazz, String s, float intValue)
+	{
+		if( clazz.getMeasuredDataSet().get(s) == null )
+			clazz.getMeasuredDataSet().put(s, new float[] { intValue });
+		else
+		{
+			float[] i = (float[])clazz.getMeasuredDataSet().get(s);
+			i[0] = intValue;
+		}
+	}
 		
 	public void measure(AOMClass clazz)
 	{
-		clazz.getMeasuredDataSet().put(LOC, new int[] { clazz.getLOC() });
-		clazz.getMeasuredDataSet().put(NOCON, newZeroInt());
-		clazz.getMeasuredDataSet().put(NOO, newZeroInt());
-		clazz.getMeasuredDataSet().put(NOA, newZeroInt());
-		clazz.getMeasuredDataSet().put(NOM, newZeroInt());
-//		clazz.getMeasuredDataSet().put(DIT, newZeroInt());
-//		clazz.getMeasuredDataSet().put(CLD, newZeroInt());
-//		clazz.getMeasuredDataSet().put(NOC, newZeroInt());
-//		clazz.getMeasuredDataSet().put(NOP, newZeroInt());
-		clazz.getMeasuredDataSet().put(NMO, newZeroInt());
-		clazz.getMeasuredDataSet().put(NMI, newZeroInt());
-		clazz.getMeasuredDataSet().put(NMA, newZeroInt());
-//		clazz.getMeasuredDataSet().put(WMC, newZeroInt());
-		clazz.getMeasuredDataSet().put(StaticImport, newZeroInt());
-		clazz.getMeasuredDataSet().put(DynamicImport, newZeroInt());
-		clazz.getMeasuredDataSet().put(StaticExport, newZeroInt());
-		clazz.getMeasuredDataSet().put(DynamicExport, newZeroInt());
-		clazz.getMeasuredDataSet().put(LCOM2, newZeroFloat());
-		clazz.getMeasuredDataSet().put(LCOM3, newZeroFloat());
-		clazz.getMeasuredDataSet().put(NUIM, newZeroInt());
-		clazz.getMeasuredDataSet().put(NUOM, newZeroInt());
+		_initializeMetric(clazz, LOC, clazz.getLOC());
+			
+		_initializeMetric(clazz, NOCON, 0);
+		_initializeMetric(clazz, NOO, 0);
+		_initializeMetric(clazz, NOA, 0);
+		_initializeMetric(clazz, NOM, 0);
+//		_initializeMetric(clazz, DIT, 0);
+//		_initializeMetric(clazz, CLD, 0);
+//		_initializeMetric(clazz, NOC, 0);
+//		_initializeMetric(clazz, NOP, 0);
+		_initializeMetric(clazz, NMO, 0);
+		_initializeMetric(clazz, NMI, 0);
+		_initializeMetric(clazz, NMA, 0);
+//		_initializeMetric(clazz, WMC, 0);
+		_initializeMetric(clazz, StaticImport, 0);
+		_initializeMetric(clazz, DynamicImport, 0);
+		_initializeMetric(clazz, StaticExport, 0);
+		_initializeMetric(clazz, DynamicExport, 0);
+		_initializeMetric(clazz, NUIM, 0);
+		_initializeMetric(clazz, NUOM, 0);
 		//20110425
-		clazz.getMeasuredDataSet().put(MPCDE, newZeroInt());
-		clazz.getMeasuredDataSet().put(MPCDI, newZeroInt());
-		clazz.getMeasuredDataSet().put(MPCSE, newZeroInt());
-		clazz.getMeasuredDataSet().put(MPCSI, newZeroInt());
+		_initializeMetric(clazz, MPCDE, 0);
+		_initializeMetric(clazz, MPCDI, 0);
+		_initializeMetric(clazz, MPCSE, 0);
+		_initializeMetric(clazz, MPCSI, 0);
 		// MSC
-		clazz.getMeasuredDataSet().put(MSC, newZeroFloat());
+		_initializeMetric(clazz, MSC, 0.0f);
+		_initializeMetric(clazz, LCOM2, 0.0f);
+		_initializeMetric(clazz, LCOM3, 0.0f);
 	
 								
 		int dit = 0; int cld = 0;
 		int max_anc = 0; int max_des = 0;
 
 		visitedClasses.clear();
-		clazz.getMeasuredDataSet().put(DIT, new int[]{ getMaximumAncestorDepth(clazz) });
+		_initializeMetric(clazz, DIT, getMaximumAncestorDepth(clazz) );
 		visitedClasses.clear();
-		clazz.getMeasuredDataSet().put(CLD, new int[]{ getMaximemDescendantDepth(clazz) });
-		//
-		clazz.getMeasuredDataSet().put(NOC, new int[]{ getNumDescendant(clazz) });
-		clazz.getMeasuredDataSet().put(NOP, new int[]{ getNumAncestor(clazz) });
-		clazz.getMeasuredDataSet().put(WMC, new int[]{ clazz.getMethods().size() });	
+		_initializeMetric(clazz, CLD, getMaximemDescendantDepth(clazz) );
+		
+		_initializeMetric(clazz, NOC, getNumDescendant(clazz) );
+		_initializeMetric(clazz, NOP, getNumAncestor(clazz) );
+		_initializeMetric(clazz, WMC, clazz.getMethods().size() );
+
 		
 		//
 		for( AOMMethod method : clazz.getMethods() )

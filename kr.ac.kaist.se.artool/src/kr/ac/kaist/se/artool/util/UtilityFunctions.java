@@ -2,10 +2,9 @@ package kr.ac.kaist.se.artool.util;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-
-import kr.ac.kaist.se.artool.engine.ARToolMain;
 
 import org.eclipse.emf.common.util.EMap;
 
@@ -22,7 +21,7 @@ public class UtilityFunctions {
 		return instance;
 	}
 		
-	public <T> void increase(EMap<HashSet<T>, Integer> map, T aomElement1, T aomElement2)
+	public <T> void increase(HashMap<HashSet<T>, int[]> map, T aomElement1, T aomElement2)
 	{
 		HashSet<T> key = new HashSet<T>();
 		key.add(aomElement1);
@@ -30,20 +29,23 @@ public class UtilityFunctions {
 		
 		if( map.containsKey(key) )
 		{
-			int idx = map.indexOfKey(key);
-			Map.Entry<HashSet<T>, Integer> entry = map.get(idx);
-			entry.setValue(entry.getValue() + 1);
+			int[] i = map.get(key);
+			i[0]++;
 		}
 		else
 		{
-			map.put(key, 1);		
+			int[] i = new int[1];
+			i[0] = 1;
+			map.put(key, i);		
 		}
+		
+		key = null;
 	}
 	
-	public <T> Map.Entry<HashSet<T>, Integer>[] __getSortedIBDP(EMap<HashSet<T>, Integer> map, int cutline)
+	public <T> Map.Entry<HashSet<T>, int[]>[] __getSortedIBDP(HashMap<HashSet<T>, int[]> map, int cutline)
 	{	
 		
-		HashSet<Map.Entry<HashSet<T>, Integer>> entries = new HashSet<Map.Entry<HashSet<T>, Integer>>(map.entrySet());
+		HashSet<Map.Entry<HashSet<T>, int[]>> entries = new HashSet<Map.Entry<HashSet<T>, int[]>>(map.entrySet());
 
 		if( cutline > entries.size() )
 		{
@@ -54,11 +56,11 @@ public class UtilityFunctions {
 		
 		for( int i = 0 ; i < cutline ; i++ )
 		{
-			Map.Entry<HashSet<T>, Integer> maxEntry = Collections.max(entries, new Comparator<Map.Entry<HashSet<T>, Integer>>(){
+			Map.Entry<HashSet<T>, int[]> maxEntry = Collections.max(entries, new Comparator<Map.Entry<HashSet<T>, int[]>>(){
 				@Override
-				public int compare(Map.Entry<HashSet<T>, Integer> arg0,
-						Map.Entry<HashSet<T>, Integer> arg1) {
-					return arg0.getValue().compareTo(arg1.getValue()) ;
+				public int compare(Map.Entry<HashSet<T>, int[]> arg0,
+						Map.Entry<HashSet<T>, int[]> arg1) {
+					return arg0.getValue()[0] - arg1.getValue()[0] ;
 				}
 			}
 			);

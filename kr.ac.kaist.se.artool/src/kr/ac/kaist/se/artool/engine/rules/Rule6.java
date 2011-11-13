@@ -1,25 +1,21 @@
 package kr.ac.kaist.se.artool.engine.rules;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.eclipse.emf.common.util.BasicEMap;
-import org.eclipse.emf.common.util.EMap;
-
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
-import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.metrics.BasicMetricSuite;
-import kr.ac.kaist.se.artool.engine.refactoring.CollapseClassHierarchyCommand;
 import kr.ac.kaist.se.artool.engine.refactoring.RefactoringCommand;
 import kr.ac.kaist.se.artool.engine.refactoring.RelocateGeneralizationCommand;
 import kr.ac.kaist.se.artool.util.UtilityFunctions;
 
 public class Rule6 extends AbstractRule {
 
-	EMap<HashSet<AOMClass>, Integer> rule6list;
-	EMap<HashSet<AOMClass>, Integer> rule6list2;
-	Map.Entry<HashSet<AOMClass>, Integer>[] sortedRule6list;
+	HashMap<HashSet<AOMClass>, int[]> rule6list;
+	HashMap<HashSet<AOMClass>, int[]> rule6list2;
+	Map.Entry<HashSet<AOMClass>, int[]>[] sortedRule6list;
 	private AOMClass[] aomClasses;
 	private AOMClass newParentRelocatingClass;
 	
@@ -38,7 +34,7 @@ public class Rule6 extends AbstractRule {
 
 		if( (sortedRule6list = ListCache.getInstance().getClassList(getRuleName())) == null )
 		{
-			rule6list = new BasicEMap<HashSet<AOMClass>, Integer>();
+			rule6list = new HashMap<HashSet<AOMClass>, int[]>();
 			rule6list2 = getRule6List();
 	
 			sortedRule6list = UtilityFunctions.getInstance().__getSortedIBDP(rule6list2, cutline);
@@ -49,7 +45,7 @@ public class Rule6 extends AbstractRule {
 		ClassStat.getDynamicStat().countOnClassEntries(sortedRule6list);
 	}
 
-	public EMap<HashSet<AOMClass>, Integer> getRule6List()
+	public HashMap<HashSet<AOMClass>, int[]> getRule6List()
 	{
 		AOMClass[] source_targetClasses = new AOMClass[2]; 
 		

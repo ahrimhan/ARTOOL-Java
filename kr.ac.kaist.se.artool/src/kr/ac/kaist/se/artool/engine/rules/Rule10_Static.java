@@ -1,5 +1,6 @@
 package kr.ac.kaist.se.artool.engine.rules;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -11,15 +12,12 @@ import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
 import kr.ac.kaist.se.artool.engine.refactoring.RefactoringCommand;
 import kr.ac.kaist.se.artool.util.UtilityFunctions;
 
-import org.eclipse.emf.common.util.BasicEMap;
-import org.eclipse.emf.common.util.EMap;
-
 public class Rule10_Static extends AbstractRule {
 
 	
-	EMap<HashSet<AOMMethod>, Integer> rule10list;
-	EMap<HashSet<AOMMethod>, Integer> rule10list2;
-	Map.Entry<HashSet<AOMMethod>, Integer>[] sortedRule10list;
+	HashMap<HashSet<AOMMethod>, int[]> rule10list;
+	HashMap<HashSet<AOMMethod>, int[]> rule10list2;
+	Map.Entry<HashSet<AOMMethod>, int[]>[] sortedRule10list;
 	private AOMMethod[] aomMethods;
 	
 	
@@ -29,7 +27,7 @@ public class Rule10_Static extends AbstractRule {
 		
 		if( (sortedRule10list = ListCache.getInstance().getMethodList(getRuleName())) == null )
 		{
-			rule10list = new BasicEMap<HashSet<AOMMethod>, Integer>();
+			rule10list = new HashMap<HashSet<AOMMethod>, int[]>();
 			rule10list2 = getRule10List();
 			sortedRule10list = UtilityFunctions.getInstance().__getSortedIBDP(rule10list2, cutline);
 			ListCache.getInstance().putMethodList(getRuleName(), sortedRule10list);
@@ -177,7 +175,7 @@ public class Rule10_Static extends AbstractRule {
 		
 	
 	
-	public EMap<HashSet<AOMMethod>, Integer> getRule10List()
+	public HashMap<HashSet<AOMMethod>, int[]> getRule10List()
 	{
 		AOMMethod[] source_targetMethods = new AOMMethod[2]; 
 		AOMClass actualImplementingClass;

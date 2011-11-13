@@ -68,30 +68,18 @@ public class ClassStat {
 		}
 	}
 	
-	public void countOnMethodEntries(Map.Entry<HashSet<AOMMethod>, Integer>[] methodEntries)
+	public void countOnMethodEntries(Map.Entry<HashSet<AOMMethod>, int[]>[] methodEntries)
 	{
-//		HashSet<AOMClass> visitedClass = new HashSet<AOMClass>();
-//
-//		for( Entry<HashSet<AOMMethod>, Integer> entry : methodEntries )
-//		{
-//			for( AOMMethod aomMethod : entry.getKey() )
-//			{
-//				if( !visitedClass.contains(aomMethod.getOwner()) )
-//				{
-//					countOn(aomMethod.getOwner());
-//					visitedClass.add(aomMethod.getOwner());
-//				}
-//			}
-//		}
+
 		if( methodEntries == null || methodEntries.length == 0 || methodEntries[0] == null ) return;
 		
-		int max = methodEntries[0].getValue();
+		int max = methodEntries[0].getValue()[0];
 		HashSet<AOMMethod> classSet = methodEntries[0].getKey();
-		for( Entry<HashSet<AOMMethod>, Integer> entry : methodEntries )
+		for( Entry<HashSet<AOMMethod>, int[]> entry : methodEntries )
 		{
-			if( entry != null && max < entry.getValue() )
+			if( entry != null && max < entry.getValue()[0] )
 			{
-				max = entry.getValue();
+				max = entry.getValue()[0];
 				classSet = entry.getKey();
 			}
 		}
@@ -102,25 +90,18 @@ public class ClassStat {
 		}
 	}
 	
-	public void countOnClassEntries(Map.Entry<HashSet<AOMClass>, Integer>[] classEntries)
+	public void countOnClassEntries(Map.Entry<HashSet<AOMClass>, int[]>[] classEntries)
 	{
-//		for( Entry<HashSet<AOMClass>, Integer> entry : classEntries )
-//		{
-//			for( AOMClass aomClass : entry.getKey() )
-//			{
-//				countOn(aomClass);
-//			}
-//		}
 		
 		if( classEntries == null || classEntries.length == 0 || classEntries[0] == null ) return;
 		
-		int max = classEntries[0].getValue();
+		int max = classEntries[0].getValue()[0];
 		HashSet<AOMClass> classSet = classEntries[0].getKey();
-		for( Entry<HashSet<AOMClass>, Integer> entry : classEntries )
+		for( Entry<HashSet<AOMClass>, int[]> entry : classEntries )
 		{
-			if(entry != null &&  max < entry.getValue() )
+			if(entry != null &&  max < entry.getValue()[0] )
 			{
-				max = entry.getValue();
+				max = entry.getValue()[0];
 				classSet = entry.getKey();
 			}
 		}

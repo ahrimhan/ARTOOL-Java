@@ -7,6 +7,7 @@ import kr.ac.kaist.se.artool.engine.StatusLogger;
 import kr.ac.kaist.se.artool.engine.rules.AbstractRule;
 
 import org.eclipse.emf.common.util.BasicEMap;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -148,7 +149,7 @@ public class RuleSelectionDialog extends Dialog {
 		return super.isResizable();
 	}
 
-	public static final String[] statusAttributes = { "ciaForClass", "ciaForMethod", "fitness2", "fitness3", "fitness_static", "StaticBoth", "DynamicBoth", "MPCDBoth", "MSC", "LCOM2", "LCOM3" };
+	public static final String[] statusAttributes = { "ciaForClass", "ciaForMethod", "fitness2", "fitness3", "fitness_static", "StaticBoth", "DynamicBoth", "MPCDBoth", "MPCSBoth", "MSC", "LCOM2", "LCOM3", "StaticEP", "DynamicEP" };
 
 	
 	private void createColumns(final TableViewer viewer) {
@@ -209,10 +210,10 @@ public class RuleSelectionDialog extends Dialog {
 	
 	public static float getAttr(final String selectedAttr,
 			AbstractRule rule) {
-		BasicEMap<String, Float> p = StatusLogger.getInstance().getTrialPhase(rule);
+		BasicEMap<String, float[]> p = StatusLogger.getInstance().getTrialPhase(rule);
 		if( p == null ) return Float.NaN;
 		if( p.get(selectedAttr) == null ) return Float.NaN;
-		return p.get(selectedAttr);
+		return p.get(selectedAttr)[0];
 	}
 	
 	public static String getAttrAsString(final String selectedAttr,
@@ -224,13 +225,19 @@ public class RuleSelectionDialog extends Dialog {
 	
 	public static float calculateDelta(String selectedAttr,
 			AbstractRule rule) {
-		BasicEMap<String, Float> p = StatusLogger.getInstance().getTrialPhase(rule);
+		EMap<String, float[]> p = StatusLogger.getInstance().getTrialPhase(rule);
 		if( p == null ) return Float.NaN;
 		if( p.get(selectedAttr) == null ) return Float.NaN;
-		float curValue =  p.get(selectedAttr);
-		float originalValue =  StatusLogger.getInstance().getOriginalPhase().get(selectedAttr);
-		float previousValue =  StatusLogger.getInstance().getPreviousPhase().get(selectedAttr);
-		return curValue - previousValue;
+		float curValue =  p.get(selectedAttr)[0];
+		float[] f = StatusLogger.getInstance().getPreviousPhase().get(selectedAttr);
+		if( f != null )
+		{
+			float previousValue =  StatusLogger.getInstance().getPreviousPhase().get(selectedAttr)[0];
+			return curValue - previousValue;
+		}
+		return -1;
+//		float originalValue =  StatusLogger.getInstance().getOriginalPhase().get(selectedAttr)[0];
+
 	}
 	public static String calculateDeltaAsString(String selectedAttr,
 			AbstractRule rule) {

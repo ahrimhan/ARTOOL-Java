@@ -54,6 +54,9 @@ public abstract class AbstractRule {
 	
 	public void trial()
 	{
+		long mem_usage;
+		long curTime = System.currentTimeMillis();
+
 		refactoringCommand = getCommand();
 
 		float ret = 0;
@@ -70,11 +73,23 @@ public abstract class AbstractRule {
 					return;
 				}
 			}
+			System.err.println("doCommand:" + Long.toString(System.currentTimeMillis() - curTime));
+			mem_usage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+			System.err.println("doCommand!:" + mem_usage);
 			
+			curTime = System.currentTimeMillis();
 			ret =  FitnessFunction.getInstance().calculate(aom);
-						
+			System.err.println("FitnessFunction:" + Long.toString(System.currentTimeMillis() - curTime));
+			mem_usage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+			System.err.println("FitnessFunction!:" + mem_usage);
+			
 			try {
+				curTime = System.currentTimeMillis();
 				refactoringCommand.undoCommand();
+				System.err.println("undoCommand:" + Long.toString(System.currentTimeMillis() - curTime));
+				mem_usage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+				System.err.println("undoCommand!:" + mem_usage);
+				
 			} catch (RefactoringException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

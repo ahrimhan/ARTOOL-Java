@@ -16,7 +16,7 @@ public class StaticEntityPlacement extends EntityPlacement {
 		super();
 	}
 	
-	protected AOMBag<AOMEntity> getEntitySet(AOMMethod method)
+	protected AOMBag<AOMEntity> _getEntitySet(AOMMethod method)
 	{
 		AOMBag<AOMEntity> ret = new AOMBag<AOMEntity>(useUnique());
 		
@@ -35,7 +35,7 @@ public class StaticEntityPlacement extends EntityPlacement {
 		return ret;
 	}
 	
-	protected AOMBag<AOMEntity> getEntitySet(AOMField field)
+	protected AOMBag<AOMEntity> _getEntitySet(AOMField field)
 	{
 		AOMBag<AOMEntity> ret = new AOMBag<AOMEntity>(useUnique());
 		

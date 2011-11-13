@@ -16,12 +16,12 @@ import kr.ac.kaist.se.artool.engine.refactoring.RefactoringTransaction;
 
 public class Rule1 extends AbstractRule {
 
-	private Map.Entry<HashSet<AOMClass>, Integer>[] n_IBDPC;
+	private Map.Entry<HashSet<AOMClass>, int[]>[] n_IBDPC;
 	private AOMClass[] aomClasses;
 	
 	
 	public Rule1(AbstractObjectModel aom,
-			Entry<HashSet<AOMClass>, Integer>[] n_IBDPC, int pick) {
+			Entry<HashSet<AOMClass>, int[]>[] n_IBDPC, int pick) {
 		super(aom, pick);
 		this.n_IBDPC = n_IBDPC;
 		aomClasses = n_IBDPC[pick].getKey().toArray(new AOMClass[0]);

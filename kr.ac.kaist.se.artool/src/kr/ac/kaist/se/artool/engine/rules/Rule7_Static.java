@@ -1,14 +1,11 @@
 package kr.ac.kaist.se.artool.engine.rules;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.eclipse.emf.common.util.BasicEMap;
-import org.eclipse.emf.common.util.EMap;
-
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
-import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.metrics.BasicMetricSuite;
 import kr.ac.kaist.se.artool.engine.refactoring.CollapseClassHierarchyCommand;
 import kr.ac.kaist.se.artool.engine.refactoring.RefactoringCommand;
@@ -17,9 +14,9 @@ import kr.ac.kaist.se.artool.util.UtilityFunctions;
 public class Rule7_Static extends AbstractRule {
 
 	
-	EMap<HashSet<AOMClass>, Integer> rule7list;
-	EMap<HashSet<AOMClass>, Integer> rule7list2;
-	Map.Entry<HashSet<AOMClass>, Integer>[] sortedRule7list;
+	HashMap<HashSet<AOMClass>, int[]> rule7list;
+	HashMap<HashSet<AOMClass>, int[]> rule7list2;
+	Map.Entry<HashSet<AOMClass>, int[]>[] sortedRule7list;
 	private AOMClass[] aomClasses;
 	
 	public Rule7_Static(AbstractObjectModel aom, int cutline, int pick) {
@@ -28,7 +25,7 @@ public class Rule7_Static extends AbstractRule {
 		if( (sortedRule7list = ListCache.getInstance().getClassList(getRuleName())) == null )
 		{
 		
-			rule7list = new BasicEMap<HashSet<AOMClass>, Integer>();
+			rule7list = new HashMap<HashSet<AOMClass>, int[]>();
 			rule7list2 = getRule7List();
 	
 			sortedRule7list = UtilityFunctions.getInstance().__getSortedIBDP(rule7list2, cutline);
@@ -44,7 +41,7 @@ public class Rule7_Static extends AbstractRule {
 		ClassStat.getStaticStat().countOnClassEntries(sortedRule7list);
 	}
 
-	public EMap<HashSet<AOMClass>, Integer> getRule7List()
+	public HashMap<HashSet<AOMClass>, int[]> getRule7List()
 	{
 		AOMClass[] source_targetClasses = new AOMClass[2]; 
 		

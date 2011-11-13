@@ -21,31 +21,31 @@ public class ListCache {
 		
 		return cache;
 	}
-	private HashMap<String, Map.Entry<HashSet<AOMMethod>, Integer>[]> methodCache;
-	private HashMap<String, Map.Entry<HashSet<AOMClass>, Integer>[]> classCache;
+	private HashMap<String, Map.Entry<HashSet<AOMMethod>, int[]>[]> methodCache;
+	private HashMap<String, Map.Entry<HashSet<AOMClass>, int[]>[]> classCache;
 	
 	private ListCache()
 	{
-		methodCache = new HashMap<String, Map.Entry<HashSet<AOMMethod>, Integer>[]>();
-		classCache = new HashMap<String, Map.Entry<HashSet<AOMClass>, Integer>[]>();
+		methodCache = new HashMap<String, Map.Entry<HashSet<AOMMethod>, int[]>[]>();
+		classCache = new HashMap<String, Map.Entry<HashSet<AOMClass>, int[]>[]>();
 	}
 	
-	public Map.Entry<HashSet<AOMMethod>, Integer>[] getMethodList(String ruleName)
+	public Map.Entry<HashSet<AOMMethod>, int[]>[] getMethodList(String ruleName)
 	{
 		return methodCache.get(ruleName);
 	}
 	
-	public Map.Entry<HashSet<AOMClass>, Integer>[] getClassList(String ruleName)
+	public Map.Entry<HashSet<AOMClass>, int[]>[] getClassList(String ruleName)
 	{
 		return classCache.get(ruleName);
 	}
 	
-	public void putMethodList(String ruleName, Map.Entry<HashSet<AOMMethod>, Integer>[] list)
+	public void putMethodList(String ruleName, Map.Entry<HashSet<AOMMethod>, int[]>[] list)
 	{
 		methodCache.put(ruleName, list);
 	}
 	
-	public void putClassList(String ruleName, Map.Entry<HashSet<AOMClass>, Integer>[] list)
+	public void putClassList(String ruleName, Map.Entry<HashSet<AOMClass>, int[]>[] list)
 	{
 		classCache.put(ruleName, list);
 	}

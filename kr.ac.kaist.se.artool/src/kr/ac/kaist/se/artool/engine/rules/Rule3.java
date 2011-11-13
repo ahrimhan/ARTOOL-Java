@@ -15,11 +15,11 @@ import kr.ac.kaist.se.artool.engine.refactoring.RefactoringException;
 import kr.ac.kaist.se.artool.engine.refactoring.RefactoringTransaction;
 
 public class Rule3 extends AbstractRule {
-	private Map.Entry<HashSet<AOMMethod>, Integer>[] n_IBDPM;
+	private Map.Entry<HashSet<AOMMethod>, int[]>[] n_IBDPM;
 	private AOMMethod[] aomMethods;
 	
 	public Rule3(AbstractObjectModel aom,
-			Entry<HashSet<AOMMethod>, Integer>[] n_IBDPM, int pick) {
+			Entry<HashSet<AOMMethod>, int[]>[] n_IBDPM, int pick) {
 		super(aom, pick);
 		this.n_IBDPM = n_IBDPM;
 		aomMethods = n_IBDPM[pick].getKey().toArray(new AOMMethod[0]);

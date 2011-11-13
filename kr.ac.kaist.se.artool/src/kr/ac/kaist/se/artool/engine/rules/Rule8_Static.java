@@ -1,16 +1,12 @@
 package kr.ac.kaist.se.artool.engine.rules;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.eclipse.emf.common.util.BasicEMap;
-import org.eclipse.emf.common.util.EMap;
-
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
-import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.metrics.BasicMetricSuite;
-import kr.ac.kaist.se.artool.engine.refactoring.CollapseClassHierarchyCommand;
 import kr.ac.kaist.se.artool.engine.refactoring.RefactoringCommand;
 import kr.ac.kaist.se.artool.engine.refactoring.RelocateGeneralizationCommand;
 import kr.ac.kaist.se.artool.util.UtilityFunctions;
@@ -18,9 +14,9 @@ import kr.ac.kaist.se.artool.util.UtilityFunctions;
 public class Rule8_Static extends AbstractRule {
 
 	
-	EMap<HashSet<AOMClass>, Integer> rule8list;
-	EMap<HashSet<AOMClass>, Integer> rule8list2;
-	Map.Entry<HashSet<AOMClass>, Integer>[] sortedRule8list;
+	HashMap<HashSet<AOMClass>, int[]> rule8list;
+	HashMap<HashSet<AOMClass>, int[]> rule8list2;
+	Map.Entry<HashSet<AOMClass>, int[]>[] sortedRule8list;
 	private AOMClass[] aomClasses;
 	private AOMClass newParentRelocatingClass;
 	
@@ -31,7 +27,7 @@ public class Rule8_Static extends AbstractRule {
 		
 		if( (sortedRule8list = ListCache.getInstance().getClassList(getRuleName())) == null )
 		{
-			rule8list = new BasicEMap<HashSet<AOMClass>, Integer>();
+			rule8list = new HashMap<HashSet<AOMClass>, int[]>();
 			rule8list2 = getRule8List();
 	
 			sortedRule8list = UtilityFunctions.getInstance().__getSortedIBDP(rule8list2, cutline);
@@ -53,7 +49,7 @@ public class Rule8_Static extends AbstractRule {
 		this.newParentRelocatingClass = newParentRelocatingClass;
 	}
 
-	public EMap<HashSet<AOMClass>, Integer> getRule8List()
+	public HashMap<HashSet<AOMClass>, int[]> getRule8List()
 	{
 		AOMClass[] source_targetClasses = new AOMClass[2]; 
 		

@@ -21,12 +21,12 @@ import kr.ac.kaist.se.artool.util.UtilityFunctions;
 
 public class Rule4 extends AbstractRule {
 
-	private Map.Entry<HashSet<AOMClass>, Integer>[] n_IBDPC;
+	private Map.Entry<HashSet<AOMClass>, int[]>[] n_IBDPC;
 	private AOMClass[] aomClasses;
 	
 	
 	public Rule4(AbstractObjectModel aom,
-			Entry<HashSet<AOMClass>, Integer>[] n_DCICM,int pick) {
+			Entry<HashSet<AOMClass>, int[]>[] n_DCICM,int pick) {
 		super(aom, pick);
 		this.n_IBDPC = n_DCICM;
 		aomClasses = n_DCICM[pick].getKey().toArray(new AOMClass[0]);

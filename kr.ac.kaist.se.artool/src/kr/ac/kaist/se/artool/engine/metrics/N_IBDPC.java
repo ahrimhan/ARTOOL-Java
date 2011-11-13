@@ -2,37 +2,34 @@ package kr.ac.kaist.se.artool.engine.metrics;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 
-import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.EMap;
 
 public class N_IBDPC {
 	//interaction between different pair of classes
 	public N_IBDPC() {
-		map4N_IBDPC = new BasicEMap<HashSet<AOMClass>, Integer>();
-		map4N_IBDPM = new BasicEMap<HashSet<AOMMethod>, Integer>();
+		map4N_IBDPC = new HashMap<HashSet<AOMClass>, int[]>();
+		map4N_IBDPM = new HashMap<HashSet<AOMMethod>, int[]>();
 	}
 	
 
 	public static final String N_IBDPC = "N_IBDPC";
 	
-	public EMap<HashSet<AOMClass>, Integer> map4N_IBDPC;
-	public EMap<HashSet<AOMMethod>, Integer> map4N_IBDPM;
+	public HashMap<HashSet<AOMClass>, int[]> map4N_IBDPC;
+	public HashMap<HashSet<AOMMethod>, int[]> map4N_IBDPM;
 	
 	
 	private HashSet key = new HashSet();
 	
-	public <T> void increase(EMap<HashSet<T>, Integer> map, T aomElement1, T aomElement2)
+	public <T> void increase(HashMap<HashSet<T>, int[]> map, T aomElement1, T aomElement2)
 	{
 		key.clear();
 		key.add(aomElement1);
@@ -40,20 +37,20 @@ public class N_IBDPC {
 		
 		if( map.containsKey(key) )
 		{
-			int idx = map.indexOfKey(key);
-			Map.Entry<HashSet<T>, Integer> entry = map.get(idx);
-			entry.setValue(entry.getValue() + 1);
+			int[] i = map.get(key);
+			i[0]++;
 		}
 		else
 		{
-			map.put(key, 1);
-			key = new HashSet();
+			int[] i = new int[1];
+			i[0] = 1;
+			map.put(key, i);		
 		}
 	}
 	
-	public <T> Map.Entry<HashSet<T>, Integer>[] __getSortedIBDP(EMap<HashSet<T>, Integer> map, int cutline)
+	public <T> Map.Entry<HashSet<T>, int[]>[] __getSortedIBDP(HashMap<HashSet<T>, int[]> map, int cutline)
 	{	
-		HashSet<Map.Entry<HashSet<T>, Integer>> entries = new HashSet<Map.Entry<HashSet<T>, Integer>>(map.entrySet());
+		HashSet<Map.Entry<HashSet<T>, int[]>> entries = new HashSet<Map.Entry<HashSet<T>, int[]>>(map.entrySet());
 		
 		
 		Map.Entry[] ret = new Map.Entry[cutline];
@@ -61,11 +58,11 @@ public class N_IBDPC {
 		for( int i = 0 ; i < cutline ; i++ )
 		{
 			if( entries.size() <= 0 ) break;
-			Map.Entry<HashSet<T>, Integer> maxEntry = Collections.max(entries, new Comparator<Map.Entry<HashSet<T>, Integer>>(){
+			Map.Entry<HashSet<T>, int[]> maxEntry = Collections.max(entries, new Comparator<Map.Entry<HashSet<T>, int[]>>(){
 				@Override
-				public int compare(Map.Entry<HashSet<T>, Integer> arg0,
-						Map.Entry<HashSet<T>, Integer> arg1) {
-					return arg0.getValue().compareTo(arg1.getValue()) ;
+				public int compare(Map.Entry<HashSet<T>, int[]> arg0,
+						Map.Entry<HashSet<T>, int[]> arg1) {
+					return arg0.getValue()[0] - arg1.getValue()[0] ;
 				}
 			}
 			);
@@ -75,12 +72,12 @@ public class N_IBDPC {
 		return ret;
 	}
 	
-	public Map.Entry<HashSet<AOMMethod>, Integer>[] getSortedIBDPM(int cutline)
+	public Map.Entry<HashSet<AOMMethod>, int[]>[] getSortedIBDPM(int cutline)
 	{
 		return __getSortedIBDP(map4N_IBDPM, cutline);
 	}
 
-	public Map.Entry<HashSet<AOMClass>, Integer>[] getSortedIBDPC(int cutline)
+	public Map.Entry<HashSet<AOMClass>, int[]>[] getSortedIBDPC(int cutline)
 	{
 		return __getSortedIBDP(map4N_IBDPC, cutline);
 	}
