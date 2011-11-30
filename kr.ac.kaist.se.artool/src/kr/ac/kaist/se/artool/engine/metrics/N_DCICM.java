@@ -19,6 +19,22 @@ public abstract class N_DCICM {
 		map4N_DMICM = new HashMap<AOMMethod, AOMMethod[]>();
 	}
 	
+	public static N_DCICM createInstance(boolean isDynamic)
+	{
+		N_DCICM dcicm;
+		
+		if( isDynamic )
+		{
+			dcicm = new N_DCICM_Dynamic();
+		}
+		else
+		{
+			dcicm = new N_DCICM_Static();
+		}
+		
+		return dcicm;
+	}
+	
 	
 	public abstract String getName();
 	//HashSet<AOMClass> key;

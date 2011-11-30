@@ -5,47 +5,32 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.Vector;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
-import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
-import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.metrics.BasicMetricSuite;
-import kr.ac.kaist.se.artool.engine.metrics.N_DCICM_Dynamic;
-import kr.ac.kaist.se.artool.engine.metrics.N_DCICM_Static;
+import kr.ac.kaist.se.artool.engine.metrics.N_ConsecutiveCall;
+import kr.ac.kaist.se.artool.engine.metrics.N_DCICM;
 import kr.ac.kaist.se.artool.engine.metrics.N_IBDPC;
-import kr.ac.kaist.se.artool.engine.metrics.N_IBDPC_Static;
+import kr.ac.kaist.se.artool.engine.metrics.N_RestrictedVerticalLocality;
+import kr.ac.kaist.se.artool.engine.metrics.N_RestrictedVerticalLocality_Dynamic;
 import kr.ac.kaist.se.artool.engine.metrics.entityplacement.EPMoveMethodCandidate;
 import kr.ac.kaist.se.artool.engine.metrics.entityplacement.EntityPlacement;
 import kr.ac.kaist.se.artool.engine.rules.AbstractRule;
 import kr.ac.kaist.se.artool.engine.rules.ClassStat;
+import kr.ac.kaist.se.artool.engine.rules.CollapseClasRule;
 import kr.ac.kaist.se.artool.engine.rules.DynamicEP_MoveMethod;
-import kr.ac.kaist.se.artool.engine.rules.ListCache;
-import kr.ac.kaist.se.artool.engine.rules.Rule1;
-import kr.ac.kaist.se.artool.engine.rules.Rule1_Static;
-import kr.ac.kaist.se.artool.engine.rules.Rule2;
-import kr.ac.kaist.se.artool.engine.rules.Rule2_Static;
-import kr.ac.kaist.se.artool.engine.rules.Rule3;
-import kr.ac.kaist.se.artool.engine.rules.Rule3_Static;
-import kr.ac.kaist.se.artool.engine.rules.Rule4;
-import kr.ac.kaist.se.artool.engine.rules.Rule4_MoveMethod_1;
-import kr.ac.kaist.se.artool.engine.rules.Rule4_MoveMethod_2;
-import kr.ac.kaist.se.artool.engine.rules.Rule4_Static;
-import kr.ac.kaist.se.artool.engine.rules.Rule5;
-import kr.ac.kaist.se.artool.engine.rules.Rule5_Static;
-import kr.ac.kaist.se.artool.engine.rules.Rule7;
-import kr.ac.kaist.se.artool.engine.rules.Rule7_Static;
+import kr.ac.kaist.se.artool.engine.rules.MoveMethod1Rule;
+import kr.ac.kaist.se.artool.engine.rules.MoveMethod2Rule;
 import kr.ac.kaist.se.artool.engine.rules.StaticEP_MoveMethod;
 import kr.ac.kaist.se.artool.engine.ruleselector.BestSelector;
 import kr.ac.kaist.se.artool.engine.ruleselector.InteractiveSelector;
 import kr.ac.kaist.se.artool.engine.ruleselector.RuleSelector;
-import kr.ac.kaist.se.artool.util.UtilityFunctions;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
@@ -57,18 +42,20 @@ public class ARToolMain {
 	private static ARToolMain instance;
 	private static final int INTERACTIVE_CHOICE = 0;
 	private static final int BEST_CHOICE = 1;
-	private int pickUntil = 20;
+	private static final int locality_from = 2;
+	private static final int locality_to = 5;
+	private int pickUntil = 10;
 	private boolean tsantalis = false;
 	// FIXME: 
 	private int chosenSelector = INTERACTIVE_CHOICE;
-	
+
 	private static RuleSelector[] selectorSet = { new InteractiveSelector(), new BestSelector()};
-	
+
 	private FileOutputStream fos;
 	private PrintStream ps;
 	private PrintStream ps1;
 	private PrintStream ps2;
-	
+
 	public PrintStream getPrintStream() {
 		return ps;
 	}
@@ -76,25 +63,25 @@ public class ARToolMain {
 	public PrintStream getPrintStream1() {
 		return ps1;
 	}
-	
+
 	public PrintStream getPrintStream2() {
 		return ps2;
 	}
-	
+
 	private int numPerformingRefactoring = 0;
 	//mode
 	private static int evaluation_mode = 0;
 	//private static boolean useMAX_NDCICM = false;
 	private static boolean dynamic_mode = true;
-	
-	
-//	public boolean isUseMAX_NDCICM() {
-//		return useMAX_NDCICM;
-//	}
-//
-//	public void setUseMAX_NDCICM(boolean useMAX_NDCICM) {
-//		ARToolMain.useMAX_NDCICM = useMAX_NDCICM;
-//	}
+
+
+	//	public boolean isUseMAX_NDCICM() {
+	//		return useMAX_NDCICM;
+	//	}
+	//
+	//	public void setUseMAX_NDCICM(boolean useMAX_NDCICM) {
+	//		ARToolMain.useMAX_NDCICM = useMAX_NDCICM;
+	//	}
 
 	public static boolean isDynamic_mode() {
 		return dynamic_mode;
@@ -115,40 +102,40 @@ public class ARToolMain {
 	private ARToolMain()
 	{
 		try {
-			
+
 			ps = new PrintStream(new FileOutputStream("/Users/wjsong/git/ARTOOL/resultARTool/metric_result1.txt"));
 			ps1 = new PrintStream(new FileOutputStream("/Users/wjsong/git/ARTOOL/resultARTool/basicmetricsuite.txt"));
 			ps2 = new PrintStream(new FileOutputStream("/Users/wjsong/git/ARTOOL/resultARTool/changeimpactanalysis.txt"));
-						
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.err.println ("Error in writing to file");
 		}
-		
+
 		setEvaluation_mode(4);
 		//setUseMAX_NDCICM(true);
 		setDynamic_mode(false);
-		
-		
+
+
 	}
-	
+
 	public static ARToolMain getInstance()
 	{
 		if( instance == null )
 		{
 			instance = new ARToolMain();
 		}
-		
+
 		return instance;
 	}
-	
+
 
 	private static final int cutline = 10;
-	
+
 	private void trialExecute(Vector<AbstractRule> rules)
 	{
-		
+
 		for( AbstractRule rule : rules )
 		{
 			System.err.print("Trial["+rule.getName()+"]\t");
@@ -157,7 +144,7 @@ public class ARToolMain {
 			rule.trial();
 		}
 	}
-	
+
 	private AbstractRule selectRule(Vector<AbstractRule> rules) {
 		return selectorSet[chosenSelector].select(rules);
 	}
@@ -173,182 +160,19 @@ public class ARToolMain {
 			isPerformed = rule.perform();
 		}
 		return isPerformed;
-		
+
 	}
-	
-//	public EMap<HashSet<AOMClass>, int[]> getRule4List(AbstractObjectModel aom, N_DCICM n_dcicm)
-//	{
-//		int ndcicm = 0;
-//		int numStaticMethodCalls = 0;
-//		
-//		EMap<HashSet<AOMClass>, int[]> rule4list = new BasicEMap<HashSet<AOMClass>, int[]>();
-//		
-//		
-//		AOMClass[] aomClasses;
-//		AOMClass[] source_targetClasses = new AOMClass[2]; 
-//		
-//		for( AOMClass clazz : aom.getClasses() )
-//		{
-//			for( AOMMethod method : clazz.getMethods() )
-//			{
-//				ndcicm = BasicMetricSuite.getInt(method.getMeasuredDataSet().get("N_DCICM"));
-//				aomClasses = n_dcicm.getDCICM().get(method).toArray(new AOMClass[ndcicm]);
-//				
-//				if( method.getOwnedScope() != null )
-//				{
-//					numStaticMethodCalls = method.getOwnedScope().getStaticMethodCalls().size();
-//					if( ndcicm >= 3 && numStaticMethodCalls != 0 &&
-//							ndcicm == numStaticMethodCalls )
-//					{
-//						for( int i = 0; i < aomClasses.length - 1 ; )
-//						{
-//							source_targetClasses[0] = aomClasses[i];
-//							source_targetClasses[1] = aomClasses[++i];
-//							UtilityFunctions.getInstance().increase(rule4list, source_targetClasses[0], source_targetClasses[1]);
-//						}
-//					}
-//				}
-//				ndcicm =0;
-//				numStaticMethodCalls = 0;
-//			}
-//		}
-//		return rule4list;
-//	}
-	
-	public HashMap[] getRule4List(AbstractObjectModel aom, N_DCICM_Dynamic n_dcicm)
-	{
-		int ndcicm = 0;
-		int numDynamicMethodCalls = 0;
-		
-		HashMap<HashSet<AOMClass>, int[]> rule4list_Class = new HashMap<HashSet<AOMClass>, int[]>();
-		HashMap<HashSet<AOMMethod>, int[]> rule4list_Method = new HashMap<HashSet<AOMMethod>, int[]>();	
-		HashMap[] ret = new HashMap[2];
-		ret[0] = rule4list_Class;
-		ret[1] = rule4list_Method;
-		
-		AOMClass[] aomClasses;
-		AOMMethod[] aomMethods;
-		AOMClass[] source_targetClasses = new AOMClass[2];
-		AOMMethod[] source_targetMethods  = new AOMMethod[2];
-		
-		Vector<StaticMethodCall> containedDynamictoStaticMethodCall = new Vector<StaticMethodCall>();
-		
-		for( AOMClass clazz : aom.getClasses() )
-		{
-			for( AOMMethod method : clazz.getMethods() )
-			{
-				ndcicm = BasicMetricSuite.getInt(method.getMeasuredDataSet().get("N_DCICM"));
-				aomClasses = n_dcicm.getDCICM().get(method);
-				aomMethods = n_dcicm.getMap4N_DMICM().get(method);
-				
-				if( method.getOwnedScope() != null )
-				{
-					//numDynamicMethodCalls = method.getOwnedScope().getDynamicMethodCalls().size();
-					//start: ignore quantity effect of dynamic (just count as one)
-					containedDynamictoStaticMethodCall.clear();
-					
-					for( DynamicMethodCall dmc : method.getOwnedScope().getDynamicMethodCalls() )
-					{
-						if(!containedDynamictoStaticMethodCall.contains(dmc.getStatic()))
-						{
-							containedDynamictoStaticMethodCall.add(dmc.getStatic());
-						}
-						
-					}
-					//end: ignore quantity effect of dynamic (just count as one)
-					numDynamicMethodCalls = containedDynamictoStaticMethodCall.size();
-					
-					//FIXME: 3 adjustable!
-					if( ndcicm >= 3 && numDynamicMethodCalls != 0 
-//							&& ndcicm == numDynamicMethodCalls  
-							)
-					{
-						for( int i = 0; i < aomClasses.length - 1; i++)
-						{
-							for( int j = i + 1; j < aomClasses.length; j++  )
-							{
-								source_targetClasses[0] = aomClasses[i];
-								source_targetClasses[1] = aomClasses[j];
-								UtilityFunctions.getInstance().increase(rule4list_Class, source_targetClasses[0], source_targetClasses[1]);
-							}
-						}
-						
-						for(int i = 0; i < aomMethods.length - 1 ; i++ )
-						{
-							for( int j = i + 1; j < aomMethods.length; j++  )
-							{
-								source_targetMethods[0] = aomMethods[i];
-								source_targetMethods[1] = aomMethods[j];
-								UtilityFunctions.getInstance().increase(rule4list_Method, source_targetMethods[0], source_targetMethods[1]);
-							}
-						}
-					}
-				}
-				ndcicm =0;
-				numDynamicMethodCalls = 0;
-			}
-		}
-		return ret;
-	}
-	
-	public HashMap[] getRule4List_Static(AbstractObjectModel aom, N_DCICM_Static n_dcicm_static)
-	{
-		int ndcicm_static = 0;
-		int numStaticMethodCalls = 0;
-		
-		HashMap<HashSet<AOMClass>, int[]> rule4list_Class = new HashMap<HashSet<AOMClass>, int[]>();
-		HashMap<HashSet<AOMMethod>, int[]> rule4list_Method = new HashMap<HashSet<AOMMethod>, int[]>();	
-		HashMap[] ret = new HashMap[2];
-		ret[0] = rule4list_Class;
-		ret[1] = rule4list_Method;
-		
-		AOMClass[] aomClasses;
-		AOMMethod[] aomMethods;
-		AOMClass[] source_targetClasses = new AOMClass[2]; 
-		AOMMethod[] source_targetMethods  = new AOMMethod[2];
-		
-		for( AOMClass clazz : aom.getClasses() )
-		{
-			for( AOMMethod method : clazz.getMethods() )
-			{
-				ndcicm_static = BasicMetricSuite.getInt(method.getMeasuredDataSet().get("N_DCICM_Static"));
-				aomClasses = n_dcicm_static.getDCICM().get(method);
-				aomMethods = n_dcicm_static.getMap4N_DMICM().get(method);
-				
-				if( method.getOwnedScope() != null )
-				{
-					numStaticMethodCalls = method.getOwnedScope().getStaticMethodCalls().size();
-					if( ndcicm_static >= 3 && numStaticMethodCalls!=0 &&
-							ndcicm_static == numStaticMethodCalls )
-					{
-						for( int i = 0; i < aomClasses.length - 1 ; )
-						{
-							source_targetClasses[0] = aomClasses[i];
-							source_targetClasses[1] = aomClasses[++i];
-							UtilityFunctions.getInstance().increase(rule4list_Class, source_targetClasses[0], source_targetClasses[1]);
-						}
-						
-						for(int i = 0; i < aomMethods.length - 1 ; )
-						{
-							source_targetMethods[0] = aomMethods[i];
-							source_targetMethods[1] = aomMethods[++i];
-							UtilityFunctions.getInstance().increase(rule4list_Method, source_targetMethods[0], source_targetMethods[1]);
-						}
-					}
-				}
-				ndcicm_static =0;
-				numStaticMethodCalls = 0;
-			}
-		}
-		return ret;
-	}
-	
+
+
+
+
+
 	public static int getInt(Object obj)
 	{
 		return BasicMetricSuite.getInt(obj);
 	}
-	
-	
+
+
 	//always followed after FitnessFunction.getInstance().calculate(aom);
 	public void printCouplingRelatedMetrics(AbstractObjectModel aom, PrintStream ps)
 	{
@@ -375,10 +199,10 @@ public class ARToolMain {
 			ps.println();
 		}
 	}
-	
+
 	public void printInitialItems()
 	{
-		
+
 		if(isDynamic_mode() == true)
 		{
 			ARToolMain.getInstance().getPrintStream1().println("Basically based on DynamicMethodCall.");
@@ -387,7 +211,7 @@ public class ARToolMain {
 		{
 			ARToolMain.getInstance().getPrintStream1().println("Basically based on StaticMethodCall.");
 		}
-		
+
 		ARToolMain.getInstance().getPrintStream1().print("ClassName"+"\t");
 		ARToolMain.getInstance().getPrintStream1().print("DynamicExport"+"\t");
 		ARToolMain.getInstance().getPrintStream1().print("StaticExport"+"\t");
@@ -409,21 +233,22 @@ public class ARToolMain {
 	private static MessageDialogWithToggle dialog;	
 	public void run(AbstractObjectModel aom, final Shell shell) throws IOException
 	{	
-	
+
 		shell.getDisplay().syncExec(
-				  new Runnable() {
-				    public void run(){
-				    	 dialog = 
-							MessageDialogWithToggle.openYesNoQuestion(shell, "Analysis Selection", "Select dynamic or static analysis", "Dynamic?", true, null, null);
-				    }
-				  });
-	
+				new Runnable() {
+					public void run(){
+						dialog = 
+								MessageDialogWithToggle.openYesNoQuestion(shell, "Analysis Selection", "Select dynamic or static analysis", "Dynamic?", true, null, null);
+					}
+				});
+
 		this.setDynamic_mode(dialog.getToggleState());
 		StatusLogger.getInstance().clear();
 		ChangeImpactAnalysis cia = ChangeImpactAnalysis.getInstance();
+		//		String changeFile = "/Users/wjsong/git/ARTOOL/jgit/modifiedMethod.csv";
 		String changeFile = "/Users/wjsong/git/ARTOOL/resultARTool/modifiedMethod.csv";
 		cia.init(aom, changeFile);
-		
+
 		ps.print("Rule\t");
 		ps.print("fitness2\t");
 		ps.print("fitness3\t");
@@ -434,373 +259,256 @@ public class ARToolMain {
 		ps.print("MSC\t");
 		ps.print("LCOM2\t");
 		ps.println("LCOM3");
-		
+
 		System.err.print("Original\t");
 		//file write for further analysis
 		ps.print("Original\t");
 		//
-		
+
 		StatusLogger.getInstance().openOriginalPhase();
-		
 
-		
-//		StatusLogger.getInstance().putVar("StaticEP", (float)static_entityplacement);
 
-		
+
+		//		StatusLogger.getInstance().putVar("StaticEP", (float)static_entityplacement);
+
+
 		float originalFitness = FitnessFunction.getInstance().calculate(aom);
-		
+
 		//print file[basicmetricsuite.txt] for easy comparison
 		printInitialItems();
 		printCouplingRelatedMetrics(aom, ARToolMain.getInstance().getPrintStream1());
-		
-		
-		
+
+
+
 		if( isDynamic_mode() )
 		{
 			System.err.print("Dynamic!!");
 			getPrintStream2().print("Dynamic!!");
-			
+
 			if(cia.isStepTwo())
 			{
 				System.err.println(" (step2)");
 				getPrintStream2().println(" (step2)");
 			}
-			
+
 			else
 			{
 				System.err.println(" (step1)");
 				getPrintStream2().println(" (step1)");
 			}
-			
+
 		}
 		else
 		{
 			System.err.print("Static!!");
 			getPrintStream2().print("Static!!");
-			
+
 			if(cia.isStepTwo())
 			{
 				System.err.println(" (step2)");
 				getPrintStream2().println(" (step2)");
 			}
-			
+
 			else
 			{
 				System.err.println(" (step1)");
 				getPrintStream2().println(" (step1)");
 			}
 		}
-		
+
 		//change impact analysis
 		double ciaForClass = cia.analysisOnClass();
 		double ciaForMethod = cia.analysisOnMethod();
-				
+
 		System.out.println("CIA for Class:" + ciaForClass);
 		System.out.println("CIA for Method:" + ciaForMethod);
 		getPrintStream2().println("CIA for Class:" + ciaForClass);
 		getPrintStream2().println("CIA for Method:" + ciaForMethod);
-		double dynamic_entityplacement = 0;
-		double static_entityplacement = 0;
+		double entityplacement = 0;
 		long mem_usage = 0;
-		if(isDynamic_mode() == true) //basically based on DynamicMethodCall
+
+
+		do
 		{
-			
-			do
+
+			N_IBDPC n_ibdpc = N_IBDPC.createInstance(isDynamic_mode());
+			N_DCICM n_dcicm = N_DCICM.createInstance(isDynamic_mode());
+			N_ConsecutiveCall n_cc = N_ConsecutiveCall.createInstance(isDynamic_mode());
+
+			n_ibdpc.measure(aom);
+			n_dcicm.measure(aom);
+			n_cc.measure(aom);
+
+			N_RestrictedVerticalLocality n_rv = new N_RestrictedVerticalLocality_Dynamic(locality_from, locality_to);
+			n_rv.measure(aom, n_dcicm);
+
+			Map.Entry<HashSet<AOMClass>, int[]>[] n_IBDPC = n_ibdpc.getSortedIBDPC(cutline);
+			Map.Entry<HashSet<AOMMethod>, int[]>[] n_IBDPM = n_ibdpc.getSortedIBDPM(cutline);
+
+			Map.Entry<HashSet<AOMClass>, int[]>[] n_CCC = n_cc.getSortedCCC(cutline);
+			Map.Entry<HashSet<AOMMethod>, int[]>[] n_CCM = n_cc.getSortedCCM(cutline);
+
+
+
+			// rule setting
+			Vector<AbstractRule> rules = new Vector<AbstractRule>();
+
+			if( tsantalis )
 			{
-				mem_usage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-				System.err.println("start!:" + mem_usage);
-				long curTime = System.currentTimeMillis();
-				
-				N_IBDPC n_ibdpc = new N_IBDPC();
-				n_ibdpc.measure(aom);
-				System.err.println("N_IBDPC:" + Long.toString(System.currentTimeMillis() - curTime));
-				mem_usage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-				System.err.println("N_IBDPC!:" + mem_usage);
+				TreeSet<EPMoveMethodCandidate> ts = new TreeSet<EPMoveMethodCandidate>(new Comparator<EPMoveMethodCandidate>() {
+					@Override
+					public int compare(EPMoveMethodCandidate arg0,
+							EPMoveMethodCandidate arg1) {
+						//							if(Math.abs(arg0.getDistance() - arg1.getDistance()) < 0.0001) return 0;    
+						return Double.compare(arg0.getDistance(), arg1.getDistance());
+					}
+				});
+				entityplacement = EntityPlacement.calculate(aom, isDynamic_mode(), ts, pickUntil);
+				System.err.println("EntityPlacement:" + entityplacement);
+				EPMoveMethodCandidate[] candidates = ts.toArray(new EPMoveMethodCandidate[0]);
 
-				curTime = System.currentTimeMillis();
-				N_DCICM_Dynamic n_dcicm = new N_DCICM_Dynamic();
-				n_dcicm.measure(aom);
-				System.err.println("N_DCICM:" + Long.toString(System.currentTimeMillis() - curTime));
-				mem_usage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-				System.err.println("N_DCICM!:" + mem_usage);
-			
-				curTime = System.currentTimeMillis();
-				Map.Entry<HashSet<AOMClass>, int[]>[] n_IBDPC = n_ibdpc.getSortedIBDPC(cutline);
-				Map.Entry<HashSet<AOMMethod>, int[]>[] n_IBDPM = n_ibdpc.getSortedIBDPM(cutline);
-				System.err.println("Sorting:" + Long.toString(System.currentTimeMillis() - curTime));
-				mem_usage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-				System.err.println("Sorting!:" + mem_usage);
-				//AbstractRule rule4 = new Rule4(aom, sortedRule4list);
-				
-
-				// rule setting
-				Vector<AbstractRule> rules = new Vector<AbstractRule>();
-				
-				if( tsantalis )
-				{
-					TreeSet<EPMoveMethodCandidate> ts = new TreeSet<EPMoveMethodCandidate>(new Comparator<EPMoveMethodCandidate>() {
-						@Override
-						public int compare(EPMoveMethodCandidate arg0,
-								EPMoveMethodCandidate arg1) {
-//							if(Math.abs(arg0.getDistance() - arg1.getDistance()) < 0.0001) return 0;    
-							return Double.compare(arg0.getDistance(), arg1.getDistance());
-						}
-					});
-					dynamic_entityplacement = EntityPlacement.calculate(aom, true, ts, pickUntil);
-					System.err.println("DynamicEP:" + dynamic_entityplacement);
-					EPMoveMethodCandidate[] candidates = ts.toArray(new EPMoveMethodCandidate[0]);
-					
-					for(int i = 0; i < pickUntil; i++) {
-					    try {
-					    	System.err.println("Distance[" + i + "]:" + candidates[i].getDistance());
+				for(int i = 0; i < pickUntil; i++) {
+					try {
+						System.err.println("Distance[" + i + "]:" + candidates[i].getDistance());
+						if( isDynamic_mode() )
+						{
 							rules.add( new DynamicEP_MoveMethod(aom, candidates, i));
-					    } catch(Exception ex) { ex.printStackTrace(); }
-					}
+						}
+						else
+						{
+							rules.add( new StaticEP_MoveMethod(aom, candidates, i));
+						}
+					} catch(Exception ex) { ex.printStackTrace(); }
 				}
-				else
+
+			}
+			else
+			{
+
+				for(int i = 0; i < pickUntil; i++) {
+					try {
+						rules.add(new CollapseClasRule(aom, n_IBDPC, i, "Rule1", isDynamic_mode()));
+					} catch(Exception ex) { }
+				}
+				for(int i = 0; i < pickUntil; i++) {
+					try {
+						rules.add(new MoveMethod1Rule(aom, n_IBDPM, i, "Rule2", isDynamic_mode()));
+					} catch(Exception ex) { }
+				}
+				for(int i = 0; i < pickUntil; i++) {
+					try {
+						rules.add(new MoveMethod2Rule(aom, n_IBDPM, i, "Rule3", isDynamic_mode()));
+					} catch(Exception ex) { }
+				}
+
+				for( int locality = locality_from; locality <= locality_to; locality++ )
 				{
-					curTime = System.currentTimeMillis();
-					HashMap[] dynamicRule4List = getRule4List(aom, n_dcicm);
-					Map.Entry<HashSet<AOMClass>, int[]>[] sortedRule4list_Class=
-						UtilityFunctions.getInstance().__getSortedIBDP(dynamicRule4List[0], cutline);
-					Map.Entry<HashSet<AOMMethod>, int[]>[] sortedRule4list_Method =
-						UtilityFunctions.getInstance().__getSortedIBDP(dynamicRule4List[1], cutline);
-					System.err.println("Rule4List:" + Long.toString(System.currentTimeMillis() - curTime));
 
+					Map.Entry<HashSet<AOMClass>, int[]>[] n_RVC = n_rv.getSortedClassLevel(locality, cutline);
+					Map.Entry<HashSet<AOMMethod>, int[]>[] n_RVM = n_rv.getSortedMethodLevel(locality, cutline);
 
-					// my approach (dynamic)
-					
-					ListCache.getInstance().reset();
-					
 					for(int i = 0; i < pickUntil; i++) {
-					    try {
-					        rules.add(new Rule1(aom, n_IBDPC,i));
-					    } catch(Exception ex) { }
+						try {
+							rules.add(new CollapseClasRule(aom, n_RVC, i, "Rule4<" + locality + ">", isDynamic_mode()));
+						} catch(Exception ex) { }
 					}
 					for(int i = 0; i < pickUntil; i++) {
-					    try {
-					        rules.add(new Rule2(aom, n_IBDPM,i));
-					    } catch(Exception ex) { }
+						try {
+							rules.add(new MoveMethod1Rule(aom, n_RVM, i, "Rule5<" + locality + ">", isDynamic_mode()));
+						} catch(Exception ex) { }
 					}
 					for(int i = 0; i < pickUntil; i++) {
-					    try {
-					        rules.add(new Rule3(aom, n_IBDPM,i));
-					    } catch(Exception ex) { }
-					}
-					for(int i = 0; i < pickUntil; i++) {
-					    try {
-					        rules.add(new Rule4(aom, sortedRule4list_Class,i));
-					    } catch(Exception ex) { }
-					}
-					for(int i = 0; i < pickUntil; i++) {
-					    try {
-					        rules.add(new Rule4_MoveMethod_1(aom, sortedRule4list_Method,i));
-					    } catch(Exception ex) { }
-					}
-					for(int i = 0; i < pickUntil; i++) {
-					    try {
-					        rules.add(new Rule4_MoveMethod_2(aom, sortedRule4list_Method,i));
-					    } catch(Exception ex) { }
-					}
-					for(int i = 0; i < pickUntil; i++) {
-					    try {
-					        rules.add(new Rule5(aom, cutline,i));
-					    } catch(Exception ex) { }
-					}
-					/*
-					for(int i = 0; i < pickUntil; i++) {
-					    try {
-					        rules.add(new Rule6(aom, cutline,i));
-					    } catch(Exception ex) { }
-					}
-					*/
-					for(int i = 0; i < pickUntil; i++) {
-					    try {
-					        rules.add(new Rule7(aom, cutline,i));
-					    } catch(Exception ex) { }
+						try {
+							rules.add(new MoveMethod2Rule(aom, n_RVM, i, "Rule6<" + locality + ">", isDynamic_mode()));
+						} catch(Exception ex) { }
 					}
 				}
-//				              for(int i = 0; i < pickUntil; i++) rules.add(new
-//				              Rule8(aom, cutline,i));//              for(int i = 0; i < pickUntil; i++) rules.add(new
-//				              Rule9(aom, cutline,i));//              for(int i = 0; i < pickUntil; i++) rules.add(new
-//				              Rule10(aom, cutline,i));
-				
-				StatusLogger.getInstance().openTrialPhase();
-				// trial execution for rules
-				trialExecute(rules);
-			
-				AbstractRule selectedRule = selectRule(rules);
-				StatusLogger.getInstance().selectSuite(selectedRule);
-				
-				boolean isExcuted = execute(selectedRule);
-				
-				if(isExcuted)
-				{
-					System.err.print("Performed\t");
-					ps.print("Performed\t");
-					FitnessFunction.getInstance().calculate(aom);
-					
-					printCouplingRelatedMetrics(aom, ARToolMain.getInstance().getPrintStream1());
-					
-					//change impact analysis
-					System.out.print(numPerformingRefactoring +"\tCIA for Class\t" + cia.analysisOnClass());
-					System.out.println("\tCIA for Method\t" + cia.analysisOnMethod());
-					getPrintStream2().print(numPerformingRefactoring +"\tCIA for Class\t" + cia.analysisOnClass());
-					getPrintStream2().println("\tCIA for Method\t" + cia.analysisOnMethod());
-				}
-				
-				System.gc();
-				
-//				aom.eResource().save(null);
 
-			}while( askContinue(shell) );
-						
-			
+				for(int i = 0; i < pickUntil; i++) {
+					try {
+						rules.add(new CollapseClasRule(aom, n_CCC, i, "Rule7", isDynamic_mode()));
+					} catch(Exception ex) { }
+				}
+				for(int i = 0; i < pickUntil; i++) {
+					try {
+						rules.add(new MoveMethod1Rule(aom, n_CCM, i, "Rule8", isDynamic_mode()));
+					} catch(Exception ex) { }
+				}
+				for(int i = 0; i < pickUntil; i++) {
+					try {
+						rules.add(new MoveMethod2Rule(aom, n_CCM, i, "Rule9", isDynamic_mode()));
+					} catch(Exception ex) { }
+				}
+
+			}
+
+
+			StatusLogger.getInstance().openTrialPhase();
+			// trial execution for rules
+			trialExecute(rules);
+			StatusLogger.getInstance().printStatistics("fitness2");
+			StatusLogger.getInstance().printStatistics("fitness3");
+
+			AbstractRule selectedRule = selectRule(rules);
+			StatusLogger.getInstance().selectSuite(selectedRule);
+
+			boolean isExcuted = execute(selectedRule);
+
+			if(isExcuted)
+			{
+				System.err.print("Performed\t");
+				ps.print("Performed\t");
+				FitnessFunction.getInstance().calculate(aom);
+
+				printCouplingRelatedMetrics(aom, ARToolMain.getInstance().getPrintStream1());
+
+				//change impact analysis
+				System.out.print(numPerformingRefactoring +"\tCIA for Class\t" + cia.analysisOnClass());
+				System.out.println("\tCIA for Method\t" + cia.analysisOnMethod());
+				getPrintStream2().print(numPerformingRefactoring +"\tCIA for Class\t" + cia.analysisOnClass());
+				getPrintStream2().println("\tCIA for Method\t" + cia.analysisOnMethod());
+			}
+
+			System.gc();
+
+			//				aom.eResource().save(null);
+
+		}while( askContinue(shell) );
+
+		if( isDynamic_mode() )
+		{
 			ClassStat.getDynamicStat().export("/Users/wjsong/git/ARTOOL/resultARTool/ClassStat.");
 		}
-		else //basically based on StaticMethodCall
+		else
 		{
-			do
-			{
-				N_IBDPC_Static n_ibdpc_static = new N_IBDPC_Static();
-				n_ibdpc_static.measure(aom);
-				
-				N_DCICM_Static n_dcicm_static = new N_DCICM_Static();
-				n_dcicm_static.measure(aom);
-				
-				Map.Entry<HashSet<AOMClass>, int[]>[] n_IBDPC_Static = n_ibdpc_static.getSortedIBDPC(cutline);
-				Map.Entry<HashSet<AOMMethod>, int[]>[] n_IBDPM_Static = n_ibdpc_static.getSortedIBDPM(cutline);
-				//
-				//AbstractRule rule4 = new Rule4(aom, sortedRule4list);
-//				Map.Entry<HashSet<AOMClass>, int[]>[] sortedRule4list =
-//					UtilityFunctions.getInstance().__getSortedIBDP(getRule4List_Static(aom, n_dcicm_static), cutline);
-				HashMap[] staticRule4List = getRule4List_Static(aom, n_dcicm_static);
-				Map.Entry<HashSet<AOMClass>, int[]>[] sortedRule4list_Class=
-					UtilityFunctions.getInstance().__getSortedIBDP(staticRule4List[0], cutline);
-				Map.Entry<HashSet<AOMMethod>, int[]>[] sortedRule4list_Method =
-					UtilityFunctions.getInstance().__getSortedIBDP(staticRule4List[1], cutline);
-				
-				
-	
-				// rule setting
-				Vector<AbstractRule> rules = new Vector<AbstractRule>();
-				// static approach
-				if( tsantalis )
-				{
-					TreeSet<EPMoveMethodCandidate> ts = new TreeSet<EPMoveMethodCandidate>(new Comparator<EPMoveMethodCandidate>() {
-						@Override
-						public int compare(EPMoveMethodCandidate arg0,
-								EPMoveMethodCandidate arg1) {
-//							if(Math.abs(arg0.getDistance() - arg1.getDistance()) < 0.0001) return 0;    
-							return Double.compare(arg0.getDistance(), arg1.getDistance());
-						}
-					});
-					static_entityplacement = EntityPlacement.calculate(aom, false, ts, pickUntil);
-					System.err.println("StaticEP:" + static_entityplacement);
-					EPMoveMethodCandidate[] candidates = ts.toArray(new EPMoveMethodCandidate[0]);
-					
-					for(int i = 0; i < pickUntil; i++) {
-					    try {
-					    	System.err.println("Distance[" + i + "]:" + candidates[i].getDistance());
-							rules.add( new StaticEP_MoveMethod(aom, candidates, i));
-					    } catch(Exception ex) { }
-					}
-				}
-				else
-				{
-					for(int i = 0; i < pickUntil; i++) rules.add(new Rule1_Static(aom, n_IBDPC_Static,i));
-					for(int i = 0; i < pickUntil; i++) rules.add(new Rule2_Static(aom, n_IBDPM_Static,i));
-					for(int i = 0; i < pickUntil; i++) rules.add(new Rule3_Static(aom, n_IBDPM_Static,i));
-					for(int i = 0; i < pickUntil; i++) rules.add(new Rule4_Static(aom, sortedRule4list_Class,i));
-					for(int i = 0; i < pickUntil; i++) rules.add(new Rule4_MoveMethod_1(aom, sortedRule4list_Method,i));
-					for(int i = 0; i < pickUntil; i++) rules.add(new Rule4_MoveMethod_2(aom, sortedRule4list_Method,i));
-					for(int i = 0; i < pickUntil; i++) rules.add(new Rule5_Static(aom, cutline,i));
-	//				for(int i = 0; i < pickUntil; i++) rules.add(new Rule6_Static(aom, cutline,i));
-					for(int i = 0; i < pickUntil; i++) rules.add(new Rule7_Static(aom, cutline,i));
-	//				for(int i = 0; i < pickUntil; i++) rules.add(new Rule8_Static(aom, cutline,i));
-	//				for(int i = 0; i < pickUntil; i++) rules.add(new Rule9_Static(aom, cutline,i));
-	//				for(int i = 0; i < pickUntil; i++) rules.add(new Rule10_Static(aom, cutline,i));
-				}
-				
-				StatusLogger.getInstance().openTrialPhase();
-				// trial execution for rules
-				trialExecute(rules);
-			
-				
-				AbstractRule selectedRule = selectRule(rules);
-				StatusLogger.getInstance().selectSuite(selectedRule);
-				
-				//execute(selectedRule);
-				boolean isExcuted = execute(selectedRule);
-				
-				if(isExcuted)
-				{
-					System.err.print("Performed\t");
-					ps.print("Performed\t");
-					FitnessFunction.getInstance().calculate(aom);
-					
-					printCouplingRelatedMetrics(aom, ARToolMain.getInstance().getPrintStream1());
-					
-					System.out.print(numPerformingRefactoring +"\tCIA for Class\t" + cia.analysisOnClass());
-					System.out.println("\tCIA for Method\t" + cia.analysisOnMethod());
-					getPrintStream2().print(numPerformingRefactoring +"\tCIA for Class\t" + cia.analysisOnClass());
-					getPrintStream2().println("\tCIA for Method\t" + cia.analysisOnMethod());
-					
-//					System.out.println("CIA for Class:" + cia.analysisOnClass());
-//					System.out.println("CIA for Method:" + cia.analysisOnMethod());
-//					getPrintStream2().println("CIA for Class:" + cia.analysisOnClass());
-//					getPrintStream2().println("CIA for Method:" + cia.analysisOnMethod());
-	
-				}
-				System.gc();
-			}while( askContinue(shell) );
-			
 			ClassStat.getStaticStat().export("/Users/wjsong/git/ARTOOL/resultARTool/ClassStat.");
 		}
 
-		//igsong: 20110531
-//		String changeFile = "./resultARTool/modifiedMethod.csv";
-//		ChangeImpactAnalysis cia = ChangeImpactAnalysis.getInstance(aom);
-//		int ciaForClass = cia.analysisOnClass(changeFile);
-//		int ciaForMethod = cia.analysisOnMethod(changeFile);
-//		
-//		if( isDynamic_mode() )
-//		{
-//			System.err.println("Dynamic!!");
-//		}
-//		else
-//		{
-//			System.err.println("Static!!");
-//		}
-//		
-//		System.out.println("CIA for Class:" + ciaForClass);
-//		System.out.println("CIA for Method:" + ciaForMethod);
-//		
 		ps.close();
 		ps1.close();
 		ps2.close();
-/////// If the AbstractObjectModel should be saved, please remove below comment marks
-//		
-//		
-//		aom.eResource().save(null);
-//		
-//		
+		/////// If the AbstractObjectModel should be saved, please remove below comment marks
+		//		
+		//		
+		//		aom.eResource().save(null);
+		//		
+		//		
 	}
-	
+
 	private boolean cont = false;
 
 	private boolean askContinue(final Shell shell) {
 		cont = false;
 		Display display = shell.getDisplay();
 		display.syncExec(
-				  new Runnable() {
-				    public void run(){
+				new Runnable() {
+					public void run(){
 						cont = MessageDialog.openQuestion(shell, "Continue?",  "Do you want to continue refactoring?");
-				    }
-				  });
+					}
+				});
 		return cont;
 	}
 
-	
+
 	private static final String[] labelArray = {"Yes", "No"};
 }

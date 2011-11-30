@@ -4,35 +4,35 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eclipse.emf.common.util.BasicEMap;
-import org.eclipse.emf.common.util.EMap;
-
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.FitnessFunction;
-import kr.ac.kaist.se.artool.engine.metrics.N_DCICM_Dynamic;
 import kr.ac.kaist.se.artool.engine.refactoring.CollapseClassHierarchyCommand;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
 import kr.ac.kaist.se.artool.engine.refactoring.RefactoringCommand;
 import kr.ac.kaist.se.artool.engine.refactoring.RefactoringException;
 import kr.ac.kaist.se.artool.engine.refactoring.RefactoringTransaction;
-import kr.ac.kaist.se.artool.util.UtilityFunctions;
 
-public class Rule4_Static extends AbstractRule {
+public class CollapseClasRule extends AbstractRule {
 
 	private Map.Entry<HashSet<AOMClass>, int[]>[] n_IBDPC;
 	private AOMClass[] aomClasses;
 	
 	
-	public Rule4_Static(AbstractObjectModel aom,
-			Entry<HashSet<AOMClass>, int[]>[] n_DCICM, int pick) {
-		super(aom, pick);
-		this.n_IBDPC = n_DCICM;
-		aomClasses = n_DCICM[pick].getKey().toArray(new AOMClass[0]);
-		
-		ClassStat.getStaticStat().countOnClassEntries(n_DCICM);
+	public CollapseClasRule(AbstractObjectModel aom,
+			Entry<HashSet<AOMClass>, int[]>[] n_IBDPC, int pick, String ruleName, boolean isDynamic) {
+		super(aom, pick, ruleName);
+		this.n_IBDPC = n_IBDPC;
+		aomClasses = n_IBDPC[pick].getKey().toArray(new AOMClass[0]);
+		if( isDynamic ) 
+			ClassStat.getDynamicStat().countOnClassEntries(n_IBDPC);
+		else
+			ClassStat.getStaticStat().countOnClassEntries(n_IBDPC);
+
 	}
+
+
 
 	public RefactoringCommand getCommand()
 	{
@@ -54,11 +54,7 @@ public class Rule4_Static extends AbstractRule {
 		return mcc;
 	}
 	
-	@Override
-	public String getRuleName()
-	{
-		return "Rule4";
-	}
+
 	
 	@Override
 	public String getStatus()

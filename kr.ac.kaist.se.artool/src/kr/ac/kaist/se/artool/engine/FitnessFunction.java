@@ -67,6 +67,10 @@ public class FitnessFunction {
 		int MPCSE = 0;
 		int MPCSI = 0;
 		int MPCSBoth = 0;
+		//
+		float MIF  = 0;
+		float possible_overrides = 0;
+		float total_overrides = 0;
 		
 		//initialize
 		int LOC_MIN = getInt(aom.getClasses().get(0).getMeasuredDataSet().get("LOC")); 
@@ -95,6 +99,7 @@ public class FitnessFunction {
 		int NMA_MAX = getInt(aom.getClasses().get(0).getMeasuredDataSet().get("NMA"));
 		int WMC_MIN = getInt(aom.getClasses().get(0).getMeasuredDataSet().get("WMC"));
 		int WMC_MAX = getInt(aom.getClasses().get(0).getMeasuredDataSet().get("WMC"));
+		
 		//
 		int DynamicImport_MIN = getInt(aom.getClasses().get(0).getMeasuredDataSet().get("DynamicImport"));
 		int DynamicImport_MAX = getInt(aom.getClasses().get(0).getMeasuredDataSet().get("DynamicImport"));
@@ -131,6 +136,12 @@ public class FitnessFunction {
 		int MPCSBoth_MIN = getInt(aom.getClasses().get(0).getMeasuredDataSet().get("MPCSBoth"));
 		int MPCSBoth_MAX = getInt(aom.getClasses().get(0).getMeasuredDataSet().get("MPCSBoth"));
 		
+		float MIF_MIN = getFloat(aom.getClasses().get(0).getMeasuredDataSet().get("MIF"));
+		float MIF_MAX = getFloat(aom.getClasses().get(0).getMeasuredDataSet().get("MIF"));
+//		float PF_MIN = getFloat(aom.getClasses().get(0).getMeasuredDataSet().get("PF"));
+//		float PF_MAX = getFloat(aom.getClasses().get(0).getMeasuredDataSet().get("PF"));
+
+		
 		int clazz_size = aom.getClasses().size();
 		int metric_size = aom.getClasses().get(0).getMeasuredDataSet().size();
 		
@@ -166,7 +177,9 @@ public class FitnessFunction {
 			int l_MPCSE = getInt(clazz.getMeasuredDataSet().get("MPCSE"));
 			int l_MPCSI = getInt(clazz.getMeasuredDataSet().get("MPCSI"));
 			int l_MPCSBoth = getInt(clazz.getMeasuredDataSet().get("MPCSBoth"));
-
+			float l_MIF = getFloat(clazz.getMeasuredDataSet().get("MIF"));
+//			float l_PF = getFloat(clazz.getMeasuredDataSet().get("PF"));
+			
 			LOC += l_LOC;
 			NOM += l_NOM;
 			NOA += l_NOA;
@@ -195,7 +208,9 @@ public class FitnessFunction {
 			MPCSE += l_MPCSE;
 			MPCSI += l_MPCSI;
 			MPCSBoth += l_MPCSBoth;
-			
+			MIF += l_MIF;
+			possible_overrides += getInt(clazz.getMeasuredDataSet().get("NMA")) + getInt(clazz.getMeasuredDataSet().get("NOC"));
+			total_overrides += getInt(clazz.getMeasuredDataSet().get("NMO"));
 			//1
 			if( LOC_MIN > l_LOC )
 			{
@@ -476,36 +491,50 @@ public class FitnessFunction {
 				MPCSBoth_MAX = l_MPCSBoth;
 			}
 		
+			
+			if( MIF_MIN > l_MIF )
+			{
+				MIF_MIN = l_MIF;
+			}
+			
+			if( MIF_MAX < l_MIF )
+			{
+				MIF_MAX = l_MIF;
+			}
+			
+	
 		}
 		
-		float LOC_avg = (float) LOC / clazz_size;
-		float NOM_avg = (float) NOM / clazz_size;
-		float NOA_avg = (float) NOA / clazz_size;
-		float NOCON_avg = (float) NOCON / clazz_size;
-		float NOO_avg = (float) NOO / clazz_size;
-		float DIT_avg = (float) DIT / clazz_size;
-		float CLD_avg = (float) CLD / clazz_size;
-		float NOC_avg = (float) NOC / clazz_size;
-		float NOP_avg = (float) NOP / clazz_size;
-		float NMO_avg = (float) NMO / clazz_size;
-		float NMI_avg = (float) NMI / clazz_size;
-		float NMA_avg = (float) NMA / clazz_size;
-		float WMC_avg = (float) WMC / clazz_size;
-		float DynamicImport_avg = (float) DynamicImport / clazz_size;
-		float DynamicExport_avg = (float) DynamicExport / clazz_size;
-		float StaticImport_avg = (float) StaticImport / clazz_size;
-		float StaticExport_avg = (float) StaticExport / clazz_size;
-		float DynamicBoth_avg = (float) DynamicBoth / clazz_size;
-		float StaticBoth_avg = (float) StaticBoth / clazz_size;
-		float LCOM2_avg = (float) LCOM2 / clazz_size;
-		float LCOM3_avg = (float) LCOM3 / clazz_size;	
-		float MSC_avg = (float) MSC / clazz_size;	
-		float MPCDE_avg = (float) MPCDE / clazz_size;
-		float MPCDI_avg = (float) MPCDI / clazz_size;
-		float MPCDBoth_avg = (float) MPCDBoth / clazz_size;
-		float MPCSE_avg = (float) MPCSE / clazz_size;
-		float MPCSI_avg = (float) MPCSI / clazz_size;
-		float MPCSBoth_avg = (float) MPCSBoth / clazz_size;
+		float LOC_avg = ((float) LOC) / clazz_size;
+		float NOM_avg = ((float) NOM) / clazz_size;
+		float NOA_avg = ((float) NOA) / clazz_size;
+		float NOCON_avg = ((float) NOCON) / clazz_size;
+        float NOO_avg = ((float) NOO) / clazz_size;
+        float DIT_avg = ((float) DIT) / clazz_size;
+        float CLD_avg = ((float) CLD) / clazz_size;
+        float NOC_avg = ((float) NOC) / clazz_size;
+        float NOP_avg = ((float) NOP) / clazz_size;
+        float NMO_avg = ((float) NMO) / clazz_size;
+        float NMI_avg = ((float) NMI) / clazz_size;
+        float NMA_avg = ((float) NMA) / clazz_size;
+        float WMC_avg = ((float) WMC) / clazz_size;
+        float DynamicImport_avg = ((float) DynamicImport) / clazz_size;
+        float DynamicExport_avg = ((float) DynamicExport) / clazz_size;
+        float StaticImport_avg = ((float) StaticImport) / clazz_size;
+        float StaticExport_avg = ((float) StaticExport) / clazz_size;
+        float DynamicBoth_avg = ((float) DynamicBoth) / clazz_size;
+        float StaticBoth_avg = ((float) StaticBoth) / clazz_size;
+        float LCOM2_avg = (float) LCOM2 / clazz_size;
+        float LCOM3_avg = (float) LCOM3 / clazz_size;   
+        float MSC_avg = ((float) MSC) / clazz_size;     
+        float MPCDE_avg = ((float) MPCDE) / clazz_size;
+        float MPCDI_avg = ((float) MPCDI) / clazz_size;
+        float MPCDBoth_avg = ((float) MPCDBoth) / clazz_size;
+        float MPCSE_avg = ((float) MPCSE) / clazz_size;
+        float MPCSI_avg = ((float) MPCSI) / clazz_size;
+        float MPCSBoth_avg = ((float) MPCSBoth) / clazz_size;
+		float MIF_avg = ((float) MIF) / clazz_size;
+		float PF_avg = total_overrides / possible_overrides;
 		
 		
 		//evaluation function (fitness function)
@@ -755,6 +784,10 @@ public class FitnessFunction {
 //		StatusLogger.getInstance().putVar("MPCSE", MPCSE_avg);
 //		StatusLogger.getInstance().putVar("MPCSI", MPCSI_avg);
 		StatusLogger.getInstance().putVar("MPCSBoth", MPCSBoth_avg);
+		
+		StatusLogger.getInstance().putVar("DIT", DIT_avg);
+		StatusLogger.getInstance().putVar("MIF", MIF_avg);
+		StatusLogger.getInstance().putVar("PF", PF_avg);
 		
 
 

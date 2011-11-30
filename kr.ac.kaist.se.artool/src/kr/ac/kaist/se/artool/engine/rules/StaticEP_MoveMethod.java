@@ -15,7 +15,7 @@ public class StaticEP_MoveMethod extends AbstractRule {
 	
 	public StaticEP_MoveMethod(AbstractObjectModel aom,
 			EPMoveMethodCandidate[] candidates, int pick) {
-		super(aom, pick);
+		super(aom, pick, "StaticEP_MoveMethod");
 		this.candidates = candidates;
 		method = candidates[pick].getMethod();
 		clazz = candidates[pick].getClazz();
@@ -32,12 +32,7 @@ public class StaticEP_MoveMethod extends AbstractRule {
 		MoveMethodCommand mmc = new MoveMethodCommand(method, clazz);
 		return mmc;
 	}
-	
-	@Override
-	public String getRuleName()
-	{
-		return "StaticEP_MoveMethod";
-	}
+
 	
 	@Override
 	public String getStatus()

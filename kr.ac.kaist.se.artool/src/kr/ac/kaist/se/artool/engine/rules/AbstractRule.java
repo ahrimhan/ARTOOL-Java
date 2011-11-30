@@ -14,10 +14,13 @@ import kr.ac.kaist.se.artool.engine.refactoring.RefactoringTransaction;
 public abstract class AbstractRule {
 	protected AbstractObjectModel aom;
 	
-	public AbstractRule(AbstractObjectModel aom, int pick) {
+	private String ruleName;
+	
+	public AbstractRule(AbstractObjectModel aom, int pick, String ruleName) {
 		super();
 		this.aom = aom;
 		this.pick = pick;
+		this.ruleName = ruleName;
 	}
 	
 	private int pick;
@@ -129,7 +132,10 @@ public abstract class AbstractRule {
 		return aom;
 	}
 	
-	public abstract String getRuleName();
+	public String getRuleName()
+	{
+		return ruleName;
+	}
 	
 	public final String getName()
 	{

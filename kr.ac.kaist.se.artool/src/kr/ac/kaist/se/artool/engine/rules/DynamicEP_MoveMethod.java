@@ -15,7 +15,7 @@ public class DynamicEP_MoveMethod extends AbstractRule {
 	
 	public DynamicEP_MoveMethod(AbstractObjectModel aom,
 			EPMoveMethodCandidate[] candidates, int pick) {
-		super(aom, pick);
+		super(aom, pick, "DynamicEP_MoveMethod");
 		this.candidates = candidates;
 		method = candidates[pick].getMethod();
 		clazz = candidates[pick].getClazz();
@@ -32,11 +32,6 @@ public class DynamicEP_MoveMethod extends AbstractRule {
 		return mmc;
 	}
 	
-	@Override
-	public String getRuleName()
-	{
-		return "DynamicEP_MoveMethod";
-	}
 	
 	@Override
 	public String getStatus()

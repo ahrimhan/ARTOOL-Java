@@ -28,7 +28,9 @@ public class BasicMetricSuite {
 	public static final String CLD = "CLD"; //class-to-leaf depth
 	public static final String NOC = "NOC"; //children
 	public static final String NOP = "NOP"; //parent
-	public static final String NMO = "NMO"; //overridden
+	public static final String NMO = "NMO"; //overriding
+//	public static final String NMOB = "NMOB"; //overridden by
+
 	public static final String NMI = "NMI"; //inherited
 	public static final String NMA = "NMA"; //newly added
 	public static final String WMC = "WMC"; //weighted method per class
@@ -57,6 +59,10 @@ public class BasicMetricSuite {
 	public static final String MPCSE = "MPCSE"; //"Method" Passing Coupling (StaticMethodCalls에서 export + import & distinct한것만 함.) 
 	public static final String MPCSI = "MPCSI";
 	public static final String MPCSBoth = "MPCSBoth";
+	
+	public static final String MIF = "MIF";
+//	public static final String PF = "PF";
+	
 	
 	public void measure(AbstractObjectModel aom) {
 		for( AOMClass clazz : aom.getClasses() )
@@ -127,34 +133,34 @@ public class BasicMetricSuite {
 		return ret;
 	}
 	
-	private static AOMMethod findOverriding(AOMClass c, AOMMethod m)
-	{
-		Vector<AOMClass> queue = new Vector<AOMClass>(c.getAncestor());
-		Vector<AOMClass> visitedClass = new Vector<AOMClass>();
-		while( !queue.isEmpty() )
-		{
-			AOMClass aomClass = queue.remove(0);
-			visitedClass.add(aomClass);
-			for( AOMMethod lm : aomClass.getMethods() )
-			{
-				if( isIdenticalMethod(lm, m) )
-				{
-					return lm;
-				}
-			}
-			
-			for( AOMClass p : aomClass.getAncestor() )
-			{
-				if( !visitedClass.contains(p) )
-				{
-					queue.add(p);
-				}
-			}
-		}
-
-		return null;
-	}
-	
+//	private static AOMMethod findOverriding(AOMClass c, AOMMethod m)
+//	{
+//		Vector<AOMClass> queue = new Vector<AOMClass>(c.getAncestor());
+//		Vector<AOMClass> visitedClass = new Vector<AOMClass>();
+//		while( !queue.isEmpty() )
+//		{
+//			AOMClass aomClass = queue.remove(0);
+//			visitedClass.add(aomClass);
+//			for( AOMMethod lm : aomClass.getMethods() )
+//			{
+//				if( isIdenticalMethod(lm, m) )
+//				{
+//					return lm;
+//				}
+//			}
+//			
+//			for( AOMClass p : aomClass.getAncestor() )
+//			{
+//				if( !visitedClass.contains(p) )
+//				{
+//					queue.add(p);
+//				}
+//			}
+//		}
+//
+//		return null;
+//	}
+//	
 	private HashSet<AOMClass> visitedClasses = new HashSet<AOMClass>();
 	
 	
@@ -327,27 +333,23 @@ public class BasicMetricSuite {
 	
 	public void measureBoth (AOMClass clazz)
 	{
-		clazz.getMeasuredDataSet().put(StaticBoth, new int[] { 
+		_initializeMetric(clazz, StaticBoth, 
 				getInt(clazz.getMeasuredDataSet().get(StaticImport)) +
-				 getInt(clazz.getMeasuredDataSet().get(StaticExport)) 
-		});
-		clazz.getMeasuredDataSet().put(DynamicBoth, new int[]{ 
+				 getInt(clazz.getMeasuredDataSet().get(StaticExport)));
+		_initializeMetric(clazz, DynamicBoth,  
 				getInt(clazz.getMeasuredDataSet().get(DynamicImport)) +
-				 getInt(clazz.getMeasuredDataSet().get(DynamicExport)) 
-		});
-		clazz.getMeasuredDataSet().put(MPCDBoth, new int[] {
+				 getInt(clazz.getMeasuredDataSet().get(DynamicExport)));
+		_initializeMetric(clazz, MPCDBoth, 
 				getInt(clazz.getMeasuredDataSet().get(MPCDI)) +
-				 getInt(clazz.getMeasuredDataSet().get(MPCDE))
-		});
-		clazz.getMeasuredDataSet().put(MPCSBoth, new int[]{
+				 getInt(clazz.getMeasuredDataSet().get(MPCDE)));
+		_initializeMetric(clazz, MPCSBoth, 
 				getInt(clazz.getMeasuredDataSet().get(MPCSI)) +
-				 getInt(clazz.getMeasuredDataSet().get(MPCSE))
-		});
+				 getInt(clazz.getMeasuredDataSet().get(MPCSE)));
 	}
-	
-	private static int[] newZeroInt() { return new int[] { 0 }; }
-	
-	private static float[] newZeroFloat() { return new float[] { 0 }; }
+//	
+//	private static int[] newZeroInt() { return new int[] { 0 }; }
+//	
+//	private static float[] newZeroFloat() { return new float[] { 0 }; }
 	
 	public static int factorial(int n) {
         if      (n <  0) throw new RuntimeException("Underflow error in factorial");
@@ -391,6 +393,7 @@ public class BasicMetricSuite {
 //		_initializeMetric(clazz, NOC, 0);
 //		_initializeMetric(clazz, NOP, 0);
 		_initializeMetric(clazz, NMO, 0);
+//		_initializeMetric(clazz, NMOB, 0);
 		_initializeMetric(clazz, NMI, 0);
 		_initializeMetric(clazz, NMA, 0);
 //		_initializeMetric(clazz, WMC, 0);
@@ -409,6 +412,7 @@ public class BasicMetricSuite {
 		_initializeMetric(clazz, MSC, 0.0f);
 		_initializeMetric(clazz, LCOM2, 0.0f);
 		_initializeMetric(clazz, LCOM3, 0.0f);
+		
 	
 								
 		int dit = 0; int cld = 0;
@@ -453,6 +457,12 @@ public class BasicMetricSuite {
 			sum_mA += field.getStaticReferer().size();
 		}
 		
+		
+		float new_nif = ((float)getInt(clazz.getMeasuredDataSet().get(NMI))) / (float)(0.000001f + getInt(clazz.getMeasuredDataSet().get(NMA)) + getInt(clazz.getMeasuredDataSet().get(NMI)) + getInt(clazz.getMeasuredDataSet().get(NMO)));
+		_initializeMetric(clazz, MIF, new_nif);
+//		float new_pf = ((float)getInt(clazz.getMeasuredDataSet().get(NMOB))) / (float)(0.000001f + getInt(clazz.getMeasuredDataSet().get(NMA)) * getInt(clazz.getMeasuredDataSet().get(NOC)));
+//		_initializeMetric(clazz, PF, new_pf);
+
 		if( num_methods * num_attributes != 0 )
 		{
 //			clazz.getMeasuredDataSet().put(LCOM2, 1 - ( sum_mA/(num_methods * num_attributes)) );
@@ -624,6 +634,8 @@ public class BasicMetricSuite {
 		{
 			increase(clazz.getMeasuredDataSet().get(NMA), 1);
 		}
+		
+//		increase(clazz.getMeasuredDataSet().get(NMOB), method.getOverridedBy().size());
 						
 		if( method.isConstructor() )
 		{

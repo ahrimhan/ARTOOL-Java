@@ -107,11 +107,54 @@ public class StatusLogger {
 	
 	public void selectSuite(AbstractRule rule)
 	{
+		BasicEMap<String, float[]> ret = null;
 		if( log.size() > 1 )
 		{
 			log.pop();
 		}
-		log.push(trials.get(rule));
+		ret = trials.get(rule);
+		trials.remove(rule);
+		log.push(ret);
+	}
+	
+	public void printStatistics(String var)
+	{
+		int i = 0;
+		int count = 0;
+		float totalPositiveDelta = 0;
+		float totalDelta = 0;
+		
+		BasicEMap<String, float[]> previous = getPreviousPhase();
+		
+		for( i = 0; i < trials.size(); i++ )
+		{
+			BasicEMap<String, float[]> t = trials.get(i).getValue();
+			float[] m = t.get(var);
+			float[] p = previous.get(var);
+			
+			if( m != null && p != null )
+			{
+				if( (m[0] - p[0]) > 0 )
+				{
+					count++;
+					totalPositiveDelta += m[0] - p[0];
+				}
+				totalDelta += m[0] - p[0];
+			}
+			else
+			{
+				System.err.println(var + " is null");
+			}
+		}
+		
+		NumberFormat nf= NumberFormat.getInstance();
+		
+		nf.setMaximumFractionDigits(8);
+		nf.setMinimumFractionDigits(8);
+		ARToolMain.getInstance().getPrintStream().print("# of positive delta of "+ var + ":" + count + "\t");
+		ARToolMain.getInstance().getPrintStream().print("Sum of positive delta of "+ var + ":" + nf.format(totalPositiveDelta) + "\t");
+		ARToolMain.getInstance().getPrintStream().print("Sum of delta of "+ var + ":" + nf.format(totalDelta) + "\t");
+		ARToolMain.getInstance().getPrintStream().println();
 	}
 	
 	public void openOriginalPhase()
@@ -182,6 +225,7 @@ public class StatusLogger {
 		return ret;
 	}
 	
+	
 	private void _printDelta(BasicEMap<String, float[]> previous)
 	{
 		ListIterator<Entry<String, float[]>> iterator = getCurrentSuite().listIterator();
@@ -193,6 +237,10 @@ public class StatusLogger {
 			if( previous.get(curEntry.getKey()) != null )
 			{
 				prev_value = previous.get(curEntry.getKey())[0];
+			}
+			else
+			{
+				System.err.println("prev_value is 0[" + curEntry.getKey() + "]");
 			}
 			float diff = curEntry.getValue()[0] - prev_value;
 			NumberFormat nf= NumberFormat.getInstance();

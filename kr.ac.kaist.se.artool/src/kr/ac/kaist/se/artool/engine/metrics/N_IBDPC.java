@@ -13,13 +13,28 @@ import kr.ac.kaist.se.aom.structure.AOMMethod;
 
 import org.eclipse.emf.common.util.EList;
 
-public class N_IBDPC {
+public  abstract class N_IBDPC {
 	//interaction between different pair of classes
 	public N_IBDPC() {
 		map4N_IBDPC = new HashMap<HashSet<AOMClass>, int[]>();
 		map4N_IBDPM = new HashMap<HashSet<AOMMethod>, int[]>();
 	}
 	
+	public static N_IBDPC createInstance(boolean isDynamic)
+	{
+		N_IBDPC ret;
+		
+		if( isDynamic )
+		{
+			ret = new N_IBDPC_Dynamic();
+		}
+		else
+		{
+			ret = new N_IBDPC_Static();
+		}
+		
+		return ret;
+	}
 
 	public static final String N_IBDPC = "N_IBDPC";
 	
@@ -27,11 +42,11 @@ public class N_IBDPC {
 	public HashMap<HashSet<AOMMethod>, int[]> map4N_IBDPM;
 	
 	
-	private HashSet key = new HashSet();
+//	private HashSet key = new HashSet();
 	
 	public <T> void increase(HashMap<HashSet<T>, int[]> map, T aomElement1, T aomElement2)
 	{
-		key.clear();
+		HashSet<T> key = new HashSet<T>();
 		key.add(aomElement1);
 		key.add(aomElement2);
 		
@@ -81,6 +96,8 @@ public class N_IBDPC {
 	{
 		return __getSortedIBDP(map4N_IBDPC, cutline);
 	}
+	
+	protected abstract void _measure(AOMClass clazz, AOMMethod method);
 
 	public void measure(AbstractObjectModel aom) {
 		map4N_IBDPC.clear();
@@ -93,33 +110,7 @@ public class N_IBDPC {
 			{
 				if( method.getOwnedScope() != null )
 				{
-					EList<DynamicMethodCall> dmcList = method.getOwnedScope().getDynamicMethodCalls();
-					// In first iteration of the below for-loop,  dmc1 would be null.
-					DynamicMethodCall dmc1 = null;
-					
-					for( int k = 0; k < (dmcList.size() - 1); k++ )
-					{
-						DynamicMethodCall dmc2 = dmcList.get(k);
-						AOMMethod aomMethod2 = dmc2.getCallee();
-						AOMClass aomClass2 = dmc2.getCallee().getOwner();
-						if( aomClass2 != clazz)
-						{
-							if( dmc1 != null )
-							{
-								AOMClass aomClass1 = dmc1.getCallee().getOwner();
-								AOMMethod aomMethod1 = dmc1.getCallee();
-								if( aomClass1 != aomClass2 && aomClass1 != clazz )
-								{
-									if( aomMethod1 != aomMethod2 && aomMethod1 != method && aomMethod2 != method )
-									{
-										increase(map4N_IBDPM, aomMethod1, aomMethod2);
-									}
-									increase(map4N_IBDPC, aomClass1, aomClass2);
-								}
-							}
-							dmc1 = dmc2;
-						}
-					}
+					_measure(clazz, method);
 				}
 			}
 		}
