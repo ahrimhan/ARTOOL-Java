@@ -33,7 +33,7 @@ public class FitnessFunction {
 		return BasicMetricSuite.getFloat(obj);
 	}
 	
-	public float calculate(AbstractObjectModel aom)
+	public float calculate(AbstractObjectModel aom, double refactoring_cost)
 			//, PrintStream ps)
 	{
 		float fitness = 0;
@@ -149,35 +149,35 @@ public class FitnessFunction {
 		for( AOMClass clazz : aom.getClasses() )
 		{
 
-			int l_LOC = getInt(clazz.getMeasuredDataSet().get("LOC"));
-			int l_NOM = getInt(clazz.getMeasuredDataSet().get("NOM"));
-			int l_NOA = getInt(clazz.getMeasuredDataSet().get("NOA"));
-			int l_NOCON = getInt(clazz.getMeasuredDataSet().get("NOCON"));
-			int l_NOO = getInt(clazz.getMeasuredDataSet().get("NOO"));
-			int l_DIT = getInt(clazz.getMeasuredDataSet().get("DIT"));
-			int l_CLD = getInt(clazz.getMeasuredDataSet().get("CLD"));
-			int l_NOC = getInt(clazz.getMeasuredDataSet().get("NOC"));
-			int l_NOP = getInt(clazz.getMeasuredDataSet().get("NOP"));
-			int l_NMO = getInt(clazz.getMeasuredDataSet().get("NMO"));
-			int l_NMI = getInt(clazz.getMeasuredDataSet().get("NMI"));
-			int l_NMA = getInt(clazz.getMeasuredDataSet().get("NMA"));
-			int l_WMC = getInt(clazz.getMeasuredDataSet().get("WMC"));
-			int l_DynamicImport = getInt(clazz.getMeasuredDataSet().get("DynamicImport"));
-			int l_DynamicExport = getInt(clazz.getMeasuredDataSet().get("DynamicExport"));
-			int l_StaticImport = getInt(clazz.getMeasuredDataSet().get("StaticImport"));
-			int l_StaticExport = getInt(clazz.getMeasuredDataSet().get("StaticExport"));
-			int l_DynamicBoth = getInt(clazz.getMeasuredDataSet().get("DynamicBoth"));
-			int l_StaticBoth = getInt(clazz.getMeasuredDataSet().get("StaticBoth"));
-			float l_LCOM2 = getFloat(clazz.getMeasuredDataSet().get("LCOM2"));
-			float l_LCOM3 = getFloat(clazz.getMeasuredDataSet().get("LCOM3"));
-			float l_MSC = getFloat(clazz.getMeasuredDataSet().get("MSC"));
-			int l_MPCDE = getInt(clazz.getMeasuredDataSet().get("MPCDE"));
-			int l_MPCDI = getInt(clazz.getMeasuredDataSet().get("MPCDI"));
-			int l_MPCDBoth = getInt(clazz.getMeasuredDataSet().get("MPCDBoth"));
-			int l_MPCSE = getInt(clazz.getMeasuredDataSet().get("MPCSE"));
-			int l_MPCSI = getInt(clazz.getMeasuredDataSet().get("MPCSI"));
-			int l_MPCSBoth = getInt(clazz.getMeasuredDataSet().get("MPCSBoth"));
-			float l_MIF = getFloat(clazz.getMeasuredDataSet().get("MIF"));
+			int l_LOC = ((int[])clazz.getMeasuredDataSet().get("LOC"))[0];
+			int l_NOM = ((int[])clazz.getMeasuredDataSet().get("NOM"))[0];
+			int l_NOA = ((int[])clazz.getMeasuredDataSet().get("NOA"))[0];
+			int l_NOCON = ((int[])clazz.getMeasuredDataSet().get("NOCON"))[0];
+			int l_NOO = ((int[])clazz.getMeasuredDataSet().get("NOO"))[0];
+			int l_DIT = ((int[])clazz.getMeasuredDataSet().get("DIT"))[0];
+			int l_CLD = ((int[])clazz.getMeasuredDataSet().get("CLD"))[0];
+			int l_NOC = ((int[])clazz.getMeasuredDataSet().get("NOC"))[0];
+			int l_NOP = ((int[])clazz.getMeasuredDataSet().get("NOP"))[0];
+			int l_NMO = ((int[])clazz.getMeasuredDataSet().get("NMO"))[0];
+			int l_NMI = ((int[])clazz.getMeasuredDataSet().get("NMI"))[0];
+			int l_NMA = ((int[])clazz.getMeasuredDataSet().get("NMA"))[0];
+			int l_WMC = ((int[])clazz.getMeasuredDataSet().get("WMC"))[0];
+			int l_DynamicImport = ((int[])clazz.getMeasuredDataSet().get("DynamicImport"))[0];
+			int l_DynamicExport = ((int[])clazz.getMeasuredDataSet().get("DynamicExport"))[0];
+			int l_StaticImport = ((int[])clazz.getMeasuredDataSet().get("StaticImport"))[0];
+			int l_StaticExport = ((int[])clazz.getMeasuredDataSet().get("StaticExport"))[0];
+			int l_DynamicBoth = ((int[])clazz.getMeasuredDataSet().get("DynamicBoth"))[0];
+			int l_StaticBoth = ((int[])clazz.getMeasuredDataSet().get("StaticBoth"))[0];
+			float l_LCOM2 = ((float[])clazz.getMeasuredDataSet().get("LCOM2"))[0];
+			float l_LCOM3 = ((float[])clazz.getMeasuredDataSet().get("LCOM3"))[0];
+			float l_MSC = ((float[])clazz.getMeasuredDataSet().get("MSC"))[0];
+			int l_MPCDE = ((int[])clazz.getMeasuredDataSet().get("MPCDE"))[0];
+			int l_MPCDI = ((int[])clazz.getMeasuredDataSet().get("MPCDI"))[0];
+			int l_MPCDBoth = ((int[])clazz.getMeasuredDataSet().get("MPCDBoth"))[0];
+			int l_MPCSE = ((int[])clazz.getMeasuredDataSet().get("MPCSE"))[0];
+			int l_MPCSI = ((int[])clazz.getMeasuredDataSet().get("MPCSI"))[0];
+			int l_MPCSBoth = ((int[])clazz.getMeasuredDataSet().get("MPCSBoth"))[0];
+			float l_MIF = ((float[])clazz.getMeasuredDataSet().get("MIF"))[0];
 //			float l_PF = getFloat(clazz.getMeasuredDataSet().get("PF"));
 			
 			LOC += l_LOC;
@@ -209,8 +209,8 @@ public class FitnessFunction {
 			MPCSI += l_MPCSI;
 			MPCSBoth += l_MPCSBoth;
 			MIF += l_MIF;
-			possible_overrides += getInt(clazz.getMeasuredDataSet().get("NMA")) + getInt(clazz.getMeasuredDataSet().get("NOC"));
-			total_overrides += getInt(clazz.getMeasuredDataSet().get("NMO"));
+			possible_overrides += l_NMA + l_NOC;
+			total_overrides += l_NMO;
 			//1
 			if( LOC_MIN > l_LOC )
 			{
@@ -538,7 +538,7 @@ public class FitnessFunction {
 		
 		
 		//evaluation function (fitness function)
-		int evaluation_mode = ARToolMain.getInstance().getEvaluation_mode();
+		int evaluation_mode = 4;
 		
 		switch (evaluation_mode)
 		{
@@ -683,6 +683,8 @@ public class FitnessFunction {
 				)
 			); 
 		
+		
+		
 		float fitness_static = (float) (
 			    ( 
 					( MSC_avg )/( MSC_MAX )
@@ -752,6 +754,12 @@ public class FitnessFunction {
 		StatusLogger.getInstance().putVar("fitness2", fitness2);
 		StatusLogger.getInstance().putVar("fitness3", fitness3);
 		StatusLogger.getInstance().putVar("fitness_static", fitness_static);
+		
+		refactoring_cost = refactoring_cost + 1;
+		
+		StatusLogger.getInstance().putVar("norm_fitness2", StatusLogger.getInstance().getDeltaWithPrevious("fitness2") / (float)refactoring_cost);
+		StatusLogger.getInstance().putVar("norm_fitness3", StatusLogger.getInstance().getDeltaWithPrevious("fitness3") / (float)refactoring_cost);
+
 		//
 //		StatusLogger.getInstance().putVar("DynamicImport", DynamicImport_avg);
 //		StatusLogger.getInstance().putVar("DynamicExport", DynamicExport_avg);
@@ -770,6 +778,10 @@ public class FitnessFunction {
 		double ciaForMethod = ChangeImpactAnalysis.getInstance().analysisOnMethod();
 		StatusLogger.getInstance().putVar("ciaForClass", (float) ciaForClass );
 		StatusLogger.getInstance().putVar("ciaForMethod", (float) ciaForMethod );
+		StatusLogger.getInstance().putVar("norm_ciaForClass", StatusLogger.getInstance().getDeltaWithPrevious("ciaForClass") / (float)refactoring_cost);
+		StatusLogger.getInstance().putVar("norm_ciaForMethod", StatusLogger.getInstance().getDeltaWithPrevious("ciaForMethod") / (float)refactoring_cost);
+
+		
 //		StatusLogger.getInstance().putVar("normalizedDynamicBoth", ( DynamicBoth_avg )/( DynamicBoth_MAX ));
 //		StatusLogger.getInstance().putVar("normalizedStaticBoth", ( StaticBoth_avg )/( StaticBoth_MAX ));
 //		StatusLogger.getInstance().putVar("normalizedBothCoupling",

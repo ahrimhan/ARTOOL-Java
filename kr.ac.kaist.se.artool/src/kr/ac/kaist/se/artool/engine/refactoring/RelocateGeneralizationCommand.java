@@ -28,7 +28,7 @@ public class RelocateGeneralizationCommand implements RefactoringCommand {
 	}
 	
 	@Override
-	public void doCommand() throws RefactoringException {
+	public double doCommand() throws RefactoringException {
 		
 		if(relocatingClass.getAncestor().contains(oldParentRelocatingClass))
 		{
@@ -38,6 +38,8 @@ public class RelocateGeneralizationCommand implements RefactoringCommand {
 		{
 			relocatingClass.getAncestor().add(newParentRelocatingClass);
 		}
+		
+		return 0;
 		// TODO Auto-generated method stub
 
 	}

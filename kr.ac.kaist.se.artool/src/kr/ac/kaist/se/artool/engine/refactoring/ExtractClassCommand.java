@@ -3,9 +3,9 @@ package kr.ac.kaist.se.artool.engine.refactoring;
 public class ExtractClassCommand implements RefactoringCommand {
 
 	@Override
-	public void doCommand() throws RefactoringException {
+	public double doCommand() throws RefactoringException {
 		// TODO Auto-generated method stub
-
+		return 0;
 	}
 
 	@Override

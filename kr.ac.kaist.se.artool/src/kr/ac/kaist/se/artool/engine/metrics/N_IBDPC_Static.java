@@ -10,6 +10,7 @@ import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
+import kr.ac.kaist.se.artool.util.UtilityFunctions;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -38,11 +39,14 @@ public class N_IBDPC_Static extends N_IBDPC {
 					AOMMethod aomMethod1 = smc1.getCallee();
 					if( aomClass1 != aomClass2 && aomClass1 != clazz )
 					{
-						if( aomMethod1 != aomMethod2 && aomMethod1 != method && aomMethod2 != method )
+						if( (!aomClass1.getName().endsWith("RebaseCommand")) && (!aomClass2.getName().endsWith("RebaseCommand")))
 						{
-							increase(map4N_IBDPM, aomMethod1, aomMethod2);
+							if( aomMethod1 != aomMethod2 && aomMethod1 != method && aomMethod2 != method )
+							{
+								UtilityFunctions.getInstance().increase(map4N_IBDPM, aomMethod1, aomMethod2, 1);
+							}
+							UtilityFunctions.getInstance().increase(map4N_IBDPC, aomClass1, aomClass2, 1);
 						}
-						increase(map4N_IBDPC, aomClass1, aomClass2);
 					}
 				}
 				smc1 = smc2;

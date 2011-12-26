@@ -1,24 +1,24 @@
 package kr.ac.kaist.se.artool.engine.metrics;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
-import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
+import kr.ac.kaist.se.artool.util.UtilityFunctions;
 
-import org.eclipse.emf.common.util.EList;
+import org.apache.commons.collections.keyvalue.MultiKey;
+import org.apache.commons.collections.map.MultiKeyMap;
 
 public  abstract class N_IBDPC {
 	//interaction between different pair of classes
 	public N_IBDPC() {
-		map4N_IBDPC = new HashMap<HashSet<AOMClass>, int[]>();
-		map4N_IBDPM = new HashMap<HashSet<AOMMethod>, int[]>();
+		map4N_IBDPC = new MultiKeyMap<AOMClass, int[]>();
+		map4N_IBDPM = new MultiKeyMap<AOMMethod, int[]>();
 	}
+	
+	private static N_IBDPC dynamic_instance = null;
+	private static N_IBDPC static_instance = null;
 	
 	public static N_IBDPC createInstance(boolean isDynamic)
 	{
@@ -26,11 +26,19 @@ public  abstract class N_IBDPC {
 		
 		if( isDynamic )
 		{
-			ret = new N_IBDPC_Dynamic();
+			if( dynamic_instance == null )
+			{
+				dynamic_instance = new N_IBDPC_Dynamic();
+			}
+			ret = dynamic_instance;
 		}
 		else
 		{
-			ret = new N_IBDPC_Static();
+			if( static_instance == null )
+			{
+				static_instance = new N_IBDPC_Static();
+			}
+			ret = static_instance;
 		}
 		
 		return ret;
@@ -38,63 +46,20 @@ public  abstract class N_IBDPC {
 
 	public static final String N_IBDPC = "N_IBDPC";
 	
-	public HashMap<HashSet<AOMClass>, int[]> map4N_IBDPC;
-	public HashMap<HashSet<AOMMethod>, int[]> map4N_IBDPM;
+	public MultiKeyMap<AOMClass, int[]> map4N_IBDPC;
+	public MultiKeyMap<AOMMethod, int[]> map4N_IBDPM;
 	
 	
 //	private HashSet key = new HashSet();
 	
-	public <T> void increase(HashMap<HashSet<T>, int[]> map, T aomElement1, T aomElement2)
+	public Map.Entry<MultiKey<AOMMethod>, int[]>[] getSortedIBDPM(int cutline)
 	{
-		HashSet<T> key = new HashSet<T>();
-		key.add(aomElement1);
-		key.add(aomElement2);
-		
-		if( map.containsKey(key) )
-		{
-			int[] i = map.get(key);
-			i[0]++;
-		}
-		else
-		{
-			int[] i = new int[1];
-			i[0] = 1;
-			map.put(key, i);		
-		}
-	}
-	
-	public <T> Map.Entry<HashSet<T>, int[]>[] __getSortedIBDP(HashMap<HashSet<T>, int[]> map, int cutline)
-	{	
-		HashSet<Map.Entry<HashSet<T>, int[]>> entries = new HashSet<Map.Entry<HashSet<T>, int[]>>(map.entrySet());
-		
-		
-		Map.Entry[] ret = new Map.Entry[cutline];
-		
-		for( int i = 0 ; i < cutline ; i++ )
-		{
-			if( entries.size() <= 0 ) break;
-			Map.Entry<HashSet<T>, int[]> maxEntry = Collections.max(entries, new Comparator<Map.Entry<HashSet<T>, int[]>>(){
-				@Override
-				public int compare(Map.Entry<HashSet<T>, int[]> arg0,
-						Map.Entry<HashSet<T>, int[]> arg1) {
-					return arg0.getValue()[0] - arg1.getValue()[0] ;
-				}
-			}
-			);
-			ret[i] = maxEntry;
-			entries.remove(maxEntry);
-		}
-		return ret;
-	}
-	
-	public Map.Entry<HashSet<AOMMethod>, int[]>[] getSortedIBDPM(int cutline)
-	{
-		return __getSortedIBDP(map4N_IBDPM, cutline);
+		return UtilityFunctions.getInstance().__getSortedIBDP(map4N_IBDPM, cutline);
 	}
 
-	public Map.Entry<HashSet<AOMClass>, int[]>[] getSortedIBDPC(int cutline)
+	public Map.Entry<MultiKey<AOMClass>, int[]>[] getSortedIBDPC(int cutline)
 	{
-		return __getSortedIBDP(map4N_IBDPC, cutline);
+		return UtilityFunctions.getInstance().__getSortedIBDP(map4N_IBDPC, cutline);
 	}
 	
 	protected abstract void _measure(AOMClass clazz, AOMMethod method);

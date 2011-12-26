@@ -1,20 +1,18 @@
 package kr.ac.kaist.se.artool.engine.rules;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
+
+import org.apache.commons.collections.keyvalue.MultiKey;
 
 public class ClassStat {
 	private HashMap<String, int[]> stat;
@@ -48,7 +46,18 @@ public class ClassStat {
 		}
 		return dynamicStat;
 	}
+	private static ClassStat dynamicStaticStat = null;
+
 	
+	public static ClassStat getDynamicStaticStat()
+	{
+		if( dynamicStaticStat == null ) 
+		{
+			dynamicStaticStat = new ClassStat();
+			dynamicStaticStat.suffix = ".dynsta.csv";
+		}
+		return dynamicStaticStat;
+	}
 	
 	private void countOn(AOMClass clazz)
 	{
@@ -68,47 +77,24 @@ public class ClassStat {
 		}
 	}
 	
-	public void countOnMethodEntries(Map.Entry<HashSet<AOMMethod>, int[]>[] methodEntries)
+	public void countOnMethodEntries(Map.Entry<MultiKey<AOMMethod>, int[]> methodEntry)
 	{
 
-		if( methodEntries == null || methodEntries.length == 0 || methodEntries[0] == null ) return;
-		
-		int max = methodEntries[0].getValue()[0];
-		HashSet<AOMMethod> classSet = methodEntries[0].getKey();
-		for( Entry<HashSet<AOMMethod>, int[]> entry : methodEntries )
+		if( methodEntry == null ) return;
+		for( int i = 0; i < methodEntry.getKey().size(); i++ )
 		{
-			if( entry != null && max < entry.getValue()[0] )
-			{
-				max = entry.getValue()[0];
-				classSet = entry.getKey();
-			}
-		}
-		
-		for( AOMMethod aomMethod : classSet )
-		{
-			countOn(aomMethod.getOwner());
+			countOn(methodEntry.getKey().getKey(i).getOwner());
 		}
 	}
 	
-	public void countOnClassEntries(Map.Entry<HashSet<AOMClass>, int[]>[] classEntries)
+	public void countOnClassEntries(Map.Entry<MultiKey<AOMClass>, int[]> classEntry)
 	{
 		
-		if( classEntries == null || classEntries.length == 0 || classEntries[0] == null ) return;
+		if( classEntry == null ) return;		
 		
-		int max = classEntries[0].getValue()[0];
-		HashSet<AOMClass> classSet = classEntries[0].getKey();
-		for( Entry<HashSet<AOMClass>, int[]> entry : classEntries )
+		for( int i = 0; i < classEntry.getKey().size(); i++ )
 		{
-			if(entry != null &&  max < entry.getValue()[0] )
-			{
-				max = entry.getValue()[0];
-				classSet = entry.getKey();
-			}
-		}
-		
-		for( AOMClass aomClass : classSet )
-		{
-			countOn(aomClass);
+			countOn(classEntry.getKey().getKey(i));
 		}
 	}
 	

@@ -62,7 +62,7 @@ public class MoveMethodCommand implements RefactoringCommand {
 	boolean did = false;
 	
 	@Override
-	public void doCommand() throws RefactoringException {
+	public double doCommand() throws RefactoringException {
 		did = false;
 		try
 		{
@@ -77,7 +77,7 @@ public class MoveMethodCommand implements RefactoringCommand {
 		catch(Throwable ex)
 		{
 //			ex.printStackTrace();
-			return;
+			return 0;
 		}
 		
 		originalOverriding = movingMethod.getOverriding();
@@ -88,6 +88,8 @@ public class MoveMethodCommand implements RefactoringCommand {
 		originalClass = movingMethod.getOwner();
 		movingMethod.setOwner(targetClass);
 		did = true;
+		
+		return 1;
 	}
 
 	@Override

@@ -1,9 +1,5 @@
 package kr.ac.kaist.se.artool.engine.metrics;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Vector;
 
@@ -13,9 +9,12 @@ import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.util.UtilityFunctions;
 
+import org.apache.commons.collections.keyvalue.MultiKey;
+import org.apache.commons.collections.map.MultiKeyMap;
+
 public abstract class N_RestrictedVerticalLocality {
-	private HashMap<HashSet<AOMClass>, int[]>[] rule4list_Class;
-	private HashMap<HashSet<AOMMethod>, int[]>[] rule4list_Method;	
+	private MultiKeyMap<AOMClass, int[]>[] rule4list_Class;
+	private MultiKeyMap<AOMMethod, int[]>[] rule4list_Method;	
 	private 		Vector<StaticMethodCall> containedDynamictoStaticMethodCall = new Vector<StaticMethodCall>();
 	private int locality_from;
 	private int locality_to;
@@ -26,14 +25,18 @@ public abstract class N_RestrictedVerticalLocality {
 		this.locality_from = locality_from;
 		this.locality_to  = locality_to;
 		
-		rule4list_Class = new HashMap[locality_to - locality_from + 1];
-		rule4list_Method = new HashMap[locality_to - locality_from + 1];
+		rule4list_Class = new MultiKeyMap[locality_to - locality_from + 1];
+		rule4list_Method = new MultiKeyMap[locality_to - locality_from + 1];
 		for( int i = 0; i < locality_to - locality_from + 1; i++ )
 		{
-			rule4list_Class[i] = new HashMap<HashSet<AOMClass>, int[]>();
-			rule4list_Method[i] = new HashMap<HashSet<AOMMethod>, int[]>();
+			rule4list_Class[i] = new MultiKeyMap<AOMClass, int[]>();
+			rule4list_Method[i] = new MultiKeyMap<AOMMethod, int[]>();
 		}
 	}
+	
+
+	private static N_RestrictedVerticalLocality dynamic_instance = null;
+	private static N_RestrictedVerticalLocality static_instance = null;
 	
 	public static N_RestrictedVerticalLocality createInstance(boolean isDynamic, int locality_from, int locality_to)
 	{
@@ -41,11 +44,19 @@ public abstract class N_RestrictedVerticalLocality {
 		
 		if( isDynamic )
 		{
-			ret = new N_RestrictedVerticalLocality_Dynamic(locality_from, locality_to);
+			if( dynamic_instance == null )
+			{
+				dynamic_instance = new N_RestrictedVerticalLocality_Dynamic(locality_from, locality_to);
+			}
+			ret = dynamic_instance;
 		}
 		else
 		{
-			ret = new N_RestrictedVerticalLocality_Static(locality_from, locality_to);
+			if( static_instance == null )
+			{
+				static_instance = new N_RestrictedVerticalLocality_Static(locality_from, locality_to);
+			}
+			ret = static_instance;
 		}
 		
 		return ret;
@@ -54,58 +65,16 @@ public abstract class N_RestrictedVerticalLocality {
 	protected abstract String getN_DCICMString();
 	
 	protected abstract boolean checkLocalityOption(int ndcicm, int numMethodCall);
-	
-	public <T> void increase(HashMap<HashSet<T>, int[]> map, T aomElement1, T aomElement2)
+
+
+	public Map.Entry<MultiKey<AOMMethod>, int[]>[] getSortedMethodLevel(int locality, int cutline)
 	{
-		HashSet<T> key = new HashSet<T>();
-		key.add(aomElement1);
-		key.add(aomElement2);
-		
-		if( map.containsKey(key) )
-		{
-			int[] i = map.get(key);
-			i[0]++;
-		}
-		else
-		{
-			int[] i = new int[1];
-			i[0] = 1;
-			map.put(key, i);		
-		}
-	}
-	
-	public <T> Map.Entry<HashSet<T>, int[]>[] __getSortedIBDP(HashMap<HashSet<T>, int[]> map, int cutline)
-	{	
-		HashSet<Map.Entry<HashSet<T>, int[]>> entries = new HashSet<Map.Entry<HashSet<T>, int[]>>(map.entrySet());
-		
-		
-		Map.Entry[] ret = new Map.Entry[cutline];
-		
-		for( int i = 0 ; i < cutline ; i++ )
-		{
-			if( entries.size() <= 0 ) break;
-			Map.Entry<HashSet<T>, int[]> maxEntry = Collections.max(entries, new Comparator<Map.Entry<HashSet<T>, int[]>>(){
-				@Override
-				public int compare(Map.Entry<HashSet<T>, int[]> arg0,
-						Map.Entry<HashSet<T>, int[]> arg1) {
-					return arg0.getValue()[0] - arg1.getValue()[0] ;
-				}
-			}
-			);
-			ret[i] = maxEntry;
-			entries.remove(maxEntry);
-		}
-		return ret;
-	}
-	
-	public Map.Entry<HashSet<AOMMethod>, int[]>[] getSortedMethodLevel(int locality, int cutline)
-	{
-		return __getSortedIBDP(rule4list_Method[locality - locality_from], cutline);
+		return UtilityFunctions.getInstance().__getSortedIBDP(rule4list_Method[locality - locality_from], cutline);
 	}
 
-	public Map.Entry<HashSet<AOMClass>, int[]>[] getSortedClassLevel(int locality, int cutline)
+	public Map.Entry<MultiKey<AOMClass>, int[]>[] getSortedClassLevel(int locality, int cutline)
 	{
-		return __getSortedIBDP(rule4list_Class[locality - locality_from], cutline);
+		return UtilityFunctions.getInstance().__getSortedIBDP(rule4list_Class[locality - locality_from], cutline);
 	}
 	
 	public void measure(AbstractObjectModel aom, N_DCICM n_dcicm)
@@ -130,7 +99,7 @@ public abstract class N_RestrictedVerticalLocality {
 		{
 			for( AOMMethod method : clazz.getMethods() )
 			{
-				ndcicm = BasicMetricSuite.getInt(method.getMeasuredDataSet().get("N_DCICM"));
+				ndcicm = BasicMetricSuite.getInt(method.getMeasuredDataSet().get(getN_DCICMString()));
 				aomClasses = n_dcicm.getDCICM().get(method);
 				aomMethods = n_dcicm.getMap4N_DMICM().get(method);
 				

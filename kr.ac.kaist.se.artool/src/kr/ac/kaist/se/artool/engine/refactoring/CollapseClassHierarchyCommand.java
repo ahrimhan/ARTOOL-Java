@@ -36,7 +36,13 @@ public class CollapseClassHierarchyCommand implements RefactoringCommand {
 
 
 	@Override
-	public void doCommand() throws RefactoringException {
+	public double doCommand() throws RefactoringException {
+		int min_field_size;
+		int min_method_size;
+		
+		min_field_size = mergedClass.getFields().size() + mergingClass.getFields().size() ;
+		min_method_size = mergedClass.getMethods().size() + mergingClass.getMethods().size() ;
+		
 		aom.getClasses().remove(mergedClass);
 		
 		ancestors.addAll(mergedClass.getAncestor());
@@ -72,6 +78,8 @@ public class CollapseClassHierarchyCommand implements RefactoringCommand {
 			System.err.print( method.getOwner().getName() );
 		}
 		System.err.println();
+		
+		return (min_field_size * 0.5f + min_method_size + 0.0001) / 2.;
 	}
 
 

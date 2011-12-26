@@ -8,8 +8,10 @@ import java.util.Map;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
+import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
+import kr.ac.kaist.se.artool.util.UtilityFunctions;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -21,7 +23,7 @@ public class N_IBDPC_Dynamic extends N_IBDPC{
 	
 
 	public void _measure(AOMClass clazz, AOMMethod method) {
-
+		
 		EList<DynamicMethodCall> dmcList = method.getOwnedScope().getDynamicMethodCalls();
 		// In first iteration of the below for-loop,  dmc1 would be null.
 		DynamicMethodCall dmc1 = null;
@@ -41,13 +43,15 @@ public class N_IBDPC_Dynamic extends N_IBDPC{
 					{
 						if( aomMethod1 != aomMethod2 && aomMethod1 != method && aomMethod2 != method )
 						{
-							increase(map4N_IBDPM, aomMethod1, aomMethod2);
+							UtilityFunctions.getInstance().increase(map4N_IBDPM, aomMethod1, aomMethod2, 1);
 						}
-						increase(map4N_IBDPC, aomClass1, aomClass2);
+						UtilityFunctions.getInstance().increase(map4N_IBDPC, aomClass1, aomClass2, 1);
 					}
 				}
 				dmc1 = dmc2;
 			}
 		}
+		
+
 	}
 }

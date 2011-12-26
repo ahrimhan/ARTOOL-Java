@@ -6,29 +6,39 @@ import java.util.Map.Entry;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
-import kr.ac.kaist.se.aom.structure.AOMMethod;
-import kr.ac.kaist.se.artool.engine.FitnessFunction;
+import kr.ac.kaist.se.artool.engine.ARToolMain;
 import kr.ac.kaist.se.artool.engine.refactoring.CollapseClassHierarchyCommand;
-import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
 import kr.ac.kaist.se.artool.engine.refactoring.RefactoringCommand;
-import kr.ac.kaist.se.artool.engine.refactoring.RefactoringException;
-import kr.ac.kaist.se.artool.engine.refactoring.RefactoringTransaction;
+
+import org.apache.commons.collections.keyvalue.MultiKey;
 
 public class CollapseClasRule extends AbstractRule {
 
-	private Map.Entry<HashSet<AOMClass>, int[]>[] n_IBDPC;
-	private AOMClass[] aomClasses;
+	private Map.Entry<MultiKey<AOMClass>, int[]>[] n_IBDPC;
+	private AOMClass[] aomClasses = new AOMClass[2];
 	
 	
 	public CollapseClasRule(AbstractObjectModel aom,
-			Entry<HashSet<AOMClass>, int[]>[] n_IBDPC, int pick, String ruleName, boolean isDynamic) {
+			Entry<MultiKey<AOMClass>, int[]>[] n_IBDPC, int pick, String ruleName, int mode) {
 		super(aom, pick, ruleName);
 		this.n_IBDPC = n_IBDPC;
-		aomClasses = n_IBDPC[pick].getKey().toArray(new AOMClass[0]);
-		if( isDynamic ) 
-			ClassStat.getDynamicStat().countOnClassEntries(n_IBDPC);
-		else
-			ClassStat.getStaticStat().countOnClassEntries(n_IBDPC);
+
+		Object[] obj = n_IBDPC[pick].getKey().getKeys();
+		aomClasses[0] = (AOMClass)obj[0];
+		aomClasses[1] = (AOMClass)obj[1];
+				
+		switch( mode )
+		{
+		case ARToolMain.DYNAMIC_MODE:
+			ClassStat.getDynamicStat().countOnClassEntries(n_IBDPC[pick]);
+			break;
+		case ARToolMain.STATIC_MODE:
+			ClassStat.getStaticStat().countOnClassEntries(n_IBDPC[pick]);
+			break;
+		case ARToolMain.DYNAMIC_STATIC_MODE:
+			ClassStat.getDynamicStaticStat().countOnClassEntries(n_IBDPC[pick]);
+			break;
+		}
 
 	}
 

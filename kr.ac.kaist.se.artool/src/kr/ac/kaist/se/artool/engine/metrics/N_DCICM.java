@@ -19,20 +19,31 @@ public abstract class N_DCICM {
 		map4N_DMICM = new HashMap<AOMMethod, AOMMethod[]>();
 	}
 	
+	private static N_DCICM dynamic_instance = null;
+	private static N_DCICM static_instance = null;
+	
 	public static N_DCICM createInstance(boolean isDynamic)
 	{
-		N_DCICM dcicm;
+		N_DCICM ret;
 		
 		if( isDynamic )
 		{
-			dcicm = new N_DCICM_Dynamic();
+			if( dynamic_instance == null )
+			{
+				dynamic_instance = new N_DCICM_Dynamic();
+			}
+			ret = dynamic_instance;
 		}
 		else
 		{
-			dcicm = new N_DCICM_Static();
+			if( static_instance == null )
+			{
+				static_instance = new N_DCICM_Static();
+			}
+			ret = static_instance;
 		}
 		
-		return dcicm;
+		return ret;
 	}
 	
 	
@@ -49,12 +60,17 @@ public abstract class N_DCICM {
 		return map4N_DMICM;
 	}
 	
+	HashSet<AOMClass> visitedClass =  new HashSet<AOMClass>();
+	HashSet<AOMMethod> visitedMethod =  new HashSet<AOMMethod>();
+	
 	public void measure(AbstractObjectModel aom) {
 		int ndcicm = 0;
 		int max = 0;
 		
-		HashSet<AOMClass> visitedClass =  new HashSet<AOMClass>();
-		HashSet<AOMMethod> visitedMethod =  new HashSet<AOMMethod>();
+		map4N_DCICM.clear();
+		map4N_DMICM.clear();
+	
+
 		
 		for( AOMClass clazz : aom.getClasses() )
 		{

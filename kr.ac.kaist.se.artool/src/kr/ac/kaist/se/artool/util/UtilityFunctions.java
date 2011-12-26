@@ -5,7 +5,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import org.apache.commons.collections.keyvalue.MultiKey;
+import org.apache.commons.collections.map.MultiKeyMap;
 import org.eclipse.emf.common.util.EMap;
 
 public class UtilityFunctions {
@@ -21,50 +24,53 @@ public class UtilityFunctions {
 		return instance;
 	}
 		
-	public <T> void increase(HashMap<HashSet<T>, int[]> map, T aomElement1, T aomElement2)
+	public <T> void increase(MultiKeyMap<T, int[]> map, T aomElement1, T aomElement2, int inc)
 	{
-		HashSet<T> key = new HashSet<T>();
-		key.add(aomElement1);
-		key.add(aomElement2);
+//		AOMTuple<T> key = new AOMTuple<T>(aomElement1, aomElement2);
 		
-		if( map.containsKey(key) )
+		if( map.containsKey(aomElement1, aomElement2) )
 		{
-			int[] i = map.get(key);
-			i[0]++;
+			int[] i = map.get(aomElement1, aomElement2);
+			i[0]+=inc;
+		}
+		else if(map.containsKey(aomElement2, aomElement1) )
+		{
+			int[] i = map.get(aomElement2, aomElement1);
+			i[0]+=inc;
 		}
 		else
 		{
 			int[] i = new int[1];
-			i[0] = 1;
-			map.put(key, i);		
+			i[0] = inc;
+			map.put(aomElement1, aomElement2, i);
 		}
-		
-		key = null;
 	}
 	
-	public <T> Map.Entry<HashSet<T>, int[]>[] __getSortedIBDP(HashMap<HashSet<T>, int[]> map, int cutline)
+	public <T> void increase(MultiKeyMap<T, int[]> map, T aomElement1, T aomElement2)
+	{
+		increase(map, aomElement1, aomElement2, 1);
+	}
+	
+	public <T> Entry<MultiKey<T>, int[]>[] __getSortedIBDP(MultiKeyMap<T, int[]> map, int cutline)
 	{	
+		HashSet<Entry<MultiKey<? extends T>, int[]>> entries = new HashSet<Entry<MultiKey<? extends T>, int[]>>(map.entrySet());
 		
-		HashSet<Map.Entry<HashSet<T>, int[]>> entries = new HashSet<Map.Entry<HashSet<T>, int[]>>(map.entrySet());
 
-		if( cutline > entries.size() )
-		{
-			cutline = entries.size();
-		}
-		
-		Map.Entry[] ret = new Map.Entry[cutline];
+		Entry[] ret = new Entry[cutline];
 		
 		for( int i = 0 ; i < cutline ; i++ )
 		{
-			Map.Entry<HashSet<T>, int[]> maxEntry = Collections.max(entries, new Comparator<Map.Entry<HashSet<T>, int[]>>(){
+			if( entries.size() <= 0 ) break;
+			Entry<MultiKey<? extends T>, int[]> maxEntry = Collections.max(entries, new Comparator<Map.Entry<MultiKey<? extends T>, int[]>>(){
 				@Override
-				public int compare(Map.Entry<HashSet<T>, int[]> arg0,
-						Map.Entry<HashSet<T>, int[]> arg1) {
+				public int compare(Map.Entry<MultiKey<? extends T>, int[]> arg0,
+						Map.Entry<MultiKey<? extends T>, int[]> arg1) {
 					return arg0.getValue()[0] - arg1.getValue()[0] ;
 				}
 			}
 			);
 			ret[i] = maxEntry;
+			
 			entries.remove(maxEntry);
 		}
 		return ret;

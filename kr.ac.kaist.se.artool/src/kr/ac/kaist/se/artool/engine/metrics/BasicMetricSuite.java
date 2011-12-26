@@ -379,7 +379,8 @@ public class BasicMetricSuite {
 			i[0] = intValue;
 		}
 	}
-		
+	HashSet<AOMField> referringField1 = new HashSet<AOMField>();
+	HashSet<AOMField> referringField2 = new HashSet<AOMField>();
 	public void measure(AOMClass clazz)
 	{
 		_initializeMetric(clazz, LOC, clazz.getLOC());
@@ -485,6 +486,8 @@ public class BasicMetricSuite {
 		
 		// MSC
 		
+
+		
 		int methodSize = clazz.getMethods().size();
 		int unionSize = 0;
 		int intersectSize = 0;
@@ -502,8 +505,9 @@ public class BasicMetricSuite {
 					EList<StaticFieldAccess> fieldAccess1 = method1.getOwnedScope().getStaticFieldAccesses();
 					EList<StaticFieldAccess> fieldAccess2 = method2.getOwnedScope().getStaticFieldAccesses();
 					
-					HashSet<AOMField> referringField1 = new HashSet<AOMField>();
-					HashSet<AOMField> referringField2 = new HashSet<AOMField>();
+					referringField1.clear();
+					referringField2.clear();
+
 					
 					for( StaticFieldAccess sfa : fieldAccess1 )
 					{

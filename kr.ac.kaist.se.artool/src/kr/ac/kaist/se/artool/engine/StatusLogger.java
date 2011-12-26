@@ -16,33 +16,25 @@ public class StatusLogger {
 	private BasicEMap<AbstractRule, BasicEMap<String, float[]>> trials;
 	
 	private static Vector<BasicEMap<String, float[]>> emapPool = new Vector<BasicEMap<String, float[]>>();
-	private static Vector<float[]> floatPool = new Vector<float[]>();
+//	private static Vector<float[]> floatPool = new Vector<float[]>();
 	
 	static
 	{
 		for( int i = 0; i < 1000; i++ )
 		{
 			emapPool.add(new BasicEMap<String, float[]>());
-			floatPool.add(new float[1]);
+//			floatPool.add(new float[1]);
 		}
 	}
 	
 	static float[] getFloat()
 	{
-		if( floatPool.isEmpty() )
-		{
-			for( int i = 0; i < 1000; i++ )
-			{
-				floatPool.add(new float[1]);
-			}
-		}
-		
-		return floatPool.remove(0);
+		return new float[1];
 	}
 	
 	static void returnFloat(float[] f)
 	{
-		floatPool.add(f);
+		f= null;
 	}
 	
 	static BasicEMap<String, float[]> getEmap()
@@ -251,6 +243,18 @@ public class StatusLogger {
 			System.err.print(nf.format(diff) + "\t");
 		}
 		System.err.println();
+	}
+	
+	public float getDeltaWithPrevious(String var)
+	{
+		BasicEMap<String, float[]> previous = getPreviousPhase();
+		BasicEMap<String, float[]> current = getCurrentSuite();
+		
+		if( previous.containsKey(var) && current.containsKey(var) )
+		{
+			return current.get(var)[0] - previous.get(var)[0];
+		}
+		return 0;
 	}
 	
 	public void printDeltaWithPrevious()

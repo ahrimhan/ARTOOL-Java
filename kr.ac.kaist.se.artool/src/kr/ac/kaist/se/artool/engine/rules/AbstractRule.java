@@ -59,14 +59,14 @@ public abstract class AbstractRule {
 	{
 		long mem_usage;
 		long curTime = System.currentTimeMillis();
-
+		double refactoring_cost = 0;
 		refactoringCommand = getCommand();
 
 		float ret = 0;
 		if( refactoringCommand  != null )
 		{
 			try {
-				refactoringCommand.doCommand();
+				refactoring_cost = refactoringCommand.doCommand();
 			} catch (RefactoringException e) {
 				try {
 					refactoringCommand.undoCommand();
@@ -81,7 +81,7 @@ public abstract class AbstractRule {
 			System.err.println("doCommand!:" + mem_usage);
 			
 			curTime = System.currentTimeMillis();
-			ret =  FitnessFunction.getInstance().calculate(aom);
+			ret =  FitnessFunction.getInstance().calculate(aom, refactoring_cost);
 			System.err.println("FitnessFunction:" + Long.toString(System.currentTimeMillis() - curTime));
 			mem_usage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 			System.err.println("FitnessFunction!:" + mem_usage);
@@ -106,22 +106,23 @@ public abstract class AbstractRule {
 		setFitness(ret);
 	}
 	
-	public boolean perform()
+	public double perform()
 	{
+		double ret = 0;
 		try {
 			if(refactoringCommand == null)
 			{
-				return false;
+				return ret;
 			}
 			else
 			{
-				refactoringCommand.doCommand();
+				ret = refactoringCommand.doCommand();
 			}
 			
 		} catch (RefactoringException e) {
-			return false;
+			return ret;
 		}
-		return true;
+		return ret;
 	}
 
 	public void setAom(AbstractObjectModel aom) {

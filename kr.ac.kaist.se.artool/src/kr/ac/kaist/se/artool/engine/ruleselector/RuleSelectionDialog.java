@@ -149,7 +149,7 @@ public class RuleSelectionDialog extends Dialog {
 		return super.isResizable();
 	}
 
-	public static final String[] statusAttributes = { "ciaForClass", "ciaForMethod", "fitness2", "fitness3", "fitness_static", "StaticBoth", "DynamicBoth", "MPCDBoth", "MPCSBoth", "MSC", "LCOM2", "LCOM3", "StaticEP", "DynamicEP" };
+	public static final String[] statusAttributes = { "norm_ciaForClass", "norm_ciaForMethod", "norm_fitness2", "norm_fitness3", "ciaForClass", "ciaForMethod", "fitness2", "fitness3", "StaticEP", "DynamicEP" };
 
 	
 	private void createColumns(final TableViewer viewer) {
