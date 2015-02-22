@@ -217,14 +217,13 @@ public class StaticMethodCallItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
 		String label = ((StaticMethodCall)object).getFileName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_StaticMethodCall_type") :
-			getString("_UI_StaticMethodCall_type") + " " + label;
+			getString("_UI_StaticMethodCall_type") + " " + label + "(" + ((StaticMethodCall)object).getLineNumber() + ")";
 	}
 
 	/**
