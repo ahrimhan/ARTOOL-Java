@@ -10,8 +10,6 @@ import java.util.Collection;
 
 import kr.ac.kaist.se.aom.AomPackage;
 import kr.ac.kaist.se.aom.MeasurableElement;
-import kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess;
-import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelPackage;
 import kr.ac.kaist.se.aom.impl.StringToObjectImpl;
 import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage;
@@ -19,21 +17,16 @@ import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMEntity;
 import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMNamedElement;
-import kr.ac.kaist.se.aom.structure.AOMScope;
 import kr.ac.kaist.se.aom.structure.StructurePackage;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.EcoreUtil;

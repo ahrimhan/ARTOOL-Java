@@ -3,7 +3,6 @@ package kr.ac.kaist.se.artool.engine;
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.artool.engine.metrics.BasicMetricSuite;
-import kr.ac.kaist.se.artool.engine.metrics.entityplacement.EntityPlacement;
 
 public class FitnessFunction {
 	private BasicMetricSuite bms;
@@ -33,6 +32,7 @@ public class FitnessFunction {
 		return BasicMetricSuite.getFloat(obj);
 	}
 	
+	@SuppressWarnings("unused")
 	public float calculate(AbstractObjectModel aom, double refactoring_cost)
 			//, PrintStream ps)
 	{
@@ -660,7 +660,7 @@ public class FitnessFunction {
 					((( MSC_avg )/( MSC_MAX )))
 					//(0.25 * (( LCOM2_avg )/( LCOM2_MAX ))) +
 					//(0.25 * (( LCOM3_avg )/( LCOM3_MAX )))
-					//LCOM Àº lack of cohesion in method¶ó¼­ ºÐ¸ð·Î °¡¾ßÇÑ´Ù!
+					//LCOM ï¿½ï¿½ lack of cohesion in methodï¿½ï¿½ ï¿½Ð¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½!
 					
 				)  //test comment
 				/
@@ -748,8 +748,8 @@ public class FitnessFunction {
 //		StatusLogger.getInstance().putVar("NMA", NMA_avg);
 //		StatusLogger.getInstance().putVar("WMC", WMC_avg);
 		
-		//print ¼ø¼­ Á¶Á¤Àº ¿©±â¼­.
-		//System.out.println (console Ãâ·Â)
+		//print ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â¼­.
+		//System.out.println (console ï¿½ï¿½ï¿½)
 //		StatusLogger.getInstance().putVar("fitness", fitness);
 		StatusLogger.getInstance().putVar("fitness2", fitness2);
 		StatusLogger.getInstance().putVar("fitness3", fitness3);
@@ -805,7 +805,7 @@ public class FitnessFunction {
 
 		
 		
-		// file write - printCurrentSuite() ¸¸ ÇÔ.
+		// file write - printCurrentSuite() ï¿½ï¿½ ï¿½ï¿½.
 		StatusLogger.getInstance().printCurrentSuite();
 		//
 		System.err.print("Delta Prev\t");

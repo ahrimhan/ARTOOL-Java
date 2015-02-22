@@ -10,7 +10,6 @@ import kr.ac.kaist.se.aom.staticmodel.StaticDependency;
 import kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage;
 
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 /**

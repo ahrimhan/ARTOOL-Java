@@ -7,22 +7,19 @@
 package kr.ac.kaist.se.aom.dynamicmodel.impl;
 
 import java.util.Collection;
+
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelPackage;
-
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
-import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.aom.structure.AOMScope;
-
 import kr.ac.kaist.se.aom.structure.StructurePackage;
-import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;

@@ -7,27 +7,19 @@
 package kr.ac.kaist.se.aom.dynamicmodel.impl;
 
 import kr.ac.kaist.se.aom.AomPackage;
-
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicDependency;
-import kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelFactory;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelPackage;
-
 import kr.ac.kaist.se.aom.impl.AomPackageImpl;
-
 import kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage;
-
 import kr.ac.kaist.se.aom.staticmodel.impl.StaticmodelPackageImpl;
-
 import kr.ac.kaist.se.aom.structure.StructurePackage;
-
 import kr.ac.kaist.se.aom.structure.impl.StructurePackageImpl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 

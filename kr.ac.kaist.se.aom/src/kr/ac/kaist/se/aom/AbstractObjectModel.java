@@ -6,17 +6,10 @@
  */
 package kr.ac.kaist.se.aom;
 
-import kr.ac.kaist.se.aom.dynamicmodel.DynamicDependency;
-
-import kr.ac.kaist.se.aom.staticmodel.StaticDependency;
-
 import kr.ac.kaist.se.aom.structure.AOMClass;
-
 import kr.ac.kaist.se.aom.structure.AOMExternalType;
-import org.eclipse.emf.common.util.EList;
 
-import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->

@@ -8,15 +8,11 @@ package kr.ac.kaist.se.aom.dynamicmodel.util;
 
 import java.util.Map;
 
-import kr.ac.kaist.se.aom.staticmodel.util.StaticmodelResourceImpl;
-
 import org.eclipse.emf.common.util.URI;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
-
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.XMLResource;

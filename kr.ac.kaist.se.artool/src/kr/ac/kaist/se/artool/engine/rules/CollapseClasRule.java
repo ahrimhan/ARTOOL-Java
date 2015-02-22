@@ -1,6 +1,5 @@
 package kr.ac.kaist.se.artool.engine.rules;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -10,7 +9,7 @@ import kr.ac.kaist.se.artool.engine.ARToolMain;
 import kr.ac.kaist.se.artool.engine.refactoring.CollapseClassHierarchyCommand;
 import kr.ac.kaist.se.artool.engine.refactoring.RefactoringCommand;
 
-import org.apache.commons.collections.keyvalue.MultiKey;
+import org.apache.commons.collections4.keyvalue.MultiKey;
 
 public class CollapseClasRule extends AbstractRule {
 

@@ -6,15 +6,22 @@
  */
 package kr.ac.kaist.se.aom.structure.impl;
 
-import kr.ac.kaist.se.aom.structure.*;
+import kr.ac.kaist.se.aom.structure.AOMClass;
+import kr.ac.kaist.se.aom.structure.AOMExternalType;
+import kr.ac.kaist.se.aom.structure.AOMField;
+import kr.ac.kaist.se.aom.structure.AOMLocalVariable;
+import kr.ac.kaist.se.aom.structure.AOMMethod;
+import kr.ac.kaist.se.aom.structure.AOMModifier;
+import kr.ac.kaist.se.aom.structure.AOMParameter;
+import kr.ac.kaist.se.aom.structure.AOMScope;
+import kr.ac.kaist.se.aom.structure.StructureFactory;
+import kr.ac.kaist.se.aom.structure.StructurePackage;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 /**

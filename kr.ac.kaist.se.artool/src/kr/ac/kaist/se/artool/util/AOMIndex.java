@@ -3,8 +3,6 @@ package kr.ac.kaist.se.artool.util;
 import java.util.HashMap;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
-import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
-import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;

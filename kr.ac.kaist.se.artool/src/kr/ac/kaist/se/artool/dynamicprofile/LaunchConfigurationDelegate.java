@@ -25,6 +25,7 @@ public class LaunchConfigurationDelegate extends JavaLaunchDelegate
 	
 	private String logdir;
 
+	@SuppressWarnings("restriction")
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode,
 			ILaunch launch, IProgressMonitor monitor) throws CoreException {

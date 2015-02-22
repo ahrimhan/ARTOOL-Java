@@ -7,13 +7,13 @@
 package kr.ac.kaist.se.aom.structure.impl;
 
 import java.util.Collection;
+import java.util.HashMap;
+
 import kr.ac.kaist.se.aom.AomPackage;
 import kr.ac.kaist.se.aom.MeasurableElement;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelPackage;
 import kr.ac.kaist.se.aom.impl.StringToObjectImpl;
-import java.util.HashMap;
-
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage;
 import kr.ac.kaist.se.aom.structure.AOMClass;

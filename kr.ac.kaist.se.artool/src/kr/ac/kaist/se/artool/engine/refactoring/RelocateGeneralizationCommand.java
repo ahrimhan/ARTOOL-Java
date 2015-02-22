@@ -1,10 +1,10 @@
 package kr.ac.kaist.se.artool.engine.refactoring;
 
-import org.eclipse.emf.common.util.BasicEList;
-import org.eclipse.emf.common.util.EList;
-
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
+
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
 
 public class RelocateGeneralizationCommand implements RefactoringCommand {
 	

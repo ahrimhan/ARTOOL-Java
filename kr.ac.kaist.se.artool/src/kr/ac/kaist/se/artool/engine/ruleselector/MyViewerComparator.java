@@ -1,11 +1,7 @@
 package kr.ac.kaist.se.artool.engine.ruleselector;
 
-import java.text.NumberFormat;
-
-import kr.ac.kaist.se.artool.engine.StatusLogger;
 import kr.ac.kaist.se.artool.engine.rules.AbstractRule;
 
-import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;

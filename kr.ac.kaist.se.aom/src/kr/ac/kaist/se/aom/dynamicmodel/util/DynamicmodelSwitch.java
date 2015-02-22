@@ -6,11 +6,10 @@
  */
 package kr.ac.kaist.se.aom.dynamicmodel.util;
 
-import java.util.List;
+import kr.ac.kaist.se.aom.dynamicmodel.DynamicDependency;
+import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
+import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelPackage;
 
-import kr.ac.kaist.se.aom.dynamicmodel.*;
-
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;

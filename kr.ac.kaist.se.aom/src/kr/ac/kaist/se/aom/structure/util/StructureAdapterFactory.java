@@ -7,13 +7,24 @@
 package kr.ac.kaist.se.aom.structure.util;
 
 import kr.ac.kaist.se.aom.MeasurableElement;
-import kr.ac.kaist.se.aom.structure.*;
+import kr.ac.kaist.se.aom.structure.AOMClass;
+import kr.ac.kaist.se.aom.structure.AOMElement;
+import kr.ac.kaist.se.aom.structure.AOMEntity;
+import kr.ac.kaist.se.aom.structure.AOMExternalType;
+import kr.ac.kaist.se.aom.structure.AOMField;
+import kr.ac.kaist.se.aom.structure.AOMLocalVariable;
+import kr.ac.kaist.se.aom.structure.AOMMethod;
+import kr.ac.kaist.se.aom.structure.AOMNamedElement;
+import kr.ac.kaist.se.aom.structure.AOMParameter;
+import kr.ac.kaist.se.aom.structure.AOMScope;
+import kr.ac.kaist.se.aom.structure.AOMType;
+import kr.ac.kaist.se.aom.structure.AOMTypedElement;
+import kr.ac.kaist.se.aom.structure.AOMVariableDef;
+import kr.ac.kaist.se.aom.structure.StructurePackage;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**

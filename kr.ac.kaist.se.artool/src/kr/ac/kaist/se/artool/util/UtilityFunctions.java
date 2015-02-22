@@ -2,14 +2,12 @@ package kr.ac.kaist.se.artool.util;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.collections.keyvalue.MultiKey;
-import org.apache.commons.collections.map.MultiKeyMap;
-import org.eclipse.emf.common.util.EMap;
+import org.apache.commons.collections4.keyvalue.MultiKey;
+import org.apache.commons.collections4.map.MultiKeyMap;
 
 public class UtilityFunctions {
 

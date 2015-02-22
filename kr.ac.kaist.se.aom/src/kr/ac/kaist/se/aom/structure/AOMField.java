@@ -7,8 +7,8 @@
 package kr.ac.kaist.se.aom.structure;
 
 import kr.ac.kaist.se.aom.MeasurableElement;
-import kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
+
 import org.eclipse.emf.common.util.EList;
 
 /**

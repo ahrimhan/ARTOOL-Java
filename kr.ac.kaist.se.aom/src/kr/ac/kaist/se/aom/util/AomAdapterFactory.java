@@ -7,14 +7,14 @@
 package kr.ac.kaist.se.aom.util;
 
 import java.util.Map;
-import kr.ac.kaist.se.aom.*;
+
+import kr.ac.kaist.se.aom.AbstractObjectModel;
+import kr.ac.kaist.se.aom.AomPackage;
+import kr.ac.kaist.se.aom.MeasurableElement;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
-import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
 
 /**

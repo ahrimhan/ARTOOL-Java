@@ -7,9 +7,6 @@
 package kr.ac.kaist.se.aom;
 
 import org.eclipse.emf.common.util.EMap;
-import kr.ac.kaist.se.aom.util.MeasuredDataSet;
-import java.util.HashMap;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**

@@ -9,7 +9,7 @@ import kr.ac.kaist.se.artool.engine.ARToolMain;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
 import kr.ac.kaist.se.artool.engine.refactoring.RefactoringCommand;
 
-import org.apache.commons.collections.keyvalue.MultiKey;
+import org.apache.commons.collections4.keyvalue.MultiKey;
 
 public class MoveMethod2Rule extends AbstractRule {
 	private Map.Entry<MultiKey<AOMMethod>, int[]>[] n_IBDPM;

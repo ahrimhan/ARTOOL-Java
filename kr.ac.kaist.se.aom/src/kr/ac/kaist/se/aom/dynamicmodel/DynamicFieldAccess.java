@@ -7,7 +7,6 @@
 package kr.ac.kaist.se.aom.dynamicmodel;
 
 import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
-
 import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMScope;
 

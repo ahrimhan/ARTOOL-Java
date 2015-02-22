@@ -1,14 +1,6 @@
 package kr.ac.kaist.se.artool.engine.metrics;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-
-import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
-import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.util.UtilityFunctions;

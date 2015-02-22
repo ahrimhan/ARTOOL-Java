@@ -6,11 +6,11 @@
  */
 package kr.ac.kaist.se.aom.staticmodel.util;
 
-import java.util.List;
+import kr.ac.kaist.se.aom.staticmodel.StaticDependency;
+import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
+import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
+import kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage;
 
-import kr.ac.kaist.se.aom.staticmodel.*;
-
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;

@@ -6,8 +6,9 @@
  */
 package kr.ac.kaist.se.aom.structure;
 
-import kr.ac.kaist.se.aom.MeasurableElement;
 import java.util.List;
+
+import kr.ac.kaist.se.aom.MeasurableElement;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.core.dom.ITypeBinding;

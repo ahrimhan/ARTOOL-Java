@@ -6,14 +6,14 @@
  */
 package kr.ac.kaist.se.aom.dynamicmodel.impl;
 
-import kr.ac.kaist.se.aom.dynamicmodel.*;
+import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
+import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelFactory;
+import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelPackage;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 /**

@@ -7,8 +7,8 @@ import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.util.UtilityFunctions;
 
-import org.apache.commons.collections.keyvalue.MultiKey;
-import org.apache.commons.collections.map.MultiKeyMap;
+import org.apache.commons.collections4.keyvalue.MultiKey;
+import org.apache.commons.collections4.map.MultiKeyMap;
 
 public  abstract class N_IBDPC {
 	//interaction between different pair of classes

@@ -11,22 +11,16 @@ import java.util.Collection;
 import java.util.List;
 
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelFactory;
-
 import kr.ac.kaist.se.aom.provider.AomEditPlugin;
-
 import kr.ac.kaist.se.aom.staticmodel.StaticmodelFactory;
-
 import kr.ac.kaist.se.aom.structure.AOMScope;
 import kr.ac.kaist.se.aom.structure.StructureFactory;
 import kr.ac.kaist.se.aom.structure.StructurePackage;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;

@@ -37,23 +37,7 @@
                label="Run ARTool "
                menubarPath="additions">
          </action>
-         <action
-               class="kr.ac.kaist.se.artool.dynamicprofile.DynamicProfile2AOMAction"
-               id="kr.ac.kaist.se.artool.dynamicprofile.profileaction"
-               label="Transform Dynamic Profiles to AOM"
-               menubarPath="additions">
-         </action>
       </objectContribution>
-   </extension>
-   <extension
-         point="org.eclipse.debug.core.launchDelegates">
-      <launchDelegate
-            delegate="kr.ac.kaist.se.artool.dynamicprofile.LaunchConfigurationDelegate"
-            id="kr.ac.kaist.se.artool.launchDelegate1"
-            modes="run, profile"
-            name="ARTOOL Java Profiling"
-            type="org.eclipse.jdt.launching.localJavaApplication">
-      </launchDelegate>
    </extension>
    <extension
          point="org.eclipse.ui.views">

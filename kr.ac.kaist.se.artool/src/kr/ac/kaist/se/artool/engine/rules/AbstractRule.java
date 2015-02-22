@@ -1,15 +1,10 @@
 package kr.ac.kaist.se.artool.engine.rules;
 
-import java.util.HashSet;
-import java.util.Map;
-
 import kr.ac.kaist.se.aom.AbstractObjectModel;
-import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.ARToolMain;
 import kr.ac.kaist.se.artool.engine.FitnessFunction;
 import kr.ac.kaist.se.artool.engine.refactoring.RefactoringCommand;
 import kr.ac.kaist.se.artool.engine.refactoring.RefactoringException;
-import kr.ac.kaist.se.artool.engine.refactoring.RefactoringTransaction;
 
 public abstract class AbstractRule {
 	protected AbstractObjectModel aom;

@@ -7,20 +7,18 @@
 package kr.ac.kaist.se.aom.structure.impl;
 
 import java.util.Collection;
-import java.util.HashMap;
-import kr.ac.kaist.se.aom.AomPackage;
-import kr.ac.kaist.se.aom.MeasurableElement;
-import kr.ac.kaist.se.aom.impl.StringToObjectImpl;
 import java.util.List;
 import java.util.Vector;
 
+import kr.ac.kaist.se.aom.AomPackage;
+import kr.ac.kaist.se.aom.MeasurableElement;
+import kr.ac.kaist.se.aom.impl.StringToObjectImpl;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.aom.structure.AOMModifier;
 import kr.ac.kaist.se.aom.structure.StructurePackage;
 
-import kr.ac.kaist.se.aom.util.MeasuredDataSet;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;

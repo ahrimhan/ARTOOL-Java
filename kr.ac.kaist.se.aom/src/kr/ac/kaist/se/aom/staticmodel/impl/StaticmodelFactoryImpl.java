@@ -6,14 +6,15 @@
  */
 package kr.ac.kaist.se.aom.staticmodel.impl;
 
-import kr.ac.kaist.se.aom.staticmodel.*;
+import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
+import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
+import kr.ac.kaist.se.aom.staticmodel.StaticmodelFactory;
+import kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 /**

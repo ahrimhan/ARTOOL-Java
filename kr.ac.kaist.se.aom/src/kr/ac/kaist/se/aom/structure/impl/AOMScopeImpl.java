@@ -7,17 +7,15 @@
 package kr.ac.kaist.se.aom.structure.impl;
 
 import java.util.Collection;
-import kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess;
-import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
-import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelPackage;
-import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
+import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
+import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelPackage;
+import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage;
-import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMLocalVariable;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.aom.structure.AOMScope;
@@ -31,7 +29,6 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
-import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.jdt.core.dom.IMethodBinding;

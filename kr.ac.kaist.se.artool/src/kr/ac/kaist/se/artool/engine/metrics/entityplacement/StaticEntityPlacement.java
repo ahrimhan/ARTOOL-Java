@@ -1,8 +1,5 @@
 package kr.ac.kaist.se.artool.engine.metrics.entityplacement;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMEntity;

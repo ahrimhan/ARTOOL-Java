@@ -6,13 +6,14 @@
  */
 package kr.ac.kaist.se.aom.staticmodel.util;
 
-import kr.ac.kaist.se.aom.staticmodel.*;
+import kr.ac.kaist.se.aom.staticmodel.StaticDependency;
+import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
+import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
+import kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**

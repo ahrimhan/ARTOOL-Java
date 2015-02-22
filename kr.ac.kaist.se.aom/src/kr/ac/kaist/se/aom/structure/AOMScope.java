@@ -6,18 +6,15 @@
  */
 package kr.ac.kaist.se.aom.structure;
 
-import kr.ac.kaist.se.aom.dynamicmodel.DynamicFieldAccess;
-import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
-import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import java.util.HashMap;
 import java.util.List;
 
+import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
+import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jdt.core.dom.IMethodBinding;
-import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 
 /**

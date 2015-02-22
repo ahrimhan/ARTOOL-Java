@@ -7,9 +7,9 @@
 package kr.ac.kaist.se.aom.dynamicmodel;
 
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
-import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.aom.structure.AOMScope;
+
 import org.eclipse.emf.common.util.EList;
 
 /**

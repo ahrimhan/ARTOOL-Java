@@ -15,9 +15,7 @@ import kr.ac.kaist.se.aom.staticmodel.provider.StaticmodelItemProviderAdapterFac
 import kr.ac.kaist.se.aom.structure.provider.StructureItemProviderAdapterFactory;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.WrappedException;

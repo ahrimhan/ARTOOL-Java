@@ -7,18 +7,15 @@
 package kr.ac.kaist.se.aom.impl;
 
 import java.util.Map;
-import java.util.HashMap;
-import kr.ac.kaist.se.aom.*;
 
-import org.eclipse.emf.common.util.EMap;
-import kr.ac.kaist.se.aom.util.MeasuredDataSet;
+import kr.ac.kaist.se.aom.AbstractObjectModel;
+import kr.ac.kaist.se.aom.AomFactory;
+import kr.ac.kaist.se.aom.AomPackage;
+
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 /**

@@ -6,13 +6,12 @@
  */
 package kr.ac.kaist.se.aom.util;
 
-import java.util.List;
-
 import java.util.Map;
-import kr.ac.kaist.se.aom.*;
 
-import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.ecore.EClass;
+import kr.ac.kaist.se.aom.AbstractObjectModel;
+import kr.ac.kaist.se.aom.AomPackage;
+import kr.ac.kaist.se.aom.MeasurableElement;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;

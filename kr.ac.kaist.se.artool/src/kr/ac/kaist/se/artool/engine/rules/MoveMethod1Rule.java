@@ -4,13 +4,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
-import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.ARToolMain;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
 import kr.ac.kaist.se.artool.engine.refactoring.RefactoringCommand;
 
-import org.apache.commons.collections.keyvalue.MultiKey;
+import org.apache.commons.collections4.keyvalue.MultiKey;
 
 public class MoveMethod1Rule extends AbstractRule {
 	
@@ -50,7 +49,7 @@ public class MoveMethod1Rule extends AbstractRule {
 			return null;
 		}
 		
-		//aomMethod[1]À» aomMethods[0]¸¦ Á¤ÀÇÇÏ°í ÀÖ´Â class·Î ¿Å±ä´Ù.
+		//aomMethod[1]ï¿½ï¿½ aomMethods[0]ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ö´ï¿½ classï¿½ï¿½ ï¿½Å±ï¿½ï¿½.
 		MoveMethodCommand mmc = new MoveMethodCommand(aomMethods[1], aomMethods[0].getOwner());
 		return mmc;
 	}

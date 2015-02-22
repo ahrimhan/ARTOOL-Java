@@ -6,13 +6,13 @@
  */
 package kr.ac.kaist.se.aom.dynamicmodel.util;
 
-import kr.ac.kaist.se.aom.dynamicmodel.*;
+import kr.ac.kaist.se.aom.dynamicmodel.DynamicDependency;
+import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
+import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelPackage;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**

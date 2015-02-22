@@ -4,7 +4,6 @@ import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
-import kr.ac.kaist.se.artool.engine.metrics.BasicMetricSuite;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;

@@ -10,7 +10,6 @@ import kr.ac.kaist.se.aom.dynamicmodel.DynamicDependency;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelPackage;
 
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 /**
