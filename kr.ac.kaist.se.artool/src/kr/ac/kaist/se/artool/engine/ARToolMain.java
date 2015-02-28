@@ -42,7 +42,7 @@ public class ARToolMain {
 	public static final int STATIC_MODE = 1;
 	public static final int DYNAMIC_STATIC_MODE = 2;
 	
-	private static int execution_mode = DYNAMIC_MODE;
+	private static int execution_mode = STATIC_MODE;
 	
 	public static void setExecutionMode(int mode)
 	{
@@ -231,7 +231,7 @@ public class ARToolMain {
 		//
 		ARToolMain.getInstance().getPrintStream1().println();
 	}
-	private static MessageDialogWithToggle dialog;	
+
 	public void run(AbstractObjectModel aom, final Shell shell) throws IOException
 	{	
 		numPerformingRefactoring = 0;
