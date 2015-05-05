@@ -86,11 +86,9 @@ public class DeltaMatrixEngine {
 			int col = m.indexColumns(index);
 			double v = m.get(index);
 			
-			//ret.putRow(row, DoubleMatrix.ones(1, classes.size()).mul(v));
-			
 			for( int i = 0 ; i < sts.classes.size(); i++ )
 			{
-				ret.put(row, i, v);
+				ret.put(row, i, ret.get(row, i) + v);
 			}
 			ret.put(row, col, 0);
 		}
