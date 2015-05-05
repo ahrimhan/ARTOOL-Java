@@ -4,10 +4,19 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
+import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
+import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
+import kr.ac.kaist.se.aom.structure.AOMClass;
+import kr.ac.kaist.se.aom.structure.AOMEntity;
+import kr.ac.kaist.se.aom.structure.AOMField;
+import kr.ac.kaist.se.aom.structure.AOMMethod;
 
 import org.eclipse.swt.widgets.Shell;
+import org.jblas.DoubleMatrix;
 
 public class ARSearchMain {
 	
@@ -37,9 +46,16 @@ public class ARSearchMain {
 
 		return instance;
 	}
+	 
 
+	
+
+	
 	public void run(AbstractObjectModel aom, final Shell shell) throws IOException
 	{	
-	
+		SystemEntitySet ses = new SystemEntitySet(aom);
+		DeltaMatrixEngine dme = new DeltaMatrixEngine(ses);
+		
+		DoubleMatrix dm = dme.getDeltaMatrix();
 	}
 }
