@@ -6,6 +6,7 @@
  */
 package kr.ac.kaist.se.aom.staticmodel.util;
 
+import kr.ac.kaist.se.aom.staticmodel.*;
 import kr.ac.kaist.se.aom.staticmodel.StaticDependency;
 import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ecore:EPackage xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="aom"
-    nsURI="http://se.kaist.ac.kr/aom" nsPrefix="aom">
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="aom" nsURI="http://se.kaist.ac.kr/aom" nsPrefix="aom">
   <eClassifiers xsi:type="ecore:EClass" name="AbstractObjectModel" eSuperTypes="#//MeasurableElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="classes" upperBound="-1"
         eType="#//structure/AOMClass" containment="true"/>
@@ -31,7 +29,7 @@
           eType="#//structure/AOMTypedElement" eOpposite="#//structure/AOMTypedElement/type"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="fqdn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="AOMClass" eSuperTypes="#//structure/AOMType #//MeasurableElement">
+    <eClassifiers xsi:type="ecore:EClass" name="AOMClass" eSuperTypes="#//structure/AOMType #//MeasurableElement #//structure/IndexedElement">
       <eStructuralFeatures xsi:type="ecore:EReference" name="fields" upperBound="-1"
           eType="#//structure/AOMField" containment="true" eOpposite="#//structure/AOMField/owner"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="methods" upperBound="-1"
@@ -112,9 +110,13 @@
       <eLiterals name="protected" value="2"/>
       <eLiterals name="package" value="3"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="AOMEntity" abstract="true">
+    <eClassifiers xsi:type="ecore:EClass" name="AOMEntity" abstract="true" eSuperTypes="#//structure/IndexedElement">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="occurrence" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
           transient="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IndexedElement" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          volatile="true"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="staticmodel" nsURI="http://se.kaist.ac.kr/aom/staticmodel" nsPrefix="staticmodel">

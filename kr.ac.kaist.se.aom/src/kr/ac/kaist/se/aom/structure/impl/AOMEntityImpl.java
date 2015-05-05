@@ -27,7 +27,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public abstract class AOMEntityImpl extends EObjectImpl implements AOMEntity {
+public abstract class AOMEntityImpl extends IndexedElementImpl implements AOMEntity {
 	/**
 	 * The default value of the '{@link #getOccurrence() <em>Occurrence</em>}' attribute.
 	 * <!-- begin-user-doc -->

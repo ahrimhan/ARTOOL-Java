@@ -6,6 +6,7 @@
  */
 package kr.ac.kaist.se.aom.structure.impl;
 
+import kr.ac.kaist.se.aom.structure.*;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMExternalType;
 import kr.ac.kaist.se.aom.structure.AOMField;
@@ -39,7 +40,7 @@ public class StructureFactoryImpl extends EFactoryImpl implements StructureFacto
 	 */
 	public static StructureFactory init() {
 		try {
-			StructureFactory theStructureFactory = (StructureFactory)EPackage.Registry.INSTANCE.getEFactory("http://se.kaist.ac.kr/aom/structure"); 
+			StructureFactory theStructureFactory = (StructureFactory)EPackage.Registry.INSTANCE.getEFactory(StructurePackage.eNS_URI);
 			if (theStructureFactory != null) {
 				return theStructureFactory;
 			}

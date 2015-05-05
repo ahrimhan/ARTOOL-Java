@@ -7,6 +7,7 @@
 package kr.ac.kaist.se.aom.structure.util;
 
 import kr.ac.kaist.se.aom.MeasurableElement;
+import kr.ac.kaist.se.aom.structure.*;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMElement;
 import kr.ac.kaist.se.aom.structure.AOMEntity;
@@ -116,6 +117,7 @@ public class StructureSwitch<T> extends Switch<T> {
 				T result = caseAOMClass(aomClass);
 				if (result == null) result = caseAOMType(aomClass);
 				if (result == null) result = caseMeasurableElement(aomClass);
+				if (result == null) result = caseIndexedElement(aomClass);
 				if (result == null) result = caseAOMNamedElement(aomClass);
 				if (result == null) result = caseAOMElement(aomClass);
 				if (result == null) result = defaultCase(theEObject);
@@ -129,6 +131,7 @@ public class StructureSwitch<T> extends Switch<T> {
 				if (result == null) result = caseAOMEntity(aomField);
 				if (result == null) result = caseAOMTypedElement(aomField);
 				if (result == null) result = caseAOMNamedElement(aomField);
+				if (result == null) result = caseIndexedElement(aomField);
 				if (result == null) result = caseAOMElement(aomField);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -141,6 +144,7 @@ public class StructureSwitch<T> extends Switch<T> {
 				if (result == null) result = caseMeasurableElement(aomMethod);
 				if (result == null) result = caseAOMEntity(aomMethod);
 				if (result == null) result = caseAOMElement(aomMethod);
+				if (result == null) result = caseIndexedElement(aomMethod);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -191,6 +195,13 @@ public class StructureSwitch<T> extends Switch<T> {
 			case StructurePackage.AOM_ENTITY: {
 				AOMEntity aomEntity = (AOMEntity)theEObject;
 				T result = caseAOMEntity(aomEntity);
+				if (result == null) result = caseIndexedElement(aomEntity);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case StructurePackage.INDEXED_ELEMENT: {
+				IndexedElement indexedElement = (IndexedElement)theEObject;
+				T result = caseIndexedElement(indexedElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -390,6 +401,21 @@ public class StructureSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAOMEntity(AOMEntity object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Indexed Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Indexed Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIndexedElement(IndexedElement object) {
 		return null;
 	}
 

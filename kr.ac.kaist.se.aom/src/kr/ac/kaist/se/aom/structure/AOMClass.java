@@ -40,7 +40,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
  * @model
  * @generated
  */
-public interface AOMClass extends AOMType, MeasurableElement {
+public interface AOMClass extends AOMType, MeasurableElement, IndexedElement {
 	/**
 	 * Returns the value of the '<em><b>Fields</b></em>' containment reference list.
 	 * The list contents are of type {@link kr.ac.kaist.se.aom.structure.AOMField}.

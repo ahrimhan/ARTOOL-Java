@@ -130,7 +130,7 @@ public class AOMScopeImpl extends EObjectImpl implements AOMScope {
 	 */
 	public AOMMethod getOwner() {
 		if (eContainerFeatureID() != StructurePackage.AOM_SCOPE__OWNER) return null;
-		return (AOMMethod)eContainer();
+		return (AOMMethod)eInternalContainer();
 	}
 
 	/**

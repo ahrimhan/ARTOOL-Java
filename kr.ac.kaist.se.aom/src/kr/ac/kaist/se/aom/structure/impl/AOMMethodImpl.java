@@ -23,6 +23,7 @@ import kr.ac.kaist.se.aom.structure.AOMParameter;
 import kr.ac.kaist.se.aom.structure.AOMScope;
 import kr.ac.kaist.se.aom.structure.AOMType;
 import kr.ac.kaist.se.aom.structure.AOMTypedElement;
+import kr.ac.kaist.se.aom.structure.IndexedElement;
 import kr.ac.kaist.se.aom.structure.StructurePackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -50,6 +51,7 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getType <em>Type</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getMeasuredDataSet <em>Measured Data Set</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getIndex <em>Index</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getOccurrence <em>Occurrence</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getParameters <em>Parameters</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getOwner <em>Owner</em>}</li>
@@ -91,6 +93,16 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 	 * @ordered
 	 */
 	protected EMap<String, Object> measuredDataSet;
+
+	/**
+	 * The default value of the '{@link #getIndex() <em>Index</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getIndex()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int INDEX_EDEFAULT = 0;
 
 	/**
 	 * The default value of the '{@link #getOccurrence() <em>Occurrence</em>}' attribute.
@@ -439,6 +451,28 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getIndex() {
+		// TODO: implement this method to return the 'Index' attribute
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setIndex(int newIndex) {
+		// TODO: implement this method to set the 'Index' attribute
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public AOMScope getOwnedScope() {
 		return ownedScope;
 	}
@@ -652,7 +686,7 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 	 */
 	public AOMClass getOwner() {
 		if (eContainerFeatureID() != StructurePackage.AOM_METHOD__OWNER) return null;
-		return (AOMClass)eContainer();
+		return (AOMClass)eInternalContainer();
 	}
 
 	/**
@@ -886,6 +920,8 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 			case StructurePackage.AOM_METHOD__MEASURED_DATA_SET:
 				if (coreType) return getMeasuredDataSet();
 				else return getMeasuredDataSet().map();
+			case StructurePackage.AOM_METHOD__INDEX:
+				return getIndex();
 			case StructurePackage.AOM_METHOD__OCCURRENCE:
 				return getOccurrence();
 			case StructurePackage.AOM_METHOD__PARAMETERS:
@@ -937,6 +973,9 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 				return;
 			case StructurePackage.AOM_METHOD__MEASURED_DATA_SET:
 				((EStructuralFeature.Setting)getMeasuredDataSet()).set(newValue);
+				return;
+			case StructurePackage.AOM_METHOD__INDEX:
+				setIndex((Integer)newValue);
 				return;
 			case StructurePackage.AOM_METHOD__OCCURRENCE:
 				setOccurrence((Integer)newValue);
@@ -1008,6 +1047,9 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 			case StructurePackage.AOM_METHOD__MEASURED_DATA_SET:
 				getMeasuredDataSet().clear();
 				return;
+			case StructurePackage.AOM_METHOD__INDEX:
+				setIndex(INDEX_EDEFAULT);
+				return;
 			case StructurePackage.AOM_METHOD__OCCURRENCE:
 				setOccurrence(OCCURRENCE_EDEFAULT);
 				return;
@@ -1072,6 +1114,8 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 				return type != null;
 			case StructurePackage.AOM_METHOD__MEASURED_DATA_SET:
 				return measuredDataSet != null && !measuredDataSet.isEmpty();
+			case StructurePackage.AOM_METHOD__INDEX:
+				return getIndex() != INDEX_EDEFAULT;
 			case StructurePackage.AOM_METHOD__OCCURRENCE:
 				return occurrence != OCCURRENCE_EDEFAULT;
 			case StructurePackage.AOM_METHOD__PARAMETERS:
@@ -1127,6 +1171,12 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 				default: return -1;
 			}
 		}
+		if (baseClass == IndexedElement.class) {
+			switch (derivedFeatureID) {
+				case StructurePackage.AOM_METHOD__INDEX: return StructurePackage.INDEXED_ELEMENT__INDEX;
+				default: return -1;
+			}
+		}
 		if (baseClass == AOMEntity.class) {
 			switch (derivedFeatureID) {
 				case StructurePackage.AOM_METHOD__OCCURRENCE: return StructurePackage.AOM_ENTITY__OCCURRENCE;
@@ -1152,6 +1202,12 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 		if (baseClass == MeasurableElement.class) {
 			switch (baseFeatureID) {
 				case AomPackage.MEASURABLE_ELEMENT__MEASURED_DATA_SET: return StructurePackage.AOM_METHOD__MEASURED_DATA_SET;
+				default: return -1;
+			}
+		}
+		if (baseClass == IndexedElement.class) {
+			switch (baseFeatureID) {
+				case StructurePackage.INDEXED_ELEMENT__INDEX: return StructurePackage.AOM_METHOD__INDEX;
 				default: return -1;
 			}
 		}

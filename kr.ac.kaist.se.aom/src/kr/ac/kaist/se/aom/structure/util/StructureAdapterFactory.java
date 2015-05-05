@@ -7,6 +7,7 @@
 package kr.ac.kaist.se.aom.structure.util;
 
 import kr.ac.kaist.se.aom.MeasurableElement;
+import kr.ac.kaist.se.aom.structure.*;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMElement;
 import kr.ac.kaist.se.aom.structure.AOMEntity;
@@ -134,6 +135,10 @@ public class StructureAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseAOMEntity(AOMEntity object) {
 				return createAOMEntityAdapter();
+			}
+			@Override
+			public Adapter caseIndexedElement(IndexedElement object) {
+				return createIndexedElementAdapter();
 			}
 			@Override
 			public Adapter caseMeasurableElement(MeasurableElement object) {
@@ -338,6 +343,20 @@ public class StructureAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAOMEntityAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link kr.ac.kaist.se.aom.structure.IndexedElement <em>Indexed Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kr.ac.kaist.se.aom.structure.IndexedElement
+	 * @generated
+	 */
+	public Adapter createIndexedElementAdapter() {
 		return null;
 	}
 

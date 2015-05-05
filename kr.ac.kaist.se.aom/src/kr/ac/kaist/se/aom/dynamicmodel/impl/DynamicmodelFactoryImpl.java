@@ -6,6 +6,7 @@
  */
 package kr.ac.kaist.se.aom.dynamicmodel.impl;
 
+import kr.ac.kaist.se.aom.dynamicmodel.*;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelFactory;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelPackage;
@@ -31,7 +32,7 @@ public class DynamicmodelFactoryImpl extends EFactoryImpl implements Dynamicmode
 	 */
 	public static DynamicmodelFactory init() {
 		try {
-			DynamicmodelFactory theDynamicmodelFactory = (DynamicmodelFactory)EPackage.Registry.INSTANCE.getEFactory("http://se.kaist.ac.kr/aom/dynamicmodel"); 
+			DynamicmodelFactory theDynamicmodelFactory = (DynamicmodelFactory)EPackage.Registry.INSTANCE.getEFactory(DynamicmodelPackage.eNS_URI);
 			if (theDynamicmodelFactory != null) {
 				return theDynamicmodelFactory;
 			}

@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model abstract="true"
  * @generated
  */
-public interface AOMEntity extends EObject {
+public interface AOMEntity extends IndexedElement {
 
 	/**
 	 * Returns the value of the '<em><b>Occurrence</b></em>' attribute.

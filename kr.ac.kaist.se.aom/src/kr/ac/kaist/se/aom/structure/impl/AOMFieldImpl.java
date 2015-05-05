@@ -17,6 +17,7 @@ import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMEntity;
 import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMNamedElement;
+import kr.ac.kaist.se.aom.structure.IndexedElement;
 import kr.ac.kaist.se.aom.structure.StructurePackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -41,6 +42,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getName <em>Name</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getMeasuredDataSet <em>Measured Data Set</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getIndex <em>Index</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getOccurrence <em>Occurrence</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getOwner <em>Owner</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getStaticReferer <em>Static Referer</em>}</li>
@@ -79,6 +81,16 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 	 * @ordered
 	 */
 	protected EMap<String, Object> measuredDataSet;
+
+	/**
+	 * The default value of the '{@link #getIndex() <em>Index</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getIndex()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int INDEX_EDEFAULT = 0;
 
 	/**
 	 * The default value of the '{@link #getOccurrence() <em>Occurrence</em>}' attribute.
@@ -188,9 +200,31 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getIndex() {
+		// TODO: implement this method to return the 'Index' attribute
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setIndex(int newIndex) {
+		// TODO: implement this method to set the 'Index' attribute
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public AOMClass getOwner() {
 		if (eContainerFeatureID() != StructurePackage.AOM_FIELD__OWNER) return null;
-		return (AOMClass)eContainer();
+		return (AOMClass)eInternalContainer();
 	}
 
 	/**
@@ -300,6 +334,8 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 			case StructurePackage.AOM_FIELD__MEASURED_DATA_SET:
 				if (coreType) return getMeasuredDataSet();
 				else return getMeasuredDataSet().map();
+			case StructurePackage.AOM_FIELD__INDEX:
+				return getIndex();
 			case StructurePackage.AOM_FIELD__OCCURRENCE:
 				return getOccurrence();
 			case StructurePackage.AOM_FIELD__OWNER:
@@ -324,6 +360,9 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 				return;
 			case StructurePackage.AOM_FIELD__MEASURED_DATA_SET:
 				((EStructuralFeature.Setting)getMeasuredDataSet()).set(newValue);
+				return;
+			case StructurePackage.AOM_FIELD__INDEX:
+				setIndex((Integer)newValue);
 				return;
 			case StructurePackage.AOM_FIELD__OCCURRENCE:
 				setOccurrence((Integer)newValue);
@@ -353,6 +392,9 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 			case StructurePackage.AOM_FIELD__MEASURED_DATA_SET:
 				getMeasuredDataSet().clear();
 				return;
+			case StructurePackage.AOM_FIELD__INDEX:
+				setIndex(INDEX_EDEFAULT);
+				return;
 			case StructurePackage.AOM_FIELD__OCCURRENCE:
 				setOccurrence(OCCURRENCE_EDEFAULT);
 				return;
@@ -378,6 +420,8 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case StructurePackage.AOM_FIELD__MEASURED_DATA_SET:
 				return measuredDataSet != null && !measuredDataSet.isEmpty();
+			case StructurePackage.AOM_FIELD__INDEX:
+				return getIndex() != INDEX_EDEFAULT;
 			case StructurePackage.AOM_FIELD__OCCURRENCE:
 				return occurrence != OCCURRENCE_EDEFAULT;
 			case StructurePackage.AOM_FIELD__OWNER:
@@ -407,6 +451,12 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 				default: return -1;
 			}
 		}
+		if (baseClass == IndexedElement.class) {
+			switch (derivedFeatureID) {
+				case StructurePackage.AOM_FIELD__INDEX: return StructurePackage.INDEXED_ELEMENT__INDEX;
+				default: return -1;
+			}
+		}
 		if (baseClass == AOMEntity.class) {
 			switch (derivedFeatureID) {
 				case StructurePackage.AOM_FIELD__OCCURRENCE: return StructurePackage.AOM_ENTITY__OCCURRENCE;
@@ -432,6 +482,12 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 		if (baseClass == MeasurableElement.class) {
 			switch (baseFeatureID) {
 				case AomPackage.MEASURABLE_ELEMENT__MEASURED_DATA_SET: return StructurePackage.AOM_FIELD__MEASURED_DATA_SET;
+				default: return -1;
+			}
+		}
+		if (baseClass == IndexedElement.class) {
+			switch (baseFeatureID) {
+				case StructurePackage.INDEXED_ELEMENT__INDEX: return StructurePackage.AOM_FIELD__INDEX;
 				default: return -1;
 			}
 		}

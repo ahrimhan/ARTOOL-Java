@@ -8,6 +8,7 @@ package kr.ac.kaist.se.aom.impl;
 
 import java.util.Map;
 
+import kr.ac.kaist.se.aom.*;
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.AomFactory;
 import kr.ac.kaist.se.aom.AomPackage;
@@ -33,7 +34,7 @@ public class AomFactoryImpl extends EFactoryImpl implements AomFactory {
 	 */
 	public static AomFactory init() {
 		try {
-			AomFactory theAomFactory = (AomFactory)EPackage.Registry.INSTANCE.getEFactory("http://se.kaist.ac.kr/aom"); 
+			AomFactory theAomFactory = (AomFactory)EPackage.Registry.INSTANCE.getEFactory(AomPackage.eNS_URI);
 			if (theAomFactory != null) {
 				return theAomFactory;
 			}

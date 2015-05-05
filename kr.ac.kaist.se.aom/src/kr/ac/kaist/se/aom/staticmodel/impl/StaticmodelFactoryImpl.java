@@ -6,6 +6,7 @@
  */
 package kr.ac.kaist.se.aom.staticmodel.impl;
 
+import kr.ac.kaist.se.aom.staticmodel.*;
 import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.staticmodel.StaticmodelFactory;
@@ -32,7 +33,7 @@ public class StaticmodelFactoryImpl extends EFactoryImpl implements StaticmodelF
 	 */
 	public static StaticmodelFactory init() {
 		try {
-			StaticmodelFactory theStaticmodelFactory = (StaticmodelFactory)EPackage.Registry.INSTANCE.getEFactory("http://se.kaist.ac.kr/aom/staticmodel"); 
+			StaticmodelFactory theStaticmodelFactory = (StaticmodelFactory)EPackage.Registry.INSTANCE.getEFactory(StaticmodelPackage.eNS_URI);
 			if (theStaticmodelFactory != null) {
 				return theStaticmodelFactory;
 			}

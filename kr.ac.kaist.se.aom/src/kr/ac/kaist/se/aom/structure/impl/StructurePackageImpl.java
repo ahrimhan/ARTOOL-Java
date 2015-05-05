@@ -26,6 +26,7 @@ import kr.ac.kaist.se.aom.structure.AOMScope;
 import kr.ac.kaist.se.aom.structure.AOMType;
 import kr.ac.kaist.se.aom.structure.AOMTypedElement;
 import kr.ac.kaist.se.aom.structure.AOMVariableDef;
+import kr.ac.kaist.se.aom.structure.IndexedElement;
 import kr.ac.kaist.se.aom.structure.StructureFactory;
 import kr.ac.kaist.se.aom.structure.StructurePackage;
 
@@ -133,6 +134,13 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 	 * @generated
 	 */
 	private EClass aomEntityEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass indexedElementEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -704,6 +712,24 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getIndexedElement() {
+		return indexedElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getIndexedElement_Index() {
+		return (EAttribute)indexedElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getAOMModifier() {
 		return aomModifierEEnum;
 	}
@@ -803,6 +829,9 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 		aomEntityEClass = createEClass(AOM_ENTITY);
 		createEAttribute(aomEntityEClass, AOM_ENTITY__OCCURRENCE);
 
+		indexedElementEClass = createEClass(INDEXED_ELEMENT);
+		createEAttribute(indexedElementEClass, INDEXED_ELEMENT__INDEX);
+
 		// Create enums
 		aomModifierEEnum = createEEnum(AOM_MODIFIER);
 	}
@@ -845,6 +874,7 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 		aomTypeEClass.getESuperTypes().add(this.getAOMNamedElement());
 		aomClassEClass.getESuperTypes().add(this.getAOMType());
 		aomClassEClass.getESuperTypes().add(theAomPackage.getMeasurableElement());
+		aomClassEClass.getESuperTypes().add(this.getIndexedElement());
 		aomFieldEClass.getESuperTypes().add(this.getAOMVariableDef());
 		aomFieldEClass.getESuperTypes().add(theAomPackage.getMeasurableElement());
 		aomFieldEClass.getESuperTypes().add(this.getAOMEntity());
@@ -857,6 +887,7 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 		aomVariableDefEClass.getESuperTypes().add(this.getAOMNamedElement());
 		aomLocalVariableEClass.getESuperTypes().add(this.getAOMVariableDef());
 		aomExternalTypeEClass.getESuperTypes().add(this.getAOMType());
+		aomEntityEClass.getESuperTypes().add(this.getIndexedElement());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(aomElementEClass, AOMElement.class, "AOMElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -925,6 +956,9 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 
 		initEClass(aomEntityEClass, AOMEntity.class, "AOMEntity", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAOMEntity_Occurrence(), ecorePackage.getEInt(), "occurrence", null, 0, 1, AOMEntity.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(indexedElementEClass, IndexedElement.class, "IndexedElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getIndexedElement_Index(), ecorePackage.getEInt(), "index", null, 0, 1, IndexedElement.class, !IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(aomModifierEEnum, AOMModifier.class, "AOMModifier");

@@ -168,7 +168,7 @@ public class StaticFieldAccessImpl extends StaticDependencyImpl implements Stati
 	 */
 	public AOMScope getAccessingScope() {
 		if (eContainerFeatureID() != StaticmodelPackage.STATIC_FIELD_ACCESS__ACCESSING_SCOPE) return null;
-		return (AOMScope)eContainer();
+		return (AOMScope)eInternalContainer();
 	}
 
 	/**

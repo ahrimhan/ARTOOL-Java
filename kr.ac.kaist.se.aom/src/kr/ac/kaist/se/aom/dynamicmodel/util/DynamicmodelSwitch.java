@@ -6,6 +6,7 @@
  */
 package kr.ac.kaist.se.aom.dynamicmodel.util;
 
+import kr.ac.kaist.se.aom.dynamicmodel.*;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicDependency;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
 import kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelPackage;

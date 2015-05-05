@@ -130,7 +130,7 @@ public class DynamicMethodCallImpl extends DynamicDependencyImpl implements Dyna
 	 */
 	public AOMScope getCaller() {
 		if (eContainerFeatureID() != DynamicmodelPackage.DYNAMIC_METHOD_CALL__CALLER) return null;
-		return (AOMScope)eContainer();
+		return (AOMScope)eInternalContainer();
 	}
 
 	/**

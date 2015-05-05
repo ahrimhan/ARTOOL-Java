@@ -100,7 +100,7 @@ public class AOMParameterImpl extends AOMTypedElementImpl implements AOMParamete
 	 */
 	public AOMMethod getOwner() {
 		if (eContainerFeatureID() != StructurePackage.AOM_PARAMETER__OWNER) return null;
-		return (AOMMethod)eContainer();
+		return (AOMMethod)eInternalContainer();
 	}
 
 	/**

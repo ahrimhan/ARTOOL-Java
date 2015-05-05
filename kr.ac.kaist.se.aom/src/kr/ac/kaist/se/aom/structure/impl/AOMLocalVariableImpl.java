@@ -100,7 +100,7 @@ public class AOMLocalVariableImpl extends AOMTypedElementImpl implements AOMLoca
 	 */
 	public AOMScope getOwner() {
 		if (eContainerFeatureID() != StructurePackage.AOM_LOCAL_VARIABLE__OWNER) return null;
-		return (AOMScope)eContainer();
+		return (AOMScope)eInternalContainer();
 	}
 
 	/**

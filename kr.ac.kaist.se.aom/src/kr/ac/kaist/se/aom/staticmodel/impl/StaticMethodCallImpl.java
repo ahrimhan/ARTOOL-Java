@@ -147,7 +147,7 @@ public class StaticMethodCallImpl extends StaticDependencyImpl implements Static
 	 */
 	public AOMScope getCaller() {
 		if (eContainerFeatureID() != StaticmodelPackage.STATIC_METHOD_CALL__CALLER) return null;
-		return (AOMScope)eContainer();
+		return (AOMScope)eInternalContainer();
 	}
 
 	/**

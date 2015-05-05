@@ -17,6 +17,7 @@ import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.aom.structure.AOMModifier;
+import kr.ac.kaist.se.aom.structure.IndexedElement;
 import kr.ac.kaist.se.aom.structure.StructurePackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -41,6 +42,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
  * The following features are implemented:
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMClassImpl#getMeasuredDataSet <em>Measured Data Set</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMClassImpl#getIndex <em>Index</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMClassImpl#getFields <em>Fields</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMClassImpl#getMethods <em>Methods</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMClassImpl#getAncestor <em>Ancestor</em>}</li>
@@ -68,6 +70,16 @@ public class AOMClassImpl extends AOMTypeImpl implements AOMClass {
 	 * @ordered
 	 */
 	protected EMap<String, Object> measuredDataSet;
+
+	/**
+	 * The default value of the '{@link #getIndex() <em>Index</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getIndex()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int INDEX_EDEFAULT = 0;
 
 	/**
 	 * The cached value of the '{@link #getFields() <em>Fields</em>}' containment reference list.
@@ -288,6 +300,28 @@ public class AOMClassImpl extends AOMTypeImpl implements AOMClass {
 			measuredDataSet = new EcoreEMap<String,Object>(AomPackage.Literals.STRING_TO_OBJECT, StringToObjectImpl.class, this, StructurePackage.AOM_CLASS__MEASURED_DATA_SET);
 		}
 		return measuredDataSet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getIndex() {
+		// TODO: implement this method to return the 'Index' attribute
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setIndex(int newIndex) {
+		// TODO: implement this method to set the 'Index' attribute
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -579,6 +613,8 @@ public class AOMClassImpl extends AOMTypeImpl implements AOMClass {
 			case StructurePackage.AOM_CLASS__MEASURED_DATA_SET:
 				if (coreType) return getMeasuredDataSet();
 				else return getMeasuredDataSet().map();
+			case StructurePackage.AOM_CLASS__INDEX:
+				return getIndex();
 			case StructurePackage.AOM_CLASS__FIELDS:
 				return getFields();
 			case StructurePackage.AOM_CLASS__METHODS:
@@ -618,6 +654,9 @@ public class AOMClassImpl extends AOMTypeImpl implements AOMClass {
 		switch (featureID) {
 			case StructurePackage.AOM_CLASS__MEASURED_DATA_SET:
 				((EStructuralFeature.Setting)getMeasuredDataSet()).set(newValue);
+				return;
+			case StructurePackage.AOM_CLASS__INDEX:
+				setIndex((Integer)newValue);
 				return;
 			case StructurePackage.AOM_CLASS__FIELDS:
 				getFields().clear();
@@ -674,6 +713,9 @@ public class AOMClassImpl extends AOMTypeImpl implements AOMClass {
 			case StructurePackage.AOM_CLASS__MEASURED_DATA_SET:
 				getMeasuredDataSet().clear();
 				return;
+			case StructurePackage.AOM_CLASS__INDEX:
+				setIndex(INDEX_EDEFAULT);
+				return;
 			case StructurePackage.AOM_CLASS__FIELDS:
 				getFields().clear();
 				return;
@@ -724,6 +766,8 @@ public class AOMClassImpl extends AOMTypeImpl implements AOMClass {
 		switch (featureID) {
 			case StructurePackage.AOM_CLASS__MEASURED_DATA_SET:
 				return measuredDataSet != null && !measuredDataSet.isEmpty();
+			case StructurePackage.AOM_CLASS__INDEX:
+				return getIndex() != INDEX_EDEFAULT;
 			case StructurePackage.AOM_CLASS__FIELDS:
 				return fields != null && !fields.isEmpty();
 			case StructurePackage.AOM_CLASS__METHODS:
@@ -765,6 +809,12 @@ public class AOMClassImpl extends AOMTypeImpl implements AOMClass {
 				default: return -1;
 			}
 		}
+		if (baseClass == IndexedElement.class) {
+			switch (derivedFeatureID) {
+				case StructurePackage.AOM_CLASS__INDEX: return StructurePackage.INDEXED_ELEMENT__INDEX;
+				default: return -1;
+			}
+		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -778,6 +828,12 @@ public class AOMClassImpl extends AOMTypeImpl implements AOMClass {
 		if (baseClass == MeasurableElement.class) {
 			switch (baseFeatureID) {
 				case AomPackage.MEASURABLE_ELEMENT__MEASURED_DATA_SET: return StructurePackage.AOM_CLASS__MEASURED_DATA_SET;
+				default: return -1;
+			}
+		}
+		if (baseClass == IndexedElement.class) {
+			switch (baseFeatureID) {
+				case StructurePackage.INDEXED_ELEMENT__INDEX: return StructurePackage.AOM_CLASS__INDEX;
 				default: return -1;
 			}
 		}
