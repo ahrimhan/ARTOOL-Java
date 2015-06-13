@@ -14,7 +14,7 @@ public class MoveMethodCommand implements RefactoringCommand {
 	private AOMMethod originalOverriding;
 	
 	
-	private double deltaValue;
+	private float deltaValue;
 	
 	public MoveMethodCommand(AOMMethod movingMethod, AOMClass targetClass)
 	{
@@ -25,7 +25,7 @@ public class MoveMethodCommand implements RefactoringCommand {
 		this.deltaValue = 0;
 	}
 	
-	public MoveMethodCommand(AOMMethod movingMethod, AOMClass targetClass, double d)
+	public MoveMethodCommand(AOMMethod movingMethod, AOMClass targetClass, float d)
 	{
 		this.movingMethod = movingMethod;
 		this.targetClass = targetClass;
@@ -36,7 +36,7 @@ public class MoveMethodCommand implements RefactoringCommand {
 	
 	public float fitness;
 	
-	public double getDeltaValue()
+	public float getDeltaValue()
 	{
 		return deltaValue;
 	}

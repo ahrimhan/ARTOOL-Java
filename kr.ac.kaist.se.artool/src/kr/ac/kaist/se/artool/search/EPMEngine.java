@@ -7,10 +7,10 @@ import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.SystemEntitySet;
 
-import org.jblas.DoubleMatrix;
+import org.jblas.FloatMatrix;
 
-public class EPMEngine {
-	DoubleMatrix membershipMatrix;
+public class EPMEngine implements FitnessFunction, MoveMethodEventListener {
+	FloatMatrix membershipMatrix;
 	SystemEntitySet sts;
 	
 	
@@ -24,7 +24,7 @@ public class EPMEngine {
 	
 	private void initMembershipMatrix()
 	{
-		membershipMatrix = DoubleMatrix.zeros(sts.entities.size(), sts.classes.size());
+		membershipMatrix = FloatMatrix.zeros(sts.entities.size(), sts.classes.size());
 		for( AOMClass clazz : sts.classes )
 		{
 			for( AOMMethod method : clazz.getMethods() )
@@ -49,11 +49,11 @@ public class EPMEngine {
 
 	}
 	
-	DoubleMatrix entityMatrix;
+	FloatMatrix entityMatrix;
 	
 	private void initEntityMatrix()
 	{
-		entityMatrix = DoubleMatrix.zeros(sts.entities.size(), sts.entities.size());
+		entityMatrix = FloatMatrix.zeros(sts.entities.size(), sts.entities.size());
 
 		for (AOMMethod method : sts.methods) {
 			
@@ -72,32 +72,32 @@ public class EPMEngine {
 		}
 	}
 	
-	private DoubleMatrix getDistanceMatrix()
+	private FloatMatrix getDistanceMatrix()
 	{
-		DoubleMatrix intersectMatrix = entityMatrix.mmul(membershipMatrix);
-		DoubleMatrix colSum = entityMatrix.columnSums();
-		DoubleMatrix rowSum = membershipMatrix.rowSums();
+		FloatMatrix intersectMatrix = entityMatrix.mmul(membershipMatrix);
+		FloatMatrix colSum = entityMatrix.columnSums();
+		FloatMatrix rowSum = membershipMatrix.rowSums();
 		
-		DoubleMatrix minusUnionMatrix = intersectMatrix.subColumnVector(colSum).subiRowVector(rowSum);
-		DoubleMatrix distanceMatrix = intersectMatrix.divi(minusUnionMatrix).addi(1);
+		FloatMatrix minusUnionMatrix = intersectMatrix.subColumnVector(colSum).subiRowVector(rowSum);
+		FloatMatrix distanceMatrix = intersectMatrix.divi(minusUnionMatrix).addi(1);
 		
 		return distanceMatrix;
 	}
 	
-	public double getEPM()
+	public float calculate()
 	{
-		DoubleMatrix distanceMatrix = getDistanceMatrix();
+		FloatMatrix distanceMatrix = getDistanceMatrix();
 		
-		double epm = 0;
+		float epm = 0;
 		
 		
 		for( int i = 0; i < sts.classes.size(); i++ )
 		{
-			double internal = 0;
+			float internal = 0;
 			int internalCount = 0;
-			double external = 0;
+			float external = 0;
 			int externalCount = 0;
-			double epmc = 0;
+			float epmc = 0;
 			
 			for( int j = 0 ; j < sts.entities.size(); j++ )
 			{
@@ -125,7 +125,7 @@ public class EPMEngine {
 		return epm;
 	}
 	
-	public void moveMethod(AOMMethod method, AOMClass targetClass)
+	public void moveMethodPerformed(AOMMethod method, AOMClass targetClass, boolean isRollbackAction)
 	{
 		membershipMatrix.put(method.getIndex(), method.getOwner().getIndex(), 0);
 		membershipMatrix.put(method.getIndex(), targetClass.getIndex(), 1);

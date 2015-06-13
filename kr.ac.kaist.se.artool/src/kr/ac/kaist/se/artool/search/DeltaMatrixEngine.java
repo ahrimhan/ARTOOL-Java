@@ -12,10 +12,10 @@ import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.SystemEntitySet;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
 
-import org.jblas.DoubleMatrix;
+import org.jblas.FloatMatrix;
 
-public class DeltaMatrixEngine {
-	DoubleMatrix membershipMatrix;
+public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSelection {
+	FloatMatrix membershipMatrix;
 	SystemEntitySet sts;
 	
 	
@@ -29,7 +29,7 @@ public class DeltaMatrixEngine {
 	
 	private void initMembershipMatrix()
 	{
-		membershipMatrix = DoubleMatrix.zeros(sts.entities.size(), sts.classes.size());
+		membershipMatrix = FloatMatrix.zeros(sts.entities.size(), sts.classes.size());
 		for( AOMClass clazz : sts.classes )
 		{
 			for( AOMMethod method : clazz.getMethods() )
@@ -54,11 +54,11 @@ public class DeltaMatrixEngine {
 
 	}
 	
-	DoubleMatrix linkMatrix;
+	FloatMatrix linkMatrix;
 	
 	private void initLinkMatrix()
 	{
-		linkMatrix = DoubleMatrix.zeros(sts.entities.size(), sts.entities.size());
+		linkMatrix = FloatMatrix.zeros(sts.entities.size(), sts.entities.size());
 
 		for (AOMMethod method : sts.methods) {
 			
@@ -79,23 +79,23 @@ public class DeltaMatrixEngine {
 		}
 	}
 	
-	private DoubleMatrix getInternalLinkMatrix()
+	private FloatMatrix getInternalLinkMatrix()
 	{
-		DoubleMatrix internalLinkMask = membershipMatrix.mmul(membershipMatrix.transpose());
+		FloatMatrix internalLinkMask = membershipMatrix.mmul(membershipMatrix.transpose());
 		return linkMatrix.mmul(internalLinkMask);
 	}
 	
-	private DoubleMatrix getExternalLinkMatrix(DoubleMatrix internalLinkMatrix)
+	private FloatMatrix getExternalLinkMatrix(FloatMatrix internalLinkMatrix)
 	{
-		DoubleMatrix externalLinkMatrix = linkMatrix.sub(internalLinkMatrix);
+		FloatMatrix externalLinkMatrix = linkMatrix.sub(internalLinkMatrix);
 		return externalLinkMatrix;
 	}
 	
-	private DoubleMatrix getInvertedMembershipMatrix(DoubleMatrix m)
+	private FloatMatrix getInvertedMembershipMatrix(FloatMatrix m)
 	{
-		DoubleMatrix ret;
+		FloatMatrix ret;
 		
-		ret = DoubleMatrix.zeros(sts.entities.size(), sts.classes.size());
+		ret = FloatMatrix.zeros(sts.entities.size(), sts.classes.size());
 		
 		int[] indices = m.findIndices();
 
@@ -103,7 +103,7 @@ public class DeltaMatrixEngine {
 		{
 			int row = m.indexRows(index);
 			int col = m.indexColumns(index);
-			double v = m.get(index);
+			float v = m.get(index);
 			
 			for( int i = 0 ; i < sts.classes.size(); i++ )
 			{
@@ -115,28 +115,28 @@ public class DeltaMatrixEngine {
 		return ret;
 	}
 	
-	private DoubleMatrix getDeltaMatrix()
+	private FloatMatrix getDeltaMatrix()
 	{
-		DoubleMatrix internalLinkMatrix = getInternalLinkMatrix();
-		DoubleMatrix externalLinkMatrix = getExternalLinkMatrix(internalLinkMatrix);
-		DoubleMatrix IP = internalLinkMatrix.mmul(membershipMatrix);
-		DoubleMatrix EP = externalLinkMatrix.mmul(membershipMatrix);
-		DoubleMatrix IIP = getInvertedMembershipMatrix(IP);
-		DoubleMatrix deltaMatrix = IIP.sub(EP);
+		FloatMatrix internalLinkMatrix = getInternalLinkMatrix();
+		FloatMatrix externalLinkMatrix = getExternalLinkMatrix(internalLinkMatrix);
+		FloatMatrix IP = internalLinkMatrix.mmul(membershipMatrix);
+		FloatMatrix EP = externalLinkMatrix.mmul(membershipMatrix);
+		FloatMatrix IIP = getInvertedMembershipMatrix(IP);
+		FloatMatrix deltaMatrix = IIP.sub(EP);
 		
 		return deltaMatrix;
 	}
 	
 	public Vector<MoveMethodCommand> getPositiveRefactorings()
 	{
-		DoubleMatrix dm = getDeltaMatrix();
+		FloatMatrix dm = getDeltaMatrix();
 		Vector<MoveMethodCommand> mmcSet = new Vector<MoveMethodCommand>();
 		
 		for( int row = 0; row < sts.methods.size(); row++ )
 		{
 			for( int col = 0; col < sts.classes.size(); col++ )
 			{
-				double d = dm.get(row, col);
+				float d = dm.get(row, col);
 				if( d > 0 )
 				{
 					AOMMethod method = sts.methods.get(row);
@@ -151,7 +151,7 @@ public class DeltaMatrixEngine {
 
 			@Override
 			public int compare(MoveMethodCommand o1, MoveMethodCommand o2) {
-				double dd = o1.getDeltaValue() - o2.getDeltaValue();
+				float dd = o1.getDeltaValue() - o2.getDeltaValue();
 				if( dd == 0 )
 				{
 					return 0;
@@ -168,9 +168,16 @@ public class DeltaMatrixEngine {
 		return mmcSet;
 	}
 	
-	public void moveMethod(AOMMethod method, AOMClass targetClass)
+	@Override
+	public void moveMethodPerformed(AOMMethod method, AOMClass targetClass, boolean isRollbackAction)
 	{
 		membershipMatrix.put(method.getIndex(), method.getOwner().getIndex(), 0);
 		membershipMatrix.put(method.getIndex(), targetClass.getIndex(), 1);
+	}
+
+
+	@Override
+	public Vector<MoveMethodCommand> getCandidates() {
+		return this.getPositiveRefactorings();
 	}
 }

@@ -75,7 +75,7 @@ public class ARSearchWizard extends Wizard {
 					
 					AbstractObjectModel aom = (AbstractObjectModel) aomResource.getContents().get(0);
 					
-					ARSearchMain.getInstance().run(aom, paramConfigPage.getFitnessType(), paramConfigPage.getSearchTechType(), paramConfigPage.useDeltaTable());
+					ARSearchMain.getInstance().run(aom, paramConfigPage.getFitnessType(), paramConfigPage.getSearchTechType(), paramConfigPage.useDeltaTable(), paramConfigPage.getMaxIterationCount(), paramConfigPage.getMaxCandidateCount());
 					
 				} catch (IOException e) {
 					return CommandResult.newErrorCommandResult("save failed");

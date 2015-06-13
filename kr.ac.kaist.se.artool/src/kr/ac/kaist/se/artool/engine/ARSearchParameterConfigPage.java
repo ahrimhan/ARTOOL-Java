@@ -2,6 +2,7 @@ package kr.ac.kaist.se.artool.engine;
 
 import kr.ac.kaist.se.artool.search.ARSearchMain;
 
+import org.apache.commons.collections4.functors.ForClosure;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -9,7 +10,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Text;
 
 public class ARSearchParameterConfigPage extends WizardPage {
 
@@ -36,6 +40,9 @@ public class ARSearchParameterConfigPage extends WizardPage {
 			*/
 	};
 	
+	private Text maxIterationCount;
+	private Text maxCandidateCount;
+	
 	private Button useDeltaTableButton;
 
 	@Override
@@ -50,15 +57,55 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		// create the widgets and their grid data objects
 		// Date of travel
 		new Label(composite, SWT.NONE).setText("Fitness Function:");
-		fitnessFunction = new Combo(composite, SWT.BORDER | SWT.READ_ONLY);
+		fitnessFunction = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.DROP_DOWN);
 		fitnessFunction.setItems(fitnessFunctionItems);
 		fitnessFunction.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		
 		new Label(composite, SWT.NONE).setText("Search Technique:");
-		searchTechnique = new Combo(composite, SWT.BORDER | SWT.READ_ONLY);
+		searchTechnique = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.DROP_DOWN);
 		searchTechnique.setItems(searchTechniqueItems);
 		searchTechnique.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		new Label(composite, SWT.NONE).setText("Max Iteraction Count:");
+		maxIterationCount = new Text(composite, SWT.BORDER | SWT.SINGLE);
+		maxIterationCount.setMessage("Set Max-Iteration Counts. Default is 1000");
+		maxIterationCount.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		maxIterationCount.addListener(SWT.Verify, new Listener() {
+	        public void handleEvent(Event e) {
+	          String string = e.text;
+	          char[] chars = new char[string.length()];
+	          string.getChars(0, chars.length, chars, 0);
+	          for (int i = 0; i < chars.length; i++) {
+	            if (!('0' <= chars[i] && chars[i] <= '9')) {
+	              e.doit = false;
+	              return;
+	            }
+	          }
+	        }
+	      });
+		
+		
+		new Label(composite, SWT.NONE).setText("Max Candidates Count:");
+		maxCandidateCount = new Text(composite, SWT.BORDER | SWT.SINGLE);
+		maxCandidateCount.setMessage("Set Max-Candidate Counts. Default is 1000");
+		maxCandidateCount.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		maxCandidateCount.addListener(SWT.Verify, new Listener() {
+	        public void handleEvent(Event e) {
+	          String string = e.text;
+	          char[] chars = new char[string.length()];
+	          string.getChars(0, chars.length, chars, 0);
+	          for (int i = 0; i < chars.length; i++) {
+	            if (!('0' <= chars[i] && chars[i] <= '9')) {
+	              e.doit = false;
+	              return;
+	            }
+	          }
+	        }
+	      });
+		
 		
 		useDeltaTableButton = new Button(composite, SWT.CHECK);
 		useDeltaTableButton.setText("Use Delta Table Acceleration?");
@@ -67,7 +114,13 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		useDeltaTableButton.setLayoutData(gd);
 		useDeltaTableButton.setSelection(true);
 		
+		
+		fitnessFunction.select(0);
+		searchTechnique.select(0);
+		
+		
 		setControl(composite);
+		
 	}
 
 	
@@ -130,4 +183,37 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	{
 		return useDeltaTableButton.getSelection();
 	}
+
+
+	public int getMaxCandidateCount() {
+		int ret = 1000;;
+		
+		try
+		{
+			ret = Integer.parseInt(maxCandidateCount.getText());
+		}
+		catch(Exception e)
+		{
+			ret = 1000;
+		}
+		
+		
+		return ret;
+	}
+
+
+	public int getMaxIterationCount() {
+		int ret = 1000;;
+		
+		try
+		{
+			ret = Integer.parseInt(maxIterationCount.getText());
+		}
+		catch(Exception e)
+		{
+			ret = 1000;
+		}
+		
+		
+		return ret;	}
 }

@@ -1,6 +1,7 @@
 package kr.ac.kaist.se.artool.search;
 
 import java.util.Stack;
+import java.util.Vector;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
@@ -10,14 +11,21 @@ public class MoveMethodRefactoring {
 
 	private Stack<MoveMethodCommand> history;
 	private AbstractObjectModel aom;
-	private DeltaMatrixEngine dme;
+	private Vector<MoveMethodEventListener> listenerList;
 	
-	public MoveMethodRefactoring(AbstractObjectModel aom, DeltaMatrixEngine dme)
+	
+	public MoveMethodRefactoring(AbstractObjectModel aom)
 	{
 		history = new Stack<MoveMethodCommand>();
 		this.aom = aom;
-		this.dme = dme;
+		listenerList = new Vector<MoveMethodEventListener>();
 	}
+	
+	public void addListener(MoveMethodEventListener listener)
+	{
+		listenerList.add(listener);
+	}
+	
 	
 	public boolean doAction(MoveMethodCommand action)
 	{
@@ -33,7 +41,10 @@ public class MoveMethodRefactoring {
 		{
 			if( action.doCommand() > 0 )
 			{
-				dme.moveMethod(action.getMethod(), action.getToClass());
+				for( MoveMethodEventListener listener : listenerList )
+				{
+					listener.moveMethodPerformed(action.getMethod(), action.getToClass(), false);
+				}
 				history.push(action);
 				return true;
 			}
@@ -53,7 +64,10 @@ public class MoveMethodRefactoring {
 		
 		try {
 			action.undoCommand();
-			dme.moveMethod(action.getMethod(), action.getFromClass());
+			for( MoveMethodEventListener listener : listenerList )
+			{
+				listener.moveMethodPerformed(action.getMethod(), action.getFromClass(), true);
+			}
 		} catch (RefactoringException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

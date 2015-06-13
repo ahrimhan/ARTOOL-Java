@@ -11,8 +11,6 @@ import kr.ac.kaist.se.artool.engine.StatusLogger;
 import kr.ac.kaist.se.artool.engine.SystemEntitySet;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
 
-import org.eclipse.swt.widgets.Shell;
-
 public class ARSearchMain {
 	
 	private PrintStream ps;
@@ -51,48 +49,78 @@ public class ARSearchMain {
 
 		return instance;
 	}
-	 
-	private void trialExecute(Object rule)
-	{
-		//System.err.print("Trial["+rule.getName()+"]\t");
-		//ps.print("Trial["+rule.getName()+"]\t");
-
-	}
 	
 
 	
-	public void run(AbstractObjectModel aom, FitnessType fitnessType, SearchTechType searchType, boolean useDeltaTable) throws IOException
+	public void run(AbstractObjectModel aom, FitnessType fitnessType, SearchTechType searchType, boolean useDeltaTable, int max_iteration, int max_candidate_selection) throws IOException
 	{	
+		long mem_usage = 0;
+		
+		
 		
 		// Initialize
 		SystemEntitySet ses = new SystemEntitySet(aom);
-		DeltaMatrixEngine dme = new DeltaMatrixEngine(ses);
+
 		StatusLogger.getInstance().clear();
 		StatusLogger.getInstance().openOriginalPhase();
-		QMoodFitnessFunction qmood = new QMoodFitnessFunction(aom);
+
+		MoveMethodRefactoring mmr = new MoveMethodRefactoring(aom);
+
+		CandidateSelection candidateSelection;
 		
-		float fitness = qmood.calculate(aom)[QMoodFitnessFunction.TYPE.FLEXIBILITY.ordinal()];
+		if(useDeltaTable)
+		{
+			DeltaMatrixEngine dmEngine = new DeltaMatrixEngine(ses);
+			mmr.addListener(dmEngine);
+			candidateSelection = dmEngine;
+		}
+		else
+		{
+			candidateSelection = new RandomCandidateSelection(aom, max_candidate_selection);
+		}
+		
+		FitnessFunction fitnessFunction;
+		
+		switch( fitnessType )
+		{
+		case EPM:
+			EPMEngine epmEngine = new EPMEngine(ses);
+			fitnessFunction = epmEngine;
+			mmr.addListener(epmEngine);
+			break;
+		case FLEXIBILITY:
+			fitnessFunction = new QMoodEngine(aom, QMoodEngine.TYPE.FLEXIBILITY);
+			break;
+		case REUSABILITY:
+			fitnessFunction = new QMoodEngine(aom, QMoodEngine.TYPE.REUSABILITY);
+			break;
+		case UNDERSTANDABILITY:
+			fitnessFunction = new QMoodEngine(aom, QMoodEngine.TYPE.UNDERSTANDABILITY);
+			break;
+		default:
+			fitnessFunction = new QMoodEngine(aom, QMoodEngine.TYPE.FLEXIBILITY);
+			break;
+		
+		}
+		
+		
+		float fitness = fitnessFunction.calculate();
 		float prevFitness;
-		long mem_usage = 0;
-		
-		int max_iteration = 100;
-		int max_search_one_step = 100;
-		MoveMethodRefactoring mmr = new MoveMethodRefactoring(aom, dme);
-		
+
 		
 		for(int iteration = 0; iteration < max_iteration; iteration++ )
 		{
 			prevFitness = fitness;
-			Vector<MoveMethodCommand> positiveRefactorings = dme.getPositiveRefactorings();
+			Vector<MoveMethodCommand> candidates = candidateSelection.getCandidates();
 			StatusLogger.getInstance().openTrialPhase();
 			BestFitnessSelectionStrategy strategy = new BestFitnessSelectionStrategy(prevFitness);
 
-			for( int idx = 0 ; idx < max_search_one_step && idx < positiveRefactorings.size() ; idx++ )
+			for( int idx = 0 ; idx < max_candidate_selection && idx < candidates.size() ; idx++ )
 			{
-				MoveMethodCommand mmc = positiveRefactorings.elementAt(idx);
+				MoveMethodCommand mmc = candidates.elementAt(idx);
 				StatusLogger.getInstance().openTrialSuite(mmc);
 				mmr.doAction(mmc);
-				fitness =  qmood.calculate(aom)[QMoodFitnessFunction.TYPE.FLEXIBILITY.ordinal()];
+				fitness =  fitnessFunction.calculate();
 				if( strategy.next(mmc, fitness) )
 				{
 					mmr.undoAction();	

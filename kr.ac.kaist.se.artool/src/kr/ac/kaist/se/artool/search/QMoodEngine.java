@@ -3,11 +3,9 @@ package kr.ac.kaist.se.artool.search;
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.artool.engine.StatusLogger;
-import kr.ac.kaist.se.artool.engine.metrics.BasicMetricSuite;
 
-public class QMoodFitnessFunction {
+public class QMoodEngine implements FitnessFunction {
 	private MinimalBasicMetricSuite bms;
-	private static QMoodFitnessFunction instance;
 	
 	public enum TYPE
 	{
@@ -50,18 +48,24 @@ public class QMoodFitnessFunction {
 		currentNOM /= aom.getClasses().size();
 	}
 	
-	public QMoodFitnessFunction(AbstractObjectModel aom)
+	AbstractObjectModel aom;
+	TYPE type;
+	
+	public QMoodEngine(AbstractObjectModel aom, TYPE type)
 	{
 		bms = new MinimalBasicMetricSuite();
 		bms.measure(aom);
 		
 		calculateRawMetrics(aom);
+		this.aom = aom;
 		
 		initialDCC = currentDCC;
 		initialCAM = currentCAM;
 		initialNOP = currentNOP;
 		initialCIS = currentCIS;
 		initialNOM = currentNOM;
+		
+		this.type = type;
 	}
 	
 	public static int getInt(Object obj)
@@ -75,7 +79,7 @@ public class QMoodFitnessFunction {
 	}
 	
 	@SuppressWarnings("unused")
-	public float[] calculate(AbstractObjectModel aom)
+	public float calculate()
 			//, PrintStream ps)
 	{
 		float[] qmood = new float[countOfType];
@@ -127,7 +131,7 @@ public class QMoodFitnessFunction {
 		System.err.print("Delta Orig\t");
 		StatusLogger.getInstance().printDeltaWithOriginal();
 		
-		return qmood;
+		return qmood[type.ordinal()];
 			
 	}
 }
