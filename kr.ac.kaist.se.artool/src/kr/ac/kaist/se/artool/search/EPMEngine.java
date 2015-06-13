@@ -72,13 +72,24 @@ public class EPMEngine implements FitnessFunction, MoveMethodEventListener {
 		}
 	}
 	
+	private void printMatrixSpec(String prefix, FloatMatrix matrix)
+	{
+		System.out.println(prefix + ": " + matrix.rows + " x " + matrix.columns);
+	}
+	
 	private FloatMatrix getDistanceMatrix()
 	{
 		FloatMatrix intersectMatrix = entityMatrix.mmul(membershipMatrix);
-		FloatMatrix colSum = entityMatrix.columnSums();
-		FloatMatrix rowSum = membershipMatrix.rowSums();
+		FloatMatrix rowSum = entityMatrix.rowSums();
+		FloatMatrix colSum = membershipMatrix.columnSums();
 		
-		FloatMatrix minusUnionMatrix = intersectMatrix.subColumnVector(colSum).subiRowVector(rowSum);
+		printMatrixSpec("entityMatrix", entityMatrix);
+		printMatrixSpec("membershipMatrix", membershipMatrix);
+		printMatrixSpec("intersectMatrix", intersectMatrix);
+		printMatrixSpec("colSum", colSum);
+		printMatrixSpec("rowSum", rowSum);
+		
+		FloatMatrix minusUnionMatrix = intersectMatrix.subColumnVector(rowSum).subiRowVector(colSum);
 		FloatMatrix distanceMatrix = intersectMatrix.divi(minusUnionMatrix).addi(1);
 		
 		return distanceMatrix;

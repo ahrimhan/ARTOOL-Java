@@ -7,6 +7,8 @@ import java.util.List;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.artool.search.ARSearchMain;
+import kr.ac.kaist.se.artool.search.ARSearchMain.FitnessType;
+import kr.ac.kaist.se.artool.search.ARSearchMain.SearchTechType;
 import kr.ac.kaist.se.artool.util.CommandExecutionOperation;
 
 import org.eclipse.core.commands.ExecutionException;
@@ -29,7 +31,17 @@ public class ARSearchWizard extends Wizard {
 
 	protected ARSearchParameterConfigPage paramConfigPage;
 	
-	private IFile selectedFile; 
+	private IFile selectedFile;
+
+	private FitnessType fitnessType;
+
+	private SearchTechType searchTechType;
+
+	private boolean useDeltaTable;
+
+	private int maxIterationCount;
+
+	private int maxCandidateCount; 
 
 	public ARSearchWizard(IFile selectedFile) {
 		super();
@@ -65,6 +77,12 @@ public class ARSearchWizard extends Wizard {
 		List<IFile> affectedFileList = new LinkedList<IFile>();
 		affectedFileList.add(selectedFile);
 		
+		fitnessType = paramConfigPage.getFitnessType();
+		searchTechType = paramConfigPage.getSearchTechType();
+		useDeltaTable = paramConfigPage.useDeltaTable();
+		maxIterationCount = paramConfigPage.getMaxIterationCount();
+		maxCandidateCount = paramConfigPage.getMaxCandidateCount();
+		
 		
 		AbstractTransactionalCommand command = new AbstractTransactionalCommand(
 				myEditingDomain, "Measuring Metric Suites", affectedFileList) { //$NON-NLS-1$
@@ -75,7 +93,7 @@ public class ARSearchWizard extends Wizard {
 					
 					AbstractObjectModel aom = (AbstractObjectModel) aomResource.getContents().get(0);
 					
-					ARSearchMain.getInstance().run(aom, paramConfigPage.getFitnessType(), paramConfigPage.getSearchTechType(), paramConfigPage.useDeltaTable(), paramConfigPage.getMaxIterationCount(), paramConfigPage.getMaxCandidateCount());
+					ARSearchMain.getInstance().run(aom, fitnessType, searchTechType, useDeltaTable, maxIterationCount, maxCandidateCount);
 					
 				} catch (IOException e) {
 					return CommandResult.newErrorCommandResult("save failed");

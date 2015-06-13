@@ -111,7 +111,10 @@ public class ARSearchMain {
 		for(int iteration = 0; iteration < max_iteration; iteration++ )
 		{
 			prevFitness = fitness;
+			System.out.print("select candidate...");
 			Vector<MoveMethodCommand> candidates = candidateSelection.getCandidates();
+			System.out.println("done");
+			
 			StatusLogger.getInstance().openTrialPhase();
 			BestFitnessSelectionStrategy strategy = new BestFitnessSelectionStrategy(prevFitness);
 
@@ -120,7 +123,9 @@ public class ARSearchMain {
 				MoveMethodCommand mmc = candidates.elementAt(idx);
 				StatusLogger.getInstance().openTrialSuite(mmc);
 				mmr.doAction(mmc);
+				System.out.print("calculate fitness...");
 				fitness =  fitnessFunction.calculate();
+				System.out.println("done");
 				if( strategy.next(mmc, fitness) )
 				{
 					mmr.undoAction();	

@@ -243,23 +243,23 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public int getIndex() {
 		// TODO: implement this method to return the 'Index' attribute
 		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+		return index;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public void setIndex(int newIndex) {
 		// TODO: implement this method to set the 'Index' attribute
 		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+		this.index = newIndex;
 	}
 
 	/**

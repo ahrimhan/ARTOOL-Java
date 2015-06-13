@@ -117,12 +117,17 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 	
 	private FloatMatrix getDeltaMatrix()
 	{
+		System.err.println("get delta matrix 1");
 		FloatMatrix internalLinkMatrix = getInternalLinkMatrix();
+		System.err.println("get delta matrix 2");
 		FloatMatrix externalLinkMatrix = getExternalLinkMatrix(internalLinkMatrix);
-		FloatMatrix IP = internalLinkMatrix.mmul(membershipMatrix);
-		FloatMatrix EP = externalLinkMatrix.mmul(membershipMatrix);
+		System.err.println("get delta matrix 3");
+		FloatMatrix IP = internalLinkMatrix.mmuli(membershipMatrix);
+		System.err.println("get delta matrix 4");
+		FloatMatrix EP = externalLinkMatrix.mmuli(membershipMatrix);
+		System.err.println("get delta matrix 5");
 		FloatMatrix IIP = getInvertedMembershipMatrix(IP);
-		FloatMatrix deltaMatrix = IIP.sub(EP);
+		FloatMatrix deltaMatrix = IIP.subi(EP);
 		
 		return deltaMatrix;
 	}
