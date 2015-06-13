@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMEntity#getOccurrence <em>Occurrence</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.AOMEntity#isPublicEntity <em>Public Entity</em>}</li>
  * </ul>
  * </p>
  *
@@ -51,4 +52,30 @@ public interface AOMEntity extends IndexedElement {
 	 * @generated
 	 */
 	void setOccurrence(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Public Entity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Public Entity</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Public Entity</em>' attribute.
+	 * @see #setPublicEntity(boolean)
+	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMEntity_PublicEntity()
+	 * @model
+	 * @generated
+	 */
+	boolean isPublicEntity();
+
+	/**
+	 * Sets the value of the '{@link kr.ac.kaist.se.aom.structure.AOMEntity#isPublicEntity <em>Public Entity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Public Entity</em>' attribute.
+	 * @see #isPublicEntity()
+	 * @generated
+	 */
+	void setPublicEntity(boolean value);
 } // AOMEntity

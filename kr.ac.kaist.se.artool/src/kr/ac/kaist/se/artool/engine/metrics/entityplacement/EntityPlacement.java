@@ -51,21 +51,13 @@ public abstract class EntityPlacement {
 		distanceCache = new HashMap<AOMClass, HashMap<AOMEntity, Double>>();
 	}
 	
-	private static DynamicEntityPlacement dep = null;
 	private static StaticEntityPlacement sep = null;
 	
-	public static double calculate(AbstractObjectModel aom, boolean isDynamic, SortedSet<EPMoveMethodCandidate> candidates, int size)
+	public static double calculate(AbstractObjectModel aom, SortedSet<EPMoveMethodCandidate> candidates, int size)
 	{
 		double ret = 0;
 		
-		if( isDynamic )
-		{
-			if( dep == null ) dep = new DynamicEntityPlacement();
-			dep.cache.clear();
-			dep.distanceCache.clear();
-			ret = dep.getEntityPlacement(aom, candidates, size);
-		}
-		else
+
 		{
 			if( sep == null ) sep = new StaticEntityPlacement();
 			sep.cache.clear();
@@ -164,7 +156,7 @@ public abstract class EntityPlacement {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			addEntityPlacement(clazzEntityCount * getEntityPlacement(clazz, allEntitySet, clazzEntityCount, candidates, size) / allEntityCount);
+			addEntityPlacement(clazzEntityCount * getEntityPlacementPrivate(clazz, allEntitySet, clazzEntityCount, candidates, size) / allEntityCount);
 		}
 		
 	}
@@ -250,7 +242,7 @@ public abstract class EntityPlacement {
 		return entityplacement;
 	}
 
-	private double getEntityPlacement(AOMClass clazz, HashSet<AOMEntity> allEntitySet, long clazzEntityCount, SortedSet<EPMoveMethodCandidate> candidates, int size) {
+	private double getEntityPlacementPrivate(AOMClass clazz, HashSet<AOMEntity> allEntitySet, long clazzEntityCount, SortedSet<EPMoveMethodCandidate> candidates, int size) {
 		double ret = 0;
 		
 		long internalTotalDistance = 0;

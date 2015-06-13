@@ -1,10 +1,16 @@
-package kr.ac.kaist.se.artool.engine;
+package kr.ac.kaist.se.artool.search;
+
+import java.util.Comparator;
+import java.util.SortedSet;
+import java.util.Vector;
 
 import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
+import kr.ac.kaist.se.artool.engine.SystemEntitySet;
+import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
 
 import org.jblas.DoubleMatrix;
 
@@ -28,7 +34,16 @@ public class DeltaMatrixEngine {
 		{
 			for( AOMMethod method : clazz.getMethods() )
 			{
-				membershipMatrix.put(method.getIndex(), clazz.getIndex(), 1);
+				try
+				{
+					membershipMatrix.put(method.getIndex(), clazz.getIndex(), 1);
+				} 
+				catch(ArrayIndexOutOfBoundsException ex)
+				{
+					System.err.println("Method index:" + method.getIndex());
+					System.err.println("Class index:" + clazz.getIndex());
+					throw ex;
+				}
 			}
 			
 			for( AOMField field : clazz.getFields() )
@@ -46,16 +61,20 @@ public class DeltaMatrixEngine {
 		linkMatrix = DoubleMatrix.zeros(sts.entities.size(), sts.entities.size());
 
 		for (AOMMethod method : sts.methods) {
-			for(StaticFieldAccess sfa : method.getOwnedScope().getStaticFieldAccesses() )
-			{
-				linkMatrix.put(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
-				linkMatrix.put(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
-			}
 			
-			for(StaticMethodCall smc : method.getOwnedScope().getStaticMethodCalls() )
+			if( method.getOwnedScope() != null )
 			{
-				linkMatrix.put(smc.getCallee().getIndex(), method.getIndex(), 1);
-				linkMatrix.put(method.getIndex(), smc.getCallee().getIndex(), 1);
+				for(StaticFieldAccess sfa : method.getOwnedScope().getStaticFieldAccesses() )
+				{
+					linkMatrix.put(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
+					linkMatrix.put(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
+				}
+
+				for(StaticMethodCall smc : method.getOwnedScope().getStaticMethodCalls() )
+				{
+					linkMatrix.put(smc.getCallee().getIndex(), method.getIndex(), 1);
+					linkMatrix.put(method.getIndex(), smc.getCallee().getIndex(), 1);
+				}
 			}
 		}
 	}
@@ -96,7 +115,7 @@ public class DeltaMatrixEngine {
 		return ret;
 	}
 	
-	public DoubleMatrix getDeltaMatrix()
+	private DoubleMatrix getDeltaMatrix()
 	{
 		DoubleMatrix internalLinkMatrix = getInternalLinkMatrix();
 		DoubleMatrix externalLinkMatrix = getExternalLinkMatrix(internalLinkMatrix);
@@ -106,6 +125,47 @@ public class DeltaMatrixEngine {
 		DoubleMatrix deltaMatrix = IIP.sub(EP);
 		
 		return deltaMatrix;
+	}
+	
+	public Vector<MoveMethodCommand> getPositiveRefactorings()
+	{
+		DoubleMatrix dm = getDeltaMatrix();
+		Vector<MoveMethodCommand> mmcSet = new Vector<MoveMethodCommand>();
+		
+		for( int row = 0; row < sts.methods.size(); row++ )
+		{
+			for( int col = 0; col < sts.classes.size(); col++ )
+			{
+				double d = dm.get(row, col);
+				if( d > 0 )
+				{
+					AOMMethod method = sts.methods.get(row);
+					AOMClass clazz = sts.classes.get(col);
+					MoveMethodCommand mmc = new MoveMethodCommand(method, clazz, d);
+					mmcSet.add(mmc);
+				}
+			}
+		}
+		
+		mmcSet.sort(new Comparator<MoveMethodCommand>() {
+
+			@Override
+			public int compare(MoveMethodCommand o1, MoveMethodCommand o2) {
+				double dd = o1.getDeltaValue() - o2.getDeltaValue();
+				if( dd == 0 )
+				{
+					return 0;
+				}
+				else if( dd < 0 )
+				{
+					return -1;
+				}
+				return 1;
+			}
+			
+		});
+		
+		return mmcSet;
 	}
 	
 	public void moveMethod(AOMMethod method, AOMClass targetClass)

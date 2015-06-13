@@ -32,7 +32,7 @@
             id="kr.ac.kaist.se.artool.engine"
             objectClass="org.eclipse.core.resources.IFile">
          <action
-               class="kr.ac.kaist.se.artool.engine.BootStrapAction"
+               class="kr.ac.kaist.se.artool.search.SearchAction"
                id="kr.ac.kaist.se.artool.engine.MainAction"
                label="Run ARTool "
                menubarPath="additions">

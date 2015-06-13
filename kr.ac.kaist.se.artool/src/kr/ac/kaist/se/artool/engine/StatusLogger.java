@@ -6,14 +6,12 @@ import java.util.Map.Entry;
 import java.util.Stack;
 import java.util.Vector;
 
-import kr.ac.kaist.se.artool.engine.rules.AbstractRule;
-
 import org.eclipse.emf.common.util.BasicEMap;
 
 public class StatusLogger {
 	private static StatusLogger instance = null;
 	private Stack<BasicEMap<String, float[]>> log;
-	private BasicEMap<AbstractRule, BasicEMap<String, float[]>> trials;
+	private BasicEMap<Object, BasicEMap<String, float[]>> trials;
 	
 	private static Vector<BasicEMap<String, float[]>> emapPool = new Vector<BasicEMap<String, float[]>>();
 //	private static Vector<float[]> floatPool = new Vector<float[]>();
@@ -74,7 +72,7 @@ public class StatusLogger {
 	private StatusLogger()
 	{
 		log = new Stack<BasicEMap<String, float[]>>();
-		trials = new BasicEMap<AbstractRule, BasicEMap<String, float[]>>();
+		trials = new BasicEMap<Object, BasicEMap<String, float[]>>();
 	}
 	
 	
@@ -91,13 +89,13 @@ public class StatusLogger {
 		trials.clear();
 	}
 	
-	public void openTrialSuite(AbstractRule rule)
+	public void openTrialSuite(Object rule)
 	{
 		trials.put(rule, getEmap());
 	}
 	
 	
-	public void selectSuite(AbstractRule rule)
+	public void selectSuite(Object rule)
 	{
 		BasicEMap<String, float[]> ret = null;
 		if( log.size() > 1 )
@@ -194,7 +192,7 @@ public class StatusLogger {
 		return log.peek();
 	}
 	
-	public BasicEMap<String, float[]> getTrialPhase(AbstractRule rule)
+	public BasicEMap<String, float[]> getTrialPhase(Object rule)
 	{
 		return trials.get(rule);
 	}

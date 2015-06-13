@@ -446,13 +446,22 @@ public interface StructurePackage extends EPackage {
 	int AOM_FIELD__OCCURRENCE = AOM_VARIABLE_DEF_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Public Entity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOM_FIELD__PUBLIC_ENTITY = AOM_VARIABLE_DEF_FEATURE_COUNT + 3;
+
+	/**
 	 * The feature id for the '<em><b>Owner</b></em>' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_FIELD__OWNER = AOM_VARIABLE_DEF_FEATURE_COUNT + 3;
+	int AOM_FIELD__OWNER = AOM_VARIABLE_DEF_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Static Referer</b></em>' reference list.
@@ -461,7 +470,7 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_FIELD__STATIC_REFERER = AOM_VARIABLE_DEF_FEATURE_COUNT + 4;
+	int AOM_FIELD__STATIC_REFERER = AOM_VARIABLE_DEF_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>AOM Field</em>' class.
@@ -470,7 +479,7 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_FIELD_FEATURE_COUNT = AOM_VARIABLE_DEF_FEATURE_COUNT + 5;
+	int AOM_FIELD_FEATURE_COUNT = AOM_VARIABLE_DEF_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl <em>AOM Method</em>}' class.
@@ -528,13 +537,22 @@ public interface StructurePackage extends EPackage {
 	int AOM_METHOD__OCCURRENCE = AOM_NAMED_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Public Entity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOM_METHOD__PUBLIC_ENTITY = AOM_NAMED_ELEMENT_FEATURE_COUNT + 4;
+
+	/**
 	 * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_METHOD__PARAMETERS = AOM_NAMED_ELEMENT_FEATURE_COUNT + 4;
+	int AOM_METHOD__PARAMETERS = AOM_NAMED_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Owner</b></em>' container reference.
@@ -543,7 +561,7 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_METHOD__OWNER = AOM_NAMED_ELEMENT_FEATURE_COUNT + 5;
+	int AOM_METHOD__OWNER = AOM_NAMED_ELEMENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Signature</b></em>' attribute.
@@ -552,7 +570,7 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_METHOD__SIGNATURE = AOM_NAMED_ELEMENT_FEATURE_COUNT + 6;
+	int AOM_METHOD__SIGNATURE = AOM_NAMED_ELEMENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Static Referer</b></em>' reference list.
@@ -561,7 +579,7 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_METHOD__STATIC_REFERER = AOM_NAMED_ELEMENT_FEATURE_COUNT + 7;
+	int AOM_METHOD__STATIC_REFERER = AOM_NAMED_ELEMENT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Overriding</b></em>' reference.
@@ -570,7 +588,7 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_METHOD__OVERRIDING = AOM_NAMED_ELEMENT_FEATURE_COUNT + 8;
+	int AOM_METHOD__OVERRIDING = AOM_NAMED_ELEMENT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Overrided By</b></em>' reference list.
@@ -579,7 +597,7 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_METHOD__OVERRIDED_BY = AOM_NAMED_ELEMENT_FEATURE_COUNT + 9;
+	int AOM_METHOD__OVERRIDED_BY = AOM_NAMED_ELEMENT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Owned Scope</b></em>' containment reference.
@@ -588,7 +606,7 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_METHOD__OWNED_SCOPE = AOM_NAMED_ELEMENT_FEATURE_COUNT + 10;
+	int AOM_METHOD__OWNED_SCOPE = AOM_NAMED_ELEMENT_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Dynamic Referer</b></em>' reference list.
@@ -597,7 +615,7 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_METHOD__DYNAMIC_REFERER = AOM_NAMED_ELEMENT_FEATURE_COUNT + 11;
+	int AOM_METHOD__DYNAMIC_REFERER = AOM_NAMED_ELEMENT_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Method Id</b></em>' attribute.
@@ -606,7 +624,7 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_METHOD__METHOD_ID = AOM_NAMED_ELEMENT_FEATURE_COUNT + 12;
+	int AOM_METHOD__METHOD_ID = AOM_NAMED_ELEMENT_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Start Line</b></em>' attribute.
@@ -615,7 +633,7 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_METHOD__START_LINE = AOM_NAMED_ELEMENT_FEATURE_COUNT + 13;
+	int AOM_METHOD__START_LINE = AOM_NAMED_ELEMENT_FEATURE_COUNT + 14;
 
 	/**
 	 * The feature id for the '<em><b>End Line</b></em>' attribute.
@@ -624,7 +642,7 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_METHOD__END_LINE = AOM_NAMED_ELEMENT_FEATURE_COUNT + 14;
+	int AOM_METHOD__END_LINE = AOM_NAMED_ELEMENT_FEATURE_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>Abstract</b></em>' attribute.
@@ -633,7 +651,7 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_METHOD__ABSTRACT = AOM_NAMED_ELEMENT_FEATURE_COUNT + 15;
+	int AOM_METHOD__ABSTRACT = AOM_NAMED_ELEMENT_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>LOC</b></em>' attribute.
@@ -642,7 +660,7 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_METHOD__LOC = AOM_NAMED_ELEMENT_FEATURE_COUNT + 16;
+	int AOM_METHOD__LOC = AOM_NAMED_ELEMENT_FEATURE_COUNT + 17;
 
 	/**
 	 * The feature id for the '<em><b>Static</b></em>' attribute.
@@ -651,7 +669,7 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_METHOD__STATIC = AOM_NAMED_ELEMENT_FEATURE_COUNT + 17;
+	int AOM_METHOD__STATIC = AOM_NAMED_ELEMENT_FEATURE_COUNT + 18;
 
 	/**
 	 * The feature id for the '<em><b>Constructor</b></em>' attribute.
@@ -660,7 +678,7 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_METHOD__CONSTRUCTOR = AOM_NAMED_ELEMENT_FEATURE_COUNT + 18;
+	int AOM_METHOD__CONSTRUCTOR = AOM_NAMED_ELEMENT_FEATURE_COUNT + 19;
 
 	/**
 	 * The number of structural features of the '<em>AOM Method</em>' class.
@@ -669,7 +687,7 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_METHOD_FEATURE_COUNT = AOM_NAMED_ELEMENT_FEATURE_COUNT + 19;
+	int AOM_METHOD_FEATURE_COUNT = AOM_NAMED_ELEMENT_FEATURE_COUNT + 20;
 
 	/**
 	 * The meta object id for the '{@link kr.ac.kaist.se.aom.structure.impl.AOMScopeImpl <em>AOM Scope</em>}' class.
@@ -930,13 +948,22 @@ public interface StructurePackage extends EPackage {
 	int AOM_ENTITY__OCCURRENCE = INDEXED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Public Entity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOM_ENTITY__PUBLIC_ENTITY = INDEXED_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>AOM Entity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_ENTITY_FEATURE_COUNT = INDEXED_ELEMENT_FEATURE_COUNT + 1;
+	int AOM_ENTITY_FEATURE_COUNT = INDEXED_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link kr.ac.kaist.se.aom.structure.AOMModifier <em>AOM Modifier</em>}' enum.
@@ -1530,6 +1557,17 @@ public interface StructurePackage extends EPackage {
 	EAttribute getAOMEntity_Occurrence();
 
 	/**
+	 * Returns the meta object for the attribute '{@link kr.ac.kaist.se.aom.structure.AOMEntity#isPublicEntity <em>Public Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Public Entity</em>'.
+	 * @see kr.ac.kaist.se.aom.structure.AOMEntity#isPublicEntity()
+	 * @see #getAOMEntity()
+	 * @generated
+	 */
+	EAttribute getAOMEntity_PublicEntity();
+
+	/**
 	 * Returns the meta object for class '{@link kr.ac.kaist.se.aom.structure.IndexedElement <em>Indexed Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2039,6 +2077,14 @@ public interface StructurePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute AOM_ENTITY__OCCURRENCE = eINSTANCE.getAOMEntity_Occurrence();
+
+		/**
+		 * The meta object literal for the '<em><b>Public Entity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute AOM_ENTITY__PUBLIC_ENTITY = eINSTANCE.getAOMEntity_PublicEntity();
 
 		/**
 		 * The meta object literal for the '{@link kr.ac.kaist.se.aom.structure.impl.IndexedElementImpl <em>Indexed Element</em>}' class.

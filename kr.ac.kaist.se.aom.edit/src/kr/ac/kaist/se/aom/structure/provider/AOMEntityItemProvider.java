@@ -35,13 +35,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class AOMEntityItemProvider
-	extends ItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends IndexedElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -64,6 +58,7 @@ public class AOMEntityItemProvider
 			super.getPropertyDescriptors(object);
 
 			addOccurrencePropertyDescriptor(object);
+			addPublicEntityPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -91,6 +86,28 @@ public class AOMEntityItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Public Entity feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPublicEntityPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AOMEntity_publicEntity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AOMEntity_publicEntity_feature", "_UI_AOMEntity_type"),
+				 StructurePackage.Literals.AOM_ENTITY__PUBLIC_ENTITY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns AOMEntity.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -110,7 +127,7 @@ public class AOMEntityItemProvider
 	@Override
 	public String getText(Object object) {
 		AOMEntity aomEntity = (AOMEntity)object;
-		return getString("_UI_AOMEntity_type") + " " + aomEntity.getOccurrence();
+		return getString("_UI_AOMEntity_type") + " " + aomEntity.getIndex();
 	}
 
 	/**
@@ -126,6 +143,7 @@ public class AOMEntityItemProvider
 
 		switch (notification.getFeatureID(AOMEntity.class)) {
 			case StructurePackage.AOM_ENTITY__OCCURRENCE:
+			case StructurePackage.AOM_ENTITY__PUBLIC_ENTITY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
@@ -142,17 +160,6 @@ public class AOMEntityItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return AomEditPlugin.INSTANCE;
 	}
 
 }

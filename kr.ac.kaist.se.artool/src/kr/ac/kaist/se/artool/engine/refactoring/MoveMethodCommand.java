@@ -13,10 +13,68 @@ public class MoveMethodCommand implements RefactoringCommand {
 	private AOMClass originalClass;
 	private AOMMethod originalOverriding;
 	
+	
+	private double deltaValue;
+	
 	public MoveMethodCommand(AOMMethod movingMethod, AOMClass targetClass)
 	{
 		this.movingMethod = movingMethod;
 		this.targetClass = targetClass;
+		this.originalClass = movingMethod.getOwner();
+		this.originalOverriding = movingMethod.getOverriding();
+		this.deltaValue = 0;
+	}
+	
+	public MoveMethodCommand(AOMMethod movingMethod, AOMClass targetClass, double d)
+	{
+		this.movingMethod = movingMethod;
+		this.targetClass = targetClass;
+		this.originalClass = movingMethod.getOwner();
+		this.originalOverriding = movingMethod.getOverriding();
+		this.deltaValue = d;
+	}
+	
+	public float fitness;
+	
+	public double getDeltaValue()
+	{
+		return deltaValue;
+	}
+	
+	public AOMMethod getMethod()
+	{
+		return movingMethod;
+	}
+	
+	public AOMClass getToClass()
+	{
+		return targetClass;
+	}
+	
+	public AOMClass getFromClass()
+	{
+		return originalClass;
+	}
+	
+	public boolean isIdenticalOrReversal(MoveMethodCommand action)
+	{
+		if (this.movingMethod == action.movingMethod)
+		{
+			if(this.originalClass == action.originalClass && this.targetClass == action.targetClass)
+			{
+				return true;
+			}
+			else if(this.originalClass == action.targetClass && this.targetClass == action.originalClass)
+			{
+				return true;
+			}
+		}
+		else
+		{
+			return false;
+		}
+		
+		return false;
 	}
 
 	private static boolean isIdenticalMethod(AOMMethod m1, AOMMethod m2)
@@ -80,12 +138,9 @@ public class MoveMethodCommand implements RefactoringCommand {
 			return 0;
 		}
 		
-		originalOverriding = movingMethod.getOverriding();
 		AOMMethod overriding = null;
 		overriding = findOverriding(targetClass, movingMethod);
 		movingMethod.setOverriding(overriding);
-		
-		originalClass = movingMethod.getOwner();
 		movingMethod.setOwner(targetClass);
 		did = true;
 		

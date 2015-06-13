@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMEntityImpl#getOccurrence <em>Occurrence</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMEntityImpl#isPublicEntity <em>Public Entity</em>}</li>
  * </ul>
  * </p>
  *
@@ -46,6 +47,25 @@ public abstract class AOMEntityImpl extends IndexedElementImpl implements AOMEnt
 	 * @ordered
 	 */
 	protected int occurrence = OCCURRENCE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isPublicEntity() <em>Public Entity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPublicEntity()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean PUBLIC_ENTITY_EDEFAULT = false;
+	/**
+	 * The flag representing the value of the '{@link #isPublicEntity() <em>Public Entity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPublicEntity()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int PUBLIC_ENTITY_EFLAG = 1 << 8;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -92,11 +112,34 @@ public abstract class AOMEntityImpl extends IndexedElementImpl implements AOMEnt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isPublicEntity() {
+		return (eFlags & PUBLIC_ENTITY_EFLAG) != 0;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPublicEntity(boolean newPublicEntity) {
+		boolean oldPublicEntity = (eFlags & PUBLIC_ENTITY_EFLAG) != 0;
+		if (newPublicEntity) eFlags |= PUBLIC_ENTITY_EFLAG; else eFlags &= ~PUBLIC_ENTITY_EFLAG;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructurePackage.AOM_ENTITY__PUBLIC_ENTITY, oldPublicEntity, newPublicEntity));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case StructurePackage.AOM_ENTITY__OCCURRENCE:
 				return getOccurrence();
+			case StructurePackage.AOM_ENTITY__PUBLIC_ENTITY:
+				return isPublicEntity();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -111,6 +154,9 @@ public abstract class AOMEntityImpl extends IndexedElementImpl implements AOMEnt
 		switch (featureID) {
 			case StructurePackage.AOM_ENTITY__OCCURRENCE:
 				setOccurrence((Integer)newValue);
+				return;
+			case StructurePackage.AOM_ENTITY__PUBLIC_ENTITY:
+				setPublicEntity((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -127,6 +173,9 @@ public abstract class AOMEntityImpl extends IndexedElementImpl implements AOMEnt
 			case StructurePackage.AOM_ENTITY__OCCURRENCE:
 				setOccurrence(OCCURRENCE_EDEFAULT);
 				return;
+			case StructurePackage.AOM_ENTITY__PUBLIC_ENTITY:
+				setPublicEntity(PUBLIC_ENTITY_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -141,6 +190,8 @@ public abstract class AOMEntityImpl extends IndexedElementImpl implements AOMEnt
 		switch (featureID) {
 			case StructurePackage.AOM_ENTITY__OCCURRENCE:
 				return occurrence != OCCURRENCE_EDEFAULT;
+			case StructurePackage.AOM_ENTITY__PUBLIC_ENTITY:
+				return ((eFlags & PUBLIC_ENTITY_EFLAG) != 0) != PUBLIC_ENTITY_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -157,6 +208,8 @@ public abstract class AOMEntityImpl extends IndexedElementImpl implements AOMEnt
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (occurrence: ");
 		result.append(occurrence);
+		result.append(", publicEntity: ");
+		result.append((eFlags & PUBLIC_ENTITY_EFLAG) != 0);
 		result.append(')');
 		return result.toString();
 	}

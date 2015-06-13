@@ -44,6 +44,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getMeasuredDataSet <em>Measured Data Set</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getIndex <em>Index</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getOccurrence <em>Occurrence</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#isPublicEntity <em>Public Entity</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getOwner <em>Owner</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getStaticReferer <em>Static Referer</em>}</li>
  * </ul>
@@ -111,6 +112,26 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 	 * @ordered
 	 */
 	protected int occurrence = OCCURRENCE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isPublicEntity() <em>Public Entity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPublicEntity()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean PUBLIC_ENTITY_EDEFAULT = false;
+
+	/**
+	 * The flag representing the value of the '{@link #isPublicEntity() <em>Public Entity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPublicEntity()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int PUBLIC_ENTITY_EFLAG = 1 << 8;
 
 	/**
 	 * The cached value of the '{@link #getStaticReferer() <em>Static Referer</em>}' reference list.
@@ -195,6 +216,30 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 			eNotify(new ENotificationImpl(this, Notification.SET, StructurePackage.AOM_FIELD__OCCURRENCE, oldOccurrence, occurrence));
 	}
 
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isPublicEntity() {
+		return (eFlags & PUBLIC_ENTITY_EFLAG) != 0;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPublicEntity(boolean newPublicEntity) {
+		boolean oldPublicEntity = (eFlags & PUBLIC_ENTITY_EFLAG) != 0;
+		if (newPublicEntity) eFlags |= PUBLIC_ENTITY_EFLAG; else eFlags &= ~PUBLIC_ENTITY_EFLAG;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructurePackage.AOM_FIELD__PUBLIC_ENTITY, oldPublicEntity, newPublicEntity));
+	}
+
+
+	private int index = -1;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -338,6 +383,8 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 				return getIndex();
 			case StructurePackage.AOM_FIELD__OCCURRENCE:
 				return getOccurrence();
+			case StructurePackage.AOM_FIELD__PUBLIC_ENTITY:
+				return isPublicEntity();
 			case StructurePackage.AOM_FIELD__OWNER:
 				return getOwner();
 			case StructurePackage.AOM_FIELD__STATIC_REFERER:
@@ -366,6 +413,9 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 				return;
 			case StructurePackage.AOM_FIELD__OCCURRENCE:
 				setOccurrence((Integer)newValue);
+				return;
+			case StructurePackage.AOM_FIELD__PUBLIC_ENTITY:
+				setPublicEntity((Boolean)newValue);
 				return;
 			case StructurePackage.AOM_FIELD__OWNER:
 				setOwner((AOMClass)newValue);
@@ -398,6 +448,9 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 			case StructurePackage.AOM_FIELD__OCCURRENCE:
 				setOccurrence(OCCURRENCE_EDEFAULT);
 				return;
+			case StructurePackage.AOM_FIELD__PUBLIC_ENTITY:
+				setPublicEntity(PUBLIC_ENTITY_EDEFAULT);
+				return;
 			case StructurePackage.AOM_FIELD__OWNER:
 				setOwner((AOMClass)null);
 				return;
@@ -424,6 +477,8 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 				return getIndex() != INDEX_EDEFAULT;
 			case StructurePackage.AOM_FIELD__OCCURRENCE:
 				return occurrence != OCCURRENCE_EDEFAULT;
+			case StructurePackage.AOM_FIELD__PUBLIC_ENTITY:
+				return ((eFlags & PUBLIC_ENTITY_EFLAG) != 0) != PUBLIC_ENTITY_EDEFAULT;
 			case StructurePackage.AOM_FIELD__OWNER:
 				return getOwner() != null;
 			case StructurePackage.AOM_FIELD__STATIC_REFERER:
@@ -460,6 +515,7 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 		if (baseClass == AOMEntity.class) {
 			switch (derivedFeatureID) {
 				case StructurePackage.AOM_FIELD__OCCURRENCE: return StructurePackage.AOM_ENTITY__OCCURRENCE;
+				case StructurePackage.AOM_FIELD__PUBLIC_ENTITY: return StructurePackage.AOM_ENTITY__PUBLIC_ENTITY;
 				default: return -1;
 			}
 		}
@@ -494,6 +550,7 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 		if (baseClass == AOMEntity.class) {
 			switch (baseFeatureID) {
 				case StructurePackage.AOM_ENTITY__OCCURRENCE: return StructurePackage.AOM_FIELD__OCCURRENCE;
+				case StructurePackage.AOM_ENTITY__PUBLIC_ENTITY: return StructurePackage.AOM_FIELD__PUBLIC_ENTITY;
 				default: return -1;
 			}
 		}
@@ -514,6 +571,8 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 		result.append(name);
 		result.append(", occurrence: ");
 		result.append(occurrence);
+		result.append(", publicEntity: ");
+		result.append((eFlags & PUBLIC_ENTITY_EFLAG) != 0);
 		result.append(')');
 		return result.toString();
 	}

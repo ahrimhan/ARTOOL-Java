@@ -97,6 +97,7 @@
       <genClasses ecoreClass="aom.ecore#//structure/AOMExternalType"/>
       <genClasses ecoreClass="aom.ecore#//structure/AOMEntity">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMEntity/occurrence"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMEntity/publicEntity"/>
       </genClasses>
       <genClasses image="false" ecoreClass="aom.ecore#//structure/IndexedElement">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/IndexedElement/index"/>

@@ -35,13 +35,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class AOMClassItemProvider
-	extends AOMTypeItemProvider
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends AOMTypeItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -64,6 +58,7 @@ public class AOMClassItemProvider
 			super.getPropertyDescriptors(object);
 
 			addMeasuredDataSetPropertyDescriptor(object);
+			addIndexPropertyDescriptor(object);
 			addAncestorPropertyDescriptor(object);
 			addDescendantPropertyDescriptor(object);
 			addAbstractPropertyDescriptor(object);
@@ -96,6 +91,28 @@ public class AOMClassItemProvider
 				 false,
 				 false,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Index feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addIndexPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_IndexedElement_index_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_IndexedElement_index_feature", "_UI_IndexedElement_type"),
+				 StructurePackage.Literals.INDEXED_ELEMENT__INDEX,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -389,6 +406,7 @@ public class AOMClassItemProvider
 
 		switch (notification.getFeatureID(AOMClass.class)) {
 			case StructurePackage.AOM_CLASS__MEASURED_DATA_SET:
+			case StructurePackage.AOM_CLASS__INDEX:
 			case StructurePackage.AOM_CLASS__ABSTRACT:
 			case StructurePackage.AOM_CLASS__INTERFACE:
 			case StructurePackage.AOM_CLASS__INNER_CLASS:

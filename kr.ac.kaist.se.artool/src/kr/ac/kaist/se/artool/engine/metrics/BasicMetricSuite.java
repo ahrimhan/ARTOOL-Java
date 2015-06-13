@@ -10,6 +10,7 @@ import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
+import kr.ac.kaist.se.aom.structure.AOMParameter;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -20,16 +21,23 @@ public class BasicMetricSuite {
 	
 
 	public static final String LOC = "LOC";
-	public static final String NOM = "NOM"; //methods
 	public static final String NOA = "NOA"; //attributes
 	public static final String NOCON = "NOCON"; //constructors
 	public static final String NOO = "NOO"; //operations
 	public static final String DIT = "DIT"; //depth of inheritance tree
 	public static final String CLD = "CLD"; //class-to-leaf depth
 	public static final String NOC = "NOC"; //children
-	public static final String NOP = "NOP"; //parent
+	
 	public static final String NMO = "NMO"; //overriding
 //	public static final String NMOB = "NMOB"; //overridden by
+	
+	public static final String DCC="DCC";
+	public static final String CAM="CAM";
+	public static final String NOP = "NOP"; //parent
+	public static final String CIS = "CIS";
+	public static final String NOM = "NOM"; //methods
+
+	
 
 	public static final String NMI = "NMI"; //inherited
 	public static final String NMA = "NMA"; //newly added
@@ -39,8 +47,8 @@ public class BasicMetricSuite {
 	public static final String DynamicExport = "DynamicExport"; 
 	public static final String StaticImport = "StaticImport"; //alike with RFC
 	public static final String StaticExport = "StaticExport";
-	//message-level, a() a() ÀÌ·¯¸é a() µÎ¹ø count vs.
-	//method-level, a() a() ÀÌ·¯¸é a() ÇÑ¹ø count
+	//message-level, a() a() ï¿½Ì·ï¿½ï¿½ï¿½ a() ï¿½Î¹ï¿½ count vs.
+	//method-level, a() a() ï¿½Ì·ï¿½ï¿½ï¿½ a() ï¿½Ñ¹ï¿½ count
 	public static final String DynamicBoth = "DynamicBoth";
 	public static final String StaticBoth = "StaticBoth"; //alike with CBO
 	//cohesion
@@ -52,11 +60,11 @@ public class BasicMetricSuite {
 	public static final String NUOM = "NUOM"; //number of used overriding method (dynamic)
 	//dynamic coupling (to reduce the effect of loop)
 	//new(20110421)
-	public static final String MPCDE = "MPCDE"; //"Message" Passing Coupling (DynamicMethodCalls¿¡¼­ export + import & distinctÇÑ°Í¸¸ ÇÔ.) 
+	public static final String MPCDE = "MPCDE"; //"Message" Passing Coupling (DynamicMethodCallsï¿½ï¿½ï¿½ï¿½ export + import & distinctï¿½Ñ°Í¸ï¿½ ï¿½ï¿½.) 
 	public static final String MPCDI = "MPCDI";
 	public static final String MPCDBoth = "MPCDBoth";
 	//new(20110511)
-	public static final String MPCSE = "MPCSE"; //"Method" Passing Coupling (StaticMethodCalls¿¡¼­ export + import & distinctÇÑ°Í¸¸ ÇÔ.) 
+	public static final String MPCSE = "MPCSE"; //"Method" Passing Coupling (StaticMethodCallsï¿½ï¿½ï¿½ï¿½ export + import & distinctï¿½Ñ°Í¸ï¿½ ï¿½ï¿½.) 
 	public static final String MPCSI = "MPCSI";
 	public static final String MPCSBoth = "MPCSBoth";
 	
@@ -369,6 +377,17 @@ public class BasicMetricSuite {
 		}
 	}
 	
+	public void _initializeMetric(AOMMethod method, String s, int intValue)
+	{
+		if( method.getMeasuredDataSet().get(s) == null )
+			method.getMeasuredDataSet().put(s, new int[] { intValue });
+		else
+		{
+			int[] i = (int[])method.getMeasuredDataSet().get(s);
+			i[0] = intValue;
+		}
+	}	
+	
 	public void _initializeMetric(AOMClass clazz, String s, float intValue)
 	{
 		if( clazz.getMeasuredDataSet().get(s) == null )
@@ -389,15 +408,9 @@ public class BasicMetricSuite {
 		_initializeMetric(clazz, NOO, 0);
 		_initializeMetric(clazz, NOA, 0);
 		_initializeMetric(clazz, NOM, 0);
-//		_initializeMetric(clazz, DIT, 0);
-//		_initializeMetric(clazz, CLD, 0);
-//		_initializeMetric(clazz, NOC, 0);
-//		_initializeMetric(clazz, NOP, 0);
 		_initializeMetric(clazz, NMO, 0);
-//		_initializeMetric(clazz, NMOB, 0);
 		_initializeMetric(clazz, NMI, 0);
 		_initializeMetric(clazz, NMA, 0);
-//		_initializeMetric(clazz, WMC, 0);
 		_initializeMetric(clazz, StaticImport, 0);
 		_initializeMetric(clazz, DynamicImport, 0);
 		_initializeMetric(clazz, StaticExport, 0);
@@ -414,6 +427,8 @@ public class BasicMetricSuite {
 		_initializeMetric(clazz, LCOM2, 0.0f);
 		_initializeMetric(clazz, LCOM3, 0.0f);
 		
+		_initializeMetric(clazz, DCC, 0);
+		
 	
 								
 		int dit = 0; int cld = 0;
@@ -428,12 +443,41 @@ public class BasicMetricSuite {
 		_initializeMetric(clazz, NOP, getNumAncestor(clazz) );
 		_initializeMetric(clazz, WMC, clazz.getMethods().size() );
 
+				
+		HashSet<AOMClass> dccSet = new HashSet<AOMClass>();
+		HashSet<AOMClass> camcTotalSet = new HashSet<AOMClass>();
+		HashSet<AOMClass> camcMethodSet =  new HashSet<AOMClass>();
+		int camcMethodParameterCount = 0;
 		
 		//
 		for( AOMMethod method : clazz.getMethods() )
 		{
+			camcMethodSet.clear();
+			
 			measure(method);
+			for( AOMParameter param : method.getParameters() )
+			{
+				if( param.getType() instanceof AOMClass )
+				{
+					dccSet.add((AOMClass)param.getType());
+					camcMethodSet.add((AOMClass)param.getType());
+					camcTotalSet.add((AOMClass)param.getType());
+				}
+			}
+			
+			if( method.getType() instanceof AOMClass )
+			{
+				dccSet.add((AOMClass)method.getType());
+				camcMethodSet.add((AOMClass)method.getType());
+				camcTotalSet.add((AOMClass)method.getType());
+			}
+			
+			camcMethodParameterCount += camcMethodSet.size();
 		}
+		
+		float camc = camcMethodParameterCount / ((float)camcTotalSet.size() * clazz.getMethods().size());
+		
+		_initializeMetric(clazz, CAM, camc);
 		
 		//nmi (must be calculated after measure(method)
 		Object nmiObj = clazz.getMeasuredDataSet().get(NMI);
@@ -441,8 +485,6 @@ public class BasicMetricSuite {
 		{
 			increase(nmiObj, getInt(clazz2.getMeasuredDataSet().get(NMA)));
 		}
-		
-		
 		
 		int num_methods = 0;
 		int num_attributes = 0;
@@ -456,7 +498,14 @@ public class BasicMetricSuite {
 		{
 			measure(field);
 			sum_mA += field.getStaticReferer().size();
+			if( field.getType() instanceof AOMClass )
+			{
+				dccSet.add((AOMClass)field.getType());		
+			}
 		}
+		
+		increase(clazz.getMeasuredDataSet().get(DCC), dccSet.size());
+
 		
 		
 		float new_nif = ((float)getInt(clazz.getMeasuredDataSet().get(NMI))) / (float)(0.000001f + getInt(clazz.getMeasuredDataSet().get(NMA)) + getInt(clazz.getMeasuredDataSet().get(NMI)) + getInt(clazz.getMeasuredDataSet().get(NMO)));
@@ -624,11 +673,6 @@ public class BasicMetricSuite {
 		method.getMeasuredDataSet().put(LOC, method.getLOC());
 		AOMClass clazz = method.getOwner();
 		
-//		int nom = getInt(clazz.getMeasuredDataSet().get(NOM));
-//		int noo = getInt(clazz.getMeasuredDataSet().get(NOO));
-//		int nocon = getInt(clazz.getMeasuredDataSet().get(NOCON));
-//		int nmo = getInt(clazz.getMeasuredDataSet().get(NMO));
-//		int nma = getInt(clazz.getMeasuredDataSet().get(NMA));
 				
 		if ( method.getOverriding() != null)
 		{
@@ -638,9 +682,7 @@ public class BasicMetricSuite {
 		{
 			increase(clazz.getMeasuredDataSet().get(NMA), 1);
 		}
-		
-//		increase(clazz.getMeasuredDataSet().get(NMOB), method.getOverridedBy().size());
-						
+								
 		if( method.isConstructor() )
 		{
 			increase(clazz.getMeasuredDataSet().get(NOCON), 1);
@@ -649,6 +691,13 @@ public class BasicMetricSuite {
 		{	
 			increase(clazz.getMeasuredDataSet().get(NOO), 1);
 			increase(clazz.getMeasuredDataSet().get(NOM), 1);
+		}
+		
+
+		
+		if( method.getOverridedBy().size() > 0 )
+		{
+			increase(clazz.getMeasuredDataSet().get(NOP), 1);
 		}
 		
 		containedDynamictoStaticMethodCall.clear();
@@ -713,6 +762,7 @@ public class BasicMetricSuite {
 		containedDynamictoStaticMethodCall.clear();
 		
 		//export
+		/*
 		int SE = 0; int DE = 0; 
 		int valueMPCDE = 0;
 		int valueMPCSE = 0;
@@ -742,7 +792,8 @@ public class BasicMetricSuite {
 			
 		}
 		containedStaticMethodCall.clear();
-		
+		*/
+		/*
 		for ( DynamicMethodCall dmc : method.getDynamicReferer() )
 		{
 			callee = dmc.getCallee().getOwner();
@@ -765,6 +816,7 @@ public class BasicMetricSuite {
 			}
 			
 		}
+		*/
 		containedDynamictoStaticMethodCall.clear();
 		
 		
@@ -775,15 +827,10 @@ public class BasicMetricSuite {
 	public void measure(AOMField field)
 	{
 		AOMClass clazz = field.getOwner();
-		
-//		int nom = getInt(clazz.getMeasuredDataSet().get(NOM));
-//		int noa = getInt(clazz.getMeasuredDataSet().get(NOA));
-//		noa++;
-//		nom++;
-//		clazz.getMeasuredDataSet().put(NOA, noa);
-//		clazz.getMeasuredDataSet().put(NOM, nom);
 			
-		increase(clazz.getMeasuredDataSet().get(NOM), 1);
+		//increase(clazz.getMeasuredDataSet().get(NOM), 1);
 		increase(clazz.getMeasuredDataSet().get(NOA), 1);
+		
+	
 	}
 }

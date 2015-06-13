@@ -53,6 +53,7 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getMeasuredDataSet <em>Measured Data Set</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getIndex <em>Index</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getOccurrence <em>Occurrence</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#isPublicEntity <em>Public Entity</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getParameters <em>Parameters</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getOwner <em>Owner</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getSignature <em>Signature</em>}</li>
@@ -123,6 +124,26 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 	 * @ordered
 	 */
 	protected int occurrence = OCCURRENCE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isPublicEntity() <em>Public Entity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPublicEntity()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean PUBLIC_ENTITY_EDEFAULT = false;
+
+	/**
+	 * The flag representing the value of the '{@link #isPublicEntity() <em>Public Entity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPublicEntity()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int PUBLIC_ENTITY_EFLAG = 1 << 8;
 
 	/**
 	 * The cached value of the '{@link #getParameters() <em>Parameters</em>}' containment reference list.
@@ -282,7 +303,7 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int ABSTRACT_EFLAG = 1 << 8;
+	protected static final int ABSTRACT_EFLAG = 1 << 9;
 
 	/**
 	 * The default value of the '{@link #getLOC() <em>LOC</em>}' attribute.
@@ -312,7 +333,7 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int STATIC_EFLAG = 1 << 9;
+	protected static final int STATIC_EFLAG = 1 << 10;
 
 	/**
 	 * The default value of the '{@link #isConstructor() <em>Constructor</em>}' attribute.
@@ -332,7 +353,7 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int CONSTRUCTOR_EFLAG = 1 << 10;
+	protected static final int CONSTRUCTOR_EFLAG = 1 << 11;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -451,10 +472,8 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getIndex() {
-		// TODO: implement this method to return the 'Index' attribute
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+	public boolean isPublicEntity() {
+		return (eFlags & PUBLIC_ENTITY_EFLAG) != 0;
 	}
 
 	/**
@@ -462,10 +481,34 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public void setPublicEntity(boolean newPublicEntity) {
+		boolean oldPublicEntity = (eFlags & PUBLIC_ENTITY_EFLAG) != 0;
+		if (newPublicEntity) eFlags |= PUBLIC_ENTITY_EFLAG; else eFlags &= ~PUBLIC_ENTITY_EFLAG;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructurePackage.AOM_METHOD__PUBLIC_ENTITY, oldPublicEntity, newPublicEntity));
+	}
+
+	private int index = -1;
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public int getIndex() {
+		// TODO: implement this method to return the 'Index' attribute
+		// Ensure that you remove @generated or mark it @generated NOT
+		return index;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
 	public void setIndex(int newIndex) {
 		// TODO: implement this method to set the 'Index' attribute
 		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+		this.index = newIndex;
 	}
 
 	/**
@@ -924,6 +967,8 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 				return getIndex();
 			case StructurePackage.AOM_METHOD__OCCURRENCE:
 				return getOccurrence();
+			case StructurePackage.AOM_METHOD__PUBLIC_ENTITY:
+				return isPublicEntity();
 			case StructurePackage.AOM_METHOD__PARAMETERS:
 				return getParameters();
 			case StructurePackage.AOM_METHOD__OWNER:
@@ -979,6 +1024,9 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 				return;
 			case StructurePackage.AOM_METHOD__OCCURRENCE:
 				setOccurrence((Integer)newValue);
+				return;
+			case StructurePackage.AOM_METHOD__PUBLIC_ENTITY:
+				setPublicEntity((Boolean)newValue);
 				return;
 			case StructurePackage.AOM_METHOD__PARAMETERS:
 				getParameters().clear();
@@ -1053,6 +1101,9 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 			case StructurePackage.AOM_METHOD__OCCURRENCE:
 				setOccurrence(OCCURRENCE_EDEFAULT);
 				return;
+			case StructurePackage.AOM_METHOD__PUBLIC_ENTITY:
+				setPublicEntity(PUBLIC_ENTITY_EDEFAULT);
+				return;
 			case StructurePackage.AOM_METHOD__PARAMETERS:
 				getParameters().clear();
 				return;
@@ -1118,6 +1169,8 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 				return getIndex() != INDEX_EDEFAULT;
 			case StructurePackage.AOM_METHOD__OCCURRENCE:
 				return occurrence != OCCURRENCE_EDEFAULT;
+			case StructurePackage.AOM_METHOD__PUBLIC_ENTITY:
+				return ((eFlags & PUBLIC_ENTITY_EFLAG) != 0) != PUBLIC_ENTITY_EDEFAULT;
 			case StructurePackage.AOM_METHOD__PARAMETERS:
 				return parameters != null && !parameters.isEmpty();
 			case StructurePackage.AOM_METHOD__OWNER:
@@ -1180,6 +1233,7 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 		if (baseClass == AOMEntity.class) {
 			switch (derivedFeatureID) {
 				case StructurePackage.AOM_METHOD__OCCURRENCE: return StructurePackage.AOM_ENTITY__OCCURRENCE;
+				case StructurePackage.AOM_METHOD__PUBLIC_ENTITY: return StructurePackage.AOM_ENTITY__PUBLIC_ENTITY;
 				default: return -1;
 			}
 		}
@@ -1214,6 +1268,7 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 		if (baseClass == AOMEntity.class) {
 			switch (baseFeatureID) {
 				case StructurePackage.AOM_ENTITY__OCCURRENCE: return StructurePackage.AOM_METHOD__OCCURRENCE;
+				case StructurePackage.AOM_ENTITY__PUBLIC_ENTITY: return StructurePackage.AOM_METHOD__PUBLIC_ENTITY;
 				default: return -1;
 			}
 		}
@@ -1232,6 +1287,8 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (occurrence: ");
 		result.append(occurrence);
+		result.append(", publicEntity: ");
+		result.append((eFlags & PUBLIC_ENTITY_EFLAG) != 0);
 		result.append(", signature: ");
 		result.append(signature);
 		result.append(", methodId: ");

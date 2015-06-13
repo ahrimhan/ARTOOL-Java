@@ -88,4 +88,32 @@
       </editor>
    </extension>
 
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated aom -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="kr.ac.kaist.se.aom.dynamicmodel.presentation.DynamicmodelModelWizardID"
+            name="%_UI_DynamicmodelModelWizard_label"
+            class="kr.ac.kaist.se.aom.dynamicmodel.presentation.DynamicmodelModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/DynamicmodelModelFile.gif">
+         <description>%_UI_DynamicmodelModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated aom -->
+      <editor
+            id="kr.ac.kaist.se.aom.dynamicmodel.presentation.DynamicmodelEditorID"
+            name="%_UI_DynamicmodelEditor_label"
+            icon="icons/full/obj16/DynamicmodelModelFile.gif"
+            extensions="dynamicmodel"
+            class="kr.ac.kaist.se.aom.dynamicmodel.presentation.DynamicmodelEditor"
+            contributorClass="kr.ac.kaist.se.aom.dynamicmodel.presentation.DynamicmodelActionBarContributor">
+      </editor>
+   </extension>
+
 </plugin>

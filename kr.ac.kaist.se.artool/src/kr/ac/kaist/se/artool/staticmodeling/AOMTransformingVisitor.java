@@ -412,6 +412,7 @@ public class AOMTransformingVisitor extends ASTVisitor {
 		AOMMethod aomMethod = StructureFactory.eINSTANCE.createAOMMethod();
 		aomMethod.setAbstract(Modifier.isAbstract(node.getModifiers()));
 		aomMethod.setStatic(Modifier.isStatic(node.getModifiers()));
+		aomMethod.setPublicEntity(Modifier.isPublic(node.getModifiers()));
 		aomMethod.setConstructor(node.isConstructor());
 		
 		if( node.isConstructor() )

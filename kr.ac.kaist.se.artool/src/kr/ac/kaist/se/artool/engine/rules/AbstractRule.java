@@ -2,7 +2,7 @@ package kr.ac.kaist.se.artool.engine.rules;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.artool.engine.ARToolMain;
-import kr.ac.kaist.se.artool.engine.FitnessFunction;
+import kr.ac.kaist.se.artool.engine.ARFitnessFunction;
 import kr.ac.kaist.se.artool.engine.refactoring.RefactoringCommand;
 import kr.ac.kaist.se.artool.engine.refactoring.RefactoringException;
 
@@ -76,7 +76,7 @@ public abstract class AbstractRule {
 			System.err.println("doCommand!:" + mem_usage);
 			
 			curTime = System.currentTimeMillis();
-			ret =  FitnessFunction.getInstance().calculate(aom, refactoring_cost);
+			ret =  ARFitnessFunction.getInstance().calculate(aom, refactoring_cost);
 			System.err.println("FitnessFunction:" + Long.toString(System.currentTimeMillis() - curTime));
 			mem_usage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 			System.err.println("FitnessFunction!:" + mem_usage);

@@ -274,7 +274,7 @@ public class ARToolMain {
 
 		StatusLogger.getInstance().openOriginalPhase();
 		
-		float originalFitness = FitnessFunction.getInstance().calculate(aom, 0);
+		float originalFitness = ARFitnessFunction.getInstance().calculate(aom, 0);
 
 		//print file[basicmetricsuite.txt] for easy comparison
 		printInitialItems();
@@ -448,7 +448,7 @@ public class ARToolMain {
 			{
 				System.err.print("Performed\t");
 				ps.print("Performed\t");
-				FitnessFunction.getInstance().calculate(aom, refactoring_cost);
+				ARFitnessFunction.getInstance().calculate(aom, refactoring_cost);
 
 				printCouplingRelatedMetrics(aom, ARToolMain.getInstance().getPrintStream1());
 

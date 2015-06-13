@@ -712,6 +712,15 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getAOMEntity_PublicEntity() {
+		return (EAttribute)aomEntityEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getIndexedElement() {
 		return indexedElementEClass;
 	}
@@ -828,6 +837,7 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 
 		aomEntityEClass = createEClass(AOM_ENTITY);
 		createEAttribute(aomEntityEClass, AOM_ENTITY__OCCURRENCE);
+		createEAttribute(aomEntityEClass, AOM_ENTITY__PUBLIC_ENTITY);
 
 		indexedElementEClass = createEClass(INDEXED_ELEMENT);
 		createEAttribute(indexedElementEClass, INDEXED_ELEMENT__INDEX);
@@ -956,6 +966,7 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 
 		initEClass(aomEntityEClass, AOMEntity.class, "AOMEntity", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAOMEntity_Occurrence(), ecorePackage.getEInt(), "occurrence", null, 0, 1, AOMEntity.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAOMEntity_PublicEntity(), ecorePackage.getEBoolean(), "publicEntity", null, 0, 1, AOMEntity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(indexedElementEClass, IndexedElement.class, "IndexedElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getIndexedElement_Index(), ecorePackage.getEInt(), "index", null, 0, 1, IndexedElement.class, !IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

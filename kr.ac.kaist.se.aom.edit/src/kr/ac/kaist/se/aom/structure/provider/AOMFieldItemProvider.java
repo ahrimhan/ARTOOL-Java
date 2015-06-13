@@ -33,13 +33,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class AOMFieldItemProvider
-	extends AOMTypedElementItemProvider
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends AOMTypedElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -63,7 +57,9 @@ public class AOMFieldItemProvider
 
 			addNamePropertyDescriptor(object);
 			addMeasuredDataSetPropertyDescriptor(object);
+			addIndexPropertyDescriptor(object);
 			addOccurrencePropertyDescriptor(object);
+			addPublicEntityPropertyDescriptor(object);
 			addStaticRefererPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -114,6 +110,28 @@ public class AOMFieldItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Index feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addIndexPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_IndexedElement_index_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_IndexedElement_index_feature", "_UI_IndexedElement_type"),
+				 StructurePackage.Literals.INDEXED_ELEMENT__INDEX,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Occurrence feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -131,6 +149,28 @@ public class AOMFieldItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Public Entity feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPublicEntityPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AOMEntity_publicEntity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AOMEntity_publicEntity_feature", "_UI_AOMEntity_type"),
+				 StructurePackage.Literals.AOM_ENTITY__PUBLIC_ENTITY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -196,7 +236,9 @@ public class AOMFieldItemProvider
 		switch (notification.getFeatureID(AOMField.class)) {
 			case StructurePackage.AOM_FIELD__NAME:
 			case StructurePackage.AOM_FIELD__MEASURED_DATA_SET:
+			case StructurePackage.AOM_FIELD__INDEX:
 			case StructurePackage.AOM_FIELD__OCCURRENCE:
+			case StructurePackage.AOM_FIELD__PUBLIC_ENTITY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

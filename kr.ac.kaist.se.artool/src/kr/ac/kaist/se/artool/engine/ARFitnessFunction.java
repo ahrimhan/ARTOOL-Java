@@ -4,20 +4,20 @@ import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.artool.engine.metrics.BasicMetricSuite;
 
-public class FitnessFunction {
+public class ARFitnessFunction {
 	private BasicMetricSuite bms;
-	private static FitnessFunction instance;
-	public static FitnessFunction getInstance()
+	private static ARFitnessFunction instance;
+	public static ARFitnessFunction getInstance()
 	{
 		if( instance == null )
 		{
-			instance = new FitnessFunction();
+			instance = new ARFitnessFunction();
 			
 		}
 		return instance;
 	}
 	
-	private FitnessFunction()
+	private ARFitnessFunction()
 	{
 		
 	}

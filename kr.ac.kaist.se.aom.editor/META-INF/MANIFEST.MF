@@ -8,7 +8,8 @@ Bundle-Activator: kr.ac.kaist.se.aom.presentation.AomEditorPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: kr.ac.kaist.se.aom.presentation,
+Export-Package: kr.ac.kaist.se.aom.dynamicmodel.presentation,
+ kr.ac.kaist.se.aom.presentation,
  kr.ac.kaist.se.aom.staticmodel.presentation,
  kr.ac.kaist.se.aom.structure.presentation
 Require-Bundle: org.eclipse.core.runtime,
