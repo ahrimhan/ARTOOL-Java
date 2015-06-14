@@ -6,12 +6,15 @@ import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.SystemEntitySet;
-
-import org.jblas.FloatMatrix;
+import no.uib.cipr.matrix.DenseVector;
+import no.uib.cipr.matrix.Matrix;
+import no.uib.cipr.matrix.sparse.LinkedSparseMatrix;
 
 public class EPMEngine implements FitnessFunction, MoveMethodEventListener {
-	FloatMatrix membershipMatrix;
-	SystemEntitySet sts;
+	Matrix membershipMatrix;
+	SystemEntitySet sts;	
+	no.uib.cipr.matrix.Vector oneVector;
+	
 	
 	
 	public EPMEngine(SystemEntitySet sts)
@@ -19,19 +22,26 @@ public class EPMEngine implements FitnessFunction, MoveMethodEventListener {
 		this.sts = sts;
 		initMembershipMatrix();
 		initEntityMatrix();
+		
+		oneVector = new DenseVector(sts.entities.size());
+		
+		for( int i = 0; i < sts.entities.size(); i++ )
+		{
+			oneVector.set(i, 1);
+		}
 	}
 	
 	
 	private void initMembershipMatrix()
 	{
-		membershipMatrix = FloatMatrix.zeros(sts.entities.size(), sts.classes.size());
+		membershipMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
 		for( AOMClass clazz : sts.classes )
 		{
 			for( AOMMethod method : clazz.getMethods() )
 			{
 				try
 				{
-					membershipMatrix.put(method.getIndex(), clazz.getIndex(), 1);
+					membershipMatrix.set(method.getIndex(), clazz.getIndex(), 1);
 				} 
 				catch(ArrayIndexOutOfBoundsException ex)
 				{
@@ -43,17 +53,17 @@ public class EPMEngine implements FitnessFunction, MoveMethodEventListener {
 			
 			for( AOMField field : clazz.getFields() )
 			{
-				membershipMatrix.put(field.getIndex(), clazz.getIndex(), 1);
+				membershipMatrix.set(field.getIndex(), clazz.getIndex(), 1);
 			}
 		}
 
 	}
 	
-	FloatMatrix entityMatrix;
+	Matrix entityMatrix;
 	
 	private void initEntityMatrix()
 	{
-		entityMatrix = FloatMatrix.zeros(sts.entities.size(), sts.entities.size());
+		entityMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.entities.size());
 
 		for (AOMMethod method : sts.methods) {
 			
@@ -61,43 +71,79 @@ public class EPMEngine implements FitnessFunction, MoveMethodEventListener {
 			{
 				for(StaticFieldAccess sfa : method.getOwnedScope().getStaticFieldAccesses() )
 				{
-					entityMatrix.put(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
+					entityMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
 				}
 
 				for(StaticMethodCall smc : method.getOwnedScope().getStaticMethodCalls() )
 				{
-					entityMatrix.put(method.getIndex(), smc.getCallee().getIndex(), 1);
+					entityMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 1);
 				}
 			}
 		}
 	}
 	
-	private void printMatrixSpec(String prefix, FloatMatrix matrix)
+	private void printMatrixSpec(String prefix, Matrix matrix)
 	{
-		System.out.println(prefix + ": " + matrix.rows + " x " + matrix.columns);
+		System.out.println(prefix + ": " + matrix.numRows() + " x " + matrix.numColumns());
 	}
 	
-	private FloatMatrix getDistanceMatrix()
+	
+	
+	private Matrix getIntersectMatrix()
 	{
-		FloatMatrix intersectMatrix = entityMatrix.mmul(membershipMatrix);
-		FloatMatrix rowSum = entityMatrix.rowSums();
-		FloatMatrix colSum = membershipMatrix.columnSums();
+		Matrix intersectMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
 		
-		printMatrixSpec("entityMatrix", entityMatrix);
-		printMatrixSpec("membershipMatrix", membershipMatrix);
-		printMatrixSpec("intersectMatrix", intersectMatrix);
-		printMatrixSpec("colSum", colSum);
-		printMatrixSpec("rowSum", rowSum);
+		intersectMatrix = entityMatrix.mult(membershipMatrix, intersectMatrix);
 		
-		FloatMatrix minusUnionMatrix = intersectMatrix.subColumnVector(rowSum).subiRowVector(colSum);
-		FloatMatrix distanceMatrix = intersectMatrix.divi(minusUnionMatrix).addi(1);
-		
-		return distanceMatrix;
+		return intersectMatrix;
 	}
+	
+	private class RowColVectorMatrix
+	{
+		no.uib.cipr.matrix.Vector colVector;
+		no.uib.cipr.matrix.Vector rowVector;
+		
+		public RowColVectorMatrix(no.uib.cipr.matrix.Vector rowVector, no.uib.cipr.matrix.Vector colVector)
+		{
+			this.rowVector = rowVector;
+			this.colVector = colVector;
+		}
+		
+		public double getValue(int row, int col)
+		{
+			return rowVector.get(row) + colVector.get(col);
+		}
+	}
+		
+	
+	private RowColVectorMatrix getSumMatrix()
+	{
+		//Matrix sum = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
+		
+		no.uib.cipr.matrix.Vector rowSumColVector = new DenseVector(sts.entities.size());
+		rowSumColVector = entityMatrix.mult(oneVector, rowSumColVector);
+		
+		no.uib.cipr.matrix.Vector colSumRowVector = new DenseVector(sts.classes.size());		
+		colSumRowVector = membershipMatrix.transMult(oneVector, colSumRowVector);
+		
+		//printMatrixSpec("entityMatrix", entityMatrix);
+		//printMatrixSpec("membershipMatrix", membershipMatrix);
+		//printMatrixSpec("intersectMatrix", intersectMatrix);
+		//printMatrixSpec("colSum", colSum);
+		//printMatrixSpec("rowSum", rowSum);
+		
+		
+		
+		return new RowColVectorMatrix(rowSumColVector, colSumRowVector);
+	}
+	
+	
+		
 	
 	public float calculate()
 	{
-		FloatMatrix distanceMatrix = getDistanceMatrix();
+		Matrix intersectMatrix = getIntersectMatrix();
+		RowColVectorMatrix sumMatrix = getSumMatrix();
 		
 		float epm = 0;
 		
@@ -109,36 +155,44 @@ public class EPMEngine implements FitnessFunction, MoveMethodEventListener {
 			float external = 0;
 			int externalCount = 0;
 			float epmc = 0;
-			
+			double vv, vs;
 			for( int j = 0 ; j < sts.entities.size(); j++ )
-			{
+			{	
 				
-				if( membershipMatrix.get(j, i) == 1 )
+				vv = intersectMatrix.get(j, i);
+				vs = sumMatrix.getValue(j, i);
+				
+				if( vs == vv ) continue;
+				
+				vv = 1f - (vv / (vs - vv));
+				
+				if( membershipMatrix.get(j, i) > 0 )
 				{
-					internal += distanceMatrix.get(j, i);
+					internal += vv;
 					internalCount ++;
 				}
 				else
 				{
-					external += distanceMatrix.get(j, i);
+					external += vv;
 					externalCount ++;
 				}
 			
 			}
 			
-			epmc = internal * externalCount / external / internalCount;
-			epm += (sts.classes.get(i).getMethods().size() + sts.classes.get(i).getFields().size()) * epmc;
+			if( external != 0 && internalCount != 0 )
+			{
+				epmc = internal * externalCount / external / internalCount;
+				epm += (sts.classes.get(i).getMethods().size() + sts.classes.get(i).getFields().size()) * epmc;
+			}
 		}
 		
-		epm = epm / sts.entities.size();
-		
-		
+		epm = epm / sts.entities.size();		
 		return epm;
 	}
 	
-	public void moveMethodPerformed(AOMMethod method, AOMClass targetClass, boolean isRollbackAction)
+	public void moveMethodPerformed(AOMClass fromClass, AOMMethod method, AOMClass toClass, boolean isRollbackAction)
 	{
-		membershipMatrix.put(method.getIndex(), method.getOwner().getIndex(), 0);
-		membershipMatrix.put(method.getIndex(), targetClass.getIndex(), 1);
+		membershipMatrix.set(method.getIndex(), fromClass.getIndex(), 0);
+		membershipMatrix.set(method.getIndex(), toClass.getIndex(), 1);
 	}
 }

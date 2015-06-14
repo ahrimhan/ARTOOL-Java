@@ -26,7 +26,6 @@ import kr.ac.kaist.se.artool.engine.ruleselector.RuleSelector;
 
 import org.apache.commons.collections4.keyvalue.MultiKey;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 

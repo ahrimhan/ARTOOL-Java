@@ -43,7 +43,7 @@ public class MoveMethodRefactoring {
 			{
 				for( MoveMethodEventListener listener : listenerList )
 				{
-					listener.moveMethodPerformed(action.getMethod(), action.getToClass(), false);
+					listener.moveMethodPerformed(action.getFromClass(), action.getMethod(), action.getToClass(), false);
 				}
 				history.push(action);
 				return true;
@@ -66,7 +66,7 @@ public class MoveMethodRefactoring {
 			action.undoCommand();
 			for( MoveMethodEventListener listener : listenerList )
 			{
-				listener.moveMethodPerformed(action.getMethod(), action.getFromClass(), true);
+				listener.moveMethodPerformed(action.getToClass(), action.getMethod(), action.getFromClass(), true);
 			}
 		} catch (RefactoringException e) {
 			// TODO Auto-generated catch block

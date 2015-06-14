@@ -1,6 +1,8 @@
 package kr.ac.kaist.se.artool.search;
 
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 import java.util.Vector;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
@@ -32,7 +34,7 @@ public class RandomCandidateSelection implements CandidateSelection {
 	}
 	
 	
-	private boolean isUniqueMMC(Vector<MoveMethodCommand> ret, MoveMethodCommand newMMC)
+	private boolean isUniqueMMC(HashSet<MoveMethodCommand> ret, MoveMethodCommand newMMC)
 	{
 		for( MoveMethodCommand mmc: ret)
 		{
@@ -46,9 +48,9 @@ public class RandomCandidateSelection implements CandidateSelection {
 	}
 	
 	@Override
-	public Vector<MoveMethodCommand> getCandidates() {
+	public Set<MoveMethodCommand> getCandidates() {
 		
-		Vector<MoveMethodCommand> ret = new Vector<MoveMethodCommand>();
+		HashSet<MoveMethodCommand> ret = new HashSet<MoveMethodCommand>();
 		
 		if( (this.candidateCount * 2) > (aom.getClasses().size() * methodList.size()) )
 		{
@@ -59,14 +61,13 @@ public class RandomCandidateSelection implements CandidateSelection {
 		{
 			MoveMethodCommand newMMC = null;
 			
-			
 			do
 			{
 				int ci = random.nextInt(aom.getClasses().size());
 				int mi = random.nextInt(methodList.size());
 				newMMC = new MoveMethodCommand(methodList.elementAt(mi), aom.getClasses().get(ci));
 			}
-			while( isUniqueMMC(ret, newMMC) );
+			while( !isUniqueMMC(ret, newMMC) );
 			
 			if( newMMC != null )
 			{

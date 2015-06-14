@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="lib/jblas-1.2.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="libmtj/arpack_combined_all-0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libmtj/core-1.1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="libmtj/jniloader-1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libmtj/mtj-1.0.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="libmtj/native_ref-java-1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libmtj/native_system-java-1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libmtj/netlib-native_ref-linux-armhf-1.1-natives.jar"/>
+	<classpathentry exported="true" kind="lib" path="libmtj/netlib-native_ref-linux-i686-1.1-natives.jar"/>
+	<classpathentry exported="true" kind="lib" path="libmtj/netlib-native_ref-linux-x86_64-1.1-natives.jar"/>
+	<classpathentry exported="true" kind="lib" path="libmtj/netlib-native_ref-osx-x86_64-1.1-natives.jar"/>
+	<classpathentry exported="true" kind="lib" path="libmtj/netlib-native_ref-win-i686-1.1-natives.jar"/>
+	<classpathentry exported="true" kind="lib" path="libmtj/netlib-native_ref-win-x86_64-1.1-natives.jar"/>
+	<classpathentry exported="true" kind="lib" path="libmtj/netlib-native_system-linux-armhf-1.1-natives.jar"/>
+	<classpathentry exported="true" kind="lib" path="libmtj/netlib-native_system-linux-i686-1.1-natives.jar"/>
+	<classpathentry exported="true" kind="lib" path="libmtj/netlib-native_system-linux-x86_64-1.1-natives.jar"/>
+	<classpathentry exported="true" kind="lib" path="libmtj/netlib-native_system-osx-x86_64-1.1-natives.jar"/>
+	<classpathentry exported="true" kind="lib" path="libmtj/netlib-native_system-win-i686-1.1-natives.jar"/>
+	<classpathentry exported="true" kind="lib" path="libmtj/netlib-native_system-win-x86_64-1.1-natives.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/aomprofiler.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-logging-1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ws-commons-util-1.0.2.jar"/>
@@ -18,11 +35,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/commons-collections-4.0-SNAPSHOT.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>

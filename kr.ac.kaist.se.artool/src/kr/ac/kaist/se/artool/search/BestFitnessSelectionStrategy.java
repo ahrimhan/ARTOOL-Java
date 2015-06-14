@@ -11,8 +11,8 @@ public class BestFitnessSelectionStrategy extends
 
 	private Vector<MoveMethodCommand> commandList = new Vector<MoveMethodCommand>();
 	
-	public BestFitnessSelectionStrategy(float prevFitness) {
-		super(prevFitness);
+	public BestFitnessSelectionStrategy(float prevFitness, Comparator<MoveMethodCommand> comparator) {
+		super(prevFitness, comparator);
 	}
 
 	@Override
@@ -29,16 +29,9 @@ public class BestFitnessSelectionStrategy extends
 		
 		try
 		{
-			cmd = Collections.max(commandList, new Comparator<MoveMethodCommand>(){
-	
-				@Override
-				public int compare(MoveMethodCommand o1, MoveMethodCommand o2) {
-					if( o1.fitness > o2.fitness ) return 1;
-					else if( o1.fitness < o2.fitness ) return -1;
-					else return 0;
-				}
-				
-			});
+			cmd = Collections.max(commandList, comparator);
+			
+			
 		}
 		catch(Exception ex)
 		{

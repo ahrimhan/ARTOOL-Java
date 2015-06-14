@@ -56,6 +56,22 @@ public class MoveMethodCommand implements RefactoringCommand {
 		return originalClass;
 	}
 	
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append('[');
+		sb.append(deltaValue);
+		sb.append("] ");
+		sb.append(originalClass.getFqdn());
+		sb.append(" -- ");
+		sb.append(movingMethod.getName());
+		sb.append(" -> ");
+		sb.append(targetClass.getFqdn());
+		
+		
+		return sb.toString();
+	}
+	
 	public boolean isIdenticalOrReversal(MoveMethodCommand action)
 	{
 		if (this.movingMethod == action.movingMethod)
@@ -153,6 +169,7 @@ public class MoveMethodCommand implements RefactoringCommand {
 		{
 			movingMethod.setOwner(originalClass);
 			movingMethod.setOverriding(originalOverriding);
+			did = false;
 		}
 	}
 

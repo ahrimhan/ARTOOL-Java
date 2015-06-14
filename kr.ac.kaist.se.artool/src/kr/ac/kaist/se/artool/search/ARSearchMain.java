@@ -4,7 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Vector;
+import java.util.Comparator;
+import java.util.Set;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.artool.engine.StatusLogger;
@@ -63,6 +64,7 @@ public class ARSearchMain {
 
 		StatusLogger.getInstance().clear();
 		StatusLogger.getInstance().openOriginalPhase();
+		Comparator<MoveMethodCommand> comparator;
 
 		MoveMethodRefactoring mmr = new MoveMethodRefactoring(aom);
 
@@ -70,7 +72,7 @@ public class ARSearchMain {
 		
 		if(useDeltaTable)
 		{
-			DeltaMatrixEngine dmEngine = new DeltaMatrixEngine(ses);
+			DeltaMatrixEngine dmEngine = new DeltaMatrixEngine(ses, max_candidate_selection);
 			mmr.addListener(dmEngine);
 			candidateSelection = dmEngine;
 		}
@@ -81,12 +83,34 @@ public class ARSearchMain {
 		
 		FitnessFunction fitnessFunction;
 		
+		comparator = new Comparator<MoveMethodCommand>(){
+			
+			@Override
+			public int compare(MoveMethodCommand o1, MoveMethodCommand o2) {
+				if( o1.fitness > o2.fitness ) return 1;
+				else if( o1.fitness < o2.fitness ) return -1;
+				else return 0;
+			}
+			
+		};
+		
 		switch( fitnessType )
 		{
 		case EPM:
 			EPMEngine epmEngine = new EPMEngine(ses);
 			fitnessFunction = epmEngine;
 			mmr.addListener(epmEngine);
+			
+			comparator = new Comparator<MoveMethodCommand>(){
+				
+				@Override
+				public int compare(MoveMethodCommand o1, MoveMethodCommand o2) {
+					if( o1.fitness < o2.fitness ) return 1;
+					else if( o1.fitness > o2.fitness ) return -1;
+					else return 0;
+				}
+				
+			};
 			break;
 		case FLEXIBILITY:
 			fitnessFunction = new QMoodEngine(aom, QMoodEngine.TYPE.FLEXIBILITY);
@@ -112,35 +136,54 @@ public class ARSearchMain {
 		{
 			prevFitness = fitness;
 			System.out.print("select candidate...");
-			Vector<MoveMethodCommand> candidates = candidateSelection.getCandidates();
+			Set<MoveMethodCommand> candidates = candidateSelection.getCandidates();
 			System.out.println("done");
-			
-			StatusLogger.getInstance().openTrialPhase();
-			BestFitnessSelectionStrategy strategy = new BestFitnessSelectionStrategy(prevFitness);
 
-			for( int idx = 0 ; idx < max_candidate_selection && idx < candidates.size() ; idx++ )
+			/*
+			System.err.println();
+			
+			
+			for( MoveMethodCommand command: candidates )
 			{
-				MoveMethodCommand mmc = candidates.elementAt(idx);
-				StatusLogger.getInstance().openTrialSuite(mmc);
-				mmr.doAction(mmc);
-				System.out.print("calculate fitness...");
-				fitness =  fitnessFunction.calculate();
-				System.out.println("done");
-				if( strategy.next(mmc, fitness) )
+				System.err.println(command);
+			}
+			*/
+			
+			
+			//StatusLogger.getInstance().openTrialPhase();
+			BestFitnessSelectionStrategy strategy = new BestFitnessSelectionStrategy(prevFitness, comparator);
+			int idx = 0;
+			for( MoveMethodCommand mmc : candidates )
+			{
+				if( idx >= max_candidate_selection ) break;
+
+				//StatusLogger.getInstance().openTrialSuite(mmc);
+				if( mmr.doAction(mmc) )
 				{
-					mmr.undoAction();	
+					System.out.print("Candidate...");
+					fitness = fitnessFunction.calculate();
+					System.out.print(fitnessType.toString() + " [" + fitness + "] ");					
+					System.out.println("done");
+					
+					
+					if (strategy.next(mmc, fitness)) {
+						mmr.undoAction();
+					} else {
+						mmr.undoAction();
+						break;
+					}
 				}
-				else
-				{
-					mmr.undoAction();	
-					break;
-				}
+				
+				idx++;
 			}	
 			
 			MoveMethodCommand selectedCommand = strategy.done();
 			fitness = selectedCommand.fitness;
 			
-			StatusLogger.getInstance().selectSuite(selectedCommand);
+			System.err.print(fitnessType.toString() + " [" + fitness + "] ");
+			System.err.println(" selected!!!");
+			
+			//StatusLogger.getInstance().selectSuite(selectedCommand);
 			mmr.doAction(selectedCommand);
 		}
 	}

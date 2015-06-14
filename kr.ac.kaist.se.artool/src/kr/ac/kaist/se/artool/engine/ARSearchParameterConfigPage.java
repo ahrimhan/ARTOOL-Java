@@ -2,7 +2,6 @@ package kr.ac.kaist.se.artool.engine;
 
 import kr.ac.kaist.se.artool.search.ARSearchMain;
 
-import org.apache.commons.collections4.functors.ForClosure;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -89,7 +88,7 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		
 		new Label(composite, SWT.NONE).setText("Max Candidates Count:");
 		maxCandidateCount = new Text(composite, SWT.BORDER | SWT.SINGLE);
-		maxCandidateCount.setMessage("Set Max-Candidate Counts. Default is 1000");
+		maxCandidateCount.setMessage("Set Max-Candidate Counts. Default is 100");
 		maxCandidateCount.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		maxCandidateCount.addListener(SWT.Verify, new Listener() {
@@ -112,7 +111,7 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = ncol;
 		useDeltaTableButton.setLayoutData(gd);
-		useDeltaTableButton.setSelection(true);
+		useDeltaTableButton.setSelection(false);
 		
 		
 		fitnessFunction.select(0);
@@ -186,7 +185,7 @@ public class ARSearchParameterConfigPage extends WizardPage {
 
 
 	public int getMaxCandidateCount() {
-		int ret = 1000;;
+		int ret = 10;;
 		
 		try
 		{
@@ -194,7 +193,7 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		}
 		catch(Exception e)
 		{
-			ret = 1000;
+			ret = 100;
 		}
 		
 		

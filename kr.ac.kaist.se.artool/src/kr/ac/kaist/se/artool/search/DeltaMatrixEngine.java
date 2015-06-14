@@ -1,7 +1,10 @@
 package kr.ac.kaist.se.artool.search;
 
+import java.sql.Timestamp;
 import java.util.Comparator;
-import java.util.SortedSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
@@ -11,148 +14,165 @@ import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.SystemEntitySet;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
-
-import org.jblas.FloatMatrix;
+import no.uib.cipr.matrix.DenseMatrix;
+import no.uib.cipr.matrix.Matrix;
+import no.uib.cipr.matrix.MatrixEntry;
+import no.uib.cipr.matrix.sparse.LinkedSparseMatrix;
 
 public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSelection {
-	FloatMatrix membershipMatrix;
+	Matrix membershipMatrix;
 	SystemEntitySet sts;
+//	Matrix linkMatrix;
+	Matrix internalLinkMatrix;
+	Matrix externalLinkMatrix;
+	int maxCandidate;
+
 	
-	
-	public DeltaMatrixEngine(SystemEntitySet sts)
+	public DeltaMatrixEngine(SystemEntitySet sts, int maxCandidate)
 	{
 		this.sts = sts;
-		initMembershipMatrix();
-		initLinkMatrix();
+		this.maxCandidate = maxCandidate;
+		initBasicMatrix();	
 	}
 	
 	
-	private void initMembershipMatrix()
+	private void initBasicMatrix()
 	{
-		membershipMatrix = FloatMatrix.zeros(sts.entities.size(), sts.classes.size());
-		for( AOMClass clazz : sts.classes )
-		{
-			for( AOMMethod method : clazz.getMethods() )
-			{
-				try
-				{
-					membershipMatrix.put(method.getIndex(), clazz.getIndex(), 1);
-				} 
-				catch(ArrayIndexOutOfBoundsException ex)
-				{
-					System.err.println("Method index:" + method.getIndex());
-					System.err.println("Class index:" + clazz.getIndex());
-					throw ex;
-				}
-			}
-			
-			for( AOMField field : clazz.getFields() )
-			{
-				membershipMatrix.put(field.getIndex(), clazz.getIndex(), 1);
-			}
-		}
-
-	}
-	
-	FloatMatrix linkMatrix;
-	
-	private void initLinkMatrix()
-	{
-		linkMatrix = FloatMatrix.zeros(sts.entities.size(), sts.entities.size());
+		membershipMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
+		internalLinkMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.entities.size());
+		externalLinkMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.entities.size());
 
 		for (AOMMethod method : sts.methods) {
+			AOMClass clazz = method.getOwner();
+			try {
+				membershipMatrix.set(method.getIndex(), clazz.getIndex(), 1);
+			} catch (ArrayIndexOutOfBoundsException ex) {
+				dLog("Method index:" + method.getIndex());
+				dLog("Class index:" + clazz.getIndex());
+				throw ex;
+			}
 			
 			if( method.getOwnedScope() != null )
 			{
 				for(StaticFieldAccess sfa : method.getOwnedScope().getStaticFieldAccesses() )
 				{
-					linkMatrix.put(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
-					linkMatrix.put(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
+					if( method.getOwner() == sfa.getAccessedField().getOwner() )
+					{
+						internalLinkMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
+						internalLinkMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
+					}
+					else
+					{
+						externalLinkMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
+						externalLinkMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
+					}
 				}
 
 				for(StaticMethodCall smc : method.getOwnedScope().getStaticMethodCalls() )
 				{
-					linkMatrix.put(smc.getCallee().getIndex(), method.getIndex(), 1);
-					linkMatrix.put(method.getIndex(), smc.getCallee().getIndex(), 1);
+					if( method.getOwner() == smc.getCallee().getOwner() )
+					{
+						internalLinkMatrix.set(smc.getCallee().getIndex(), method.getIndex(), 1);
+						internalLinkMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 1);
+					}
+					else
+					{
+						externalLinkMatrix.set(smc.getCallee().getIndex(), method.getIndex(), 1);
+						externalLinkMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 1);
+					}
 				}
 			}
 		}
-	}
-	
-	private FloatMatrix getInternalLinkMatrix()
-	{
-		FloatMatrix internalLinkMask = membershipMatrix.mmul(membershipMatrix.transpose());
-		return linkMatrix.mmul(internalLinkMask);
-	}
-	
-	private FloatMatrix getExternalLinkMatrix(FloatMatrix internalLinkMatrix)
-	{
-		FloatMatrix externalLinkMatrix = linkMatrix.sub(internalLinkMatrix);
-		return externalLinkMatrix;
-	}
-	
-	private FloatMatrix getInvertedMembershipMatrix(FloatMatrix m)
-	{
-		FloatMatrix ret;
-		
-		ret = FloatMatrix.zeros(sts.entities.size(), sts.classes.size());
-		
-		int[] indices = m.findIndices();
 
-		for( int index : indices )
+		for (AOMField field : sts.fields) {
+			AOMClass clazz = field.getOwner();
+			membershipMatrix.set(field.getIndex(), clazz.getIndex(), 1);
+		}
+
+	}
+	
+		
+	private Matrix getInvertedMembershipMatrix(Matrix m)
+	{
+		Matrix ret;
+		
+		ret = new DenseMatrix(sts.entities.size(), sts.classes.size());
+		
+		
+		Iterator<MatrixEntry> iterator = m.iterator();
+		
+		for( MatrixEntry entry = iterator.next(); iterator.hasNext(); entry = iterator.next() )
 		{
-			int row = m.indexRows(index);
-			int col = m.indexColumns(index);
-			float v = m.get(index);
+			int row = entry.row();
+			int col = entry.column();
+			float v = (float) entry.get();
 			
 			for( int i = 0 ; i < sts.classes.size(); i++ )
 			{
-				ret.put(row, i, ret.get(row, i) + v);
+				ret.set(row, i, ret.get(row, i) + v);
 			}
-			ret.put(row, col, 0);
+			
+			ret.set(row, col, 0);
 		}
+		
 
 		return ret;
 	}
 	
-	private FloatMatrix getDeltaMatrix()
+	public static void dLog(String s)
 	{
-		System.err.println("get delta matrix 1");
-		FloatMatrix internalLinkMatrix = getInternalLinkMatrix();
-		System.err.println("get delta matrix 2");
-		FloatMatrix externalLinkMatrix = getExternalLinkMatrix(internalLinkMatrix);
-		System.err.println("get delta matrix 3");
-		FloatMatrix IP = internalLinkMatrix.mmuli(membershipMatrix);
-		System.err.println("get delta matrix 4");
-		FloatMatrix EP = externalLinkMatrix.mmuli(membershipMatrix);
-		System.err.println("get delta matrix 5");
-		FloatMatrix IIP = getInvertedMembershipMatrix(IP);
-		FloatMatrix deltaMatrix = IIP.subi(EP);
+		Timestamp time = new Timestamp(System.currentTimeMillis());
+		System.err.println(time.toString() + s);
+	}
+	
+	private Matrix getDeltaMatrix()
+	{
 		
+		Matrix temp1;
+		Matrix temp2;
+		
+		/*
+		temp 1 = new LinkedSparseMatrix(sts.entities.size(), sts.entities.size());
+		Matrix localInternalLinkMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.entities.size());
+		
+		dLog("get delta matrix 1.1: internal Link Matrix transBmult");
+
+		temp1 = membershipMatrix.transBmult(membershipMatrix, temp1);
+		
+		dLog("get delta matrix 1.2: internal Link Matrix mult");
+		
+		localInternalLinkMatrix = linkMatrix.mult(temp1, localInternalLinkMatrix);
+		dLog("get delta matrix 1.3: internal Link Matrix completed...");
+
+		Matrix temp2 = linkMatrix.copy();
+		dLog("get delta matrix 2: external Link Matrix");
+		Matrix localExternalLinkMatrix = temp2.add(-1, localInternalLinkMatrix);
+		*/
+		
+		
+		
+		
+		
+		
+		temp1 = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
+		temp2 = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
+		
+		Matrix IP = internalLinkMatrix.mult(membershipMatrix, temp1);
+		
+		Matrix EP = externalLinkMatrix.mult(membershipMatrix, temp2);
+		
+		Matrix IIP = getInvertedMembershipMatrix(IP);
+		
+		Matrix deltaMatrix = IIP.add(-1, EP);
+		
+
 		return deltaMatrix;
 	}
 	
-	public Vector<MoveMethodCommand> getPositiveRefactorings()
+	public Set<MoveMethodCommand> getPositiveRefactorings()
 	{
-		FloatMatrix dm = getDeltaMatrix();
-		Vector<MoveMethodCommand> mmcSet = new Vector<MoveMethodCommand>();
-		
-		for( int row = 0; row < sts.methods.size(); row++ )
-		{
-			for( int col = 0; col < sts.classes.size(); col++ )
-			{
-				float d = dm.get(row, col);
-				if( d > 0 )
-				{
-					AOMMethod method = sts.methods.get(row);
-					AOMClass clazz = sts.classes.get(col);
-					MoveMethodCommand mmc = new MoveMethodCommand(method, clazz, d);
-					mmcSet.add(mmc);
-				}
-			}
-		}
-		
-		mmcSet.sort(new Comparator<MoveMethodCommand>() {
+		Matrix dm = getDeltaMatrix();
+		TreeSet<MoveMethodCommand> mmcSet = new TreeSet<MoveMethodCommand>(new Comparator<MoveMethodCommand>() {
 
 			@Override
 			public int compare(MoveMethodCommand o1, MoveMethodCommand o2) {
@@ -161,7 +181,7 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 				{
 					return 0;
 				}
-				else if( dd < 0 )
+				else if( dd > 0 )
 				{
 					return -1;
 				}
@@ -170,19 +190,85 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 			
 		});
 		
+		Iterator<MatrixEntry> iterator = dm.iterator();
+		
+		for( MatrixEntry entry = iterator.next(); iterator.hasNext(); entry = iterator.next() )
+		{
+			int row = entry.row();
+			int col = entry.column();
+			float v = (float) entry.get();
+			
+			if( v > 0 && row < sts.methods.size())
+			{
+				AOMMethod method = sts.methods.get(row);
+				AOMClass clazz = sts.classes.get(col);
+				MoveMethodCommand mmc = new MoveMethodCommand(method, clazz, (float)v);
+				mmcSet.add(mmc);
+				if( mmcSet.size() > maxCandidate )
+				{
+					mmcSet.remove(mmcSet.last());
+				}
+			}
+		}
+		
+		
+
+
 		return mmcSet;
 	}
 	
 	@Override
-	public void moveMethodPerformed(AOMMethod method, AOMClass targetClass, boolean isRollbackAction)
+	public void moveMethodPerformed(AOMClass fromClass, AOMMethod method, AOMClass toClass, boolean isRollbackAction)
 	{
-		membershipMatrix.put(method.getIndex(), method.getOwner().getIndex(), 0);
-		membershipMatrix.put(method.getIndex(), targetClass.getIndex(), 1);
+		membershipMatrix.set(method.getIndex(), fromClass.getIndex(), 0);
+		membershipMatrix.set(method.getIndex(), toClass.getIndex(), 1);
+		
+		
+		if( method.getOwnedScope() != null )
+		{
+			for(StaticFieldAccess sfa : method.getOwnedScope().getStaticFieldAccesses() )
+			{
+				if( method.getOwner() == sfa.getAccessedField().getOwner() )
+				{
+					internalLinkMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
+					internalLinkMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
+					externalLinkMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 0);
+					externalLinkMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 0);
+
+				}
+				else
+				{
+					externalLinkMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
+					externalLinkMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
+					internalLinkMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 0);
+					internalLinkMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 0);
+					
+				}
+			}
+
+			for(StaticMethodCall smc : method.getOwnedScope().getStaticMethodCalls() )
+			{
+				if( method.getOwner() == smc.getCallee().getOwner() )
+				{
+					internalLinkMatrix.set(smc.getCallee().getIndex(), method.getIndex(), 1);
+					internalLinkMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 1);
+					externalLinkMatrix.set(smc.getCallee().getIndex(), method.getIndex(), 0);
+					externalLinkMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 0);
+				}
+				else
+				{
+					internalLinkMatrix.set(smc.getCallee().getIndex(), method.getIndex(), 0);
+					internalLinkMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 0);
+					externalLinkMatrix.set(smc.getCallee().getIndex(), method.getIndex(), 1);
+					externalLinkMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 1);
+				}
+			}
+		}	
 	}
 
 
 	@Override
-	public Vector<MoveMethodCommand> getCandidates() {
+	public Set<MoveMethodCommand> getCandidates() {
 		return this.getPositiveRefactorings();
 	}
 }
