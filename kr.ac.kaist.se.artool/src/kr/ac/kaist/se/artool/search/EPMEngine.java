@@ -131,14 +131,10 @@ public class EPMEngine implements FitnessFunction, MoveMethodEventListener {
 		//printMatrixSpec("intersectMatrix", intersectMatrix);
 		//printMatrixSpec("colSum", colSum);
 		//printMatrixSpec("rowSum", rowSum);
-		
-		
-		
+			
 		return new RowColVectorMatrix(rowSumColVector, colSumRowVector);
 	}
 	
-	
-		
 	
 	public float calculate()
 	{
@@ -160,9 +156,9 @@ public class EPMEngine implements FitnessFunction, MoveMethodEventListener {
 			{	
 				
 				vv = intersectMatrix.get(j, i);
-				vs = sumMatrix.getValue(j, i);
+				vs = sumMatrix.getValue(j, i) - membershipMatrix.get(j, i);
 				
-				if( vs == vv ) continue;
+				if( vs <= vv ) continue;
 				
 				vv = 1f - (vv / (vs - vv));
 				

@@ -41,7 +41,9 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 		membershipMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
 		internalLinkMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.entities.size());
 		externalLinkMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.entities.size());
-
+		
+		
+		
 		for (AOMMethod method : sts.methods) {
 			AOMClass clazz = method.getOwner();
 			try {
@@ -66,6 +68,28 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 						externalLinkMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
 						externalLinkMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
 					}
+					
+					
+					// Experimental: Cohesive factor
+					for(StaticFieldAccess sfaReverse: sfa.getAccessedField().getStaticReferer() )
+					{
+						AOMMethod cohesiveMethod = sfaReverse.getAccessingScope().getOwner();
+						
+						if( cohesiveMethod != method )
+						{
+							if( method.getOwner() == cohesiveMethod.getOwner() )
+							{
+								internalLinkMatrix.set(cohesiveMethod.getIndex(), method.getIndex(), 1);
+								internalLinkMatrix.set(method.getIndex(), cohesiveMethod.getIndex(), 1);
+							}
+							else
+							{
+								externalLinkMatrix.set(cohesiveMethod.getIndex(), method.getIndex(), 1);
+								externalLinkMatrix.set(method.getIndex(), cohesiveMethod.getIndex(), 1);
+							}							
+						}
+					}
+					
 				}
 
 				for(StaticMethodCall smc : method.getOwnedScope().getStaticMethodCalls() )
@@ -172,6 +196,8 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 	public Set<MoveMethodCommand> getPositiveRefactorings()
 	{
 		Matrix dm = getDeltaMatrix();
+		
+		
 		TreeSet<MoveMethodCommand> mmcSet = new TreeSet<MoveMethodCommand>(new Comparator<MoveMethodCommand>() {
 
 			@Override
@@ -181,7 +207,7 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 				{
 					return 0;
 				}
-				else if( dd > 0 )
+				else if( dd < 0 )
 				{
 					return -1;
 				}
@@ -190,6 +216,35 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 			
 		});
 		
+		
+		for( int i = 0; i < sts.methods.size(); i++ )
+		{
+			double minV = 0;
+			int minCol = -1;
+			
+			for( int j = 0; j < dm.numColumns(); j++ )
+			{
+				if( minV > dm.get(i, j) || minCol == -1 )
+				{
+					minCol = j;
+					minV = dm.get(i, j);
+				}
+			}
+			
+			if( minV < 0 )
+			{
+				AOMMethod method = sts.methods.get(i);
+				AOMClass clazz = sts.classes.get(minCol);
+				MoveMethodCommand mmc = new MoveMethodCommand(method, clazz, (float)minV);
+				mmcSet.add(mmc);
+				if( mmcSet.size() > maxCandidate )
+				{
+					mmcSet.remove(mmcSet.last());
+				}
+			}
+		}
+		
+		/*
 		Iterator<MatrixEntry> iterator = dm.iterator();
 		
 		for( MatrixEntry entry = iterator.next(); iterator.hasNext(); entry = iterator.next() )
@@ -210,6 +265,9 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 				}
 			}
 		}
+		*/
+		
+		
 		
 		
 
@@ -238,12 +296,36 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 				}
 				else
 				{
-					externalLinkMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
-					externalLinkMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
 					internalLinkMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 0);
 					internalLinkMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 0);
-					
+					externalLinkMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
+					externalLinkMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
 				}
+				
+				// Experimental: Cohesive factor
+				for(StaticFieldAccess sfaReverse: sfa.getAccessedField().getStaticReferer() )
+				{
+					AOMMethod cohesiveMethod = sfaReverse.getAccessingScope().getOwner();
+					
+					if( cohesiveMethod != method )
+					{
+						if( method.getOwner() == cohesiveMethod.getOwner() )
+						{
+							internalLinkMatrix.set(cohesiveMethod.getIndex(), method.getIndex(), 1);
+							internalLinkMatrix.set(method.getIndex(), cohesiveMethod.getIndex(), 1);
+							externalLinkMatrix.set(cohesiveMethod.getIndex(), method.getIndex(), 0);
+							externalLinkMatrix.set(method.getIndex(), cohesiveMethod.getIndex(), 0);
+						}
+						else
+						{
+							internalLinkMatrix.set(cohesiveMethod.getIndex(), method.getIndex(), 0);
+							internalLinkMatrix.set(method.getIndex(), cohesiveMethod.getIndex(), 0);
+							externalLinkMatrix.set(cohesiveMethod.getIndex(), method.getIndex(), 1);
+							externalLinkMatrix.set(method.getIndex(), cohesiveMethod.getIndex(), 1);
+						}							
+					}
+				}
+				
 			}
 
 			for(StaticMethodCall smc : method.getOwnedScope().getStaticMethodCalls() )

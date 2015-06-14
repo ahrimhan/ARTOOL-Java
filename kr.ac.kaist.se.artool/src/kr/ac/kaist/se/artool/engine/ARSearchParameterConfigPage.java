@@ -111,7 +111,7 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = ncol;
 		useDeltaTableButton.setLayoutData(gd);
-		useDeltaTableButton.setSelection(false);
+		useDeltaTableButton.setSelection(true);
 		
 		
 		fitnessFunction.select(0);

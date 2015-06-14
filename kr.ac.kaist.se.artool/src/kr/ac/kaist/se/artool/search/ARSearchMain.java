@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.Set;
 
@@ -135,10 +136,11 @@ public class ARSearchMain {
 		for(int iteration = 0; iteration < max_iteration; iteration++ )
 		{
 			prevFitness = fitness;
-			System.out.print("select candidate...");
+			//System.out.print("select candidate...");
 			Set<MoveMethodCommand> candidates = candidateSelection.getCandidates();
-			System.out.println("done");
+			//System.out.println("done");
 
+			
 			/*
 			System.err.println();
 			
@@ -148,6 +150,7 @@ public class ARSearchMain {
 				System.err.println(command);
 			}
 			*/
+			
 			
 			
 			//StatusLogger.getInstance().openTrialPhase();
@@ -160,11 +163,9 @@ public class ARSearchMain {
 				//StatusLogger.getInstance().openTrialSuite(mmc);
 				if( mmr.doAction(mmc) )
 				{
-					System.out.print("Candidate...");
-					fitness = fitnessFunction.calculate();
-					System.out.print(fitnessType.toString() + " [" + fitness + "] ");					
-					System.out.println("done");
 					
+					fitness = fitnessFunction.calculate();
+					dLog("[Candidate:" + mmc.toString() + "]["+fitnessType.toString() + ":" + fitness + "][DT:" + mmc.getDeltaValue() +"]");										
 					
 					if (strategy.next(mmc, fitness)) {
 						mmr.undoAction();
@@ -180,11 +181,16 @@ public class ARSearchMain {
 			MoveMethodCommand selectedCommand = strategy.done();
 			fitness = selectedCommand.fitness;
 			
-			System.err.print(fitnessType.toString() + " [" + fitness + "] ");
-			System.err.println(" selected!!!");
+			dLog("[ITERATION:" + iteration + "][DT:" + useDeltaTable + "]["+ fitnessType.toString() + ":" + fitness + "] selected!!!");
 			
 			//StatusLogger.getInstance().selectSuite(selectedCommand);
 			mmr.doAction(selectedCommand);
 		}
+	}
+	
+	public static void dLog(String s)
+	{
+		Timestamp time = new Timestamp(System.currentTimeMillis());
+		System.out.println(time.toString() + s);
 	}
 }
