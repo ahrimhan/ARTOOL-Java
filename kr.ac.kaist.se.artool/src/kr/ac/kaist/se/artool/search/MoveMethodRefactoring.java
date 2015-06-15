@@ -29,6 +29,7 @@ public class MoveMethodRefactoring {
 	
 	public boolean doAction(MoveMethodCommand action)
 	{
+		/*
 		for( MoveMethodCommand mmc : history )
 		{
 			if( mmc.isIdenticalOrReversal(action) )
@@ -36,6 +37,7 @@ public class MoveMethodRefactoring {
 				return false;
 			}
 		}
+		*/
 		
 		try
 		{

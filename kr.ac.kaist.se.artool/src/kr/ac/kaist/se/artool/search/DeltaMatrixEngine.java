@@ -203,23 +203,31 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 			@Override
 			public int compare(MoveMethodCommand o1, MoveMethodCommand o2) {
 				float dd = o1.getDeltaValue() - o2.getDeltaValue();
-				if( dd == 0 )
-				{
-					return 0;
-				}
-				else if( dd < 0 )
+				if( dd < 0 )
 				{
 					return -1;
 				}
+				
+				// do not permit equality
 				return 1;
 			}
 			
 		});
 		
 		
+		System.err.print  ("dm.col  :" + dm.numColumns());
+		System.err.println(" dm.row  :" + dm.numRows());
+		System.err.print  ("classes :" + sts.classes.size());
+		System.err.println(" entities:" + sts.entities.size());
+		System.err.println("methods:" + sts.methods.size());
+		System.err.println("fields:" + sts.fields.size());
+		System.err.println("maxCandidate:" + maxCandidate);
+		
+		
+		
 		for( int i = 0; i < sts.methods.size(); i++ )
 		{
-			double minV = 0;
+			double minV = 9999999999f;
 			int minCol = -1;
 			
 			for( int j = 0; j < dm.numColumns(); j++ )
@@ -231,7 +239,7 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 				}
 			}
 			
-			if( minV < 0 )
+			//if( minV < 0 )
 			{
 				AOMMethod method = sts.methods.get(i);
 				AOMClass clazz = sts.classes.get(minCol);
@@ -239,10 +247,12 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 				mmcSet.add(mmc);
 				if( mmcSet.size() > maxCandidate )
 				{
-					mmcSet.remove(mmcSet.last());
+					mmcSet.pollLast();
 				}
 			}
 		}
+		System.err.println("selCandidate:" + mmcSet.size());
+
 		
 		/*
 		Iterator<MatrixEntry> iterator = dm.iterator();
@@ -253,7 +263,7 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 			int col = entry.column();
 			float v = (float) entry.get();
 			
-			if( v > 0 && row < sts.methods.size())
+			if( v < 0 && row < sts.methods.size())
 			{
 				AOMMethod method = sts.methods.get(row);
 				AOMClass clazz = sts.classes.get(col);
@@ -266,10 +276,6 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 			}
 		}
 		*/
-		
-		
-		
-		
 
 
 		return mmcSet;
