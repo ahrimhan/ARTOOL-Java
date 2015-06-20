@@ -11,6 +11,7 @@ public class FirstPositiveFitnessSelectionStrategy extends
 	
 	
 	private MoveMethodCommand prevCmd = null;
+	private MoveMethodCommand retCmd = null;
 	
 	public FirstPositiveFitnessSelectionStrategy(float prevFitness, Comparator<MoveMethodCommand> comparator) {
 		super(prevFitness, comparator);
@@ -22,6 +23,7 @@ public class FirstPositiveFitnessSelectionStrategy extends
 		if( prevCmd == null || comparator.compare(prevCmd, obj) < 0 )
 		{
 			prevCmd = obj;
+			retCmd = obj;
 			return true;
 		}
 		
@@ -30,10 +32,10 @@ public class FirstPositiveFitnessSelectionStrategy extends
 
 	@Override
 	public MoveMethodCommand done() {
-		MoveMethodCommand mmc = prevCmd;
-		prevFitness = prevCmd.fitness;
+		MoveMethodCommand mmc = retCmd;
+		prevFitness = retCmd.fitness;
 		
-		prevCmd = null;
+		retCmd = null;
 		
 		return mmc;
 	}
