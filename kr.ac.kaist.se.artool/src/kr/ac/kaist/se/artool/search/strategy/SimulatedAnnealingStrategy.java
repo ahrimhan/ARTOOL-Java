@@ -9,48 +9,72 @@ public class SimulatedAnnealingStrategy extends
 		AbstractRefactoringSelectionStrategy {
 	
 	private MoveMethodCommand prevCmd = null;
+	private MoveMethodCommand bestCmd = null;
 	
 	
-	private double temperature;
+	private double temperature = 10000;
+	private double coolingRate = 0.003;
 	private Random random;
 	
 	
-	public SimulatedAnnealingStrategy(float initFitness, Comparator<MoveMethodCommand> comparator, double initTemp) {
+	public SimulatedAnnealingStrategy(float initFitness, Comparator<MoveMethodCommand> comparator) {
 		super(initFitness, comparator);
 		
-		temperature = initTemp;
 		random = new Random(System.currentTimeMillis());
 	}
 	
-	private double accept_level(MoveMethodCommand newCmd)
+	private double acceptanceProbability(MoveMethodCommand prevCmd, MoveMethodCommand newCmd, double temperature)
 	{
-		if( prevCmd == null || comparator.compare(prevCmd, newCmd) > 0 )
+		if( prevCmd == null || comparator.compare(prevCmd, newCmd) < 0 )
 		{
 			return 1;
 		}
 		else
 		{
 			//return Math.exp(-(prevCmd.fitness - newCmd.fitness) / temperature);
-			return Math.exp((newCmd.fitness - prevCmd.fitness) / temperature);
+			if( newCmd.fitness < prevCmd.fitness )
+			{
+				return Math.exp((newCmd.fitness - prevCmd.fitness) / temperature);
+			}
+			else
+			{
+				return Math.exp((prevCmd.fitness - newCmd.fitness) / temperature);
+			}
 		}
 	}
 
 	@Override
-	public boolean next(MoveMethodCommand obj, float fitness) {
-		obj.fitness = fitness;
+	public boolean next(MoveMethodCommand newCmd, float fitness) {
+		boolean ret = true;
 		
-		if( random.nextDouble() < accept_level(obj) )
+		newCmd.fitness = fitness;
+		
+		if( random.nextDouble() < acceptanceProbability(prevCmd, newCmd, temperature) )
 		{
-			prevCmd = obj;
-			
-			return true;
+			prevCmd = newCmd;
+			ret = true;
+		}
+		else
+		{
+			ret = false;
 		}
 		
-		return false;
+		if( comparator.compare(bestCmd, newCmd) < 0 )
+		{
+			bestCmd = newCmd;
+		}
+		
+		temperature *= 1 - coolingRate;
+		
+		return ret;
 	}
 
 	@Override
 	public MoveMethodCommand done() {
+		if( temperature <= 1 )
+		{
+			return null;
+		}
 		return prevCmd;
 	}
 
