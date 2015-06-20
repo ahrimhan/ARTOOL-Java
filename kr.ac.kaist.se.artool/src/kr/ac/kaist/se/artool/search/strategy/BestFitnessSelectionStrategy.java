@@ -1,4 +1,4 @@
-package kr.ac.kaist.se.artool.search;
+package kr.ac.kaist.se.artool.search.strategy;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,14 +30,16 @@ public class BestFitnessSelectionStrategy extends
 		try
 		{
 			cmd = Collections.max(commandList, comparator);
-			
-			
+			prevFitness = cmd.fitness;	
 		}
 		catch(Exception ex)
 		{
 			cmd = null;
 		}
-		// TODO Auto-generated method stub
+		
+		
+		commandList.clear();
+		
 		return cmd;
 	}
 

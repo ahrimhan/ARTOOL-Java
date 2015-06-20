@@ -1,4 +1,4 @@
-package kr.ac.kaist.se.artool.search;
+package kr.ac.kaist.se.artool.search.fitness;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;

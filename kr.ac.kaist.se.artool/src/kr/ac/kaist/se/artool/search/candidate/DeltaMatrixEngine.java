@@ -1,4 +1,4 @@
-package kr.ac.kaist.se.artool.search;
+package kr.ac.kaist.se.artool.search.candidate;
 
 import java.sql.Timestamp;
 import java.util.Comparator;
@@ -14,6 +14,7 @@ import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.SystemEntitySet;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
+import kr.ac.kaist.se.artool.search.MoveMethodEventListener;
 import no.uib.cipr.matrix.DenseMatrix;
 import no.uib.cipr.matrix.Matrix;
 import no.uib.cipr.matrix.MatrixEntry;

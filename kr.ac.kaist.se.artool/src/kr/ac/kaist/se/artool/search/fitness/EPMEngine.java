@@ -1,4 +1,4 @@
-package kr.ac.kaist.se.artool.search;
+package kr.ac.kaist.se.artool.search.fitness;
 
 import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
@@ -6,6 +6,7 @@ import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.SystemEntitySet;
+import kr.ac.kaist.se.artool.search.MoveMethodEventListener;
 import no.uib.cipr.matrix.DenseVector;
 import no.uib.cipr.matrix.Matrix;
 import no.uib.cipr.matrix.sparse.LinkedSparseMatrix;

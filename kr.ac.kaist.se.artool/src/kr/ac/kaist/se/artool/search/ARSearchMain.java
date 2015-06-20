@@ -12,6 +12,13 @@ import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.artool.engine.StatusLogger;
 import kr.ac.kaist.se.artool.engine.SystemEntitySet;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
+import kr.ac.kaist.se.artool.search.candidate.CandidateSelection;
+import kr.ac.kaist.se.artool.search.candidate.DeltaMatrixEngine;
+import kr.ac.kaist.se.artool.search.candidate.RandomCandidateSelection;
+import kr.ac.kaist.se.artool.search.fitness.EPMEngine;
+import kr.ac.kaist.se.artool.search.fitness.FitnessFunction;
+import kr.ac.kaist.se.artool.search.fitness.QMoodEngine;
+import kr.ac.kaist.se.artool.search.strategy.BestFitnessSelectionStrategy;
 
 public class ARSearchMain {
 	
@@ -130,7 +137,9 @@ public class ARSearchMain {
 		
 		
 		float fitness = fitnessFunction.calculate();
-		float prevFitness;
+		float prevFitness = fitness;
+		
+		BestFitnessSelectionStrategy strategy = new BestFitnessSelectionStrategy(prevFitness, comparator);
 
 		
 		for(int iteration = 0; iteration < max_iteration; iteration++ )
@@ -154,7 +163,6 @@ public class ARSearchMain {
 			
 			
 			//StatusLogger.getInstance().openTrialPhase();
-			BestFitnessSelectionStrategy strategy = new BestFitnessSelectionStrategy(prevFitness, comparator);
 			int idx = 0;
 			for( MoveMethodCommand mmc : candidates )
 			{

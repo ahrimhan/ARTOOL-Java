@@ -1,4 +1,4 @@
-package kr.ac.kaist.se.artool.search;
+package kr.ac.kaist.se.artool.search.candidate;
 
 import java.util.Set;
 import java.util.Vector;
