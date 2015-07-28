@@ -23,11 +23,15 @@ import no.uib.cipr.matrix.sparse.LinkedSparseMatrix;
 public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSelection {
 	Matrix membershipMatrix;
 	SystemEntitySet sts;
-//	Matrix linkMatrix;
-	Matrix internalLinkMatrix;
-	Matrix externalLinkMatrix;
+	Matrix internalCouplingMatrix;
+	Matrix externalCouplingMatrix;
+	Matrix internalCohesionMatrix;
+	Matrix externalCohesionMatrix;
+	Matrix adjustMatrix;
 	int maxCandidate;
-
+	
+	private double cohesiveFactor = 1.0 / 3.0;
+	private double couplingFactor = 2.0 / 3.0;
 	
 	public DeltaMatrixEngine(SystemEntitySet sts, int maxCandidate)
 	{
@@ -40,9 +44,11 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 	private void initBasicMatrix()
 	{
 		membershipMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
-		internalLinkMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.entities.size());
-		externalLinkMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.entities.size());
-		
+		internalCouplingMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.entities.size());
+		externalCouplingMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.entities.size());
+		internalCohesionMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.entities.size());
+		externalCohesionMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.entities.size());
+		adjustMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
 		
 		
 		for (AOMMethod method : sts.methods) {
@@ -61,14 +67,15 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 				{
 					if( method.getOwner() == sfa.getAccessedField().getOwner() )
 					{
-						internalLinkMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
-						internalLinkMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
+						internalCouplingMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
+						internalCouplingMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
 					}
 					else
 					{
-						externalLinkMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
-						externalLinkMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
+						externalCouplingMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
+						externalCouplingMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
 					}
+					
 					
 					
 					// Experimental: Cohesive factor
@@ -80,16 +87,17 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 						{
 							if( method.getOwner() == cohesiveMethod.getOwner() )
 							{
-								internalLinkMatrix.set(cohesiveMethod.getIndex(), method.getIndex(), 1);
-								internalLinkMatrix.set(method.getIndex(), cohesiveMethod.getIndex(), 1);
+								internalCohesionMatrix.set(cohesiveMethod.getIndex(), method.getIndex(), 1);
+								internalCohesionMatrix.set(method.getIndex(), cohesiveMethod.getIndex(), 1);
 							}
 							else
 							{
-								externalLinkMatrix.set(cohesiveMethod.getIndex(), method.getIndex(), 1);
-								externalLinkMatrix.set(method.getIndex(), cohesiveMethod.getIndex(), 1);
+								externalCohesionMatrix.set(cohesiveMethod.getIndex(), method.getIndex(), 1);
+								externalCohesionMatrix.set(method.getIndex(), cohesiveMethod.getIndex(), 1);
 							}							
 						}
 					}
+					
 					
 				}
 
@@ -97,13 +105,13 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 				{
 					if( method.getOwner() == smc.getCallee().getOwner() )
 					{
-						internalLinkMatrix.set(smc.getCallee().getIndex(), method.getIndex(), 1);
-						internalLinkMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 1);
+						internalCouplingMatrix.set(smc.getCallee().getIndex(), method.getIndex(), 1);
+						internalCouplingMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 1);
 					}
 					else
 					{
-						externalLinkMatrix.set(smc.getCallee().getIndex(), method.getIndex(), 1);
-						externalLinkMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 1);
+						externalCouplingMatrix.set(smc.getCallee().getIndex(), method.getIndex(), 1);
+						externalCouplingMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 1);
 					}
 				}
 			}
@@ -150,7 +158,22 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 		System.err.println(time.toString() + s);
 	}
 	
-	private Matrix getDeltaMatrix()
+	public class MatrixTuple
+	{
+		public Matrix deltaMatrix;
+		public Matrix invertedInternalMatrix;
+	}
+	
+	public void setCohesiveFactorRate(double coupling, double cohesive)
+	{
+		cohesiveFactor = cohesive / (coupling + cohesive);
+		couplingFactor = coupling / (coupling + cohesive);
+		
+		System.err.println("CohesiveFactor:"+cohesiveFactor);
+		System.err.println("CouplingFactor:"+couplingFactor);
+	}
+	
+	private MatrixTuple getDeltaMatrix()
 	{
 		
 		Matrix temp1;
@@ -176,11 +199,21 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 		
 		
 		
-		
-		
-		
 		temp1 = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
 		temp2 = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
+		
+		Matrix internalLinkMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
+		
+		internalLinkMatrix = internalCouplingMatrix.copy();
+		internalLinkMatrix = internalLinkMatrix.scale(couplingFactor);
+		internalLinkMatrix = internalLinkMatrix.add(cohesiveFactor, internalCohesionMatrix);
+		
+		Matrix externalLinkMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
+		
+		externalLinkMatrix = externalCouplingMatrix.copy();
+		externalLinkMatrix = externalLinkMatrix.scale(couplingFactor);
+		externalLinkMatrix = externalLinkMatrix.add(cohesiveFactor, externalCohesionMatrix);
+		
 		
 		Matrix IP = internalLinkMatrix.mult(membershipMatrix, temp1);
 		
@@ -188,16 +221,34 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 		
 		Matrix IIP = getInvertedMembershipMatrix(IP);
 		
-		Matrix deltaMatrix = IIP.add(-1, EP);
+		MatrixTuple tuple = new MatrixTuple();
 		
-
-		return deltaMatrix;
+		Matrix I = IIP.copy();
+		
+		tuple.deltaMatrix = IIP.add(-1, EP);
+		
+		tuple.invertedInternalMatrix = I;
+		
+		return tuple;
+	}
+	
+	private boolean adjustOption = false;
+	
+	public void setAdjust(boolean adjustOption)
+	{
+		this.adjustOption = adjustOption;
 	}
 	
 	public Set<MoveMethodCommand> getPositiveRefactorings()
 	{
-		Matrix dm = getDeltaMatrix();
+		MatrixTuple tuple = getDeltaMatrix();
+		Matrix dm = tuple.deltaMatrix;
+		Matrix iim = tuple.invertedInternalMatrix;
 		
+		if( adjustOption )
+		{
+			dm = dm.add(adjustMatrix);
+		}
 		
 		TreeSet<MoveMethodCommand> mmcSet = new TreeSet<MoveMethodCommand>(new Comparator<MoveMethodCommand>() {
 
@@ -216,16 +267,31 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 		});
 		
 		
-		System.err.print  ("dm.col  :" + dm.numColumns());
-		System.err.println(" dm.row  :" + dm.numRows());
-		System.err.print  ("classes :" + sts.classes.size());
-		System.err.println(" entities:" + sts.entities.size());
-		System.err.println("methods:" + sts.methods.size());
-		System.err.println("fields:" + sts.fields.size());
-		System.err.println("maxCandidate:" + maxCandidate);
+		for( int i = 0; i < sts.methods.size(); i++ )
+		{
+	
+			for( int j = 0; j < dm.numColumns(); j++ )
+			{
+				
+				AOMMethod method = sts.methods.get(i);
+				AOMClass clazz = sts.classes.get(j);
+				if( method.getOwnedScope() != null && (method.getOwnedScope().getStaticMethodCalls().size() + method.getOwnedScope().getStaticFieldAccesses().size() + method.getStaticReferer().size()) != 0)
+				{
+//					for(StaticFieldAccess sfa : method.getOwnedScope().getStaticFieldAccesses() )
+//					{
+						
+						MoveMethodCommand mmc = new MoveMethodCommand(method, clazz, (float)(dm.get(i, j) / (iim.get(i, j) + 1)) );
+						mmcSet.add(mmc);
+						if( mmcSet.size() > maxCandidate )
+						{
+							mmcSet.pollLast();
+						}
+//					}
+				}
+			}
+		}
 		
-		
-		
+		/*
 		for( int i = 0; i < sts.methods.size(); i++ )
 		{
 			double minV = 9999999999f;
@@ -252,7 +318,7 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 				}
 			}
 		}
-		System.err.println("selCandidate:" + mmcSet.size());
+		*/
 
 		
 		/*
@@ -277,6 +343,14 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 			}
 		}
 		*/
+		
+		if( adjustOption )
+		{
+			for (MoveMethodCommand mmc : mmcSet) {
+				adjustMatrix.add(mmc.getMethod().getIndex(), mmc.getToClass()
+						.getIndex(), 1.31);
+			}
+		}
 
 
 		return mmcSet;
@@ -295,18 +369,18 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 			{
 				if( method.getOwner() == sfa.getAccessedField().getOwner() )
 				{
-					internalLinkMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
-					internalLinkMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
-					externalLinkMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 0);
-					externalLinkMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 0);
+					internalCouplingMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
+					internalCouplingMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
+					externalCouplingMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 0);
+					externalCouplingMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 0);
 
 				}
 				else
 				{
-					internalLinkMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 0);
-					internalLinkMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 0);
-					externalLinkMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
-					externalLinkMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
+					internalCouplingMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 0);
+					internalCouplingMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 0);
+					externalCouplingMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
+					externalCouplingMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
 				}
 				
 				// Experimental: Cohesive factor
@@ -318,38 +392,37 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 					{
 						if( method.getOwner() == cohesiveMethod.getOwner() )
 						{
-							internalLinkMatrix.set(cohesiveMethod.getIndex(), method.getIndex(), 1);
-							internalLinkMatrix.set(method.getIndex(), cohesiveMethod.getIndex(), 1);
-							externalLinkMatrix.set(cohesiveMethod.getIndex(), method.getIndex(), 0);
-							externalLinkMatrix.set(method.getIndex(), cohesiveMethod.getIndex(), 0);
+							internalCohesionMatrix.set(cohesiveMethod.getIndex(), method.getIndex(), 1);
+							internalCohesionMatrix.set(method.getIndex(), cohesiveMethod.getIndex(), 1);
+							externalCohesionMatrix.set(cohesiveMethod.getIndex(), method.getIndex(), 0);
+							externalCohesionMatrix.set(method.getIndex(), cohesiveMethod.getIndex(), 0);
 						}
 						else
 						{
-							internalLinkMatrix.set(cohesiveMethod.getIndex(), method.getIndex(), 0);
-							internalLinkMatrix.set(method.getIndex(), cohesiveMethod.getIndex(), 0);
-							externalLinkMatrix.set(cohesiveMethod.getIndex(), method.getIndex(), 1);
-							externalLinkMatrix.set(method.getIndex(), cohesiveMethod.getIndex(), 1);
+							internalCohesionMatrix.set(cohesiveMethod.getIndex(), method.getIndex(), 0);
+							internalCohesionMatrix.set(method.getIndex(), cohesiveMethod.getIndex(), 0);
+							externalCohesionMatrix.set(cohesiveMethod.getIndex(), method.getIndex(), 1);
+							externalCohesionMatrix.set(method.getIndex(), cohesiveMethod.getIndex(), 1);
 						}							
 					}
 				}
-				
 			}
 
 			for(StaticMethodCall smc : method.getOwnedScope().getStaticMethodCalls() )
 			{
 				if( method.getOwner() == smc.getCallee().getOwner() )
 				{
-					internalLinkMatrix.set(smc.getCallee().getIndex(), method.getIndex(), 1);
-					internalLinkMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 1);
-					externalLinkMatrix.set(smc.getCallee().getIndex(), method.getIndex(), 0);
-					externalLinkMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 0);
+					internalCouplingMatrix.set(smc.getCallee().getIndex(), method.getIndex(), 1);
+					internalCouplingMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 1);
+					externalCouplingMatrix.set(smc.getCallee().getIndex(), method.getIndex(), 0);
+					externalCouplingMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 0);
 				}
 				else
 				{
-					internalLinkMatrix.set(smc.getCallee().getIndex(), method.getIndex(), 0);
-					internalLinkMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 0);
-					externalLinkMatrix.set(smc.getCallee().getIndex(), method.getIndex(), 1);
-					externalLinkMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 1);
+					internalCouplingMatrix.set(smc.getCallee().getIndex(), method.getIndex(), 0);
+					internalCouplingMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 0);
+					externalCouplingMatrix.set(smc.getCallee().getIndex(), method.getIndex(), 1);
+					externalCouplingMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 1);
 				}
 			}
 		}	

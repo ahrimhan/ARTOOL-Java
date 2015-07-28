@@ -59,15 +59,15 @@ public class MoveMethodCommand implements RefactoringCommand {
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer();
-		sb.append('[');
-		sb.append(deltaValue);
-		sb.append("] ");
+		//sb.append('[');
+		//sb.append(deltaValue);
+		sb.append("'");
 		sb.append(originalClass.getFqdn());
 		sb.append(" -- ");
 		sb.append(movingMethod.getName());
 		sb.append(" -> ");
 		sb.append(targetClass.getFqdn());
-		
+		sb.append("'");
 		
 		return sb.toString();
 	}
