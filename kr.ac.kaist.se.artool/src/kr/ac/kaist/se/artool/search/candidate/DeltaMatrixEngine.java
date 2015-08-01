@@ -276,9 +276,9 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 				AOMMethod method = sts.methods.get(i);
 				AOMClass clazz = sts.classes.get(j);
 				if( method.getOwnedScope() != null && (method.getOwnedScope().getStaticMethodCalls().size() + method.getOwnedScope().getStaticFieldAccesses().size() + method.getStaticReferer().size()) != 0)
-				{
-//					for(StaticFieldAccess sfa : method.getOwnedScope().getStaticFieldAccesses() )
-//					{
+				{	
+					if( dm.get(i,  j) < 0 )
+					{
 						
 						MoveMethodCommand mmc = new MoveMethodCommand(method, clazz, (float)(dm.get(i, j) / (iim.get(i, j) + 1)) );
 						mmcSet.add(mmc);
@@ -286,7 +286,7 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 						{
 							mmcSet.pollLast();
 						}
-//					}
+					}
 				}
 			}
 		}
@@ -346,6 +346,8 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 		
 		if( adjustOption )
 		{
+			adjustMatrix = adjustMatrix.scale(0.9);
+
 			for (MoveMethodCommand mmc : mmcSet) {
 				adjustMatrix.add(mmc.getMethod().getIndex(), mmc.getToClass()
 						.getIndex(), 1.31);

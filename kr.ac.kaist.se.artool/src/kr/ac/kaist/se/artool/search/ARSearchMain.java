@@ -18,7 +18,9 @@ import kr.ac.kaist.se.artool.search.candidate.RandomCandidateSelection;
 import kr.ac.kaist.se.artool.search.fitness.EPMEngine;
 import kr.ac.kaist.se.artool.search.fitness.FitnessFunction;
 import kr.ac.kaist.se.artool.search.fitness.QMoodEngine;
+import kr.ac.kaist.se.artool.search.strategy.AbstractRefactoringSelectionStrategy;
 import kr.ac.kaist.se.artool.search.strategy.BestFitnessSelectionStrategy;
+import kr.ac.kaist.se.artool.search.strategy.FirstPositiveFitnessSelectionStrategy;
 
 import org.apache.commons.math3.stat.correlation.SpearmansCorrelation;
 import org.apache.logging.log4j.LogManager;
@@ -138,7 +140,22 @@ public class ARSearchMain {
 		float fitness = fitnessFunction.calculate();
 		float prevFitness = fitness;
 		
-		BestFitnessSelectionStrategy strategy = new BestFitnessSelectionStrategy(prevFitness, comparator);
+		AbstractRefactoringSelectionStrategy strategy = null;
+		
+		switch( searchType )
+		{
+		case SELECT_BEST:
+			strategy = new BestFitnessSelectionStrategy(prevFitness, comparator);
+			break;
+		case SELECT_FIRST:
+			strategy = new FirstPositiveFitnessSelectionStrategy(prevFitness, comparator);
+			break;
+		case SELECT_FIRST_RESTART:
+			throw new RuntimeException("Not Yet Implemented");
+		case SIMULATED_ANNEALING:
+			throw new RuntimeException("Not Yet Implemented");
+		}
+		
 
 		SpearmansCorrelation correlation = new SpearmansCorrelation();
 

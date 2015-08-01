@@ -12,6 +12,7 @@ public class FirstPositiveFitnessSelectionStrategy extends
 	
 	private MoveMethodCommand prevCmd = null;
 	private MoveMethodCommand retCmd = null;
+	private int iteration = 0;
 	
 	public FirstPositiveFitnessSelectionStrategy(float prevFitness, Comparator<MoveMethodCommand> comparator) {
 		super(prevFitness, comparator);
@@ -20,22 +21,35 @@ public class FirstPositiveFitnessSelectionStrategy extends
 	@Override
 	public boolean next(MoveMethodCommand obj, float fitness) {
 		obj.fitness = fitness;
+		System.err.print("[" + iteration + "] first positive fitness selection...: " + obj.fitness);
+
 		if( prevCmd == null || comparator.compare(prevCmd, obj) < 0 )
 		{
+			System.err.println(" Selected");
 			prevCmd = obj;
 			retCmd = obj;
-			return true;
+			return false;
 		}
 		
-		return false;
+		System.err.println(" Not Selected");
+		return true;
 	}
 
 	@Override
 	public MoveMethodCommand done() {
 		MoveMethodCommand mmc = retCmd;
-		prevFitness = retCmd.fitness;
 		
-		retCmd = null;
+		if( retCmd != null )
+		{
+			prevFitness = retCmd.fitness;
+			System.err.println("[" + iteration + "] selected!!!: " + retCmd.fitness);
+			iteration++;
+			retCmd = null;
+		}
+		else
+		{
+			System.err.println("There are no improvements");
+		}
 		
 		return mmc;
 	}
