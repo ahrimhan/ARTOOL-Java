@@ -11,7 +11,7 @@ import no.uib.cipr.matrix.DenseVector;
 import no.uib.cipr.matrix.Matrix;
 import no.uib.cipr.matrix.sparse.LinkedSparseMatrix;
 
-public class EPMEngine implements FitnessFunction, MoveMethodEventListener {
+public class EPMEngine extends FitnessFunction implements MoveMethodEventListener {
 	Matrix membershipMatrix;
 	SystemEntitySet sts;	
 	no.uib.cipr.matrix.Vector oneVector;
@@ -185,6 +185,11 @@ public class EPMEngine implements FitnessFunction, MoveMethodEventListener {
 		
 		epm = epm / sts.entities.size();		
 		return epm;
+	}
+	
+	public boolean isBiggerValueMeantBetterFitness()
+	{
+		return false;
 	}
 	
 	public void moveMethodPerformed(AOMClass fromClass, AOMMethod method, AOMClass toClass, boolean isRollbackAction)

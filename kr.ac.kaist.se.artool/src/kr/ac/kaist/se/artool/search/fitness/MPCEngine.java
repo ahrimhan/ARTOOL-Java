@@ -3,7 +3,7 @@ package kr.ac.kaist.se.artool.search.fitness;
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 
-public class MPCEngine implements FitnessFunction {
+public class MPCEngine extends FitnessFunction {
 	private MinimalBasicMetricSuite bms;
 	private AbstractObjectModel aom;
 	
@@ -35,5 +35,10 @@ public class MPCEngine implements FitnessFunction {
 		
 		float ret = mpcTotal/mpcCount;
 		return ret;
+	}
+	
+	public boolean isBiggerValueMeantBetterFitness()
+	{
+		return false;
 	}
 }

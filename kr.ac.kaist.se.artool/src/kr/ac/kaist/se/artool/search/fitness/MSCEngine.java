@@ -4,7 +4,7 @@ import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.artool.search.fitness.QMoodEngine.TYPE;
 
-public class MSCEngine implements FitnessFunction {
+public class MSCEngine extends FitnessFunction {
 	private MinimalBasicMetricSuite bms;
 	private AbstractObjectModel aom;
 	
@@ -42,5 +42,9 @@ public class MSCEngine implements FitnessFunction {
 		float ret = mscTotal/mscCount;
 		return ret;
 	}
-
+	
+	public boolean isBiggerValueMeantBetterFitness()
+	{
+		return true;
+	}
 }

@@ -142,16 +142,6 @@ public class ARSearchMain {
 		
 		FitnessFunction fitnessFunction;
 		
-		comparator = new Comparator<MoveMethodCommand>(){
-			
-			@Override
-			public int compare(MoveMethodCommand o1, MoveMethodCommand o2) {
-				if( o1.fitness > o2.fitness ) return 1;
-				else if( o1.fitness < o2.fitness ) return -1;
-				else return 0;
-			}
-			
-		};
 		
 		switch( fitnessType )
 		{
@@ -160,16 +150,7 @@ public class ARSearchMain {
 			fitnessFunction = epmEngine;
 			mmr.addListener(epmEngine);
 			
-			comparator = new Comparator<MoveMethodCommand>(){
-				
-				@Override
-				public int compare(MoveMethodCommand o1, MoveMethodCommand o2) {
-					if( o1.fitness < o2.fitness ) return 1;
-					else if( o1.fitness > o2.fitness ) return -1;
-					else return 0;
-				}
-				
-			};
+
 			break;
 		case FLEXIBILITY:
 			fitnessFunction = new QMoodEngine(aom, QMoodEngine.TYPE.FLEXIBILITY);
@@ -183,7 +164,31 @@ public class ARSearchMain {
 		default:
 			fitnessFunction = new QMoodEngine(aom, QMoodEngine.TYPE.FLEXIBILITY);
 			break;
+		}
 		
+		if( fitnessFunction.isBiggerValueMeantBetterFitness() )
+		{
+			comparator = new Comparator<MoveMethodCommand>(){
+				
+				@Override
+				public int compare(MoveMethodCommand o1, MoveMethodCommand o2) {
+					if( o1.fitness > o2.fitness ) return 1;
+					else if( o1.fitness < o2.fitness ) return -1;
+					else return 0;
+				}
+			};
+		}
+		else
+		{
+			comparator = new Comparator<MoveMethodCommand>(){
+				
+				@Override
+				public int compare(MoveMethodCommand o1, MoveMethodCommand o2) {
+					if( o1.fitness < o2.fitness ) return 1;
+					else if( o1.fitness > o2.fitness ) return -1;
+					else return 0;
+				}
+			};	
 		}
 		
 		
@@ -264,8 +269,8 @@ public class ARSearchMain {
 			logger.debug("corr calculate stopped...");
 			logger.debug("corr:" + corr);
 
-			if( (fitnessType == FitnessType.EPM && maxCorr < corr) 
-					|| (fitnessType != FitnessType.EPM && maxCorr > corr)
+			if( ((!fitnessFunction.isBiggerValueMeantBetterFitness()) && maxCorr < corr) 
+					|| (fitnessFunction.isBiggerValueMeantBetterFitness() && maxCorr > corr)
 					|| maxCorrIdx == -1.0)
 			{
 				maxCorr = corr;

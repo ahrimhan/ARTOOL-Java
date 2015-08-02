@@ -4,7 +4,7 @@ import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.artool.engine.StatusLogger;
 
-public class QMoodEngine implements FitnessFunction {
+public class QMoodEngine extends FitnessFunction {
 	private MinimalBasicMetricSuite bms;
 	
 	public enum TYPE
@@ -161,5 +161,10 @@ public class QMoodEngine implements FitnessFunction {
 		
 		return qmood[type.ordinal()];
 			
+	}
+	
+	public boolean isBiggerValueMeantBetterFitness()
+	{
+		return true;
 	}
 }

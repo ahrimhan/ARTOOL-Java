@@ -1,5 +1,6 @@
 package kr.ac.kaist.se.artool.search.fitness;
 
-public interface FitnessFunction {
-	public float calculate();
+public abstract class FitnessFunction {
+	public abstract float calculate();
+	public abstract boolean isBiggerValueMeantBetterFitness();
 }
