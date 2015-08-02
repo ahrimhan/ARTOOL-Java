@@ -59,8 +59,7 @@
           eType="#//structure/AOMParameter" containment="true" eOpposite="#//structure/AOMParameter/owner"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//structure/AOMClass"
           eOpposite="#//structure/AOMClass/methods"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-          derived="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="staticReferer" upperBound="-1"
           eType="#//staticmodel/StaticMethodCall" eOpposite="#//staticmodel/StaticMethodCall/callee"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="overriding" eType="#//structure/AOMMethod"

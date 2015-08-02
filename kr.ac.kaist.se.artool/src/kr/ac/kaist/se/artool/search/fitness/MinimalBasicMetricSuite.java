@@ -121,11 +121,14 @@ public class MinimalBasicMetricSuite {
 				}
 			}
 			
-			for( StaticMethodCall call : method.getOwnedScope().getStaticMethodCalls() )
+			if( method.getOwnedScope() != null )
 			{
-				if( call.getCallee().getOwner() != clazz )
+				for( StaticMethodCall call : method.getOwnedScope().getStaticMethodCalls() )
 				{
-					mpcSet.add(call.getCallee());
+					if( call.getCallee().getOwner() != clazz )
+					{
+						mpcSet.add(call.getCallee());
+					}
 				}
 			}
 			
@@ -144,10 +147,14 @@ public class MinimalBasicMetricSuite {
 			{
 				HashSet<AOMField> fieldSet = new HashSet<AOMField>();
 				
-				for( StaticFieldAccess sfa : method.getOwnedScope().getStaticFieldAccesses() )
+				if( method.getOwnedScope() != null )
 				{
-					fieldSet.add(sfa.getAccessedField()); 
+					for( StaticFieldAccess sfa : method.getOwnedScope().getStaticFieldAccesses() )
+					{
+						fieldSet.add(sfa.getAccessedField()); 
+					}
 				}
+				
 				mscFieldList[index] = fieldSet;		
 			}
 		}

@@ -96,10 +96,23 @@ public class MoveMethodCommand implements RefactoringCommand {
 	private static boolean isIdenticalMethod(AOMMethod m1, AOMMethod m2)
 	{
 		boolean ret = false;
-		
-		if( m1.getName().equals(m2.getName()) && m1.getSignature().equals(m2.getSignature()) )
+	
+		try
+		{	
+			if( m1.getName().equals(m2.getName()) &&
+					
+					m1.getSignature().equals(m2.getSignature()) )
+			{
+				ret = true;
+			}
+		}
+		catch( RuntimeException ex )
 		{
-			ret = true;
+			System.err.println(m1.getMethodId());
+			System.err.println(m2.getMethodId());
+			System.err.println(m1.getSignature());
+			System.err.println(m2.getSignature());
+			throw ex;
 		}
 		
 		return ret;

@@ -35,10 +35,12 @@ public class ARSearchParameterConfigPage extends WizardPage {
 //	private Combo fitnessFunction;
 	private int fitnessSelectionBits = 0;
 	private String[] fitnessFunctionItems = {
-			"EPM",
+			"EPM (Entitiy Placement Metric)",
 			"QMOOD-Reusability",
 			"QMOOD-Flexibility",
 			"QMOOD-Understandability",
+			"MSC (Message Similiarity Cohesion)",
+			"MPC (Message Passing Coupling)"
 	};
 	
 	
@@ -249,6 +251,18 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		if( (fitnessSelectionBits & (1 << 3)) != 0 )
 		{
 			type = ARSearchMain.FitnessType.UNDERSTANDABILITY;
+			typeList.add(type);
+		}
+		
+		if( (fitnessSelectionBits & (1 << 4)) != 0 )
+		{
+			type = ARSearchMain.FitnessType.MSC;
+			typeList.add(type);
+		}
+		
+		if( (fitnessSelectionBits & (1 << 5)) != 0 )
+		{
+			type = ARSearchMain.FitnessType.MPC;
 			typeList.add(type);
 		}
 		

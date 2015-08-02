@@ -98,20 +98,26 @@ public class ARSearchWizard extends Wizard {
 					SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss");
 					String timestamp = format.format(new Date());
 					
+					monitor.beginTask("Search Refactoring", fitnessTypeList.size() * searchTechTypeList.size() * candidateSelectionTypeList.size() * maxIterationCount);
+					
+					int caseIdx = 10;
+					
 					for(FitnessType fitnessType : fitnessTypeList )
 					{
 						for(SearchTechType searchTechType: searchTechTypeList )
 						{
 							for(CandidateSelectionType candidateSelectionType: candidateSelectionTypeList )
 							{
-								ARSearchMain.getInstance().run(selectedFile.getProject().getName(), timestamp, aom, fitnessType, searchTechType, candidateSelectionType, maxIterationCount, maxCandidateCount);
+								ARSearchMain.getInstance().run(caseIdx, selectedFile.getProject().getName(), timestamp, aom, fitnessType, searchTechType, candidateSelectionType, maxIterationCount, maxCandidateCount, monitor);
+								caseIdx++;
 							}
 						}
 					}
-				
 					
 				} catch (IOException e) {
 					return CommandResult.newErrorCommandResult("save failed");
+				} finally {
+					monitor.done();
 				}
 				
 				return CommandResult.newOKCommandResult();
@@ -120,8 +126,11 @@ public class ARSearchWizard extends Wizard {
 		
 		
 		
+		
+		
 		try {
 			ProgressMonitorDialog dialog = new ProgressMonitorDialog(this.getShell());
+			
 			dialog.run(true, false, new CommandExecutionOperation(command));
 //			this.mySelectedProjectList.get(0).getProject().refreshLocal(2,
 //					new NullProgressMonitor());

@@ -103,7 +103,7 @@ public interface AOMMethod extends AOMNamedElement, AOMTypedElement, MeasurableE
 	 * @return the value of the '<em>Signature</em>' attribute.
 	 * @see #setSignature(String)
 	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMMethod_Signature()
-	 * @model derived="true"
+	 * @model
 	 * @generated
 	 */
 	String getSignature();

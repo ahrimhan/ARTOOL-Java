@@ -2,9 +2,7 @@ package kr.ac.kaist.se.artool.search;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Set;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
@@ -24,6 +22,7 @@ import kr.ac.kaist.se.artool.search.strategy.FirstPositiveFitnessSelectionStrate
 import org.apache.commons.math3.stat.correlation.SpearmansCorrelation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 public class ARSearchMain {
@@ -78,10 +77,17 @@ public class ARSearchMain {
 	}
 	*/
 	
-	public void run(String project, String timestamp, AbstractObjectModel originalAOM, FitnessType fitnessType, SearchTechType searchType, CandidateSelectionType candidateSelectionType, int max_iteration, int max_candidate_selection) throws IOException
+	public void run(int caseIdx, String project, String timestamp, AbstractObjectModel originalAOM, FitnessType fitnessType, SearchTechType searchType, CandidateSelectionType candidateSelectionType, int max_iteration, int max_candidate_selection, IProgressMonitor monitor) throws IOException
 	{	
 		long mem_usage = 0;
 		AbstractObjectModel aom = EcoreUtil.copy(originalAOM);
+		
+//		EcoreUtil.Copier copier = new EcoreUtil.Copier(true, true);
+//		
+//		AbstractObjectModel aom = (AbstractObjectModel)copier.copy(originalAOM);
+//		copier.copyReferences();
+		
+		
 		
 		String candidateMode = candidateSelectionType.name().toLowerCase();
 		
@@ -102,8 +108,11 @@ public class ARSearchMain {
 		
 		String fitnessTypeStr = fitnessType.name().toLowerCase();
 		
-		System.setProperty("candidate_filename", baseLogPath + timestamp + "/" + project + "-" + candidateMode + "-" + searchTypeStr + "-" + fitnessTypeStr + "/candidate.log");
-		System.setProperty("selection_filename", baseLogPath + timestamp + "/" + project + "-" + candidateMode + "-" + searchTypeStr + "-" + fitnessTypeStr + "/selection.log");
+		System.setProperty("candidate_filename", baseLogPath + timestamp + "/" + caseIdx + "-" + project + "-" + candidateMode + "-" + searchTypeStr + "-" + fitnessTypeStr + "/candidate.log");
+		System.setProperty("selection_filename", baseLogPath + timestamp + "/" + caseIdx + "-" + project + "-" + candidateMode + "-" + searchTypeStr + "-" + fitnessTypeStr + "/selection.log");
+		
+		monitor.setTaskName(project + " " + candidateMode + " " + searchTypeStr + " " + fitnessTypeStr);
+		
 		
 		org.apache.logging.log4j.core.LoggerContext ctx =
 			    (org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false);
@@ -289,29 +298,15 @@ public class ARSearchMain {
 			dmEngine.setCohesiveFactorRate(maxCorrIdx, 20 - maxCorrIdx);
 		}
 		
+		int iteration = 0;
 		
-		
-		for(int iteration = 0; iteration < max_iteration; iteration++ )
+		for(iteration = 0; iteration < max_iteration; iteration++ )
 		{
+			monitor.worked(1);
+			monitor.subTask(iteration + "/" + max_iteration);
+			
 			prevFitness = fitness;
-			//System.out.print("select candidate...");
 			Set<MoveMethodCommand> candidates = candidateSelection.getCandidates();
-			//System.out.println("done");
-
-			
-			/*
-			System.err.println();
-			
-			
-			for( MoveMethodCommand command: candidates )
-			{
-				System.err.println(command);
-			}
-			*/
-			
-			
-			
-			//StatusLogger.getInstance().openTrialPhase();
 			int idx = 0;
 			for( MoveMethodCommand mmc : candidates )
 			{
@@ -341,7 +336,7 @@ public class ARSearchMain {
 			if( selectedCommand == null )
 			{
 				System.err.println("There is no improvements on Main Iteration Loop");
-				return;
+				break;
 			}
 			fitness = selectedCommand.fitness;
 			
@@ -350,11 +345,13 @@ public class ARSearchMain {
 			//Print used memory
 	        double used_memory = ((double)(runtime.totalMemory() - runtime.freeMemory())) / (1024 * 1024);
 			selectionLogger.info("{}, {}, {}, {}, {}, {}, {}", iteration, idx, selectedCommand.toString(), fitnessType.toString(), fitness, selectedCommand.getDeltaValue(), used_memory);
-			//dLog("[ITERATION:" + iteration + "][DT:" + useDeltaTable + "]["+ fitnessType.toString() + ":" + fitness + "] selected!!!");
 			
-			//StatusLogger.getInstance().selectSuite(selectedCommand);
 			mmr.doAction(selectedCommand);
+			
+			//if( monitor.isCanceled() ) break;
 		}
+		
+		monitor.worked(max_iteration - iteration);
 	}
 	
 	public static void dLog(String s)
