@@ -2,11 +2,14 @@ package kr.ac.kaist.se.artool.engine;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.artool.search.ARSearchMain;
+import kr.ac.kaist.se.artool.search.ARSearchMain.CandidateSelectionType;
 import kr.ac.kaist.se.artool.search.ARSearchMain.FitnessType;
 import kr.ac.kaist.se.artool.search.ARSearchMain.SearchTechType;
 import kr.ac.kaist.se.artool.util.CommandExecutionOperation;
@@ -31,11 +34,12 @@ public class ARSearchWizard extends Wizard {
 	
 	private IFile selectedFile;
 
-	private FitnessType fitnessType;
+	private List<FitnessType> fitnessTypeList;
 
-	private SearchTechType searchTechType;
+	private List<SearchTechType> searchTechTypeList;
 
-	private boolean useDeltaTable;
+	private List<CandidateSelectionType> candidateSelectionTypeList;
+	
 
 	private int maxIterationCount;
 
@@ -75,9 +79,10 @@ public class ARSearchWizard extends Wizard {
 		List<IFile> affectedFileList = new LinkedList<IFile>();
 		affectedFileList.add(selectedFile);
 		
-		fitnessType = paramConfigPage.getFitnessType();
-		searchTechType = paramConfigPage.getSearchTechType();
-		useDeltaTable = paramConfigPage.useDeltaTable();
+		fitnessTypeList = paramConfigPage.getFitnessType();
+		searchTechTypeList = paramConfigPage.getSearchTechType();
+		candidateSelectionTypeList = paramConfigPage.getCandidateSelectionType();
+		//useDeltaTable = paramConfigPage.useDeltaTable();
 		maxIterationCount = paramConfigPage.getMaxIterationCount();
 		maxCandidateCount = paramConfigPage.getMaxCandidateCount();
 		
@@ -90,8 +95,20 @@ public class ARSearchWizard extends Wizard {
 				try {
 					
 					AbstractObjectModel aom = (AbstractObjectModel) aomResource.getContents().get(0);
+					SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss");
+					String timestamp = format.format(new Date());
 					
-					ARSearchMain.getInstance().run(aom, fitnessType, searchTechType, useDeltaTable, maxIterationCount, maxCandidateCount);
+					for(FitnessType fitnessType : fitnessTypeList )
+					{
+						for(SearchTechType searchTechType: searchTechTypeList )
+						{
+							for(CandidateSelectionType candidateSelectionType: candidateSelectionTypeList )
+							{
+								ARSearchMain.getInstance().run(selectedFile.getProject().getName(), timestamp, aom, fitnessType, searchTechType, candidateSelectionType, maxIterationCount, maxCandidateCount);
+							}
+						}
+					}
+				
 					
 				} catch (IOException e) {
 					return CommandResult.newErrorCommandResult("save failed");

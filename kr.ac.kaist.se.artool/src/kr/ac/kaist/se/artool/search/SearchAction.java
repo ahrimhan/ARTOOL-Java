@@ -48,6 +48,7 @@ public class SearchAction implements IObjectActionDelegate {
 	@Override
 	public void run(IAction action) {
 		WizardDialog dialog = new WizardDialog(shell, new ARSearchWizard(selectedFile));
+		dialog.setPageSize(500, 500);
 		dialog.open(); 
 	}
 

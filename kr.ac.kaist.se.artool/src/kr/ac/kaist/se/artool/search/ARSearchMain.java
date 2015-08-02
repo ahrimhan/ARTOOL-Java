@@ -1,11 +1,10 @@
 package kr.ac.kaist.se.artool.search;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Set;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
@@ -25,22 +24,28 @@ import kr.ac.kaist.se.artool.search.strategy.FirstPositiveFitnessSelectionStrate
 import org.apache.commons.math3.stat.correlation.SpearmansCorrelation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 public class ARSearchMain {
 	
 	private static ARSearchMain instance;
-	public static Logger candidateLogger = LogManager.getLogger("Candidate");
-	public static Logger selectionLogger = LogManager.getLogger("Selection");
+	//public static Logger candidateLogger = LogManager.getLogger("Candidate");
+	//public static Logger selectionLogger = LogManager.getLogger("Selection");
 	public static Logger logger = LogManager.getLogger("SimpleLogger");
 
 	public enum FitnessType
 	{
-		FLEXIBILITY, REUSABILITY, UNDERSTANDABILITY, EPM
+		FLEXIBILITY, REUSABILITY, UNDERSTANDABILITY, EPM, MPC, MSC
 	}
 	
 	public enum SearchTechType
 	{
 		SELECT_FIRST, SELECT_BEST, SELECT_FIRST_RESTART, SIMULATED_ANNEALING
+	}
+	
+	public enum CandidateSelectionType
+	{
+		DELTA, RANDOM
 	}
 	
 	private ARSearchMain()
@@ -58,13 +63,54 @@ public class ARSearchMain {
 		return instance;
 	}
 	
+	public static String baseLogPath = "/Users/igsong/log/";
 
+	/*
+	public void run(String project, AbstractObjectModel aom, FitnessType fitnessType, int max_iteration, int max_candidate_selection) throws IOException
+	{
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss");
+			
+		String timestamp = format.format(new Date());
+		_run(project, timestamp, aom, fitnessType, SearchTechType.SELECT_BEST, false, max_iteration, max_candidate_selection);
+		_run(project, timestamp, aom, fitnessType, SearchTechType.SELECT_BEST, true, max_iteration, max_candidate_selection);
+		_run(project, timestamp, aom, fitnessType, SearchTechType.SELECT_FIRST, false, max_iteration, max_candidate_selection);
+		_run(project, timestamp, aom, fitnessType, SearchTechType.SELECT_FIRST, true, max_iteration, max_candidate_selection);
+	}
+	*/
 	
-	public void run(AbstractObjectModel aom, FitnessType fitnessType, SearchTechType searchType, boolean useDeltaTable, int max_iteration, int max_candidate_selection) throws IOException
+	public void run(String project, String timestamp, AbstractObjectModel originalAOM, FitnessType fitnessType, SearchTechType searchType, CandidateSelectionType candidateSelectionType, int max_iteration, int max_candidate_selection) throws IOException
 	{	
 		long mem_usage = 0;
+		AbstractObjectModel aom = EcoreUtil.copy(originalAOM);
 		
+		String candidateMode = candidateSelectionType.name().toLowerCase();
 		
+		String searchTypeStr = "nosearch";
+		switch( searchType )
+		{
+		case SELECT_BEST:
+			searchTypeStr = "best";
+			break;
+		case SELECT_FIRST:
+			searchTypeStr = "first";
+			break;
+		case SELECT_FIRST_RESTART:
+			throw new RuntimeException("Not Yet Implemented");
+		case SIMULATED_ANNEALING:
+			throw new RuntimeException("Not Yet Implemented");
+		}
+		
+		String fitnessTypeStr = fitnessType.name().toLowerCase();
+		
+		System.setProperty("candidate_filename", baseLogPath + timestamp + "/" + project + "-" + candidateMode + "-" + searchTypeStr + "-" + fitnessTypeStr + "/candidate.log");
+		System.setProperty("selection_filename", baseLogPath + timestamp + "/" + project + "-" + candidateMode + "-" + searchTypeStr + "-" + fitnessTypeStr + "/selection.log");
+		
+		org.apache.logging.log4j.core.LoggerContext ctx =
+			    (org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false);
+		ctx.reconfigure();
+		
+		Logger candidateLogger = LogManager.getLogger("Candidate");
+		Logger selectionLogger = LogManager.getLogger("Selection");	
 		
 		// Initialize
 		SystemEntitySet ses = new SystemEntitySet(aom);
@@ -79,15 +125,19 @@ public class ARSearchMain {
 		
 		DeltaMatrixEngine dmEngine = null;
 		
-		if(useDeltaTable)
+		
+		switch( candidateSelectionType )
 		{
+		case DELTA:
 			dmEngine = new DeltaMatrixEngine(ses, max_candidate_selection);
 			mmr.addListener(dmEngine);
 			candidateSelection = dmEngine;
-		}
-		else
-		{
+			break;
+		case RANDOM:
 			candidateSelection = new RandomCandidateSelection(aom, max_candidate_selection);
+			break;
+		default:
+			throw new RuntimeException("Waaaagh!!!!");
 		}
 		
 		FitnessFunction fitnessFunction;
@@ -158,17 +208,15 @@ public class ARSearchMain {
 		
 
 		SpearmansCorrelation correlation = new SpearmansCorrelation();
-
-		//
-		//
-		//
 		
 		int tuningCandidate = max_candidate_selection / 10;
 		
 		double[] epmArray = new double[tuningCandidate];
 		double[] deltaArray = new double[tuningCandidate];
 		double maxCorr = 0;
-		double maxCorrIdx = 0;
+		double maxCorrIdx = -1.0;
+		Runtime runtime = Runtime.getRuntime();
+		
 		
 		if( dmEngine != null )
 		{
@@ -201,7 +249,8 @@ public class ARSearchMain {
 					mmr.undoAction();
 				}
 				deltaArray[idx] = mmc.getDeltaValue();
-				epmArray[idx] = fitness; 
+				epmArray[idx] = fitness;
+				System.err.println("Warming Up Fitness: " + fitness);
 				idx++;
 			}	
 			
@@ -215,7 +264,9 @@ public class ARSearchMain {
 			logger.debug("corr calculate stopped...");
 			logger.debug("corr:" + corr);
 
-			if( maxCorr < corr )
+			if( (fitnessType == FitnessType.EPM && maxCorr < corr) 
+					|| (fitnessType != FitnessType.EPM && maxCorr > corr)
+					|| maxCorrIdx == -1.0)
 			{
 				maxCorr = corr;
 				maxCorrIdx = warmUpIteration;
@@ -281,10 +332,19 @@ public class ARSearchMain {
 			}	
 			
 			MoveMethodCommand selectedCommand = strategy.done();
+			
+			if( selectedCommand == null )
+			{
+				System.err.println("There is no improvements on Main Iteration Loop");
+				return;
+			}
 			fitness = selectedCommand.fitness;
 			
 			//[IN:{}][SN:{}][SD:{}][FT:{}][FV:{}][DT:{}]
-			selectionLogger.info("{}, {}, {}, {}, {}, {}", iteration, idx, selectedCommand.toString(), fitnessType.toString(), fitness, selectedCommand.getDeltaValue());
+			
+			//Print used memory
+	        double used_memory = ((double)(runtime.totalMemory() - runtime.freeMemory())) / (1024 * 1024);
+			selectionLogger.info("{}, {}, {}, {}, {}, {}, {}", iteration, idx, selectedCommand.toString(), fitnessType.toString(), fitness, selectedCommand.getDeltaValue(), used_memory);
 			//dLog("[ITERATION:" + iteration + "][DT:" + useDeltaTable + "]["+ fitnessType.toString() + ":" + fitness + "] selected!!!");
 			
 			//StatusLogger.getInstance().selectSuite(selectedCommand);

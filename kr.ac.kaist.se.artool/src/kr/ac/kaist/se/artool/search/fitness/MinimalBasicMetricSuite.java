@@ -1,10 +1,9 @@
 package kr.ac.kaist.se.artool.search.fitness;
 
 import java.util.HashSet;
-import java.util.Vector;
+import java.util.List;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
-import kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall;
 import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMClass;
@@ -12,7 +11,7 @@ import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.aom.structure.AOMParameter;
 
-import org.eclipse.emf.common.util.EList;
+import com.google.common.collect.Sets;
 
 public class MinimalBasicMetricSuite {
 
@@ -20,19 +19,21 @@ public class MinimalBasicMetricSuite {
 	}
 	
 	
-	public static final String DCC="DCC";
-	public static final String CAM="CAM";
+	public static final String DCC = "DCC";
+	public static final String CAM = "CAM";
 	public static final String NOP = "NOP"; //parent
 	public static final String CIS = "CIS";
 	public static final String NOM = "NOM"; //methods
+	public static final String MPC = "MPC";
+	public static final String MSC = "MSC";
 
 	
 	
 	
-	public void measure(AbstractObjectModel aom) {
+	public void measure(AbstractObjectModel aom, boolean msc) {
 		for( AOMClass clazz : aom.getClasses() )
 		{
-			measure(clazz);
+			measure(clazz, msc);
 		}			
 	}
 	
@@ -82,21 +83,29 @@ public class MinimalBasicMetricSuite {
 	}
 	//HashSet<AOMField> referringField1 = new HashSet<AOMField>();
 	//HashSet<AOMField> referringField2 = new HashSet<AOMField>();
-	public void measure(AOMClass clazz)
+	public void measure(AOMClass clazz, boolean msc)
 	{			
 				
 		_initializeMetric(clazz, DCC, 0);
-		_initializeMetric(clazz, CAM, 0);
+		//_initializeMetric(clazz, CAM, (float)0);
 		_initializeMetric(clazz, NOP, 0);
 		_initializeMetric(clazz, CIS, 0);
 		_initializeMetric(clazz, NOM, 0);
+	
 		
 				
 		HashSet<AOMClass> dccSet = new HashSet<AOMClass>();
 		HashSet<AOMClass> camcTotalSet = new HashSet<AOMClass>();
 		HashSet<AOMClass> camcMethodSet =  new HashSet<AOMClass>();
-		int camcMethodParameterCount = 0;
 		
+		HashSet<AOMMethod> mpcSet = new HashSet<AOMMethod>();
+		
+		int camcMethodParameterCount = 0;
+		double mscValue = 0;
+		
+		HashSet<AOMField>[] mscFieldList = new HashSet[clazz.getMethods().size()];
+		
+		int index = 0;
 		for( AOMMethod method : clazz.getMethods() )
 		{
 			measure(method);
@@ -112,6 +121,14 @@ public class MinimalBasicMetricSuite {
 				}
 			}
 			
+			for( StaticMethodCall call : method.getOwnedScope().getStaticMethodCalls() )
+			{
+				if( call.getCallee().getOwner() != clazz )
+				{
+					mpcSet.add(call.getCallee());
+				}
+			}
+			
 			if( method.getType() instanceof AOMClass )
 			{
 				dccSet.add((AOMClass)method.getType());
@@ -120,12 +137,64 @@ public class MinimalBasicMetricSuite {
 			}
 			
 			camcMethodParameterCount += camcMethodSet.size();
+			
+			
+			
+			if( msc )
+			{
+				HashSet<AOMField> fieldSet = new HashSet<AOMField>();
+				
+				for( StaticFieldAccess sfa : method.getOwnedScope().getStaticFieldAccesses() )
+				{
+					fieldSet.add(sfa.getAccessedField()); 
+				}
+				mscFieldList[index] = fieldSet;		
+			}
 		}
 		
-		float camc = camcMethodParameterCount / ((float)camcTotalSet.size() * clazz.getMethods().size());
+		if( msc )
+		{
+			List<AOMMethod> methodList = clazz.getMethods();
+			
+			int totalMSCValueCount = 0;
+			
+			for( int i = 0; i < methodList.size() - 1; i++ )
+			{
+				for( int j = i + 1; j < methodList.size(); j++ )
+				{
+					int unionSize = Sets.union(mscFieldList[i], mscFieldList[j]).size();	
+					
+					if( unionSize == 0 )
+					{
+						int intersectionSize = Sets.intersection(mscFieldList[i], mscFieldList[j]).size();
+						double ms = intersectionSize / ((double) unionSize);
+						mscValue += ms;
+						totalMSCValueCount++;
+					}
+				}
+			}
+			
+			if( totalMSCValueCount != 0 )
+			{
+				mscValue = mscValue / totalMSCValueCount;
+				_initializeMetric(clazz, MSC, (float)mscValue);
+			}
+			else
+			{
+				_initializeMetric(clazz, MSC, (float)-1);
+			}
+		}
+		
+		
+		float camc = -1;
+		
+		if( camcTotalSet.size() != 0 && clazz.getMethods().size() != 0 )
+		{
+			camc = camcMethodParameterCount / ((float)camcTotalSet.size() * clazz.getMethods().size());
+		}
 		
 		_initializeMetric(clazz, CAM, camc);
-		
+		_initializeMetric(clazz, MPC, mpcSet.size());
 		
 		
 		for( AOMField field : clazz.getFields() )

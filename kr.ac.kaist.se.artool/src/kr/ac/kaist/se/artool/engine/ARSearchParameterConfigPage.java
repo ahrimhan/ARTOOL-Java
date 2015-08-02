@@ -1,15 +1,23 @@
 package kr.ac.kaist.se.artool.engine;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import kr.ac.kaist.se.artool.search.ARSearchMain;
+import kr.ac.kaist.se.artool.search.ARSearchMain.CandidateSelectionType;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
@@ -18,10 +26,14 @@ public class ARSearchParameterConfigPage extends WizardPage {
 
 	protected ARSearchParameterConfigPage(String pageName) {
 		super(pageName);
-		// TODO Auto-generated constructor stub
+		super.setTitle("Configure search-based refactoring experiments");
+		super.setDescription("Set up your experiments. Combinations of each experimental condition are executed.");
 	}
 	
-	private Combo fitnessFunction;
+	
+	
+//	private Combo fitnessFunction;
+	private int fitnessSelectionBits = 0;
 	private String[] fitnessFunctionItems = {
 			"EPM",
 			"QMOOD-Reusability",
@@ -29,7 +41,9 @@ public class ARSearchParameterConfigPage extends WizardPage {
 			"QMOOD-Understandability",
 	};
 	
-	private Combo searchTechnique;
+	
+	private int searchTechniqueBits = 0;
+	
 	private String[] searchTechniqueItems = {
 			"First-ascent hill-climbing",
 			"Steepest-ascent hill-climbing",
@@ -37,6 +51,14 @@ public class ARSearchParameterConfigPage extends WizardPage {
 			"Multiple-restart hill-climbing",
 			"Low-temperature simulated annealing"
 			*/
+	};
+	
+	private Combo candidateSelection;
+	
+	private String[] candidateSelectionItems = {
+			"Both of Delta Table & Random",
+			"Only Random",
+			"Only Delta Table"
 	};
 	
 	private Text maxIterationCount;
@@ -47,24 +69,101 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	@Override
 	public void createControl(Composite parent) {
 		// create the composite to hold the widgets
-		Composite composite = new Composite(parent, SWT.NONE);
+		Composite globalComposite = new Composite(parent, SWT.NONE);
+		fitnessSelectionBits = 0;
 		// create the desired layout for this wizard page
+		GridLayout gl1 = new GridLayout();
+		gl1.numColumns = 1;
+		globalComposite.setLayout(gl1);
+		
+		
 		GridLayout gl = new GridLayout();
 		int ncol = 2;
 		gl.numColumns = ncol;
+		
+		
+		Group composite = new Group(globalComposite, SWT.SHADOW_IN);
+		composite.setText("Experiment Conditions");
 		composite.setLayout(gl);
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		// create the widgets and their grid data objects
 		// Date of travel
-		new Label(composite, SWT.NONE).setText("Fitness Function:");
-		fitnessFunction = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.DROP_DOWN);
-		fitnessFunction.setItems(fitnessFunctionItems);
-		fitnessFunction.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		new Label(composite, SWT.NONE).setText("Fitness Function:");
+//		fitnessFunction = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.DROP_DOWN);
+//		fitnessFunction.setItems(fitnessFunctionItems);
+//		fitnessFunction.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
+	    Group group1 = new Group(composite, SWT.SHADOW_IN);
+		GridData gridDataGroup1 = new GridData(GridData.FILL_HORIZONTAL);
+		gridDataGroup1.horizontalSpan = ncol;
+		group1.setLayoutData(gridDataGroup1);
 		
-		new Label(composite, SWT.NONE).setText("Search Technique:");
-		searchTechnique = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.DROP_DOWN);
-		searchTechnique.setItems(searchTechniqueItems);
-		searchTechnique.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	    group1.setText("Fitness Function:");
+	    group1.setLayout(new RowLayout(SWT.VERTICAL));
+	    for( int i = 0; i < fitnessFunctionItems.length; i++ )
+	    {
+	    	final int j = i;
+	    	Button btn = new Button(group1, SWT.CHECK);
+	    	btn.setText(fitnessFunctionItems[i]);
+	    	btn.addSelectionListener(new SelectionListener(){
+	    		@Override
+	    		public void widgetDefaultSelected(SelectionEvent e) {
+	    			fitnessSelectionBits ^= 1 << j; 
+	    		}
+	    		
+	    		@Override
+	    		public void widgetSelected(SelectionEvent e) {
+	    			fitnessSelectionBits ^= 1 << j;
+	    		}
+	    	});
+	    	btn.setSelection(true);
+	    	
+	    	fitnessSelectionBits |= 1 << j;
+	    }
+	    
+	    
+	    group1 = new Group(composite, SWT.SHADOW_IN);
+		gridDataGroup1 = new GridData(GridData.FILL_HORIZONTAL);
+		gridDataGroup1.horizontalSpan = ncol;
+		group1.setLayoutData(gridDataGroup1);
+		
+	    group1.setText("Search Technique:");
+	    group1.setLayout(new RowLayout(SWT.VERTICAL));
+	    for( int i = 0; i < searchTechniqueItems.length; i++ )
+	    {
+	    	final int j = i;
+	    	Button btn = new Button(group1, SWT.CHECK);
+	    	btn.setText(searchTechniqueItems[i]);
+	    	btn.addSelectionListener(new SelectionListener(){
+	    		@Override
+	    		public void widgetDefaultSelected(SelectionEvent e) {
+	    			searchTechniqueBits ^= 1 << j; 
+	    		}
+	    		
+	    		@Override
+	    		public void widgetSelected(SelectionEvent e) {
+	    			searchTechniqueBits ^= 1 << j;
+	    		}
+	    	});
+	    	btn.setSelection(true);
+	    	
+	    	searchTechniqueBits |= 1 << j;
+	    }
+	    
+	    
+		new Label(composite, SWT.NONE).setText("Candidate Selection:");
+		candidateSelection = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.DROP_DOWN);
+		candidateSelection.setItems(candidateSelectionItems);
+		candidateSelection.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	    candidateSelection.select(0);
+	    
+	    
+	    composite = new Group(globalComposite, SWT.SHADOW_IN);
+		composite.setText("Experiment Parameter");
+		composite.setLayout(gl);
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
 		
 		new Label(composite, SWT.NONE).setText("Max Iteraction Count:");
 		maxIterationCount = new Text(composite, SWT.BORDER | SWT.SINGLE);
@@ -106,81 +205,112 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	      });
 		
 		
+		/*
 		useDeltaTableButton = new Button(composite, SWT.CHECK);
 		useDeltaTableButton.setText("Use Delta Table Acceleration?");
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = ncol;
 		useDeltaTableButton.setLayoutData(gd);
 		useDeltaTableButton.setSelection(true);
+		*/
+		
+		//fitnessFunction.select(0);
+		//searchTechnique.select(0);
 		
 		
-		fitnessFunction.select(0);
-		searchTechnique.select(0);
-		
-		
-		setControl(composite);
+		setControl(globalComposite);
 		
 	}
 
 	
-	public ARSearchMain.FitnessType getFitnessType()
+	public List<ARSearchMain.FitnessType> getFitnessType()
 	{
 		ARSearchMain.FitnessType type;
-		
-		switch( fitnessFunction.getSelectionIndex() )
+		List<ARSearchMain.FitnessType> typeList = new LinkedList<ARSearchMain.FitnessType>();
+
+		if( (fitnessSelectionBits & (1 << 0)) != 0 )
 		{
-		case 0:
 			type = ARSearchMain.FitnessType.EPM;
-			break;
-		case 1:
-			type = ARSearchMain.FitnessType.REUSABILITY;
-			break;
-		case 2:
-			type = ARSearchMain.FitnessType.FLEXIBILITY;
-			break;
-		case 3:
-			type = ARSearchMain.FitnessType.UNDERSTANDABILITY;
-			break;
-		
-		default:
-			type = ARSearchMain.FitnessType.EPM;
-			break;
-			
+			typeList.add(type);
 		}
 		
-		return type;
+		if( (fitnessSelectionBits & (1 << 1)) != 0 )
+		{
+			type = ARSearchMain.FitnessType.REUSABILITY;
+			typeList.add(type);
+		}
+		
+		if( (fitnessSelectionBits & (1 << 2)) != 0 )
+		{
+			type = ARSearchMain.FitnessType.FLEXIBILITY;
+			typeList.add(type);
+		}
+		
+		if( (fitnessSelectionBits & (1 << 3)) != 0 )
+		{
+			type = ARSearchMain.FitnessType.UNDERSTANDABILITY;
+			typeList.add(type);
+		}
+		
+		return typeList;
 	}
 	
-	public ARSearchMain.SearchTechType getSearchTechType()
+	public List<ARSearchMain.SearchTechType> getSearchTechType()
 	{
 		ARSearchMain.SearchTechType type;
+		List<ARSearchMain.SearchTechType> typeList = new LinkedList<ARSearchMain.SearchTechType>();
 		
-		switch( searchTechnique.getSelectionIndex() )
+		
+		if( (searchTechniqueBits & (1 << 0)) != 0 )
 		{
-		case 0:
 			type = ARSearchMain.SearchTechType.SELECT_FIRST;
-			break;
-		case 1:
-			type = ARSearchMain.SearchTechType.SELECT_BEST;
-			break;
-		case 2:
-			type = ARSearchMain.SearchTechType.SELECT_FIRST_RESTART;
-			break;
-		case 3:
-			type = ARSearchMain.SearchTechType.SIMULATED_ANNEALING;
-			break;
-		default:
-			type = ARSearchMain.SearchTechType.SELECT_FIRST;
-			break;
-			
+			typeList.add(type);
 		}
 		
-		return type;
+		if( (searchTechniqueBits & (1 << 1)) != 0 )
+		{
+			type = ARSearchMain.SearchTechType.SELECT_BEST;
+			typeList.add(type);
+		}
+		
+		if( (searchTechniqueBits & (1 << 2)) != 0 )
+		{
+			type = ARSearchMain.SearchTechType.SELECT_FIRST_RESTART;
+			typeList.add(type);
+		}
+		
+		if( (searchTechniqueBits & (1 << 3)) != 0 )
+		{
+			type = ARSearchMain.SearchTechType.SIMULATED_ANNEALING;
+			typeList.add(type);
+		}
+		
+		
+		return typeList;
 	}
 	
-	public boolean useDeltaTable()
+	public List<ARSearchMain.CandidateSelectionType> getCandidateSelectionType()
 	{
-		return useDeltaTableButton.getSelection();
+		List<ARSearchMain.CandidateSelectionType> typeList = new LinkedList<ARSearchMain.CandidateSelectionType>();
+		
+		switch( candidateSelection.getSelectionIndex() )
+		{
+		case 0:
+			typeList.add(CandidateSelectionType.RANDOM);
+			typeList.add(CandidateSelectionType.DELTA);
+			break;
+		case 1:
+			typeList.add(CandidateSelectionType.RANDOM);
+			break;
+		case 2:
+			typeList.add(CandidateSelectionType.DELTA);
+			break;
+		default:
+			throw new RuntimeException("Waaaaagh!!!");
+		}
+		
+		
+		return typeList;
 	}
 
 
