@@ -101,7 +101,6 @@ public class MinimalBasicMetricSuite {
 		HashSet<AOMMethod> mpcSet = new HashSet<AOMMethod>();
 		
 		int camcMethodParameterCount = 0;
-		double mscValue = 0;
 		
 		HashSet<AOMField>[] mscFieldList = new HashSet[clazz.getMethods().size()];
 		
@@ -155,23 +154,29 @@ public class MinimalBasicMetricSuite {
 					}
 				}
 				
-				mscFieldList[index] = fieldSet;		
+				mscFieldList[index] = fieldSet;	
 			}
+			
+			index++;
 		}
+		
 		
 		if( msc )
 		{
 			List<AOMMethod> methodList = clazz.getMethods();
-			
+			double mscValue = 0;
+	
 			int totalMSCValueCount = 0;
 			
 			for( int i = 0; i < methodList.size() - 1; i++ )
 			{
 				for( int j = i + 1; j < methodList.size(); j++ )
 				{
+					if( mscFieldList[i] == null || mscFieldList[j] == null ) continue;
+					
 					int unionSize = Sets.union(mscFieldList[i], mscFieldList[j]).size();	
 					
-					if( unionSize == 0 )
+					if( unionSize != 0 )
 					{
 						int intersectionSize = Sets.intersection(mscFieldList[i], mscFieldList[j]).size();
 						double ms = intersectionSize / ((double) unionSize);
@@ -184,7 +189,15 @@ public class MinimalBasicMetricSuite {
 			if( totalMSCValueCount != 0 )
 			{
 				mscValue = mscValue / totalMSCValueCount;
-				_initializeMetric(clazz, MSC, (float)mscValue);
+				
+				if( Double.isFinite(mscValue) )
+				{
+					_initializeMetric(clazz, MSC, (float)mscValue);
+				}
+				else
+				{
+					_initializeMetric(clazz, MSC, (float)-1);
+				}
 			}
 			else
 			{

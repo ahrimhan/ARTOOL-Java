@@ -25,6 +25,8 @@ public class MSCEngine extends FitnessFunction {
 	public float calculate() {
 		float mscTotal = 0;
 		int mscCount = 0;
+		int negCount = 0;
+		float ret = 0;
 		
 		bms.measure(aom, true);
 
@@ -37,9 +39,16 @@ public class MSCEngine extends FitnessFunction {
 				mscTotal += msc;
 				mscCount++;
 			}
+			else
+			{
+				negCount++;
+			}
 		}
 		
-		float ret = mscTotal/mscCount;
+		//System.err.println("Total:" + aom.getClasses().size() + " mscCount:" + mscCount + " negCount:" + negCount);
+		
+		ret = mscTotal/mscCount;
+		
 		return ret;
 	}
 	

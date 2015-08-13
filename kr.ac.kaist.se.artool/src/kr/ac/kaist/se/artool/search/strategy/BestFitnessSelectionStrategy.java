@@ -10,6 +10,7 @@ public class BestFitnessSelectionStrategy extends
 		AbstractRefactoringSelectionStrategy {
 
 	private Vector<MoveMethodCommand> commandList = new Vector<MoveMethodCommand>();
+	private MoveMethodCommand prevCmd = null;
 	
 	public BestFitnessSelectionStrategy(float prevFitness, Comparator<MoveMethodCommand> comparator) {
 		super(prevFitness, comparator);
@@ -30,7 +31,16 @@ public class BestFitnessSelectionStrategy extends
 		try
 		{
 			cmd = Collections.max(commandList, comparator);
-			prevFitness = cmd.fitness;	
+			
+			if( prevCmd == null || comparator.compare(prevCmd, cmd) < 0 )
+			{
+				prevFitness = cmd.fitness;
+				prevCmd = cmd;
+			}
+			else
+			{
+				cmd = null;
+			}
 		}
 		catch(Exception ex)
 		{

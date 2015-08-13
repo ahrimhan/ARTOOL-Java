@@ -14,6 +14,8 @@ import kr.ac.kaist.se.artool.search.candidate.DeltaMatrixEngine;
 import kr.ac.kaist.se.artool.search.candidate.RandomCandidateSelection;
 import kr.ac.kaist.se.artool.search.fitness.EPMEngine;
 import kr.ac.kaist.se.artool.search.fitness.FitnessFunction;
+import kr.ac.kaist.se.artool.search.fitness.MPCEngine;
+import kr.ac.kaist.se.artool.search.fitness.MSCEngine;
 import kr.ac.kaist.se.artool.search.fitness.QMoodEngine;
 import kr.ac.kaist.se.artool.search.strategy.AbstractRefactoringSelectionStrategy;
 import kr.ac.kaist.se.artool.search.strategy.BestFitnessSelectionStrategy;
@@ -170,9 +172,15 @@ public class ARSearchMain {
 		case UNDERSTANDABILITY:
 			fitnessFunction = new QMoodEngine(aom, QMoodEngine.TYPE.UNDERSTANDABILITY);
 			break;
-		default:
-			fitnessFunction = new QMoodEngine(aom, QMoodEngine.TYPE.FLEXIBILITY);
+		case MSC:
+			fitnessFunction = new MSCEngine(aom);
 			break;
+		case MPC:
+			fitnessFunction = new MPCEngine(aom);
+			break;
+		default:
+			throw new RuntimeException("Strange Fitness Type");
+		
 		}
 		
 		if( fitnessFunction.isBiggerValueMeantBetterFitness() )
@@ -232,6 +240,7 @@ public class ARSearchMain {
 		Runtime runtime = Runtime.getRuntime();
 		
 		
+		/*
 		if( dmEngine != null )
 		{
 			dmEngine.setAdjust(false);
@@ -286,16 +295,15 @@ public class ARSearchMain {
 				maxCorrIdx = warmUpIteration;
 			}
 		}
-		//
-		//
-		//
 		
 		logger.debug("Selected Corr:" + maxCorr);
+		*/
 		
 		if( dmEngine != null )
 		{
 			dmEngine.setAdjust(true);
-			dmEngine.setCohesiveFactorRate(maxCorrIdx, 20 - maxCorrIdx);
+			//dmEngine.setCohesiveFactorRate(maxCorrIdx, 20 - maxCorrIdx);
+			dmEngine.setCohesiveFactorRate(2, 1);
 		}
 		
 		int iteration = 0;
