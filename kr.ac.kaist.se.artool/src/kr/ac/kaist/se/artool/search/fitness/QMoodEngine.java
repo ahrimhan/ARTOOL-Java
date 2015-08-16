@@ -75,7 +75,7 @@ public class QMoodEngine extends FitnessFunction {
 	public QMoodEngine(AbstractObjectModel aom, TYPE type)
 	{
 		bms = new MinimalBasicMetricSuite();
-		bms.measure(aom, false);
+		bms.measure(aom, false, false);
 		
 		calculateRawMetrics(aom);
 		this.aom = aom;
@@ -107,7 +107,7 @@ public class QMoodEngine extends FitnessFunction {
 	{
 		float[] qmood = new float[countOfType];
 	
-		bms.measure(aom, false);
+		bms.measure(aom, false, false);
 		
 		float flexibility = 0;
 		float reusability = 0;

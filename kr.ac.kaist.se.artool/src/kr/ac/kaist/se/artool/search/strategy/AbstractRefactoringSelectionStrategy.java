@@ -20,4 +20,6 @@ public abstract class AbstractRefactoringSelectionStrategy {
 	
 	public abstract boolean next(MoveMethodCommand obj, float fitness);
 	public abstract MoveMethodCommand done();
+	
+	public abstract boolean hasAnotherChance();
 }

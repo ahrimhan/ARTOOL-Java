@@ -2,6 +2,7 @@ package kr.ac.kaist.se.artool.search.fitness;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Vector;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
@@ -26,14 +27,15 @@ public class MinimalBasicMetricSuite {
 	public static final String NOM = "NOM"; //methods
 	public static final String MPC = "MPC";
 	public static final String MSC = "MSC";
+	public static final String CONN = "CONN";
 
 	
 	
 	
-	public void measure(AbstractObjectModel aom, boolean msc) {
+	public void measure(AbstractObjectModel aom, boolean msc, boolean connectivity) {
 		for( AOMClass clazz : aom.getClasses() )
 		{
-			measure(clazz, msc);
+			measure(clazz, msc, connectivity);
 		}			
 	}
 	
@@ -81,9 +83,8 @@ public class MinimalBasicMetricSuite {
 			i[0] = intValue;
 		}
 	}
-	//HashSet<AOMField> referringField1 = new HashSet<AOMField>();
-	//HashSet<AOMField> referringField2 = new HashSet<AOMField>();
-	public void measure(AOMClass clazz, boolean msc)
+
+	public void measure(AOMClass clazz, boolean msc, boolean connectivity)
 	{			
 				
 		_initializeMetric(clazz, DCC, 0);
@@ -103,6 +104,67 @@ public class MinimalBasicMetricSuite {
 		int camcMethodParameterCount = 0;
 		
 		HashSet<AOMField>[] mscFieldList = new HashSet[clazz.getMethods().size()];
+		
+		if( connectivity && clazz.getMethods().size() > 0 )
+		{
+			int[] connCheckField = new int[clazz.getMethods().size() * clazz.getMethods().size()];
+			for( int i = 0 ; i < connCheckField.length; i++ )
+			{
+				connCheckField[i] = 0;	
+			}
+			
+			Vector<AOMMethod> calleeMethods = new Vector<AOMMethod>(); 
+					
+			int ii= 0; 
+			for( AOMMethod method : clazz.getMethods() )
+			{
+
+				if( method.getOwnedScope() != null )
+				{
+					for( StaticMethodCall call : method.getOwnedScope().getStaticMethodCalls() )
+					{
+						if( call.getCallee().getOwner() == clazz )
+						{
+							int calleeIndex = clazz.getMethods().indexOf(call.getCallee());
+							connCheckField[ii * clazz.getMethods().size() + calleeIndex] = 1;
+							connCheckField[calleeIndex * clazz.getMethods().size() + ii] = 1;
+						}
+					}
+					
+					for( StaticFieldAccess sfa : method.getOwnedScope().getStaticFieldAccesses() )
+					{
+						if( sfa.getAccessedField() != null )
+						{
+							for( StaticFieldAccess sfa2 : sfa.getAccessedField().getStaticReferer() )
+							{
+								if( sfa != sfa2 && sfa2.getAccessingScope().getOwner().getOwner() == clazz )
+								{
+									int calleeIndex = clazz.getMethods().indexOf(sfa2.getAccessingScope().getOwner());
+									connCheckField[ii * clazz.getMethods().size() + calleeIndex] = 1;
+									connCheckField[calleeIndex * clazz.getMethods().size() + ii] = 1;
+								}
+							}
+						}
+					}
+				}
+				ii++;
+			}
+			
+			int total = 0;
+			
+			for( int i = 0 ; i < connCheckField.length; i++ )
+			{
+				total  += connCheckField[i];
+			}
+			
+			float connectivityValue = ((float)total) / connCheckField.length;
+			
+			_initializeMetric(clazz, CONN, connectivityValue);
+		}
+		else
+		{
+			_initializeMetric(clazz, CONN, (float)-1);
+		}
 		
 		int index = 0;
 		for( AOMMethod method : clazz.getMethods() )

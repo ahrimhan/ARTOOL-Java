@@ -1,8 +1,6 @@
 package kr.ac.kaist.se.artool.search.strategy;
 
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.Vector;
 
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
 
@@ -13,9 +11,11 @@ public class FirstPositiveFitnessSelectionStrategy extends
 	private MoveMethodCommand prevCmd = null;
 	private MoveMethodCommand retCmd = null;
 	private int iteration = 0;
+	private int chance = 100;
 	
 	public FirstPositiveFitnessSelectionStrategy(float prevFitness, Comparator<MoveMethodCommand> comparator) {
 		super(prevFitness, comparator);
+		chance = 100;
 	}
 
 	@Override
@@ -54,4 +54,14 @@ public class FirstPositiveFitnessSelectionStrategy extends
 		return mmc;
 	}
 
+	@Override
+	public boolean hasAnotherChance()
+	{
+		if( chance > 0 )
+		{
+			chance--;
+			return true;
+		}
+		return false;
+	}
 }

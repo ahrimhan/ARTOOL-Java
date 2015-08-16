@@ -97,8 +97,6 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 							}							
 						}
 					}
-					
-					
 				}
 
 				for(StaticMethodCall smc : method.getOwnedScope().getStaticMethodCalls() )
@@ -161,6 +159,7 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 	public class MatrixTuple
 	{
 		public Matrix deltaMatrix;
+		public Matrix externalMatrix;
 		public Matrix invertedInternalMatrix;
 	}
 	
@@ -173,7 +172,7 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 		System.err.println("CouplingFactor:"+couplingFactor);
 	}
 	
-	private MatrixTuple getDeltaMatrix()
+	protected MatrixTuple getDeltaMatrix()
 	{
 		
 		Matrix temp1;
@@ -226,7 +225,7 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 		Matrix I = IIP.copy();
 		
 		tuple.deltaMatrix = IIP.add(-1, EP);
-		
+		tuple.externalMatrix = EP;
 		tuple.invertedInternalMatrix = I;
 		
 		return tuple;
@@ -277,7 +276,7 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 				AOMClass clazz = sts.classes.get(j);
 				if( method.getOwnedScope() != null && (method.getOwnedScope().getStaticMethodCalls().size() + method.getOwnedScope().getStaticFieldAccesses().size() + method.getStaticReferer().size()) != 0)
 				{	
-					if( dm.get(i,  j) < 0 )
+					//if( dm.get(i,  j) < 0 )
 					{
 						
 						MoveMethodCommand mmc = new MoveMethodCommand(method, clazz, (float)(dm.get(i, j) / (iim.get(i, j) + 1)) );

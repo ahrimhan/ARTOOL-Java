@@ -36,11 +36,12 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	private int fitnessSelectionBits = 0;
 	private String[] fitnessFunctionItems = {
 			"EPM (Entitiy Placement Metric)",
-			"QMOOD-Reusability",
-			"QMOOD-Flexibility",
-			"QMOOD-Understandability",
+//			"QMOOD-Reusability",
+//			"QMOOD-Flexibility",
+//			"QMOOD-Understandability",
 			"MSC (Message Similiarity Cohesion)",
-			"MPC (Message Passing Coupling)"
+			"MPC (Message Passing Coupling)",
+			"Connectivity"
 	};
 	
 	
@@ -54,19 +55,20 @@ public class ARSearchParameterConfigPage extends WizardPage {
 			"Low-temperature simulated annealing"
 			*/
 	};
+
 	
-	private Combo candidateSelection;
+	private int candidateSelectionBits = 0;
 	
 	private String[] candidateSelectionItems = {
-			"Both of Delta Table & Random",
-			"Only Random",
-			"Only Delta Table"
+			"Random",
+			//"External Dependency",
+			"Delta Table"
 	};
 	
 	private Text maxIterationCount;
 	private Text maxCandidateCount;
 	
-	private Button useDeltaTableButton;
+	//private Button useDeltaTableButton;
 
 	@Override
 	public void createControl(Composite parent) {
@@ -100,7 +102,6 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		GridData gridDataGroup1 = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataGroup1.horizontalSpan = ncol;
 		group1.setLayoutData(gridDataGroup1);
-		
 	    group1.setText("Fitness Function:");
 	    group1.setLayout(new RowLayout(SWT.VERTICAL));
 	    for( int i = 0; i < fitnessFunctionItems.length; i++ )
@@ -123,6 +124,8 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	    	
 	    	fitnessSelectionBits |= 1 << j;
 	    }
+	    
+	    
 	    
 	    
 	    group1 = new Group(composite, SWT.SHADOW_IN);
@@ -154,11 +157,41 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	    }
 	    
 	    
-		new Label(composite, SWT.NONE).setText("Candidate Selection:");
-		candidateSelection = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.DROP_DOWN);
-		candidateSelection.setItems(candidateSelectionItems);
-		candidateSelection.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-	    candidateSelection.select(0);
+//		new Label(composite, SWT.NONE).setText("Candidate Selection:");
+//		candidateSelection = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.DROP_DOWN);
+//		candidateSelection.setItems(candidateSelectionItems);
+//		candidateSelection.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//	    candidateSelection.select(0);
+	    
+	    group1 = new Group(composite, SWT.SHADOW_IN);
+		gridDataGroup1 = new GridData(GridData.FILL_HORIZONTAL);
+		gridDataGroup1.horizontalSpan = ncol;
+		group1.setLayoutData(gridDataGroup1);
+		
+	    group1.setText("Candidate Selection:");
+	    group1.setLayout(new RowLayout(SWT.VERTICAL));
+	    for( int i = 0; i < candidateSelectionItems.length; i++ )
+	    {
+	    	final int j = i;
+	    	Button btn = new Button(group1, SWT.CHECK);
+	    	btn.setText(candidateSelectionItems[i]);
+	    	btn.addSelectionListener(new SelectionListener(){
+	    		@Override
+	    		public void widgetDefaultSelected(SelectionEvent e) {
+	    			candidateSelectionBits ^= 1 << j; 
+	    		}
+	    		
+	    		@Override
+	    		public void widgetSelected(SelectionEvent e) {
+	    			candidateSelectionBits ^= 1 << j;
+	    		}
+	    	});
+	    	btn.setSelection(true);
+	    	
+	    	candidateSelectionBits |= 1 << j;
+	    }
+	    
+	    
 	    
 	    
 	    composite = new Group(globalComposite, SWT.SHADOW_IN);
@@ -236,33 +269,39 @@ public class ARSearchParameterConfigPage extends WizardPage {
 			typeList.add(type);
 		}
 		
+//		if( (fitnessSelectionBits & (1 << 1)) != 0 )
+//		{
+//			type = ARSearchMain.FitnessType.REUSABILITY;
+//			typeList.add(type);
+//		}
+//		
+//		if( (fitnessSelectionBits & (1 << 2)) != 0 )
+//		{
+//			type = ARSearchMain.FitnessType.FLEXIBILITY;
+//			typeList.add(type);
+//		}
+//		
+//		if( (fitnessSelectionBits & (1 << 3)) != 0 )
+//		{
+//			type = ARSearchMain.FitnessType.UNDERSTANDABILITY;
+//			typeList.add(type);
+//		}
+		
 		if( (fitnessSelectionBits & (1 << 1)) != 0 )
-		{
-			type = ARSearchMain.FitnessType.REUSABILITY;
-			typeList.add(type);
-		}
-		
-		if( (fitnessSelectionBits & (1 << 2)) != 0 )
-		{
-			type = ARSearchMain.FitnessType.FLEXIBILITY;
-			typeList.add(type);
-		}
-		
-		if( (fitnessSelectionBits & (1 << 3)) != 0 )
-		{
-			type = ARSearchMain.FitnessType.UNDERSTANDABILITY;
-			typeList.add(type);
-		}
-		
-		if( (fitnessSelectionBits & (1 << 4)) != 0 )
 		{
 			type = ARSearchMain.FitnessType.MSC;
 			typeList.add(type);
 		}
 		
-		if( (fitnessSelectionBits & (1 << 5)) != 0 )
+		if( (fitnessSelectionBits & (1 << 2)) != 0 )
 		{
 			type = ARSearchMain.FitnessType.MPC;
+			typeList.add(type);
+		}
+
+		if( (fitnessSelectionBits & (1 << 3)) != 0 )
+		{
+			type = ARSearchMain.FitnessType.CONNECTIVITY;
 			typeList.add(type);
 		}
 		
@@ -305,22 +344,21 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	
 	public List<ARSearchMain.CandidateSelectionType> getCandidateSelectionType()
 	{
+		ARSearchMain.CandidateSelectionType type;
+
 		List<ARSearchMain.CandidateSelectionType> typeList = new LinkedList<ARSearchMain.CandidateSelectionType>();
 		
-		switch( candidateSelection.getSelectionIndex() )
+		
+		if( (candidateSelectionBits & (1 << 0)) != 0 )
 		{
-		case 0:
-			typeList.add(CandidateSelectionType.RANDOM);
-			typeList.add(CandidateSelectionType.DELTA);
-			break;
-		case 1:
-			typeList.add(CandidateSelectionType.RANDOM);
-			break;
-		case 2:
-			typeList.add(CandidateSelectionType.DELTA);
-			break;
-		default:
-			throw new RuntimeException("Waaaaagh!!!");
+			type = CandidateSelectionType.RANDOM;
+			typeList.add(type);
+		}
+		
+		if( (candidateSelectionBits & (1 << 1)) != 0 )
+		{
+			type = CandidateSelectionType.DELTA;
+			typeList.add(type);
 		}
 		
 		

@@ -52,5 +52,11 @@ public class BestFitnessSelectionStrategy extends
 		
 		return cmd;
 	}
+	
+	@Override
+	public boolean hasAnotherChance()
+	{
+		return false;
+	}
 
 }

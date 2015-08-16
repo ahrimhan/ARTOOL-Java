@@ -4,11 +4,11 @@ import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.artool.search.fitness.QMoodEngine.TYPE;
 
-public class MSCEngine extends FitnessFunction {
+public class ConnectivityEngine extends FitnessFunction {
 	private MinimalBasicMetricSuite bms;
 	private AbstractObjectModel aom;
 	
-	public MSCEngine(AbstractObjectModel aom)
+	public ConnectivityEngine(AbstractObjectModel aom)
 	{
 		bms = new MinimalBasicMetricSuite();
 		this.aom = aom;
@@ -23,21 +23,21 @@ public class MSCEngine extends FitnessFunction {
 	
 	@Override
 	public float calculate() {
-		float mscTotal = 0;
-		int mscCount = 0;
+		float connTotal = 0;
+		int connCount = 0;
 		int negCount = 0;
 		float ret = 0;
 		
-		bms.measure(aom, true, false);
+		bms.measure(aom, false, true);
 
 		for( AOMClass clazz : aom.getClasses() )
 		{
-			float msc = getFloat(clazz.getMeasuredDataSet().get(MinimalBasicMetricSuite.MSC));
+			float conn = getFloat(clazz.getMeasuredDataSet().get(MinimalBasicMetricSuite.CONN));
 			
-			if( msc >= 0 )
+			if( conn >= 0 )
 			{
-				mscTotal += msc;
-				mscCount++;
+				connTotal += conn;
+				connCount++;
 			}
 			else
 			{
@@ -47,7 +47,7 @@ public class MSCEngine extends FitnessFunction {
 		
 		//System.err.println("Total:" + aom.getClasses().size() + " mscCount:" + mscCount + " negCount:" + negCount);
 		
-		ret = mscTotal/mscCount;
+		ret = connTotal/connCount;
 		
 		return ret;
 	}
@@ -56,15 +56,15 @@ public class MSCEngine extends FitnessFunction {
 	{
 		return true;
 	}
-	/*
+	
 	public double getCohesiveFactor()
 	{
-		return 1;
+		return 8;
 	}
 	
 	public double getCouplingFactor()
 	{
-		return 9;
+		return 2;
 	}
-	*/
+	
 }

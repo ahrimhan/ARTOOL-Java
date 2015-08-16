@@ -24,7 +24,7 @@ public class MPCEngine extends FitnessFunction {
 		float mpcTotal = 0;
 		int mpcCount = 0;
 		
-		bms.measure(aom, false);
+		bms.measure(aom, false, false);
 
 		for( AOMClass clazz : aom.getClasses() )
 		{

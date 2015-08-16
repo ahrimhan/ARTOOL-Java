@@ -12,6 +12,7 @@ import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
 import kr.ac.kaist.se.artool.search.candidate.CandidateSelection;
 import kr.ac.kaist.se.artool.search.candidate.DeltaMatrixEngine;
 import kr.ac.kaist.se.artool.search.candidate.RandomCandidateSelection;
+import kr.ac.kaist.se.artool.search.fitness.ConnectivityEngine;
 import kr.ac.kaist.se.artool.search.fitness.EPMEngine;
 import kr.ac.kaist.se.artool.search.fitness.FitnessFunction;
 import kr.ac.kaist.se.artool.search.fitness.MPCEngine;
@@ -36,7 +37,7 @@ public class ARSearchMain {
 
 	public enum FitnessType
 	{
-		FLEXIBILITY, REUSABILITY, UNDERSTANDABILITY, EPM, MPC, MSC
+		FLEXIBILITY, REUSABILITY, UNDERSTANDABILITY, EPM, MPC, MSC, CONNECTIVITY
 	}
 	
 	public enum SearchTechType
@@ -178,6 +179,9 @@ public class ARSearchMain {
 		case MPC:
 			fitnessFunction = new MPCEngine(aom);
 			break;
+		case CONNECTIVITY:
+			fitnessFunction = new ConnectivityEngine(aom);
+			break;
 		default:
 			throw new RuntimeException("Strange Fitness Type");
 		
@@ -302,15 +306,14 @@ public class ARSearchMain {
 		if( dmEngine != null )
 		{
 			dmEngine.setAdjust(true);
-			//dmEngine.setCohesiveFactorRate(maxCorrIdx, 20 - maxCorrIdx);
-			dmEngine.setCohesiveFactorRate(2, 1);
+			dmEngine.setCohesiveFactorRate(fitnessFunction.getCouplingFactor(), fitnessFunction.getCohesiveFactor());
 		}
 		
 		int iteration = 0;
-		
+		int restart_count = 0;
+
 		for(iteration = 0; iteration < max_iteration; iteration++ )
 		{
-			monitor.worked(1);
 			monitor.subTask(iteration + "/" + max_iteration);
 			
 			prevFitness = fitness;
@@ -320,10 +323,8 @@ public class ARSearchMain {
 			{
 				if( idx >= max_candidate_selection ) break;
 
-				//StatusLogger.getInstance().openTrialSuite(mmc);
 				if( mmr.doAction(mmc) )
 				{
-					
 					fitness = fitnessFunction.calculate();
 					
 					candidateLogger.debug("{}, {}, {}, {}, {}, {}", iteration, idx, mmc.toString(), fitnessType.toString(), fitness, mmc.getDeltaValue());
@@ -341,11 +342,25 @@ public class ARSearchMain {
 			
 			MoveMethodCommand selectedCommand = strategy.done();
 			
-			if( selectedCommand == null )
+			if( selectedCommand == null )	
 			{
-				System.err.println("There is no improvements on Main Iteration Loop");
-				break;
+				if( //strategy instanceof FirstPositiveFitnessSelectionStrategy &&
+						candidateSelection instanceof RandomCandidateSelection &&
+						restart_count < 1000)
+				{
+					restart_count++;
+					iteration--;
+					continue;
+				}
+				else
+				{
+					System.err.println("There is no improvements on Main Iteration Loop");
+					break;
+				}
 			}
+			
+			monitor.worked(1);
+			restart_count = 0;
 			fitness = selectedCommand.fitness;
 			
 			//[IN:{}][SN:{}][SD:{}][FT:{}][FV:{}][DT:{}]

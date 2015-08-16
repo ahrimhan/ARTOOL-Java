@@ -77,5 +77,11 @@ public class SimulatedAnnealingStrategy extends
 		}
 		return prevCmd;
 	}
+	
+	@Override
+	public boolean hasAnotherChance()
+	{
+		return false;
+	}
 
 }

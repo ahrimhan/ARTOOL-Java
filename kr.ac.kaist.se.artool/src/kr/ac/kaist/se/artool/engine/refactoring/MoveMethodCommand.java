@@ -151,6 +151,8 @@ public class MoveMethodCommand implements RefactoringCommand {
 	@Override
 	public double doCommand() throws RefactoringException {
 		did = false;
+		
+		/*
 		try
 		{
 			for( AOMMethod lm : targetClass.getMethods() )
@@ -164,6 +166,12 @@ public class MoveMethodCommand implements RefactoringCommand {
 		catch(Throwable ex)
 		{
 //			ex.printStackTrace();
+			return 0;
+		}
+		*/
+		
+		if( targetClass.getMethods().contains(movingMethod) )
+		{
 			return 0;
 		}
 		
