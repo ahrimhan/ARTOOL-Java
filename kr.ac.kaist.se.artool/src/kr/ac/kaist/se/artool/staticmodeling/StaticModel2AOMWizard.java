@@ -118,15 +118,27 @@ public class StaticModel2AOMWizard extends Wizard {
 			System.err.println("UTF-8 error");
 		}
 		List affectedFiles = new LinkedList();
-		String path = chorFile.getLocation().removeLastSegments(1).toOSString();
+		final String path = chorFile.getFullPath().toString();
+		
+		Resource aomFileResource = null;
+		 
+		if( chorFile.getFileExtension().equals("json") )
+		{
+			
+		}
+		else
+		{
+			ResourceSet resourceSet = myEditingDomain.getResourceSet();
+			aomFileResource = resourceSet
+					.createResource(URI.createPlatformResourceURI(chorFile
+							.getFullPath().toString(), true));
+			
+		}
 		
 		affectedFiles.add(chorFile);
 		
 
-		ResourceSet resourceSet = myEditingDomain.getResourceSet();
-		final Resource aomResource = resourceSet
-				.createResource(URI.createPlatformResourceURI(chorFile
-						.getFullPath().toString(), true));
+		final Resource aomResource = aomFileResource;
 
 		AbstractTransactionalCommand command = new AbstractTransactionalCommand(
 				myEditingDomain, "Transforming Java Projects to AOM", affectedFiles) { //$NON-NLS-1$
@@ -135,9 +147,16 @@ public class StaticModel2AOMWizard extends Wizard {
 					throws ExecutionException {
 				try {
 					AbstractObjectModel aom = StaticModel2AOMTransformer.getInstance().transform2AOM(mySelectedProjectList, monitor);
-					aomResource.getContents().add(aom);
-				
-					aomResource.save(null);
+					if( chorFile.getFileExtension().equals("json") )
+					{
+						AOMJsonSerializer ajs = new AOMJsonSerializer(aom, path);
+						ajs.serialize();
+					}
+					else
+					{
+						aomResource.getContents().add(aom);
+						aomResource.save(null);
+					}
 				} catch (IOException e) {
 					return CommandResult.newErrorCommandResult("save failed");
 				} catch (JavaModelException e) {
