@@ -118,6 +118,8 @@ public class StaticModel2AOMWizard extends Wizard {
 			System.err.println("UTF-8 error");
 		}
 		List affectedFiles = new LinkedList();
+		String path = chorFile.getLocation().removeLastSegments(1).toOSString();
+		
 		affectedFiles.add(chorFile);
 		
 
