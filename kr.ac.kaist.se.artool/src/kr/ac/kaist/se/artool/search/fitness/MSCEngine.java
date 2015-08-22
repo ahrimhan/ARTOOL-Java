@@ -23,31 +23,33 @@ public class MSCEngine extends FitnessFunction {
 	
 	@Override
 	public float calculate() {
-		float mscTotal = 0;
-		int mscCount = 0;
-		int negCount = 0;
+		int methodSize;
+		int attrSize;
 		float ret = 0;
+		float div = 0;
 		
 		bms.measure(aom, true, false);
 
 		for( AOMClass clazz : aom.getClasses() )
 		{
-			float msc = getFloat(clazz.getMeasuredDataSet().get(MinimalBasicMetricSuite.MSC));
+			float conn = getFloat(clazz.getMeasuredDataSet().get(MinimalBasicMetricSuite.MSC));
 			
-			if( msc >= 0 )
+			if( conn >= 0 )
 			{
-				mscTotal += msc;
-				mscCount++;
-			}
-			else
-			{
-				negCount++;
+				methodSize = clazz.getMethods().size();
+				attrSize = clazz.getFields().size();
+				
+				if( methodSize > 0 )
+				{
+					ret +=  attrSize * methodSize * (methodSize - 1) * conn;
+					div += attrSize * methodSize * (methodSize - 1);
+				}
 			}
 		}
 		
 		//System.err.println("Total:" + aom.getClasses().size() + " mscCount:" + mscCount + " negCount:" + negCount);
 		
-		ret = mscTotal/mscCount;
+		ret = ret / div;
 		
 		return ret;
 	}
@@ -56,7 +58,7 @@ public class MSCEngine extends FitnessFunction {
 	{
 		return true;
 	}
-	/*
+	
 	public double getCohesiveFactor()
 	{
 		return 1;
@@ -66,5 +68,4 @@ public class MSCEngine extends FitnessFunction {
 	{
 		return 9;
 	}
-	*/
 }

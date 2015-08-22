@@ -3,6 +3,7 @@ package kr.ac.kaist.se.artool.search;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Set;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
@@ -233,75 +234,8 @@ public class ARSearchMain {
 		}
 		
 
-		SpearmansCorrelation correlation = new SpearmansCorrelation();
 		
-		int tuningCandidate = max_candidate_selection / 10;
-		
-		double[] epmArray = new double[tuningCandidate];
-		double[] deltaArray = new double[tuningCandidate];
-		double maxCorr = 0;
-		double maxCorrIdx = -1.0;
 		Runtime runtime = Runtime.getRuntime();
-		
-		
-		/*
-		if( dmEngine != null )
-		{
-			dmEngine.setAdjust(false);
-		}
-		
-		for(int warmUpIteration = 0; dmEngine != null && warmUpIteration <= 20; warmUpIteration++ )
-		{
-			
-			Set<MoveMethodCommand> candidates = candidateSelection.getCandidates();
-			
-			
-			dmEngine.setCohesiveFactorRate(warmUpIteration, 20 - warmUpIteration);
-			
-			for( int i = 0 ; i < tuningCandidate; i++ )
-			{
-				epmArray[i] = 0;
-				deltaArray[i] = 0;
-			}
-			
-			int idx = 0;
-			
-			for( MoveMethodCommand mmc : candidates )
-			{
-				if( idx >= tuningCandidate ) break;
-
-				if( mmr.doAction(mmc) )
-				{					
-					fitness = fitnessFunction.calculate();	
-					mmr.undoAction();
-				}
-				deltaArray[idx] = mmc.getDeltaValue();
-				epmArray[idx] = fitness;
-				System.err.println("Warming Up Fitness: " + fitness);
-				idx++;
-			}	
-			
-			double[] realEPMArray = new double[idx];
-			double[] realDeltaArray = new double[idx];
-			System.arraycopy(epmArray, 0, realEPMArray, 0, idx);
-			System.arraycopy(deltaArray, 0, realDeltaArray, 0, idx);
-			
-			logger.debug("corr calculate begin...");
-			double corr = correlation.correlation(realEPMArray, realDeltaArray);
-			logger.debug("corr calculate stopped...");
-			logger.debug("corr:" + corr);
-
-			if( ((!fitnessFunction.isBiggerValueMeantBetterFitness()) && maxCorr < corr) 
-					|| (fitnessFunction.isBiggerValueMeantBetterFitness() && maxCorr > corr)
-					|| maxCorrIdx == -1.0)
-			{
-				maxCorr = corr;
-				maxCorrIdx = warmUpIteration;
-			}
-		}
-		
-		logger.debug("Selected Corr:" + maxCorr);
-		*/
 		
 		if( dmEngine != null )
 		{
@@ -311,6 +245,7 @@ public class ARSearchMain {
 		
 		int iteration = 0;
 		int restart_count = 0;
+		boolean shouldBreak;
 
 		for(iteration = 0; iteration < max_iteration; iteration++ )
 		{
@@ -318,26 +253,24 @@ public class ARSearchMain {
 			
 			prevFitness = fitness;
 			Set<MoveMethodCommand> candidates = candidateSelection.getCandidates();
+			Iterator<MoveMethodCommand> mmcIterator = candidates.iterator();
 			int idx = 0;
-			for( MoveMethodCommand mmc : candidates )
+			shouldBreak = false;
+			MoveMethodCommand mmc = null;
+			
+			for( idx = 0; mmcIterator.hasNext() && idx < max_candidate_selection && !shouldBreak; idx++  )
 			{
-				if( idx >= max_candidate_selection ) break;
-
+				mmc = mmcIterator.next();
+				
 				if( mmr.doAction(mmc) )
 				{
 					fitness = fitnessFunction.calculate();
 					
 					candidateLogger.debug("{}, {}, {}, {}, {}, {}", iteration, idx, mmc.toString(), fitnessType.toString(), fitness, mmc.getDeltaValue());
-					
-					if (strategy.next(mmc, fitness)) {
-						mmr.undoAction();
-					} else {
-						mmr.undoAction();
-						break;
-					}
-				}
+					shouldBreak = !strategy.next(mmc, fitness);
+					mmr.undoAction();
 				
-				idx++;
+				}
 			}	
 			
 			MoveMethodCommand selectedCommand = strategy.done();

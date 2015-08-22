@@ -17,7 +17,7 @@ public class BestFitnessSelectionStrategy extends
 	}
 
 	@Override
-	public boolean next(MoveMethodCommand obj, float fitness) {
+	public synchronized boolean next(MoveMethodCommand obj, float fitness) {
 		obj.fitness = fitness;
 		commandList.addElement(obj);
 		return true;

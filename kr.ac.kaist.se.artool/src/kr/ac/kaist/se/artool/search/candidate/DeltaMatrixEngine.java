@@ -29,6 +29,7 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 	Matrix externalCohesionMatrix;
 	Matrix adjustMatrix;
 	int maxCandidate;
+	Comparator<MoveMethodCommand> mmcComparator;
 	
 	private double cohesiveFactor = 1.0 / 3.0;
 	private double couplingFactor = 2.0 / 3.0;
@@ -38,6 +39,21 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 		this.sts = sts;
 		this.maxCandidate = maxCandidate;
 		initBasicMatrix();	
+		mmcComparator = new Comparator<MoveMethodCommand>() {
+
+			@Override
+			public int compare(MoveMethodCommand o1, MoveMethodCommand o2) {
+				float dd = o1.getDeltaValue() - o2.getDeltaValue();
+				if( dd < 0 )
+				{
+					return -1;
+				}
+				
+				// do not permit equality
+				return 1;
+			}
+			
+		};
 	}
 	
 	
@@ -176,7 +192,6 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 	{
 		
 		Matrix temp1;
-		Matrix temp2;
 		
 		/*
 		temp 1 = new LinkedSparseMatrix(sts.entities.size(), sts.entities.size());
@@ -199,30 +214,30 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 		
 		
 		temp1 = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
-		temp2 = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
+		//temp2 = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
 		
-		Matrix internalLinkMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
+		Matrix internalLinkMatrix;
 		
 		internalLinkMatrix = internalCouplingMatrix.copy();
-		internalLinkMatrix = internalLinkMatrix.scale(couplingFactor);
-		internalLinkMatrix = internalLinkMatrix.add(cohesiveFactor, internalCohesionMatrix);
+//		internalLinkMatrix = internalLinkMatrix.scale(couplingFactor);
+		internalLinkMatrix = internalLinkMatrix.add(cohesiveFactor/couplingFactor, internalCohesionMatrix);
 		
-		Matrix externalLinkMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
+		Matrix externalLinkMatrix;
 		
 		externalLinkMatrix = externalCouplingMatrix.copy();
-		externalLinkMatrix = externalLinkMatrix.scale(couplingFactor);
-		externalLinkMatrix = externalLinkMatrix.add(cohesiveFactor, externalCohesionMatrix);
+//		externalLinkMatrix = externalLinkMatrix.scale(couplingFactor);
+		externalLinkMatrix = externalLinkMatrix.add(cohesiveFactor/couplingFactor, externalCohesionMatrix);
 		
 		
 		Matrix IP = internalLinkMatrix.mult(membershipMatrix, temp1);
-		
-		Matrix EP = externalLinkMatrix.mult(membershipMatrix, temp2);
-		
 		Matrix IIP = getInvertedMembershipMatrix(IP);
 		
 		MatrixTuple tuple = new MatrixTuple();
 		
 		Matrix I = IIP.copy();
+		
+		Matrix EP = externalLinkMatrix.mult(membershipMatrix, temp1);
+
 		
 		tuple.deltaMatrix = IIP.add(-1, EP);
 		tuple.externalMatrix = EP;
@@ -249,21 +264,7 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 			dm = dm.add(adjustMatrix);
 		}
 		
-		TreeSet<MoveMethodCommand> mmcSet = new TreeSet<MoveMethodCommand>(new Comparator<MoveMethodCommand>() {
-
-			@Override
-			public int compare(MoveMethodCommand o1, MoveMethodCommand o2) {
-				float dd = o1.getDeltaValue() - o2.getDeltaValue();
-				if( dd < 0 )
-				{
-					return -1;
-				}
-				
-				// do not permit equality
-				return 1;
-			}
-			
-		});
+		TreeSet<MoveMethodCommand> mmcSet = new TreeSet<MoveMethodCommand>(mmcComparator);
 		
 		
 		for( int i = 0; i < sts.methods.size(); i++ )

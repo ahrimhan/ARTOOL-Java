@@ -23,10 +23,10 @@ public class ConnectivityEngine extends FitnessFunction {
 	
 	@Override
 	public float calculate() {
-		float connTotal = 0;
-		int connCount = 0;
-		int negCount = 0;
 		float ret = 0;
+		float div = 0;
+		int methodSize;
+		int attrSize;
 		
 		bms.measure(aom, false, true);
 
@@ -36,18 +36,20 @@ public class ConnectivityEngine extends FitnessFunction {
 			
 			if( conn >= 0 )
 			{
-				connTotal += conn;
-				connCount++;
-			}
-			else
-			{
-				negCount++;
+				methodSize = clazz.getMethods().size();
+				attrSize = clazz.getFields().size();
+				
+				if( methodSize > 0 )
+				{
+					ret +=  attrSize * methodSize * (methodSize - 1) * conn;
+					div += attrSize * methodSize * (methodSize - 1);
+				}
 			}
 		}
 		
 		//System.err.println("Total:" + aom.getClasses().size() + " mscCount:" + mscCount + " negCount:" + negCount);
 		
-		ret = connTotal/connCount;
+		ret = ret / div;
 		
 		return ret;
 	}
@@ -57,14 +59,16 @@ public class ConnectivityEngine extends FitnessFunction {
 		return true;
 	}
 	
+/*
 	public double getCohesiveFactor()
 	{
-		return 8;
+		return 1;
 	}
 	
 	public double getCouplingFactor()
 	{
-		return 2;
+		return 1;
 	}
+*/
 	
 }

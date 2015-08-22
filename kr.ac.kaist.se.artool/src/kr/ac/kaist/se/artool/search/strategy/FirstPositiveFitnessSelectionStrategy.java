@@ -19,7 +19,7 @@ public class FirstPositiveFitnessSelectionStrategy extends
 	}
 
 	@Override
-	public boolean next(MoveMethodCommand obj, float fitness) {
+	public synchronized boolean next(MoveMethodCommand obj, float fitness) {
 		obj.fitness = fitness;
 		System.err.print("[" + iteration + "] first positive fitness selection...: " + obj.fitness);
 
