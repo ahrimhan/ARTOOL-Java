@@ -1,6 +1,7 @@
 package kr.ac.kaist.se.artool.staticmodeling;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
@@ -122,6 +123,8 @@ public class StaticModel2AOMWizard extends Wizard {
 		
 		Resource aomFileResource = null;
 		 
+		System.err.println("file extension:\"" + chorFile.getFileExtension()+ "\"");
+		
 		if( chorFile.getFileExtension().equals("json") )
 		{
 			
@@ -149,8 +152,9 @@ public class StaticModel2AOMWizard extends Wizard {
 					AbstractObjectModel aom = StaticModel2AOMTransformer.getInstance().transform2AOM(mySelectedProjectList, monitor);
 					if( chorFile.getFileExtension().equals("json") )
 					{
-						AOMJsonSerializer ajs = new AOMJsonSerializer(aom, path);
-						ajs.serialize();
+						AOMJsonSerializer ajs = new AOMJsonSerializer(aom);
+						InputStream is = ajs.serialize();
+						chorFile.setContents(is, true, false, null);
 					}
 					else
 					{

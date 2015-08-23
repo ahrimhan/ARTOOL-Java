@@ -1,6 +1,9 @@
 package kr.ac.kaist.se.artool.staticmodeling;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Vector;
 
@@ -14,21 +17,22 @@ import kr.ac.kaist.se.aom.structure.AOMMethod;
 public class AOMJsonSerializer {
 
 	private AbstractObjectModel aom;
-	private String path;
+	
 	private Vector<AOMMethod> methodList;
 	private Vector<AOMField> fieldList;
 	
-	public AOMJsonSerializer(AbstractObjectModel aom, String path)
+	public AOMJsonSerializer(AbstractObjectModel aom)
 	{
 		this.aom = aom;
-		this.path = path;
+		
 		methodList = new Vector<AOMMethod>();
 		fieldList = new Vector<AOMField>();
 	}
 	
-	public void serialize() throws IOException
+	public InputStream serialize() throws IOException
 	{
-		PrintWriter writer = new PrintWriter(path);
+		ByteArrayOutputStream fos = new ByteArrayOutputStream();
+		PrintWriter writer = new PrintWriter(fos, true);
 		int idx = 0;
 		
 		writer.println("{");
@@ -164,6 +168,13 @@ public class AOMJsonSerializer {
 		writer.println("}");
 		
 		writer.flush();
+		fos.flush();
+		
+		ByteArrayInputStream bais = new ByteArrayInputStream(fos.toByteArray());
+		
 		writer.close();
+		fos.close();
+		
+		return bais;
 	}
 }
