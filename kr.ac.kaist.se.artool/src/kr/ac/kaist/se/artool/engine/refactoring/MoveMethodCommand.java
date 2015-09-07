@@ -20,8 +20,16 @@ public class MoveMethodCommand implements RefactoringCommand {
 	{
 		this.movingMethod = movingMethod;
 		this.targetClass = targetClass;
-		this.originalClass = movingMethod.getOwner();
-		this.originalOverriding = movingMethod.getOverriding();
+		if( movingMethod == null )
+		{
+			this.originalClass = null;
+			this.originalOverriding = null;
+		}
+		else
+		{
+			this.originalClass = movingMethod.getOwner();
+			this.originalOverriding = movingMethod.getOverriding();
+		}
 		this.deltaValue = 0;
 	}
 	
@@ -29,8 +37,16 @@ public class MoveMethodCommand implements RefactoringCommand {
 	{
 		this.movingMethod = movingMethod;
 		this.targetClass = targetClass;
-		this.originalClass = movingMethod.getOwner();
-		this.originalOverriding = movingMethod.getOverriding();
+		if( movingMethod == null )
+		{
+			this.originalClass = null;
+			this.originalOverriding = null;
+		}
+		else
+		{
+			this.originalClass = movingMethod.getOwner();
+			this.originalOverriding = movingMethod.getOverriding();
+		}		
 		this.deltaValue = d;
 	}
 	
