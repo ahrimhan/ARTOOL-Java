@@ -17,14 +17,19 @@ public class SimulatedAnnealingStrategy extends
 	private Random random;
 	private double initialProbability = 0.3;
 	private boolean isSetInitialTemperature;
+	private int iterationCount = 0;
+	private int maxIterationCount = 0;
 	
-	
-	public SimulatedAnnealingStrategy(float initFitness, Comparator<MoveMethodCommand> comparator) {
+	public SimulatedAnnealingStrategy(float initFitness, Comparator<MoveMethodCommand> comparator, int maxIterationCount) {
 		super(initFitness, comparator);
 		
 		random = new Random(System.currentTimeMillis());
 		isSetInitialTemperature = false;
 		bestCmd = null;
+		
+		this.maxIterationCount = maxIterationCount;
+		
+		System.err.println("SimulatedAnnealingStrategy");
 	}
 	
 	private double acceptanceProbability(MoveMethodCommand prevCmd, MoveMethodCommand newCmd, double temperature)
@@ -62,18 +67,22 @@ public class SimulatedAnnealingStrategy extends
 		if( random.nextDouble() < acceptanceProbability(prevCmd, newCmd, temperature) )
 		{
 			prevCmd = newCmd;
+			ret = false;
+			bestCmd = newCmd;
+		}
+		else if( iterationCount < maxIterationCount ) 
+		{
+			System.err.println("iterationCount < maxIterationCount");
 			ret = true;
 		}
 		else
 		{
+			System.err.println("else");
 			ret = false;
 		}
 		
-		if( bestCmd == null || comparator.compare(bestCmd, newCmd) < 0 )
-		{
-			bestCmd = newCmd;
-		}
-		
+
+		iterationCount++;
 		temperature *= 1 - coolingRate;
 		
 		return ret;
@@ -83,11 +92,17 @@ public class SimulatedAnnealingStrategy extends
 	public MoveMethodCommand done() {
 		MoveMethodCommand mmc = bestCmd;
 		bestCmd = null;
-		return bestCmd;
+		
+		
+		if( bestCmd != null )
+		{
+			System.err.println("SA:fitness:" + bestCmd.fitness);
+		}
+		return mmc;
 	}
 	
 	@Override
-	public boolean hasAnotherChance()
+	public boolean restrictCandidateCount()
 	{
 		return false;
 	}

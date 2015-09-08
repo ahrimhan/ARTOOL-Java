@@ -1,5 +1,11 @@
 package kr.ac.kaist.se.artool.search.fitness;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMClass;
@@ -12,11 +18,12 @@ import no.uib.cipr.matrix.Matrix;
 import no.uib.cipr.matrix.sparse.LinkedSparseMatrix;
 
 public class EPMEngine extends FitnessFunction implements MoveMethodEventListener {
-	Matrix membershipMatrix;
-	SystemEntitySet sts;	
-	no.uib.cipr.matrix.Vector oneVector;
+	private Matrix membershipMatrix;
+	private SystemEntitySet sts;	
+	private no.uib.cipr.matrix.Vector oneVector;
 	
-	
+	private ExecutorService executorService;
+	private final int executorPoolSize = 8;
 	
 	public EPMEngine(SystemEntitySet sts)
 	{
@@ -30,6 +37,8 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 		{
 			oneVector.set(i, 1);
 		}
+		
+		executorService = Executors.newFixedThreadPool(executorPoolSize);
 	}
 	
 	
@@ -119,7 +128,6 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 	
 	private RowColVectorMatrix getSumMatrix()
 	{
-		//Matrix sum = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
 		
 		no.uib.cipr.matrix.Vector rowSumColVector = new DenseVector(sts.entities.size());
 		rowSumColVector = entityMatrix.mult(oneVector, rowSumColVector);
@@ -127,14 +135,68 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 		no.uib.cipr.matrix.Vector colSumRowVector = new DenseVector(sts.classes.size());		
 		colSumRowVector = membershipMatrix.transMult(oneVector, colSumRowVector);
 		
-		//printMatrixSpec("entityMatrix", entityMatrix);
-		//printMatrixSpec("membershipMatrix", membershipMatrix);
-		//printMatrixSpec("intersectMatrix", intersectMatrix);
-		//printMatrixSpec("colSum", colSum);
-		//printMatrixSpec("rowSum", rowSum);
 			
 		return new RowColVectorMatrix(rowSumColVector, colSumRowVector);
 	}
+	
+	public class EPMHelper implements Callable<Float>
+	{
+		
+		private Matrix intersectMatrix; 
+		private RowColVectorMatrix sumMatrix;
+		private int id;
+		
+		public EPMHelper(Matrix intersectMatrix, RowColVectorMatrix sumMatrix, int id)
+		{
+			this.intersectMatrix = intersectMatrix;
+			this.sumMatrix = sumMatrix;
+			this.id = id;
+		}
+		
+		@Override
+		public Float call() throws Exception {
+			float epm = 0;
+			
+			for( int i = id; i < sts.classes.size(); i+= executorPoolSize )
+			{
+				float internal = 0;
+				int internalCount = 0;
+				float external = 0;
+				int externalCount = 0;
+				float epmc = 0;
+				double vv, vs;
+				for( int j = 0 ; j < sts.entities.size(); j++ )
+				{	
+					
+					vv = intersectMatrix.get(j, i);
+					vs = sumMatrix.getValue(j, i) - membershipMatrix.get(j, i);
+					
+					if( vs <= vv ) continue;
+					
+					vv = 1f - (vv / (vs - vv));
+					
+					if( membershipMatrix.get(j, i) > 0 )
+					{
+						internal += vv;
+						internalCount ++;
+					}
+					else
+					{
+						external += vv;
+						externalCount ++;
+					}
+				}
+				
+				if( external != 0 && internalCount != 0 )
+				{
+					epmc = internal * externalCount / external / internalCount;
+					epm += (sts.classes.get(i).getMethods().size() + sts.classes.get(i).getFields().size()) * epmc;
+				}
+			}
+			return epm;		
+		}
+	}
+	
 	
 	
 	public float calculate()
@@ -142,44 +204,25 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 		Matrix intersectMatrix = getIntersectMatrix();
 		RowColVectorMatrix sumMatrix = getSumMatrix();
 		
+		
+		@SuppressWarnings("unchecked")
+		Future<Float>[] future = new Future[executorPoolSize]; 
+		
 		float epm = 0;
 		
-		
-		for( int i = 0; i < sts.classes.size(); i++ )
+		for( int i = 0; i < executorPoolSize; i++ )
 		{
-			float internal = 0;
-			int internalCount = 0;
-			float external = 0;
-			int externalCount = 0;
-			float epmc = 0;
-			double vv, vs;
-			for( int j = 0 ; j < sts.entities.size(); j++ )
-			{	
-				
-				vv = intersectMatrix.get(j, i);
-				vs = sumMatrix.getValue(j, i) - membershipMatrix.get(j, i);
-				
-				if( vs <= vv ) continue;
-				
-				vv = 1f - (vv / (vs - vv));
-				
-				if( membershipMatrix.get(j, i) > 0 )
-				{
-					internal += vv;
-					internalCount ++;
-				}
-				else
-				{
-					external += vv;
-					externalCount ++;
-				}
-			
-			}
-			
-			if( external != 0 && internalCount != 0 )
-			{
-				epmc = internal * externalCount / external / internalCount;
-				epm += (sts.classes.get(i).getMethods().size() + sts.classes.get(i).getFields().size()) * epmc;
+			future[i] = executorService.submit(new EPMHelper(intersectMatrix, sumMatrix, i));
+		}
+		
+		for( int i = 0; i < executorPoolSize; i++ )
+		{
+			try {
+				epm += future[i].get();
+			} catch (InterruptedException | ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				throw new RuntimeException("Future crash");
 			}
 		}
 		

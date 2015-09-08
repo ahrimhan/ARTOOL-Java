@@ -6,6 +6,11 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
@@ -15,6 +20,7 @@ import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.SystemEntitySet;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
 import kr.ac.kaist.se.artool.search.MoveMethodEventListener;
+import kr.ac.kaist.se.artool.search.fitness.EPMEngine.EPMHelper;
 import no.uib.cipr.matrix.DenseMatrix;
 import no.uib.cipr.matrix.Matrix;
 import no.uib.cipr.matrix.MatrixEntry;
@@ -28,16 +34,14 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 	Matrix internalCohesionMatrix;
 	Matrix externalCohesionMatrix;
 	Matrix adjustMatrix;
-	int maxCandidate;
 	Comparator<MoveMethodCommand> mmcComparator;
 	
 	private double cohesiveFactor = 1.0 / 3.0;
 	private double couplingFactor = 2.0 / 3.0;
 	
-	public DeltaMatrixEngine(SystemEntitySet sts, int maxCandidate)
+	public DeltaMatrixEngine(SystemEntitySet sts)
 	{
 		this.sts = sts;
-		this.maxCandidate = maxCandidate;
 		initBasicMatrix();	
 		mmcComparator = new Comparator<MoveMethodCommand>() {
 
@@ -54,6 +58,8 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 			}
 			
 		};
+		
+		executorService = Executors.newFixedThreadPool(executorPoolSize);
 	}
 	
 	
@@ -142,11 +148,14 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 	private Matrix getInvertedMembershipMatrix(Matrix m)
 	{
 		Matrix ret;
-		
+		long zeroTime = System.currentTimeMillis();
+
 		ret = new DenseMatrix(sts.entities.size(), sts.classes.size());
 		
 		
 		Iterator<MatrixEntry> iterator = m.iterator();
+		
+		
 		
 		for( MatrixEntry entry = iterator.next(); iterator.hasNext(); entry = iterator.next() )
 		{
@@ -162,7 +171,6 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 			ret.set(row, col, 0);
 		}
 		
-
 		return ret;
 	}
 	
@@ -253,8 +261,60 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 		this.adjustOption = adjustOption;
 	}
 	
+	private ExecutorService executorService;
+	private final int executorPoolSize = 8;
+	
+	public class DeltaHelper implements Callable<TreeSet<MoveMethodCommand>>
+	{
+		private Matrix dm;
+		private Matrix iim;
+		private int id;
+		
+		public DeltaHelper(Matrix dm, Matrix iim, int id)
+		{
+			this.dm = dm;
+			this.iim = iim;
+			this.id = id;
+		}
+		
+		@Override
+		public TreeSet<MoveMethodCommand> call() throws Exception {
+			TreeSet<MoveMethodCommand> mmcSet = new TreeSet<MoveMethodCommand>(mmcComparator);
+
+			for( int i = id; i < sts.methods.size(); i+= executorPoolSize )
+			{
+		
+				for( int j = 0; j < dm.numColumns(); j++ )
+				{
+					
+					AOMMethod method = sts.methods.get(i);
+					AOMClass clazz = sts.classes.get(j);
+					if( method.getOwnedScope() != null && (method.getOwnedScope().getStaticMethodCalls().size() + method.getOwnedScope().getStaticFieldAccesses().size() + method.getStaticReferer().size()) != 0)
+					{	
+						//if( dm.get(i,  j) < 0 )
+						{
+							
+							MoveMethodCommand mmc = new MoveMethodCommand(method, clazz, (float)(dm.get(i, j) / (iim.get(i, j) + 1)) );
+							mmcSet.add(mmc);
+
+							if( mmcSet.size() > (1000 / executorPoolSize) )
+							{
+								mmcSet.pollLast();
+							}
+						}
+					}
+				}
+			}
+			return mmcSet;
+		}
+		
+	}
+	
 	public Set<MoveMethodCommand> getPositiveRefactorings()
 	{
+		long zeroTime = System.currentTimeMillis();
+		
+		
 		MatrixTuple tuple = getDeltaMatrix();
 		Matrix dm = tuple.deltaMatrix;
 		Matrix iim = tuple.invertedInternalMatrix;
@@ -264,98 +324,57 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 			dm = dm.add(adjustMatrix);
 		}
 		
-		TreeSet<MoveMethodCommand> mmcSet = new TreeSet<MoveMethodCommand>(mmcComparator);
 		
 		
-		for( int i = 0; i < sts.methods.size(); i++ )
-		{
-	
-			for( int j = 0; j < dm.numColumns(); j++ )
-			{
-				
-				AOMMethod method = sts.methods.get(i);
-				AOMClass clazz = sts.classes.get(j);
-				if( method.getOwnedScope() != null && (method.getOwnedScope().getStaticMethodCalls().size() + method.getOwnedScope().getStaticFieldAccesses().size() + method.getStaticReferer().size()) != 0)
-				{	
-					//if( dm.get(i,  j) < 0 )
-					{
-						
-						MoveMethodCommand mmc = new MoveMethodCommand(method, clazz, (float)(dm.get(i, j) / (iim.get(i, j) + 1)) );
-						mmcSet.add(mmc);
-						if( mmcSet.size() > maxCandidate )
-						{
-							mmcSet.pollLast();
-						}
-					}
-				}
-			}
-		}
+		long firstTime = System.currentTimeMillis();
 		
-		/*
-		for( int i = 0; i < sts.methods.size(); i++ )
-		{
-			double minV = 9999999999f;
-			int minCol = -1;
-			
-			for( int j = 0; j < dm.numColumns(); j++ )
-			{
-				if( minV > dm.get(i, j) || minCol == -1 )
-				{
-					minCol = j;
-					minV = dm.get(i, j);
-				}
-			}
-			
-			//if( minV < 0 )
-			{
-				AOMMethod method = sts.methods.get(i);
-				AOMClass clazz = sts.classes.get(minCol);
-				MoveMethodCommand mmc = new MoveMethodCommand(method, clazz, (float)minV);
-				mmcSet.add(mmc);
-				if( mmcSet.size() > maxCandidate )
-				{
-					mmcSet.pollLast();
-				}
-			}
-		}
-		*/
+		
+		@SuppressWarnings("unchecked")
+		Future<TreeSet<MoveMethodCommand>>[] future = new Future[executorPoolSize]; 
 
+		TreeSet<MoveMethodCommand> mmcTotalSet = null;
 		
-		/*
-		Iterator<MatrixEntry> iterator = dm.iterator();
-		
-		for( MatrixEntry entry = iterator.next(); iterator.hasNext(); entry = iterator.next() )
+		for( int i = 0; i < executorPoolSize; i++ )
 		{
-			int row = entry.row();
-			int col = entry.column();
-			float v = (float) entry.get();
-			
-			if( v < 0 && row < sts.methods.size())
-			{
-				AOMMethod method = sts.methods.get(row);
-				AOMClass clazz = sts.classes.get(col);
-				MoveMethodCommand mmc = new MoveMethodCommand(method, clazz, (float)v);
-				mmcSet.add(mmc);
-				if( mmcSet.size() > maxCandidate )
+			future[i] = executorService.submit(new DeltaHelper(dm, iim, i));
+		}
+		
+		for( int i = 0; i < executorPoolSize; i++ )
+		{
+			try {
+				TreeSet<MoveMethodCommand> mmcSet = future[i].get();
+				if( mmcTotalSet != null )
 				{
-					mmcSet.remove(mmcSet.last());
+					mmcTotalSet.addAll(mmcSet);
 				}
+				else
+				{
+					mmcTotalSet = mmcSet;
+				}
+			} catch (InterruptedException | ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				throw new RuntimeException("Future crash");
 			}
 		}
-		*/
+		
 		
 		if( adjustOption )
 		{
 			adjustMatrix = adjustMatrix.scale(0.9);
-
-			for (MoveMethodCommand mmc : mmcSet) {
-				adjustMatrix.add(mmc.getMethod().getIndex(), mmc.getToClass()
-						.getIndex(), 1.31);
-			}
 		}
+		
+		long lastTime = System.currentTimeMillis();
+		
+		System.err.println("0-1:" + (firstTime - zeroTime) + "\t1-2:" + (lastTime - firstTime) + "\t0-2:" + (lastTime - zeroTime));
 
-
-		return mmcSet;
+		return mmcTotalSet;
+	}
+	
+	public void markAsUsed(MoveMethodCommand mmc)
+	{
+		adjustMatrix.add(mmc.getMethod().getIndex(), mmc.getToClass()
+				.getIndex(), 1.31);
 	}
 	
 	@Override
@@ -432,7 +451,7 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 
 
 	@Override
-	public Set<MoveMethodCommand> getCandidates() {
-		return this.getPositiveRefactorings();
+	public CandidateIterator getCandidateIterator(int maxCandidateCount) {
+		return new DeltaMatrixCandidateIterator(this, getPositiveRefactorings(), maxCandidateCount);
 	}
 }

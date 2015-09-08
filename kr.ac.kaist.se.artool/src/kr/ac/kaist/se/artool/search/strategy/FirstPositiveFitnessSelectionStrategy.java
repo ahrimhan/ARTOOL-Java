@@ -11,11 +11,9 @@ public class FirstPositiveFitnessSelectionStrategy extends
 	private MoveMethodCommand prevCmd = null;
 	private MoveMethodCommand retCmd = null;
 	private int iteration = 0;
-	private int chance = 100;
 	
 	public FirstPositiveFitnessSelectionStrategy(float prevFitness, Comparator<MoveMethodCommand> comparator) {
 		super(prevFitness, comparator);
-		chance = 100;
 	}
 
 	@Override
@@ -55,13 +53,8 @@ public class FirstPositiveFitnessSelectionStrategy extends
 	}
 
 	@Override
-	public boolean hasAnotherChance()
+	public boolean restrictCandidateCount()
 	{
-		if( chance > 0 )
-		{
-			chance--;
-			return true;
-		}
 		return false;
 	}
 }

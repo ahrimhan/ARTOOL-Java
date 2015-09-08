@@ -10,6 +10,7 @@ import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.artool.engine.StatusLogger;
 import kr.ac.kaist.se.artool.engine.SystemEntitySet;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
+import kr.ac.kaist.se.artool.search.candidate.CandidateIterator;
 import kr.ac.kaist.se.artool.search.candidate.CandidateSelection;
 import kr.ac.kaist.se.artool.search.candidate.DeltaMatrixEngine;
 import kr.ac.kaist.se.artool.search.candidate.RandomCandidateSelection;
@@ -22,8 +23,8 @@ import kr.ac.kaist.se.artool.search.fitness.QMoodEngine;
 import kr.ac.kaist.se.artool.search.strategy.AbstractRefactoringSelectionStrategy;
 import kr.ac.kaist.se.artool.search.strategy.BestFitnessSelectionStrategy;
 import kr.ac.kaist.se.artool.search.strategy.FirstPositiveFitnessSelectionStrategy;
+import kr.ac.kaist.se.artool.search.strategy.SimulatedAnnealingStrategy;
 
-import org.apache.commons.math3.stat.correlation.SpearmansCorrelation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -81,7 +82,7 @@ public class ARSearchMain {
 	}
 	*/
 	
-	public void run(int caseIdx, String project, String timestamp, AbstractObjectModel originalAOM, FitnessType fitnessType, SearchTechType searchType, CandidateSelectionType candidateSelectionType, int max_iteration, int max_candidate_selection, IProgressMonitor monitor) throws IOException
+	public void run(int caseIdx, String project, String timestamp, AbstractObjectModel originalAOM, FitnessType fitnessType, SearchTechType searchType, CandidateSelectionType candidateSelectionType, int max_iteration, int max_candidate_selection, int saMaxPermissibleIdleIteration, IProgressMonitor monitor) throws IOException
 	{	
 		long mem_usage = 0;
 		AbstractObjectModel aom = EcoreUtil.copy(originalAOM);
@@ -107,7 +108,8 @@ public class ARSearchMain {
 		case SELECT_FIRST_RESTART:
 			throw new RuntimeException("Not Yet Implemented");
 		case SIMULATED_ANNEALING:
-			throw new RuntimeException("Not Yet Implemented");
+			searchTypeStr = "sa";
+			break;
 		}
 		
 		String fitnessTypeStr = fitnessType.name().toLowerCase();
@@ -142,12 +144,12 @@ public class ARSearchMain {
 		switch( candidateSelectionType )
 		{
 		case DELTA:
-			dmEngine = new DeltaMatrixEngine(ses, max_candidate_selection);
+			dmEngine = new DeltaMatrixEngine(ses);
 			mmr.addListener(dmEngine);
 			candidateSelection = dmEngine;
 			break;
 		case RANDOM:
-			candidateSelection = new RandomCandidateSelection(aom, max_candidate_selection);
+			candidateSelection = new RandomCandidateSelection(aom);
 			break;
 		default:
 			throw new RuntimeException("Waaaagh!!!!");
@@ -230,7 +232,7 @@ public class ARSearchMain {
 		case SELECT_FIRST_RESTART:
 			throw new RuntimeException("Not Yet Implemented");
 		case SIMULATED_ANNEALING:
-			throw new RuntimeException("Not Yet Implemented");
+			strategy = new SimulatedAnnealingStrategy(prevFitness, comparator, saMaxPermissibleIdleIteration);
 		}
 		
 
@@ -244,7 +246,6 @@ public class ARSearchMain {
 		}
 		
 		int iteration = 0;
-		int restart_count = 0;
 		boolean shouldBreak;
 
 		for(iteration = 0; iteration < max_iteration; iteration++ )
@@ -252,15 +253,15 @@ public class ARSearchMain {
 			monitor.subTask(iteration + "/" + max_iteration);
 			
 			prevFitness = fitness;
-			Set<MoveMethodCommand> candidates = candidateSelection.getCandidates();
-			Iterator<MoveMethodCommand> mmcIterator = candidates.iterator();
+			
+			CandidateIterator candidateIterator = candidateSelection.getCandidateIterator(strategy.restrictCandidateCount() ? max_candidate_selection : -1);
 			int idx = 0;
 			shouldBreak = false;
 			MoveMethodCommand mmc = null;
 			
-			for( idx = 0; mmcIterator.hasNext() && idx < max_candidate_selection && !shouldBreak; idx++  )
+			for( idx = 0; candidateIterator.hasNext() && !shouldBreak; idx++  )
 			{
-				mmc = mmcIterator.next();
+				mmc = candidateIterator.getNextCandidate();
 				
 				if( mmr.doAction(mmc) )
 				{
@@ -277,23 +278,11 @@ public class ARSearchMain {
 			
 			if( selectedCommand == null )	
 			{
-				if( //strategy instanceof FirstPositiveFitnessSelectionStrategy &&
-						candidateSelection instanceof RandomCandidateSelection &&
-						restart_count < 1000)
-				{
-					restart_count++;
-					iteration--;
-					continue;
-				}
-				else
-				{
-					System.err.println("There is no improvements on Main Iteration Loop");
-					break;
-				}
+				System.err.println("There is no improvements on Main Iteration Loop");
+				break;
 			}
 			
 			monitor.worked(1);
-			restart_count = 0;
 			fitness = selectedCommand.fitness;
 			
 			//[IN:{}][SN:{}][SD:{}][FT:{}][FV:{}][DT:{}]
@@ -304,7 +293,6 @@ public class ARSearchMain {
 			
 			mmr.doAction(selectedCommand);
 			
-			//if( monitor.isCanceled() ) break;
 		}
 		
 		monitor.worked(max_iteration - iteration);

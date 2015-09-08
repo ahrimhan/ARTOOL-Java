@@ -23,9 +23,9 @@ import no.uib.cipr.matrix.sparse.LinkedSparseMatrix;
 
 public class ExternalDependencyEngine extends DeltaMatrixEngine {
 
-	public ExternalDependencyEngine(SystemEntitySet sts, int maxCandidate)
+	public ExternalDependencyEngine(SystemEntitySet sts)
 	{
-		super(sts, maxCandidate);
+		super(sts);
 	}
 	
 	public Set<MoveMethodCommand> getPositiveRefactorings()
@@ -66,10 +66,6 @@ public class ExternalDependencyEngine extends DeltaMatrixEngine {
 						
 						MoveMethodCommand mmc = new MoveMethodCommand(method, clazz, (float)(-1 * em.get(i, j)));
 						mmcSet.add(mmc);
-						if( mmcSet.size() > maxCandidate )
-						{
-							mmcSet.pollLast();
-						}
 					}
 				}
 			}

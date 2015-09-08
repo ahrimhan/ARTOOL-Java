@@ -54,9 +54,9 @@ public class BestFitnessSelectionStrategy extends
 	}
 	
 	@Override
-	public boolean hasAnotherChance()
+	public boolean restrictCandidateCount()
 	{
-		return false;
+		return true;
 	}
 
 }

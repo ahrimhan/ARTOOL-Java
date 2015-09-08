@@ -11,14 +11,12 @@ import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
 
 public class RandomCandidateSelection implements CandidateSelection {
-	private int candidateCount;
 	private AbstractObjectModel aom;
 	private Random random;
 	private Vector<AOMMethod> methodList;
 	
-	public RandomCandidateSelection(AbstractObjectModel aom, int candidateCount)
+	public RandomCandidateSelection(AbstractObjectModel aom)
 	{
-		this.candidateCount = candidateCount;
 		this.aom = aom;
 		this.random = new Random(System.currentTimeMillis());
 		
@@ -31,51 +29,30 @@ public class RandomCandidateSelection implements CandidateSelection {
 				methodList.add(method);
 			}
 		}
-	}
-	
-	
-	private boolean isUniqueMMC(HashSet<MoveMethodCommand> ret, MoveMethodCommand newMMC)
-	{
-		for( MoveMethodCommand mmc: ret)
-		{
-			if( mmc.isIdenticalOrReversal(newMMC) )
-			{
-				return false;
-			}
-		}
 		
-		return true;
-	}
-	
-	@Override
-	public Set<MoveMethodCommand> getCandidates() {
-		
-		HashSet<MoveMethodCommand> ret = new HashSet<MoveMethodCommand>();
-		
+		/*
 		if( (this.candidateCount * 2) > (aom.getClasses().size() * methodList.size()) )
 		{
 			throw new RuntimeException("RandomCandidateSelection: too large candidate count");
 		}
+		*/
+	}
+	
+	public MoveMethodCommand getRandomMoveMethodCommand()
+	{
+		MoveMethodCommand newMMC = null;
+	
+		int ci = random.nextInt(aom.getClasses().size());
+		int mi = random.nextInt(methodList.size());
+		newMMC = new MoveMethodCommand(methodList.elementAt(mi), aom.getClasses().get(ci));
 		
-		for(int i = 0 ; i < this.candidateCount; i++ )
-		{
-			MoveMethodCommand newMMC = null;
-			
-			do
-			{
-				int ci = random.nextInt(aom.getClasses().size());
-				int mi = random.nextInt(methodList.size());
-				newMMC = new MoveMethodCommand(methodList.elementAt(mi), aom.getClasses().get(ci));
-			}
-			while( !isUniqueMMC(ret, newMMC) );
-			
-			if( newMMC != null )
-			{
-				ret.add(newMMC);
-			}
-		}
-		
-		
-		return ret;
+		return newMMC;
+	}
+	
+	
+	@Override
+	public CandidateIterator getCandidateIterator(int maxCandidateCount) {
+		RandomCandidateIterator rci = new RandomCandidateIterator(this, maxCandidateCount); 
+		return rci;
 	}
 }

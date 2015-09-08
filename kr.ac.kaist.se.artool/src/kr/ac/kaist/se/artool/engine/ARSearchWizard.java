@@ -44,6 +44,8 @@ public class ARSearchWizard extends Wizard {
 	private int maxIterationCount;
 
 	private int maxCandidateCount; 
+	
+	private int saMaxPermissibleIdleIteration;
 
 	public ARSearchWizard(IFile selectedFile) {
 		super();
@@ -85,7 +87,7 @@ public class ARSearchWizard extends Wizard {
 		//useDeltaTable = paramConfigPage.useDeltaTable();
 		maxIterationCount = paramConfigPage.getMaxIterationCount();
 		maxCandidateCount = paramConfigPage.getMaxCandidateCount();
-		
+		saMaxPermissibleIdleIteration = paramConfigPage.getSAPermissibleIdleIteration();
 		
 		AbstractTransactionalCommand command = new AbstractTransactionalCommand(
 				myEditingDomain, "Measuring Metric Suites", affectedFileList) { //$NON-NLS-1$
@@ -108,7 +110,7 @@ public class ARSearchWizard extends Wizard {
 						{
 							for(CandidateSelectionType candidateSelectionType: candidateSelectionTypeList )
 							{
-								ARSearchMain.getInstance().run(caseIdx, selectedFile.getProject().getName(), timestamp, aom, fitnessType, searchTechType, candidateSelectionType, maxIterationCount, maxCandidateCount, monitor);
+								ARSearchMain.getInstance().run(caseIdx, selectedFile.getProject().getName(), timestamp, aom, fitnessType, searchTechType, candidateSelectionType, maxIterationCount, maxCandidateCount, saMaxPermissibleIdleIteration, monitor);
 								caseIdx++;
 							}
 						}

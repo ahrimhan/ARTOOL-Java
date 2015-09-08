@@ -50,9 +50,10 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	private String[] searchTechniqueItems = {
 			"First-ascent hill-climbing",
 			"Steepest-ascent hill-climbing",
+			"Low-temperature simulated annealing"
+
 			/*
 			"Multiple-restart hill-climbing",
-			"Low-temperature simulated annealing"
 			*/
 	};
 
@@ -67,6 +68,7 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	
 	private Text maxIterationCount;
 	private Text maxCandidateCount;
+	private Text saMaxPermissibleIdelIteration;
 	
 	//private Button useDeltaTableButton;
 
@@ -240,6 +242,26 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	      });
 		
 		
+		new Label(composite, SWT.NONE).setText("(SA) Permissible Idle Iteration Count:");
+		saMaxPermissibleIdelIteration = new Text(composite, SWT.BORDER | SWT.SINGLE);
+		saMaxPermissibleIdelIteration.setMessage("Set Max Permissible Idle Iterations. Default is 100");
+		saMaxPermissibleIdelIteration.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		saMaxPermissibleIdelIteration.addListener(SWT.Verify, new Listener() {
+	        public void handleEvent(Event e) {
+	          String string = e.text;
+	          char[] chars = new char[string.length()];
+	          string.getChars(0, chars.length, chars, 0);
+	          for (int i = 0; i < chars.length; i++) {
+	            if (!('0' <= chars[i] && chars[i] <= '9')) {
+	              e.doit = false;
+	              return;
+	            }
+	          }
+	        }
+	      });
+		
+		
 		/*
 		useDeltaTableButton = new Button(composite, SWT.CHECK);
 		useDeltaTableButton.setText("Use Delta Table Acceleration?");
@@ -325,19 +347,21 @@ public class ARSearchParameterConfigPage extends WizardPage {
 			type = ARSearchMain.SearchTechType.SELECT_BEST;
 			typeList.add(type);
 		}
+
 		
 		if( (searchTechniqueBits & (1 << 2)) != 0 )
-		{
-			type = ARSearchMain.SearchTechType.SELECT_FIRST_RESTART;
-			typeList.add(type);
-		}
-		
-		if( (searchTechniqueBits & (1 << 3)) != 0 )
 		{
 			type = ARSearchMain.SearchTechType.SIMULATED_ANNEALING;
 			typeList.add(type);
 		}
 		
+		
+		if( (searchTechniqueBits & (1 << 3)) != 0 )
+		{
+			type = ARSearchMain.SearchTechType.SELECT_FIRST_RESTART;
+			typeList.add(type);
+		}
+	
 		
 		return typeList;
 	}
@@ -393,6 +417,22 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		catch(Exception e)
 		{
 			ret = 1000;
+		}
+		
+		
+		return ret;	}
+
+
+	public int getSAPermissibleIdleIteration() {
+		int ret = 10;;
+		
+		try
+		{
+			ret = Integer.parseInt(saMaxPermissibleIdelIteration.getText());
+		}
+		catch(Exception e)
+		{
+			ret = 100;
 		}
 		
 		
