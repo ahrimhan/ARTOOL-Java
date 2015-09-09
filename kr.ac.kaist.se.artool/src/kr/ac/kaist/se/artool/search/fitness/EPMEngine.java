@@ -160,7 +160,7 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 			for( int i = id; i < sts.classes.size(); i+= executorPoolSize )
 			{
 				float internal = 0;
-				int internalCount = 0;
+//				int internalCount = 0;
 				float external = 0;
 				int externalCount = 0;
 				float epmc = 0;
@@ -178,7 +178,7 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 					if( membershipMatrix.get(j, i) > 0 )
 					{
 						internal += vv;
-						internalCount ++;
+//						internalCount ++;
 					}
 					else
 					{
@@ -187,10 +187,11 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 					}
 				}
 				
-				if( external != 0 && internalCount != 0 )
+				if( external != 0 )
+//					&& internalCount != 0 )
 				{
-					epmc = internal * externalCount / external / internalCount;
-					epm += (sts.classes.get(i).getMethods().size() + sts.classes.get(i).getFields().size()) * epmc;
+					epmc = internal * externalCount / external ;
+					epm += epmc;
 				}
 			}
 			return epm;		
