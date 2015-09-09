@@ -148,16 +148,10 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 	private Matrix getInvertedMembershipMatrix(Matrix m)
 	{
 		Matrix ret;
-		long zeroTime = System.currentTimeMillis();
-
 		ret = new DenseMatrix(sts.methods.size(), sts.classes.size());
 		
-		
-		Iterator<MatrixEntry> iterator = m.iterator();
-		
-		
-		
-		for( MatrixEntry entry = iterator.next(); iterator.hasNext(); entry = iterator.next() )
+			
+		for( MatrixEntry entry : m)
 		{
 			int row = entry.row();
 			int col = entry.column();
@@ -309,10 +303,7 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 	}
 	
 	public Set<MoveMethodCommand> getPositiveRefactorings()
-	{
-		long zeroTime = System.currentTimeMillis();
-		
-		
+	{			
 		MatrixTuple tuple = getDeltaMatrix();
 		Matrix dm = tuple.deltaMatrix;
 		Matrix iim = tuple.invertedInternalMatrix;
@@ -321,11 +312,7 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 		{
 			dm = dm.add(adjustMatrix);
 		}
-		
-		
-		
-		long firstTime = System.currentTimeMillis();
-		
+				
 		
 		@SuppressWarnings("unchecked")
 		Future<TreeSet<MoveMethodCommand>>[] future = new Future[executorPoolSize]; 
@@ -361,10 +348,7 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 		{
 			adjustMatrix = adjustMatrix.scale(0.9);
 		}
-		
-		long lastTime = System.currentTimeMillis();
-		
-		System.err.println("0-1:" + (firstTime - zeroTime) + "\t1-2:" + (lastTime - firstTime) + "\t0-2:" + (lastTime - zeroTime));
+				
 
 		return mmcTotalSet;
 	}
