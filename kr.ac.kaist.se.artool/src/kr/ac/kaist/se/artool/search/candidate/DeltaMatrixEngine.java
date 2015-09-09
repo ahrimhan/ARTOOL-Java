@@ -227,13 +227,11 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 		Matrix internalLinkMatrix;
 		
 		internalLinkMatrix = internalCouplingMatrix.copy();
-//		internalLinkMatrix = internalLinkMatrix.scale(couplingFactor);
 		internalLinkMatrix = internalLinkMatrix.add(cohesiveFactor/couplingFactor, internalCohesionMatrix);
 		
 		Matrix externalLinkMatrix;
 		
 		externalLinkMatrix = externalCouplingMatrix.copy();
-//		externalLinkMatrix = externalLinkMatrix.scale(couplingFactor);
 		externalLinkMatrix = externalLinkMatrix.add(cohesiveFactor/couplingFactor, externalCohesionMatrix);
 		
 		
