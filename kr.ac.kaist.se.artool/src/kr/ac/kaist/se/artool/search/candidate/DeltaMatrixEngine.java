@@ -66,11 +66,11 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 	private void initBasicMatrix()
 	{
 		membershipMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
-		internalCouplingMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.entities.size());
-		externalCouplingMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.entities.size());
-		internalCohesionMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.entities.size());
-		externalCohesionMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.entities.size());
-		adjustMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
+		internalCouplingMatrix = new LinkedSparseMatrix(sts.methods.size(), sts.entities.size());
+		externalCouplingMatrix = new LinkedSparseMatrix(sts.methods.size(), sts.entities.size());
+		internalCohesionMatrix = new LinkedSparseMatrix(sts.methods.size(), sts.entities.size());
+		externalCohesionMatrix = new LinkedSparseMatrix(sts.methods.size(), sts.entities.size());
+		adjustMatrix = new LinkedSparseMatrix(sts.methods.size(), sts.classes.size());
 		
 		
 		for (AOMMethod method : sts.methods) {
@@ -89,12 +89,12 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 				{
 					if( method.getOwner() == sfa.getAccessedField().getOwner() )
 					{
-						internalCouplingMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
+//						internalCouplingMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
 						internalCouplingMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
 					}
 					else
 					{
-						externalCouplingMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
+//						externalCouplingMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
 						externalCouplingMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
 					}
 					
@@ -150,7 +150,7 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 		Matrix ret;
 		long zeroTime = System.currentTimeMillis();
 
-		ret = new DenseMatrix(sts.entities.size(), sts.classes.size());
+		ret = new DenseMatrix(sts.methods.size(), sts.classes.size());
 		
 		
 		Iterator<MatrixEntry> iterator = m.iterator();
@@ -221,7 +221,7 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 		
 		
 		
-		temp1 = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
+		temp1 = new LinkedSparseMatrix(sts.methods.size(), sts.classes.size());
 		//temp2 = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
 		
 		Matrix internalLinkMatrix;
@@ -390,17 +390,17 @@ public class DeltaMatrixEngine implements MoveMethodEventListener, CandidateSele
 			{
 				if( method.getOwner() == sfa.getAccessedField().getOwner() )
 				{
-					internalCouplingMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
+//					internalCouplingMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
 					internalCouplingMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
-					externalCouplingMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 0);
+//					externalCouplingMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 0);
 					externalCouplingMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 0);
 
 				}
 				else
 				{
-					internalCouplingMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 0);
+//					internalCouplingMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 0);
 					internalCouplingMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 0);
-					externalCouplingMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
+//					externalCouplingMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
 					externalCouplingMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
 				}
 				
