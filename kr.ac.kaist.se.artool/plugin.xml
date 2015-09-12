@@ -30,11 +30,24 @@
       <objectContribution
             adaptable="false"
             id="kr.ac.kaist.se.artool.engine"
+            nameFilter="*.aom"
             objectClass="org.eclipse.core.resources.IFile">
          <action
                class="kr.ac.kaist.se.artool.search.SearchAction"
                id="kr.ac.kaist.se.artool.engine.MainAction"
                label="Run ARTool "
+               menubarPath="additions">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="kr.ac.kaist.se.artool.getinfo"
+            nameFilter="*.aom"
+            objectClass="org.eclipse.core.resources.IFile">
+         <action
+               class="kr.ac.kaist.se.artool.engine.GettingInfoAction"
+               id="kr.ac.kaist.se.artool.engine.GettingInfoAction"
+               label="Getting AOM Info"
                menubarPath="additions">
          </action>
       </objectContribution>
