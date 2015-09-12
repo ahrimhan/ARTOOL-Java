@@ -97,10 +97,14 @@ public class ARSearchWizard extends Wizard {
 				try {
 					
 					AbstractObjectModel aom = (AbstractObjectModel) aomResource.getContents().get(0);
+					
+					SystemEntitySet ses = new SystemEntitySet(aom);
+					
 					SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss");
 					String timestamp = format.format(new Date());
 					
-					monitor.beginTask("Search Refactoring", fitnessTypeList.size() * searchTechTypeList.size() * candidateSelectionTypeList.size() * maxIterationCount);
+					monitor.beginTask("Search Refactoring, CEMF(" + aom.getClasses().size() + "," + ses.entities.size() + "," + ses.methods.size() + "," + ses.fields.size() + ")", 
+							fitnessTypeList.size() * searchTechTypeList.size() * candidateSelectionTypeList.size() * maxIterationCount);
 					
 					int caseIdx = 10;
 					

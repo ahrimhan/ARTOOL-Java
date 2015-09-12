@@ -244,7 +244,7 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		
 		new Label(composite, SWT.NONE).setText("(SA) Permissible Idle Iteration Count:");
 		saMaxPermissibleIdelIteration = new Text(composite, SWT.BORDER | SWT.SINGLE);
-		saMaxPermissibleIdelIteration.setMessage("Set Max Permissible Idle Iterations. Default is 100");
+		saMaxPermissibleIdelIteration.setMessage("Set Max Permissible Idle Iterations. Default is 500");
 		saMaxPermissibleIdelIteration.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		saMaxPermissibleIdelIteration.addListener(SWT.Verify, new Listener() {
@@ -391,7 +391,7 @@ public class ARSearchParameterConfigPage extends WizardPage {
 
 
 	public int getMaxCandidateCount() {
-		int ret = 10;;
+		int ret = 100;
 		
 		try
 		{
@@ -408,7 +408,7 @@ public class ARSearchParameterConfigPage extends WizardPage {
 
 
 	public int getMaxIterationCount() {
-		int ret = 1000;;
+		int ret = 1000;
 		
 		try
 		{
@@ -420,11 +420,12 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		}
 		
 		
-		return ret;	}
+		return ret;	
+	}
 
 
 	public int getSAPermissibleIdleIteration() {
-		int ret = 10;;
+		int ret = 500;
 		
 		try
 		{
@@ -432,9 +433,10 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		}
 		catch(Exception e)
 		{
-			ret = 100;
+			ret = 500;
 		}
 		
 		
-		return ret;	}
+		return ret;	
+	}
 }

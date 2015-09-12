@@ -94,6 +94,8 @@ public class ARSearchMain {
 		
 		
 		
+		
+		
 		String candidateMode = candidateSelectionType.name().toLowerCase();
 		
 		String searchTypeStr = "nosearch";

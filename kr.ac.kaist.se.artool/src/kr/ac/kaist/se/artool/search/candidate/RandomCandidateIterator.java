@@ -23,8 +23,13 @@ public class RandomCandidateIterator implements CandidateIterator {
 		{
 			return false;
 		}
+		else if( maxIterationCount <= 0 && iterationCount >= 1000 )
+		{
+			return false;
+		}
 		else
 		{
+			iterationCount++;
 			return true;
 		}
 				
