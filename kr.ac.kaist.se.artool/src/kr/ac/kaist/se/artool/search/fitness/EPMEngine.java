@@ -59,8 +59,6 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 				} 
 				catch(ArrayIndexOutOfBoundsException ex)
 				{
-					System.err.println("Method index:" + method.getIndex());
-					System.err.println("Class index:" + clazz.getIndex());
 					throw ex;
 				}
 			}
@@ -97,10 +95,6 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 		}
 	}
 	
-	private void printMatrixSpec(String prefix, Matrix matrix)
-	{
-		System.out.println(prefix + ": " + matrix.numRows() + " x " + matrix.numColumns());
-	}
 	
 	
 	
@@ -165,20 +159,6 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 		public Float call() throws Exception {
 			float epm = 0;
 			
-			float internalTotal = 0;
-			float externalTotal = 0;
-			float externalCountTotal = 0;
-			
-			long intersectTotal = 0;
-			long sumTotal = 0;
-			long unionTotal = 0;
-			long linkTotal = 0;
-
-			for( int j = 0 ; j < sts.entities.size(); j++ )
-			{
-				linkTotal += rowVector.get(j);
-			}
-			
 			
 			for( int i = id; i < sts.classes.size(); i+= stepSize )
 			{
@@ -196,9 +176,6 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 					if( vs <= vv ) continue;
 					
 					union_result = (float)(vs - vv);
-					intersectTotal += vv;
-					sumTotal += vs;
-					unionTotal += union_result;
 					
 					vv = 1f - (vv / union_result);
 					
@@ -217,23 +194,11 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 				if( external != 0 )
 //					&& internalCount != 0 )
 				{
-					internalTotal += internal;
-					externalTotal += external;
-					externalCountTotal += externalCount;
-					
 					epmc = internal * externalCount / external ;
 					epm += epmc;
 				}
 			}
 			
-			System.err.println("interal total:" + internalTotal);
-			System.err.println("external total:" + externalTotal);
-			System.err.println("external count total:" + externalCountTotal);
-			System.err.println("intersect total:" + intersectTotal);
-			System.err.println("sum total:" + sumTotal);
-			System.err.println("union total:" + unionTotal);
-			System.err.println("Java Total Link Count:" + linkTotal);
-			System.err.println("total epm:" + epm);
 			return epm;		
 		}
 	}
@@ -255,14 +220,14 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 		
 		float epm = 0;
 
-		/*
+		
 		@SuppressWarnings("unchecked")
 		Future<Float>[] future = new Future[executorPoolSize]; 
 		
 		
 		for( int i = 0; i < executorPoolSize; i++ )
 		{
-			future[i] = executorService.submit(new EPMHelper(intersectMatrix, sumMatrix, i));
+			future[i] = executorService.submit(new EPMHelper(intersectMatrix, rowSumColVector, colSumRowVector, i, executorPoolSize));
 		}
 		
 		for( int i = 0; i < executorPoolSize; i++ )
@@ -275,15 +240,15 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 				throw new RuntimeException("Future crash");
 			}
 		}
-		*/
-		EPMHelper hh = new EPMHelper(intersectMatrix, rowSumColVector, colSumRowVector, 0, 1);
 		
-		try {
-			epm = hh.call();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		EPMHelper hh = new EPMHelper(intersectMatrix, rowSumColVector, colSumRowVector, 0, 1);
+//		
+//		try {
+//			epm = hh.call();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		epm = epm / sts.entities.size();
 		
