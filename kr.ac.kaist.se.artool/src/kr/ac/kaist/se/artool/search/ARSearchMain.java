@@ -3,8 +3,6 @@ package kr.ac.kaist.se.artool.search;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Set;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.artool.engine.StatusLogger;
@@ -15,10 +13,10 @@ import kr.ac.kaist.se.artool.search.candidate.CandidateSelection;
 import kr.ac.kaist.se.artool.search.candidate.DeltaMatrixEngine;
 import kr.ac.kaist.se.artool.search.candidate.RandomCandidateSelection;
 import kr.ac.kaist.se.artool.search.fitness.ConnectivityEngine;
-import kr.ac.kaist.se.artool.search.fitness.EPMEngine;
 import kr.ac.kaist.se.artool.search.fitness.FitnessFunction;
 import kr.ac.kaist.se.artool.search.fitness.MPCEngine;
 import kr.ac.kaist.se.artool.search.fitness.MSCEngine;
+import kr.ac.kaist.se.artool.search.fitness.NativeEPMEngineAdapter;
 import kr.ac.kaist.se.artool.search.fitness.QMoodEngine;
 import kr.ac.kaist.se.artool.search.strategy.AbstractRefactoringSelectionStrategy;
 import kr.ac.kaist.se.artool.search.strategy.BestFitnessSelectionStrategy;
@@ -163,7 +161,7 @@ public class ARSearchMain {
 		switch( fitnessType )
 		{
 		case EPM:
-			EPMEngine epmEngine = new EPMEngine(ses);
+			NativeEPMEngineAdapter epmEngine = new NativeEPMEngineAdapter(ses);
 			fitnessFunction = epmEngine;
 			mmr.addListener(epmEngine);
 			

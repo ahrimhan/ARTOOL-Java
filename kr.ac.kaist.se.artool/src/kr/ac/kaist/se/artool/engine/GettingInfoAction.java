@@ -1,20 +1,14 @@
 package kr.ac.kaist.se.artool.engine;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
-import kr.ac.kaist.se.artool.search.ARSearchMain;
-import kr.ac.kaist.se.artool.search.ARSearchMain.CandidateSelectionType;
-import kr.ac.kaist.se.artool.search.ARSearchMain.FitnessType;
-import kr.ac.kaist.se.artool.search.ARSearchMain.SearchTechType;
 import kr.ac.kaist.se.artool.search.fitness.ConnectivityEngine;
 import kr.ac.kaist.se.artool.search.fitness.EPMEngine;
 import kr.ac.kaist.se.artool.search.fitness.MPCEngine;
+import kr.ac.kaist.se.artool.search.fitness.NativeEPMEngineAdapter;
 import kr.ac.kaist.se.artool.util.CommandExecutionOperation;
 
 import org.eclipse.core.commands.ExecutionException;
@@ -32,7 +26,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
@@ -87,8 +80,8 @@ public class GettingInfoAction implements IObjectActionDelegate {
 					ConnectivityEngine ce = new ConnectivityEngine(aom);
 					System.out.println("Connectivity, " + ce.calculate());
 					
-					EPMEngine epme = new EPMEngine(ses);
-					System.out.println("EPM, " + epme.calculate());
+					NativeEPMEngineAdapter nepme = new NativeEPMEngineAdapter(ses);
+					System.out.println("Native EPM, " + nepme.calculate());
 					
 					MPCEngine mpce = new MPCEngine(aom);
 					System.out.println("MPC, " + mpce.calculate());			

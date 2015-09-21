@@ -66,3 +66,6 @@ Bundle-ClassPath: lib/javassist.jar,
  lib/commons-math3-3.5.jar,
  lib/guava-18.0.jar
 Bundle-ActivationPolicy: lazy
+Bundle-NativeCode: lib/libNativeEPMEngine.dylib
+
+

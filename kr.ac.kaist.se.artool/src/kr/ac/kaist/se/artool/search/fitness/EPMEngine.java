@@ -31,6 +31,8 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 		initMembershipMatrix();
 		initEntityMatrix();
 		
+		
+		
 		oneVector = new DenseVector(sts.entities.size());
 		
 		for( int i = 0; i < sts.entities.size(); i++ )
@@ -44,7 +46,9 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 	
 	private void initMembershipMatrix()
 	{
-		membershipMatrix = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
+		LinkedSparseMatrix mm = new LinkedSparseMatrix(sts.entities.size(), sts.classes.size());
+		membershipMatrix = mm;
+		
 		for( AOMClass clazz : sts.classes )
 		{
 			for( AOMMethod method : clazz.getMethods() )
@@ -82,6 +86,7 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 				for(StaticFieldAccess sfa : method.getOwnedScope().getStaticFieldAccesses() )
 				{
 					entityMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
+//					entityMatrix.set(method.getIndex(), sfa.getAccessedField().getIndex(),  1);
 				}
 
 				for(StaticMethodCall smc : method.getOwnedScope().getStaticMethodCalls() )
@@ -108,72 +113,94 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 		return intersectMatrix;
 	}
 	
-	private class RowColVectorMatrix
-	{
-		no.uib.cipr.matrix.Vector colVector;
-		no.uib.cipr.matrix.Vector rowVector;
-		
-		public RowColVectorMatrix(no.uib.cipr.matrix.Vector rowVector, no.uib.cipr.matrix.Vector colVector)
-		{
-			this.rowVector = rowVector;
-			this.colVector = colVector;
-		}
-		
-		public double getValue(int row, int col)
-		{
-			return rowVector.get(row) + colVector.get(col);
-		}
-	}
+//	private class RowColVectorMatrix
+//	{
+//		no.uib.cipr.matrix.Vector colVector;
+//		no.uib.cipr.matrix.Vector rowVector;
+//		
+//		public RowColVectorMatrix(no.uib.cipr.matrix.Vector rowVector, no.uib.cipr.matrix.Vector colVector)
+//		{
+//			this.rowVector = rowVector;
+//			this.colVector = colVector;
+//		}
+//		
+//		public double getValue(int row, int col)
+//		{
+//			return rowVector.get(row) + colVector.get(col);
+//		}
+//	}
 		
 	
-	private RowColVectorMatrix getSumMatrix()
-	{
-		
-		no.uib.cipr.matrix.Vector rowSumColVector = new DenseVector(sts.entities.size());
-		rowSumColVector = entityMatrix.mult(oneVector, rowSumColVector);
-		
-		no.uib.cipr.matrix.Vector colSumRowVector = new DenseVector(sts.classes.size());		
-		colSumRowVector = membershipMatrix.transMult(oneVector, colSumRowVector);
-		
-			
-		return new RowColVectorMatrix(rowSumColVector, colSumRowVector);
-	}
+//	private RowColVectorMatrix getSumMatrix()
+//	{
+//			
+//		return new RowColVectorMatrix(rowSumColVector, colSumRowVector);
+//	}
 	
 	public class EPMHelper implements Callable<Float>
 	{
 		
 		private Matrix intersectMatrix; 
-		private RowColVectorMatrix sumMatrix;
 		private int id;
+		private int stepSize;
+		private no.uib.cipr.matrix.Vector rowVector;
+		private no.uib.cipr.matrix.Vector colVector;
+		/*
+		no.uib.cipr.matrix.Vector rowSumColVector = new DenseVector(sts.entities.size());
+		rowSumColVector = entityMatrix.mult(oneVector, rowSumColVector);
 		
-		public EPMHelper(Matrix intersectMatrix, RowColVectorMatrix sumMatrix, int id)
+		no.uib.cipr.matrix.Vector colSumRowVector = new DenseVector(sts.classes.size());		
+		colSumRowVector = membershipMatrix.transMult(oneVector, colSumRowVector);
+		*/		
+		public EPMHelper(Matrix intersectMatrix, no.uib.cipr.matrix.Vector rowVector, no.uib.cipr.matrix.Vector colVector, int id, int stepSize)
 		{
 			this.intersectMatrix = intersectMatrix;
-			this.sumMatrix = sumMatrix;
 			this.id = id;
+			this.stepSize = stepSize;
+			this.rowVector = rowVector;
+			this.colVector = colVector;
 		}
 		
 		@Override
 		public Float call() throws Exception {
 			float epm = 0;
 			
-			for( int i = id; i < sts.classes.size(); i+= executorPoolSize )
+			float internalTotal = 0;
+			float externalTotal = 0;
+			float externalCountTotal = 0;
+			
+			long intersectTotal = 0;
+			long sumTotal = 0;
+			long unionTotal = 0;
+			long linkTotal = 0;
+
+			for( int j = 0 ; j < sts.entities.size(); j++ )
+			{
+				linkTotal += rowVector.get(j);
+			}
+			
+			
+			for( int i = id; i < sts.classes.size(); i+= stepSize )
 			{
 				float internal = 0;
-//				int internalCount = 0;
 				float external = 0;
 				int externalCount = 0;
 				float epmc = 0;
 				double vv, vs;
+				float union_result = 0;
 				for( int j = 0 ; j < sts.entities.size(); j++ )
 				{	
-					
 					vv = intersectMatrix.get(j, i);
-					vs = sumMatrix.getValue(j, i) - membershipMatrix.get(j, i);
+					vs = rowVector.get(j) + colVector.get(i) - membershipMatrix.get(j, i);
 					
 					if( vs <= vv ) continue;
 					
-					vv = 1f - (vv / (vs - vv));
+					union_result = (float)(vs - vv);
+					intersectTotal += vv;
+					sumTotal += vs;
+					unionTotal += union_result;
+					
+					vv = 1f - (vv / union_result);
 					
 					if( membershipMatrix.get(j, i) > 0 )
 					{
@@ -190,10 +217,23 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 				if( external != 0 )
 //					&& internalCount != 0 )
 				{
+					internalTotal += internal;
+					externalTotal += external;
+					externalCountTotal += externalCount;
+					
 					epmc = internal * externalCount / external ;
 					epm += epmc;
 				}
 			}
+			
+			System.err.println("interal total:" + internalTotal);
+			System.err.println("external total:" + externalTotal);
+			System.err.println("external count total:" + externalCountTotal);
+			System.err.println("intersect total:" + intersectTotal);
+			System.err.println("sum total:" + sumTotal);
+			System.err.println("union total:" + unionTotal);
+			System.err.println("Java Total Link Count:" + linkTotal);
+			System.err.println("total epm:" + epm);
 			return epm;		
 		}
 	}
@@ -203,13 +243,22 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 	public float calculate()
 	{
 		Matrix intersectMatrix = getIntersectMatrix();
-		RowColVectorMatrix sumMatrix = getSumMatrix();
 		
 		
+		
+		no.uib.cipr.matrix.Vector rowSumColVector = new DenseVector(sts.entities.size());
+		rowSumColVector = entityMatrix.mult(oneVector, rowSumColVector);
+		
+		no.uib.cipr.matrix.Vector colSumRowVector = new DenseVector(sts.classes.size());		
+		colSumRowVector = membershipMatrix.transMult(oneVector, colSumRowVector);
+		
+		
+		float epm = 0;
+
+		/*
 		@SuppressWarnings("unchecked")
 		Future<Float>[] future = new Future[executorPoolSize]; 
 		
-		float epm = 0;
 		
 		for( int i = 0; i < executorPoolSize; i++ )
 		{
@@ -226,8 +275,18 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 				throw new RuntimeException("Future crash");
 			}
 		}
+		*/
+		EPMHelper hh = new EPMHelper(intersectMatrix, rowSumColVector, colSumRowVector, 0, 1);
 		
-		epm = epm / sts.entities.size();		
+		try {
+			epm = hh.call();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		epm = epm / sts.entities.size();
+		
 		return epm;
 	}
 	
