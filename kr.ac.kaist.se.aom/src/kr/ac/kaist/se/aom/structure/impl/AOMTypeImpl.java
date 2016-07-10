@@ -27,11 +27,11 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMTypeImpl#getReferer <em>Referer</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMTypeImpl#getFqdn <em>Fqdn</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

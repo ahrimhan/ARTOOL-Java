@@ -40,6 +40,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMClassImpl#getMeasuredDataSet <em>Measured Data Set</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMClassImpl#getIndex <em>Index</em>}</li>
@@ -56,7 +57,6 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMClassImpl#getLOC <em>LOC</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMClassImpl#isStatic <em>Static</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

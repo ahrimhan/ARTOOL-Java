@@ -53,14 +53,13 @@ public class SimulatedAnnealingStrategy extends
 	}
 
 	@Override
-	public boolean next(MoveMethodCommand newCmd, float fitness) {
+	public boolean next(MoveMethodCommand newCmd) {
 		boolean ret = true;
 		
-		newCmd.fitness = fitness;
 		
 		if( !isSetInitialTemperature )
 		{
-			temperature = -1 * Math.abs(fitness - initialFitness) / Math.log(initialProbability);
+			temperature = -1 * Math.abs(newCmd.fitness - initialFitness) / Math.log(initialProbability);
 			isSetInitialTemperature = true;
 		}
 		

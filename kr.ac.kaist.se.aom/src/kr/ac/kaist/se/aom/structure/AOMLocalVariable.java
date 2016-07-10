@@ -14,10 +14,10 @@ package kr.ac.kaist.se.aom.structure;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMLocalVariable#getOwner <em>Owner</em>}</li>
  * </ul>
- * </p>
  *
  * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMLocalVariable()
  * @model

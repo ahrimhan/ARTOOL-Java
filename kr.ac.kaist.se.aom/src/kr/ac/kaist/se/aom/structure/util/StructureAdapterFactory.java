@@ -141,6 +141,10 @@ public class StructureAdapterFactory extends AdapterFactoryImpl {
 				return createIndexedElementAdapter();
 			}
 			@Override
+			public Adapter caseAOMLocalVariableAccess(AOMLocalVariableAccess object) {
+				return createAOMLocalVariableAccessAdapter();
+			}
+			@Override
 			public Adapter caseMeasurableElement(MeasurableElement object) {
 				return createMeasurableElementAdapter();
 			}
@@ -357,6 +361,20 @@ public class StructureAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createIndexedElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess <em>AOM Local Variable Access</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess
+	 * @generated
+	 */
+	public Adapter createAOMLocalVariableAccessAdapter() {
 		return null;
 	}
 

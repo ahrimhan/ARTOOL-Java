@@ -85,6 +85,7 @@ public class AOMScopeItemProvider
 			childrenFeatures.add(StructurePackage.Literals.AOM_SCOPE__STATIC_METHOD_CALLS);
 			childrenFeatures.add(StructurePackage.Literals.AOM_SCOPE__DYNAMIC_METHOD_CALLS);
 			childrenFeatures.add(StructurePackage.Literals.AOM_SCOPE__STATIC_FIELD_ACCESSES);
+			childrenFeatures.add(StructurePackage.Literals.AOM_SCOPE__LOCAL_VARIABLE_ACCESSES);
 		}
 		return childrenFeatures;
 	}
@@ -140,6 +141,7 @@ public class AOMScopeItemProvider
 			case StructurePackage.AOM_SCOPE__STATIC_METHOD_CALLS:
 			case StructurePackage.AOM_SCOPE__DYNAMIC_METHOD_CALLS:
 			case StructurePackage.AOM_SCOPE__STATIC_FIELD_ACCESSES:
+			case StructurePackage.AOM_SCOPE__LOCAL_VARIABLE_ACCESSES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -176,6 +178,11 @@ public class AOMScopeItemProvider
 			(createChildParameter
 				(StructurePackage.Literals.AOM_SCOPE__STATIC_FIELD_ACCESSES,
 				 StaticmodelFactory.eINSTANCE.createStaticFieldAccess()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(StructurePackage.Literals.AOM_SCOPE__LOCAL_VARIABLE_ACCESSES,
+				 StructureFactory.eINSTANCE.createAOMLocalVariableAccess()));
 	}
 
 	/**

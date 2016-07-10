@@ -76,6 +76,7 @@ public class StructureFactoryImpl extends EFactoryImpl implements StructureFacto
 			case StructurePackage.AOM_PARAMETER: return createAOMParameter();
 			case StructurePackage.AOM_LOCAL_VARIABLE: return createAOMLocalVariable();
 			case StructurePackage.AOM_EXTERNAL_TYPE: return createAOMExternalType();
+			case StructurePackage.AOM_LOCAL_VARIABLE_ACCESS: return createAOMLocalVariableAccess();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -179,6 +180,16 @@ public class StructureFactoryImpl extends EFactoryImpl implements StructureFacto
 	public AOMExternalType createAOMExternalType() {
 		AOMExternalTypeImpl aomExternalType = new AOMExternalTypeImpl();
 		return aomExternalType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AOMLocalVariableAccess createAOMLocalVariableAccess() {
+		AOMLocalVariableAccessImpl aomLocalVariableAccess = new AOMLocalVariableAccessImpl();
+		return aomLocalVariableAccess;
 	}
 
 	/**

@@ -4,18 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import kr.ac.kaist.se.aom.AbstractObjectModel;
-import kr.ac.kaist.se.aom.AomFactory;
-import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
-import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
-import kr.ac.kaist.se.aom.structure.AOMClass;
-import kr.ac.kaist.se.aom.structure.AOMField;
-import kr.ac.kaist.se.aom.structure.AOMLocalVariable;
-import kr.ac.kaist.se.aom.structure.AOMMethod;
-import kr.ac.kaist.se.aom.structure.AOMParameter;
-import kr.ac.kaist.se.aom.structure.AOMScope;
-import kr.ac.kaist.se.aom.structure.AOMType;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
@@ -32,6 +20,19 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
+
+import kr.ac.kaist.se.aom.AbstractObjectModel;
+import kr.ac.kaist.se.aom.AomFactory;
+import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
+import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
+import kr.ac.kaist.se.aom.structure.AOMClass;
+import kr.ac.kaist.se.aom.structure.AOMField;
+import kr.ac.kaist.se.aom.structure.AOMLocalVariable;
+import kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess;
+import kr.ac.kaist.se.aom.structure.AOMMethod;
+import kr.ac.kaist.se.aom.structure.AOMParameter;
+import kr.ac.kaist.se.aom.structure.AOMScope;
+import kr.ac.kaist.se.aom.structure.AOMType;
 
 public class StaticModel2AOMTransformer {
 	
@@ -76,11 +77,18 @@ public class StaticModel2AOMTransformer {
 			SubProgressMonitor subMonitor1 = new SubProgressMonitor(monitor, 75);
 			extractClasses(projectList.get(0), parser, visitor, subMonitor1);
 		
+			ExternalTypeGenerator etg = new ExternalTypeGenerator(aom);
+
 			SubProgressMonitor subMonitor2 = new SubProgressMonitor(monitor, 20);
-			restoringReferences(aom, visitor, subMonitor2);
+			restoringReferences(aom, visitor, etg, subMonitor2);
 			
 			SubProgressMonitor subMonitor3 = new SubProgressMonitor(monitor, 5);
-			findingOverrides(aom, subMonitor3);			
+			findingOverrides(aom, subMonitor3);	
+			
+			
+			figureOutGetterAndSetter(aom, etg);
+			
+			figureOutDelegateMethod(aom);
 			
 		}
 		finally
@@ -88,6 +96,98 @@ public class StaticModel2AOMTransformer {
 			monitor.done();
 		}
 		return aom;
+	}
+	
+	private void figureOutDelegateMethod(AbstractObjectModel aom)
+	{
+		for( AOMClass clazz : aom.getClasses() )
+		{
+			for( AOMMethod method : clazz.getMethods() )
+			{
+				method.setDelegate(null);
+			}
+		}
+		
+		for( AOMClass clazz : aom.getClasses() )
+		{
+			for( AOMMethod method : clazz.getMethods() )
+			{
+				if( method.getOwnedScope() != null && method.getOwnedScope().getStaticMethodCalls().size() == 1 &&
+						method.getOwnedScope().getStaticFieldAccesses().size() < 3 )
+				{
+					boolean isDelegate = false;
+
+					AOMMethod calledMethod = method.getOwnedScope().getStaticMethodCalls().get(0).getCallee();
+					
+					if( calledMethod.getParameters().size() == method.getParameters().size() )
+					{
+						boolean isDelegate2 = true;
+						for( int i = 0; i < method.getParameters().size(); i++ )
+						{
+							if( calledMethod.getParameters().get(i).getType().getFqdn().equals(
+									method.getParameters().get(i).getType().getFqdn()) &&
+								calledMethod.getType().getFqdn().equals(method.getType().getFqdn()))
+							{
+								continue;
+							}
+							else
+							{
+								isDelegate2 = false;
+								break;
+							}
+						}
+						
+						isDelegate = isDelegate2;
+					}
+					method.setDelegate(calledMethod);
+				}
+			}
+		}
+	}
+	
+	private void figureOutGetterAndSetter(AbstractObjectModel aom, ExternalTypeGenerator etg)
+	{
+		for( AOMClass clazz : aom.getClasses() )
+		{
+			for( AOMMethod method : clazz.getMethods() )
+			{
+				if( (method.getName().startsWith("get") || method.getName().startsWith("is")) &&
+					((method.getEndLine() - method.getStartLine()) < 5) &&
+					method.getParameters().size() == 0 
+				)
+				{
+					for( AOMField field : clazz.getFields() )
+					{
+						if( method.getName().endsWith(field.getName()) && 
+								method.getType() != null && field.getType() != null &&
+								method.getType().getFqdn().equals(field.getType().getFqdn()) 
+								)
+						{
+							method.setGetter(field);
+						}
+					}
+				}
+				else if( (method.getName().startsWith("set") ) &&
+						((method.getEndLine() - method.getStartLine()) < 5) &&
+						method.getParameters().size() == 1 &&
+						method.getType() == etg.getVoid() 
+				)
+				{
+					AOMParameter param = method.getParameters().get(0);
+					
+					for( AOMField field : clazz.getFields() )
+					{
+						if( method.getName().endsWith(field.getName()) && 
+								param.getType() != null && field.getType() != null &&
+								param.getType().getFqdn().equals(field.getType().getFqdn()) 
+								)
+						{
+							method.setSetter(field);
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	private void findingOverrides(AbstractObjectModel aom,
@@ -118,9 +218,8 @@ public class StaticModel2AOMTransformer {
 	
 
 
-	private void restoringReferences(AbstractObjectModel aom, AOMTransformingVisitor visitor, IProgressMonitor monitor)
+	private void restoringReferences(AbstractObjectModel aom, AOMTransformingVisitor visitor, ExternalTypeGenerator etg, IProgressMonitor monitor)
 	{
-		ExternalTypeGenerator etg = new ExternalTypeGenerator(aom);
 		
 		monitor.beginTask("Restoring references", aom.getClasses().size());
 		try
@@ -190,25 +289,40 @@ public class StaticModel2AOMTransformer {
 					
 					if( scope != null )
 					{
-						for( IVariableBinding varBinding : scope.getVariableBindings() )
+//						for( IVariableBinding varBinding : scope.getVariableBindings() )
+//						{
+//							if( varBinding.isField() )
+//							{
+////								AOMField aomField = visitor.getAOMField(varBinding);
+////								if( aomField != null )
+////								{
+////									
+////									scope.getReferringFields().add(aomField);
+////								}
+//							}
+//							else if( varBinding.isParameter() )
+//							{
+//								AOMParameter aomParameter = method.getVarBinding2AOMParameter().get(varBinding);
+//								// TODO: local references are not handled now.
+//							}
+//							else 
+//							{
+//								// TODO: local references are not handled now.
+//							}
+//						}
+						
+						for( AOMLocalVariableAccess lva : scope.getLocalVariableAccesses() )
 						{
-							if( varBinding.isField() )
+							if( lva.isParameterAccess() )
 							{
-//								AOMField aomField = visitor.getAOMField(varBinding);
-//								if( aomField != null )
-//								{
-//									
-//									scope.getReferringFields().add(aomField);
-//								}
+								AOMParameter aomParameter = method.getVarBinding2AOMParameter().get(lva.getVariableBinding());
+								
+								lva.setAccessedVariableDef(aomParameter);
 							}
-							else if( varBinding.isParameter() )
+							else
 							{
-								AOMParameter aomParameter = method.getVarBinding2AOMParameter().get(varBinding);
-								// TODO: local references are not handled now.
-							}
-							else 
-							{
-								// TODO: local references are not handled now.
+								AOMLocalVariable localVariable = scope.getVarBinding2AOMLocalVariable().get(lva.getVariableBinding());
+								lva.setAccessedVariableDef(localVariable);
 							}
 						}
 					
@@ -238,8 +352,6 @@ public class StaticModel2AOMTransformer {
 						{
 							smc.setAccessingScope(null);
 						}
-						
-						
 						
 						Vector<StaticMethodCall> removeMethodCall = new Vector<StaticMethodCall>();
 						for( StaticMethodCall methodCall : scope.getStaticMethodCalls() )

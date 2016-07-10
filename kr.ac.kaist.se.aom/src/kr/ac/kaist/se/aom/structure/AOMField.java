@@ -18,11 +18,11 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMField#getOwner <em>Owner</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMField#getStaticReferer <em>Static Referer</em>}</li>
  * </ul>
- * </p>
  *
  * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMField()
  * @model

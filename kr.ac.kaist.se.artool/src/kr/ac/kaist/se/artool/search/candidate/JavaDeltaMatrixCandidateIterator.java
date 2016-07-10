@@ -5,13 +5,13 @@ import java.util.Set;
 
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
 
-public class DeltaMatrixCandidateIterator implements CandidateIterator {
-	private DeltaMatrixEngine dme;
+public class JavaDeltaMatrixCandidateIterator implements CandidateIterator {
+	private JavaDeltaMatrixEngine dme;
 	private Iterator<MoveMethodCommand> iter;
 	private int iterationCount = 0;
 	private int maxIterationCount = -1;
 	
-	public DeltaMatrixCandidateIterator(DeltaMatrixEngine dme, Set<MoveMethodCommand> mmcSet, int maxIterationCount) {
+	public JavaDeltaMatrixCandidateIterator(JavaDeltaMatrixEngine dme, Set<MoveMethodCommand> mmcSet, int maxIterationCount) {
 		this.dme = dme;
 		iter = mmcSet.iterator();
 		this.maxIterationCount = maxIterationCount;

@@ -20,6 +20,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMClass#getFields <em>Fields</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMClass#getMethods <em>Methods</em>}</li>
@@ -34,7 +35,6 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMClass#getLOC <em>LOC</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMClass#isStatic <em>Static</em>}</li>
  * </ul>
- * </p>
  *
  * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMClass()
  * @model

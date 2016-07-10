@@ -1,4 +1,4 @@
-package kr.ac.kaist.se.artool.engine;
+package kr.ac.kaist.se.artool.search;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -6,13 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-
-import kr.ac.kaist.se.aom.AbstractObjectModel;
-import kr.ac.kaist.se.artool.search.ARSearchMain;
-import kr.ac.kaist.se.artool.search.ARSearchMain.CandidateSelectionType;
-import kr.ac.kaist.se.artool.search.ARSearchMain.FitnessType;
-import kr.ac.kaist.se.artool.search.ARSearchMain.SearchTechType;
-import kr.ac.kaist.se.artool.util.CommandExecutionOperation;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
@@ -27,6 +20,13 @@ import org.eclipse.gmf.runtime.emf.commands.core.command.AbstractTransactionalCo
 import org.eclipse.gmf.runtime.emf.core.GMFEditingDomainFactory;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.wizard.Wizard;
+
+import kr.ac.kaist.se.aom.AbstractObjectModel;
+import kr.ac.kaist.se.artool.engine.SystemEntitySet;
+import kr.ac.kaist.se.artool.search.ARSearchMain.CandidateSelectionType;
+import kr.ac.kaist.se.artool.search.ARSearchMain.FitnessType;
+import kr.ac.kaist.se.artool.search.ARSearchMain.SearchTechType;
+import kr.ac.kaist.se.artool.util.CommandExecutionOperation;
 
 public class ARSearchWizard extends Wizard {
 
@@ -56,19 +56,19 @@ public class ARSearchWizard extends Wizard {
 
 	@Override
 	public String getWindowTitle() {
-		return "Search based Refactoring!!";
+		return "Finding Move Method with Delta Matrix";
 	}
 
 	@Override
 	public void addPages() {
 		paramConfigPage = new ARSearchParameterConfigPage("Setup Search Parameter");
+		paramConfigPage.loadSettings();
 		addPage(paramConfigPage);
 	}
 	
-	
-
 	@Override
 	public boolean performFinish() {
+		paramConfigPage.saveSettings();
 		
 		TransactionalEditingDomain myEditingDomain = GMFEditingDomainFactory.INSTANCE
 		.createEditingDomain();

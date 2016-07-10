@@ -20,11 +20,11 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMEntityImpl#getOccurrence <em>Occurrence</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMEntityImpl#isPublicEntity <em>Public Entity</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

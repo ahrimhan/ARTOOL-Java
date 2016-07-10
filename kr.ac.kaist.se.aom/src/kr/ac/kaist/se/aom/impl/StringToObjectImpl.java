@@ -22,11 +22,11 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.impl.StringToObjectImpl#getTypedKey <em>Key</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.impl.StringToObjectImpl#getTypedValue <em>Value</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

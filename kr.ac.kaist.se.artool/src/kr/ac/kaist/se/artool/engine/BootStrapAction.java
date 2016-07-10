@@ -9,6 +9,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
+import kr.ac.kaist.se.artool.search.ARSearchWizard;
+
 public class BootStrapAction implements IObjectActionDelegate {
 
 	public BootStrapAction() {

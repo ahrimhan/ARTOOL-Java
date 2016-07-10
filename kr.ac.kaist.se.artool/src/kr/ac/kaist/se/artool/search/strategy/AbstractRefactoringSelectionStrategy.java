@@ -18,7 +18,7 @@ public abstract class AbstractRefactoringSelectionStrategy {
 		this.comparator = comparator;
 	}
 	
-	public abstract boolean next(MoveMethodCommand obj, float fitness);
+	public abstract boolean next(MoveMethodCommand obj);
 	public abstract MoveMethodCommand done();
 	
 	public abstract boolean restrictCandidateCount();

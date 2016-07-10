@@ -15,11 +15,11 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMType#getReferer <em>Referer</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMType#getFqdn <em>Fqdn</em>}</li>
  * </ul>
- * </p>
  *
  * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMType()
  * @model abstract="true"

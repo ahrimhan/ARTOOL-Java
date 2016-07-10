@@ -55,6 +55,7 @@ public class AOMLocalVariableItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
+			addRefererPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -77,6 +78,28 @@ public class AOMLocalVariableItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Referer feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRefererPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AOMVariableDef_referer_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AOMVariableDef_referer_feature", "_UI_AOMVariableDef_type"),
+				 StructurePackage.Literals.AOM_VARIABLE_DEF__REFERER,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

@@ -28,6 +28,7 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.staticmodel.impl.StaticFieldAccessImpl#getAccessingScope <em>Accessing Scope</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.staticmodel.impl.StaticFieldAccessImpl#getAccessedField <em>Accessed Field</em>}</li>
@@ -37,7 +38,6 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
  *   <li>{@link kr.ac.kaist.se.aom.staticmodel.impl.StaticFieldAccessImpl#getFileName <em>File Name</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.staticmodel.impl.StaticFieldAccessImpl#getDynamicAccessCount <em>Dynamic Access Count</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

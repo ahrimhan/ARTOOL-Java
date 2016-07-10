@@ -382,13 +382,22 @@ public interface StructurePackage extends EPackage {
 	int AOM_VARIABLE_DEF__NAME = AOM_TYPED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Referer</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOM_VARIABLE_DEF__REFERER = AOM_TYPED_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>AOM Variable Def</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_VARIABLE_DEF_FEATURE_COUNT = AOM_TYPED_ELEMENT_FEATURE_COUNT + 1;
+	int AOM_VARIABLE_DEF_FEATURE_COUNT = AOM_TYPED_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl <em>AOM Field</em>}' class.
@@ -417,6 +426,15 @@ public interface StructurePackage extends EPackage {
 	 * @ordered
 	 */
 	int AOM_FIELD__NAME = AOM_VARIABLE_DEF__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Referer</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOM_FIELD__REFERER = AOM_VARIABLE_DEF__REFERER;
 
 	/**
 	 * The feature id for the '<em><b>Measured Data Set</b></em>' map.
@@ -681,13 +699,76 @@ public interface StructurePackage extends EPackage {
 	int AOM_METHOD__CONSTRUCTOR = AOM_NAMED_ELEMENT_FEATURE_COUNT + 19;
 
 	/**
+	 * The feature id for the '<em><b>Synchronized</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOM_METHOD__SYNCHRONIZED = AOM_NAMED_ELEMENT_FEATURE_COUNT + 20;
+
+	/**
+	 * The feature id for the '<em><b>Super Method Invocation</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOM_METHOD__SUPER_METHOD_INVOCATION = AOM_NAMED_ELEMENT_FEATURE_COUNT + 21;
+
+	/**
+	 * The feature id for the '<em><b>Super Field Access</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOM_METHOD__SUPER_FIELD_ACCESS = AOM_NAMED_ELEMENT_FEATURE_COUNT + 22;
+
+	/**
+	 * The feature id for the '<em><b>Contains Field Assignment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOM_METHOD__CONTAINS_FIELD_ASSIGNMENT = AOM_NAMED_ELEMENT_FEATURE_COUNT + 23;
+
+	/**
+	 * The feature id for the '<em><b>Getter</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOM_METHOD__GETTER = AOM_NAMED_ELEMENT_FEATURE_COUNT + 24;
+
+	/**
+	 * The feature id for the '<em><b>Setter</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOM_METHOD__SETTER = AOM_NAMED_ELEMENT_FEATURE_COUNT + 25;
+
+	/**
+	 * The feature id for the '<em><b>Delegate</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOM_METHOD__DELEGATE = AOM_NAMED_ELEMENT_FEATURE_COUNT + 26;
+
+	/**
 	 * The number of structural features of the '<em>AOM Method</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_METHOD_FEATURE_COUNT = AOM_NAMED_ELEMENT_FEATURE_COUNT + 20;
+	int AOM_METHOD_FEATURE_COUNT = AOM_NAMED_ELEMENT_FEATURE_COUNT + 27;
 
 	/**
 	 * The meta object id for the '{@link kr.ac.kaist.se.aom.structure.impl.AOMScopeImpl <em>AOM Scope</em>}' class.
@@ -745,13 +826,22 @@ public interface StructurePackage extends EPackage {
 	int AOM_SCOPE__STATIC_FIELD_ACCESSES = 4;
 
 	/**
+	 * The feature id for the '<em><b>Local Variable Accesses</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOM_SCOPE__LOCAL_VARIABLE_ACCESSES = 5;
+
+	/**
 	 * The number of structural features of the '<em>AOM Scope</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int AOM_SCOPE_FEATURE_COUNT = 5;
+	int AOM_SCOPE_FEATURE_COUNT = 6;
 
 	/**
 	 * The meta object id for the '{@link kr.ac.kaist.se.aom.structure.impl.AOMParameterImpl <em>AOM Parameter</em>}' class.
@@ -780,6 +870,15 @@ public interface StructurePackage extends EPackage {
 	 * @ordered
 	 */
 	int AOM_PARAMETER__NAME = AOM_VARIABLE_DEF__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Referer</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOM_PARAMETER__REFERER = AOM_VARIABLE_DEF__REFERER;
 
 	/**
 	 * The feature id for the '<em><b>Owner</b></em>' container reference.
@@ -826,6 +925,15 @@ public interface StructurePackage extends EPackage {
 	 * @ordered
 	 */
 	int AOM_LOCAL_VARIABLE__NAME = AOM_VARIABLE_DEF__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Referer</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOM_LOCAL_VARIABLE__REFERER = AOM_VARIABLE_DEF__REFERER;
 
 	/**
 	 * The feature id for the '<em><b>Owner</b></em>' container reference.
@@ -966,6 +1074,52 @@ public interface StructurePackage extends EPackage {
 	int AOM_ENTITY_FEATURE_COUNT = INDEXED_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
+	 * The meta object id for the '{@link kr.ac.kaist.se.aom.structure.impl.AOMLocalVariableAccessImpl <em>AOM Local Variable Access</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kr.ac.kaist.se.aom.structure.impl.AOMLocalVariableAccessImpl
+	 * @see kr.ac.kaist.se.aom.structure.impl.StructurePackageImpl#getAOMLocalVariableAccess()
+	 * @generated
+	 */
+	int AOM_LOCAL_VARIABLE_ACCESS = 14;
+
+	/**
+	 * The feature id for the '<em><b>Accessed Variable Def</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOM_LOCAL_VARIABLE_ACCESS__ACCESSED_VARIABLE_DEF = 0;
+
+	/**
+	 * The feature id for the '<em><b>Accessing Scope</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOM_LOCAL_VARIABLE_ACCESS__ACCESSING_SCOPE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Parameter Access</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOM_LOCAL_VARIABLE_ACCESS__PARAMETER_ACCESS = 2;
+
+	/**
+	 * The number of structural features of the '<em>AOM Local Variable Access</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOM_LOCAL_VARIABLE_ACCESS_FEATURE_COUNT = 3;
+
+	/**
 	 * The meta object id for the '{@link kr.ac.kaist.se.aom.structure.AOMModifier <em>AOM Modifier</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -973,7 +1127,7 @@ public interface StructurePackage extends EPackage {
 	 * @see kr.ac.kaist.se.aom.structure.impl.StructurePackageImpl#getAOMModifier()
 	 * @generated
 	 */
-	int AOM_MODIFIER = 14;
+	int AOM_MODIFIER = 15;
 
 	/**
 	 * Returns the meta object for class '{@link kr.ac.kaist.se.aom.structure.AOMElement <em>AOM Element</em>}'.
@@ -1409,6 +1563,83 @@ public interface StructurePackage extends EPackage {
 	EAttribute getAOMMethod_Constructor();
 
 	/**
+	 * Returns the meta object for the attribute '{@link kr.ac.kaist.se.aom.structure.AOMMethod#isSynchronized <em>Synchronized</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Synchronized</em>'.
+	 * @see kr.ac.kaist.se.aom.structure.AOMMethod#isSynchronized()
+	 * @see #getAOMMethod()
+	 * @generated
+	 */
+	EAttribute getAOMMethod_Synchronized();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kr.ac.kaist.se.aom.structure.AOMMethod#isSuperMethodInvocation <em>Super Method Invocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Super Method Invocation</em>'.
+	 * @see kr.ac.kaist.se.aom.structure.AOMMethod#isSuperMethodInvocation()
+	 * @see #getAOMMethod()
+	 * @generated
+	 */
+	EAttribute getAOMMethod_SuperMethodInvocation();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kr.ac.kaist.se.aom.structure.AOMMethod#isSuperFieldAccess <em>Super Field Access</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Super Field Access</em>'.
+	 * @see kr.ac.kaist.se.aom.structure.AOMMethod#isSuperFieldAccess()
+	 * @see #getAOMMethod()
+	 * @generated
+	 */
+	EAttribute getAOMMethod_SuperFieldAccess();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kr.ac.kaist.se.aom.structure.AOMMethod#isContainsFieldAssignment <em>Contains Field Assignment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Contains Field Assignment</em>'.
+	 * @see kr.ac.kaist.se.aom.structure.AOMMethod#isContainsFieldAssignment()
+	 * @see #getAOMMethod()
+	 * @generated
+	 */
+	EAttribute getAOMMethod_ContainsFieldAssignment();
+
+	/**
+	 * Returns the meta object for the reference '{@link kr.ac.kaist.se.aom.structure.AOMMethod#getGetter <em>Getter</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Getter</em>'.
+	 * @see kr.ac.kaist.se.aom.structure.AOMMethod#getGetter()
+	 * @see #getAOMMethod()
+	 * @generated
+	 */
+	EReference getAOMMethod_Getter();
+
+	/**
+	 * Returns the meta object for the reference '{@link kr.ac.kaist.se.aom.structure.AOMMethod#getSetter <em>Setter</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Setter</em>'.
+	 * @see kr.ac.kaist.se.aom.structure.AOMMethod#getSetter()
+	 * @see #getAOMMethod()
+	 * @generated
+	 */
+	EReference getAOMMethod_Setter();
+
+	/**
+	 * Returns the meta object for the reference '{@link kr.ac.kaist.se.aom.structure.AOMMethod#getDelegate <em>Delegate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Delegate</em>'.
+	 * @see kr.ac.kaist.se.aom.structure.AOMMethod#getDelegate()
+	 * @see #getAOMMethod()
+	 * @generated
+	 */
+	EReference getAOMMethod_Delegate();
+
+	/**
 	 * Returns the meta object for class '{@link kr.ac.kaist.se.aom.structure.AOMScope <em>AOM Scope</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1474,6 +1705,17 @@ public interface StructurePackage extends EPackage {
 	EReference getAOMScope_StaticFieldAccesses();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link kr.ac.kaist.se.aom.structure.AOMScope#getLocalVariableAccesses <em>Local Variable Accesses</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Local Variable Accesses</em>'.
+	 * @see kr.ac.kaist.se.aom.structure.AOMScope#getLocalVariableAccesses()
+	 * @see #getAOMScope()
+	 * @generated
+	 */
+	EReference getAOMScope_LocalVariableAccesses();
+
+	/**
 	 * Returns the meta object for class '{@link kr.ac.kaist.se.aom.structure.AOMParameter <em>AOM Parameter</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1503,6 +1745,17 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getAOMVariableDef();
+
+	/**
+	 * Returns the meta object for the reference list '{@link kr.ac.kaist.se.aom.structure.AOMVariableDef#getReferer <em>Referer</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Referer</em>'.
+	 * @see kr.ac.kaist.se.aom.structure.AOMVariableDef#getReferer()
+	 * @see #getAOMVariableDef()
+	 * @generated
+	 */
+	EReference getAOMVariableDef_Referer();
 
 	/**
 	 * Returns the meta object for class '{@link kr.ac.kaist.se.aom.structure.AOMLocalVariable <em>AOM Local Variable</em>}'.
@@ -1587,6 +1840,49 @@ public interface StructurePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getIndexedElement_Index();
+
+	/**
+	 * Returns the meta object for class '{@link kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess <em>AOM Local Variable Access</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>AOM Local Variable Access</em>'.
+	 * @see kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess
+	 * @generated
+	 */
+	EClass getAOMLocalVariableAccess();
+
+	/**
+	 * Returns the meta object for the reference '{@link kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess#getAccessedVariableDef <em>Accessed Variable Def</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Accessed Variable Def</em>'.
+	 * @see kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess#getAccessedVariableDef()
+	 * @see #getAOMLocalVariableAccess()
+	 * @generated
+	 */
+	EReference getAOMLocalVariableAccess_AccessedVariableDef();
+
+	/**
+	 * Returns the meta object for the container reference '{@link kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess#getAccessingScope <em>Accessing Scope</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Accessing Scope</em>'.
+	 * @see kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess#getAccessingScope()
+	 * @see #getAOMLocalVariableAccess()
+	 * @generated
+	 */
+	EReference getAOMLocalVariableAccess_AccessingScope();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess#isParameterAccess <em>Parameter Access</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Parameter Access</em>'.
+	 * @see kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess#isParameterAccess()
+	 * @see #getAOMLocalVariableAccess()
+	 * @generated
+	 */
+	EAttribute getAOMLocalVariableAccess_ParameterAccess();
 
 	/**
 	 * Returns the meta object for enum '{@link kr.ac.kaist.se.aom.structure.AOMModifier <em>AOM Modifier</em>}'.
@@ -1955,6 +2251,62 @@ public interface StructurePackage extends EPackage {
 		EAttribute AOM_METHOD__CONSTRUCTOR = eINSTANCE.getAOMMethod_Constructor();
 
 		/**
+		 * The meta object literal for the '<em><b>Synchronized</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute AOM_METHOD__SYNCHRONIZED = eINSTANCE.getAOMMethod_Synchronized();
+
+		/**
+		 * The meta object literal for the '<em><b>Super Method Invocation</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute AOM_METHOD__SUPER_METHOD_INVOCATION = eINSTANCE.getAOMMethod_SuperMethodInvocation();
+
+		/**
+		 * The meta object literal for the '<em><b>Super Field Access</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute AOM_METHOD__SUPER_FIELD_ACCESS = eINSTANCE.getAOMMethod_SuperFieldAccess();
+
+		/**
+		 * The meta object literal for the '<em><b>Contains Field Assignment</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute AOM_METHOD__CONTAINS_FIELD_ASSIGNMENT = eINSTANCE.getAOMMethod_ContainsFieldAssignment();
+
+		/**
+		 * The meta object literal for the '<em><b>Getter</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference AOM_METHOD__GETTER = eINSTANCE.getAOMMethod_Getter();
+
+		/**
+		 * The meta object literal for the '<em><b>Setter</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference AOM_METHOD__SETTER = eINSTANCE.getAOMMethod_Setter();
+
+		/**
+		 * The meta object literal for the '<em><b>Delegate</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference AOM_METHOD__DELEGATE = eINSTANCE.getAOMMethod_Delegate();
+
+		/**
 		 * The meta object literal for the '{@link kr.ac.kaist.se.aom.structure.impl.AOMScopeImpl <em>AOM Scope</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2005,6 +2357,14 @@ public interface StructurePackage extends EPackage {
 		EReference AOM_SCOPE__STATIC_FIELD_ACCESSES = eINSTANCE.getAOMScope_StaticFieldAccesses();
 
 		/**
+		 * The meta object literal for the '<em><b>Local Variable Accesses</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference AOM_SCOPE__LOCAL_VARIABLE_ACCESSES = eINSTANCE.getAOMScope_LocalVariableAccesses();
+
+		/**
 		 * The meta object literal for the '{@link kr.ac.kaist.se.aom.structure.impl.AOMParameterImpl <em>AOM Parameter</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2031,6 +2391,14 @@ public interface StructurePackage extends EPackage {
 		 * @generated
 		 */
 		EClass AOM_VARIABLE_DEF = eINSTANCE.getAOMVariableDef();
+
+		/**
+		 * The meta object literal for the '<em><b>Referer</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference AOM_VARIABLE_DEF__REFERER = eINSTANCE.getAOMVariableDef_Referer();
 
 		/**
 		 * The meta object literal for the '{@link kr.ac.kaist.se.aom.structure.impl.AOMLocalVariableImpl <em>AOM Local Variable</em>}' class.
@@ -2103,6 +2471,40 @@ public interface StructurePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute INDEXED_ELEMENT__INDEX = eINSTANCE.getIndexedElement_Index();
+
+		/**
+		 * The meta object literal for the '{@link kr.ac.kaist.se.aom.structure.impl.AOMLocalVariableAccessImpl <em>AOM Local Variable Access</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kr.ac.kaist.se.aom.structure.impl.AOMLocalVariableAccessImpl
+		 * @see kr.ac.kaist.se.aom.structure.impl.StructurePackageImpl#getAOMLocalVariableAccess()
+		 * @generated
+		 */
+		EClass AOM_LOCAL_VARIABLE_ACCESS = eINSTANCE.getAOMLocalVariableAccess();
+
+		/**
+		 * The meta object literal for the '<em><b>Accessed Variable Def</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference AOM_LOCAL_VARIABLE_ACCESS__ACCESSED_VARIABLE_DEF = eINSTANCE.getAOMLocalVariableAccess_AccessedVariableDef();
+
+		/**
+		 * The meta object literal for the '<em><b>Accessing Scope</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference AOM_LOCAL_VARIABLE_ACCESS__ACCESSING_SCOPE = eINSTANCE.getAOMLocalVariableAccess_AccessingScope();
+
+		/**
+		 * The meta object literal for the '<em><b>Parameter Access</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute AOM_LOCAL_VARIABLE_ACCESS__PARAMETER_ACCESS = eINSTANCE.getAOMLocalVariableAccess_ParameterAccess();
 
 		/**
 		 * The meta object literal for the '{@link kr.ac.kaist.se.aom.structure.AOMModifier <em>AOM Modifier</em>}' enum.

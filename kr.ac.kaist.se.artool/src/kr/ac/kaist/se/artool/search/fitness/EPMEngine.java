@@ -204,12 +204,9 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 	}
 	
 	
-	
 	public float calculate()
 	{
 		Matrix intersectMatrix = getIntersectMatrix();
-		
-		
 		
 		no.uib.cipr.matrix.Vector rowSumColVector = new DenseVector(sts.entities.size());
 		rowSumColVector = entityMatrix.mult(oneVector, rowSumColVector);

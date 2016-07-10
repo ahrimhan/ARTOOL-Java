@@ -18,11 +18,11 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.AbstractObjectModel#getClasses <em>Classes</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.AbstractObjectModel#getExternalTypes <em>External Types</em>}</li>
  * </ul>
- * </p>
  *
  * @see kr.ac.kaist.se.aom.AomPackage#getAbstractObjectModel()
  * @model

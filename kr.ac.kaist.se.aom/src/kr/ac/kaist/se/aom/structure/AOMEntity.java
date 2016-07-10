@@ -15,11 +15,11 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMEntity#getOccurrence <em>Occurrence</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMEntity#isPublicEntity <em>Public Entity</em>}</li>
  * </ul>
- * </p>
  *
  * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMEntity()
  * @model abstract="true"

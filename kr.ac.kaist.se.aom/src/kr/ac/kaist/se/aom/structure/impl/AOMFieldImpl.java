@@ -16,6 +16,7 @@ import kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMEntity;
 import kr.ac.kaist.se.aom.structure.AOMField;
+import kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess;
 import kr.ac.kaist.se.aom.structure.AOMNamedElement;
 import kr.ac.kaist.se.aom.structure.IndexedElement;
 import kr.ac.kaist.se.aom.structure.StructurePackage;
@@ -39,8 +40,10 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getName <em>Name</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getReferer <em>Referer</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getMeasuredDataSet <em>Measured Data Set</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getIndex <em>Index</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getOccurrence <em>Occurrence</em>}</li>
@@ -48,7 +51,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getOwner <em>Owner</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMFieldImpl#getStaticReferer <em>Static Referer</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -72,6 +74,16 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getReferer() <em>Referer</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getReferer()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<AOMLocalVariableAccess> referer;
 
 	/**
 	 * The cached value of the '{@link #getMeasuredDataSet() <em>Measured Data Set</em>}' map.
@@ -181,6 +193,18 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, StructurePackage.AOM_FIELD__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<AOMLocalVariableAccess> getReferer() {
+		if (referer == null) {
+			referer = new EObjectWithInverseResolvingEList<AOMLocalVariableAccess>(AOMLocalVariableAccess.class, this, StructurePackage.AOM_FIELD__REFERER, StructurePackage.AOM_LOCAL_VARIABLE_ACCESS__ACCESSED_VARIABLE_DEF);
+		}
+		return referer;
 	}
 
 	/**
@@ -324,6 +348,8 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case StructurePackage.AOM_FIELD__REFERER:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getReferer()).basicAdd(otherEnd, msgs);
 			case StructurePackage.AOM_FIELD__OWNER:
 				if (eInternalContainer() != null)
 					msgs = eBasicRemoveFromContainer(msgs);
@@ -342,6 +368,8 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case StructurePackage.AOM_FIELD__REFERER:
+				return ((InternalEList<?>)getReferer()).basicRemove(otherEnd, msgs);
 			case StructurePackage.AOM_FIELD__MEASURED_DATA_SET:
 				return ((InternalEList<?>)getMeasuredDataSet()).basicRemove(otherEnd, msgs);
 			case StructurePackage.AOM_FIELD__OWNER:
@@ -376,6 +404,8 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 		switch (featureID) {
 			case StructurePackage.AOM_FIELD__NAME:
 				return getName();
+			case StructurePackage.AOM_FIELD__REFERER:
+				return getReferer();
 			case StructurePackage.AOM_FIELD__MEASURED_DATA_SET:
 				if (coreType) return getMeasuredDataSet();
 				else return getMeasuredDataSet().map();
@@ -404,6 +434,10 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 		switch (featureID) {
 			case StructurePackage.AOM_FIELD__NAME:
 				setName((String)newValue);
+				return;
+			case StructurePackage.AOM_FIELD__REFERER:
+				getReferer().clear();
+				getReferer().addAll((Collection<? extends AOMLocalVariableAccess>)newValue);
 				return;
 			case StructurePackage.AOM_FIELD__MEASURED_DATA_SET:
 				((EStructuralFeature.Setting)getMeasuredDataSet()).set(newValue);
@@ -439,6 +473,9 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 			case StructurePackage.AOM_FIELD__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case StructurePackage.AOM_FIELD__REFERER:
+				getReferer().clear();
+				return;
 			case StructurePackage.AOM_FIELD__MEASURED_DATA_SET:
 				getMeasuredDataSet().clear();
 				return;
@@ -471,6 +508,8 @@ public class AOMFieldImpl extends AOMTypedElementImpl implements AOMField {
 		switch (featureID) {
 			case StructurePackage.AOM_FIELD__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case StructurePackage.AOM_FIELD__REFERER:
+				return referer != null && !referer.isEmpty();
 			case StructurePackage.AOM_FIELD__MEASURED_DATA_SET:
 				return measuredDataSet != null && !measuredDataSet.isEmpty();
 			case StructurePackage.AOM_FIELD__INDEX:

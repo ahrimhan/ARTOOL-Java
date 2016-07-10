@@ -15,13 +15,13 @@ import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.SystemEntitySet;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
 import kr.ac.kaist.se.artool.search.MoveMethodEventListener;
-import kr.ac.kaist.se.artool.search.candidate.DeltaMatrixEngine.MatrixTuple;
+import kr.ac.kaist.se.artool.search.candidate.JavaDeltaMatrixEngine.MatrixTuple;
 import no.uib.cipr.matrix.DenseMatrix;
 import no.uib.cipr.matrix.Matrix;
 import no.uib.cipr.matrix.MatrixEntry;
 import no.uib.cipr.matrix.sparse.LinkedSparseMatrix;
 
-public class ExternalDependencyEngine extends DeltaMatrixEngine {
+public class ExternalDependencyEngine extends JavaDeltaMatrixEngine {
 
 	public ExternalDependencyEngine(SystemEntitySet sts)
 	{

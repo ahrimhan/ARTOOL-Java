@@ -18,6 +18,7 @@ import kr.ac.kaist.se.aom.structure.AOMEntity;
 import kr.ac.kaist.se.aom.structure.AOMExternalType;
 import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMLocalVariable;
+import kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.aom.structure.AOMModifier;
 import kr.ac.kaist.se.aom.structure.AOMNamedElement;
@@ -141,6 +142,13 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 	 * @generated
 	 */
 	private EClass indexedElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass aomLocalVariableAccessEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -586,6 +594,69 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getAOMMethod_Synchronized() {
+		return (EAttribute)aomMethodEClass.getEStructuralFeatures().get(15);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAOMMethod_SuperMethodInvocation() {
+		return (EAttribute)aomMethodEClass.getEStructuralFeatures().get(16);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAOMMethod_SuperFieldAccess() {
+		return (EAttribute)aomMethodEClass.getEStructuralFeatures().get(17);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAOMMethod_ContainsFieldAssignment() {
+		return (EAttribute)aomMethodEClass.getEStructuralFeatures().get(18);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAOMMethod_Getter() {
+		return (EReference)aomMethodEClass.getEStructuralFeatures().get(19);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAOMMethod_Setter() {
+		return (EReference)aomMethodEClass.getEStructuralFeatures().get(20);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAOMMethod_Delegate() {
+		return (EReference)aomMethodEClass.getEStructuralFeatures().get(21);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getAOMScope() {
 		return aomScopeEClass;
 	}
@@ -640,6 +711,15 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getAOMScope_LocalVariableAccesses() {
+		return (EReference)aomScopeEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getAOMParameter() {
 		return aomParameterEClass;
 	}
@@ -660,6 +740,15 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 	 */
 	public EClass getAOMVariableDef() {
 		return aomVariableDefEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAOMVariableDef_Referer() {
+		return (EReference)aomVariableDefEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -732,6 +821,42 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 	 */
 	public EAttribute getIndexedElement_Index() {
 		return (EAttribute)indexedElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getAOMLocalVariableAccess() {
+		return aomLocalVariableAccessEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAOMLocalVariableAccess_AccessedVariableDef() {
+		return (EReference)aomLocalVariableAccessEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAOMLocalVariableAccess_AccessingScope() {
+		return (EReference)aomLocalVariableAccessEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAOMLocalVariableAccess_ParameterAccess() {
+		return (EAttribute)aomLocalVariableAccessEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -817,6 +942,13 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 		createEAttribute(aomMethodEClass, AOM_METHOD__LOC);
 		createEAttribute(aomMethodEClass, AOM_METHOD__STATIC);
 		createEAttribute(aomMethodEClass, AOM_METHOD__CONSTRUCTOR);
+		createEAttribute(aomMethodEClass, AOM_METHOD__SYNCHRONIZED);
+		createEAttribute(aomMethodEClass, AOM_METHOD__SUPER_METHOD_INVOCATION);
+		createEAttribute(aomMethodEClass, AOM_METHOD__SUPER_FIELD_ACCESS);
+		createEAttribute(aomMethodEClass, AOM_METHOD__CONTAINS_FIELD_ASSIGNMENT);
+		createEReference(aomMethodEClass, AOM_METHOD__GETTER);
+		createEReference(aomMethodEClass, AOM_METHOD__SETTER);
+		createEReference(aomMethodEClass, AOM_METHOD__DELEGATE);
 
 		aomScopeEClass = createEClass(AOM_SCOPE);
 		createEReference(aomScopeEClass, AOM_SCOPE__VARIABLES);
@@ -824,11 +956,13 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 		createEReference(aomScopeEClass, AOM_SCOPE__STATIC_METHOD_CALLS);
 		createEReference(aomScopeEClass, AOM_SCOPE__DYNAMIC_METHOD_CALLS);
 		createEReference(aomScopeEClass, AOM_SCOPE__STATIC_FIELD_ACCESSES);
+		createEReference(aomScopeEClass, AOM_SCOPE__LOCAL_VARIABLE_ACCESSES);
 
 		aomParameterEClass = createEClass(AOM_PARAMETER);
 		createEReference(aomParameterEClass, AOM_PARAMETER__OWNER);
 
 		aomVariableDefEClass = createEClass(AOM_VARIABLE_DEF);
+		createEReference(aomVariableDefEClass, AOM_VARIABLE_DEF__REFERER);
 
 		aomLocalVariableEClass = createEClass(AOM_LOCAL_VARIABLE);
 		createEReference(aomLocalVariableEClass, AOM_LOCAL_VARIABLE__OWNER);
@@ -841,6 +975,11 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 
 		indexedElementEClass = createEClass(INDEXED_ELEMENT);
 		createEAttribute(indexedElementEClass, INDEXED_ELEMENT__INDEX);
+
+		aomLocalVariableAccessEClass = createEClass(AOM_LOCAL_VARIABLE_ACCESS);
+		createEReference(aomLocalVariableAccessEClass, AOM_LOCAL_VARIABLE_ACCESS__ACCESSED_VARIABLE_DEF);
+		createEReference(aomLocalVariableAccessEClass, AOM_LOCAL_VARIABLE_ACCESS__ACCESSING_SCOPE);
+		createEAttribute(aomLocalVariableAccessEClass, AOM_LOCAL_VARIABLE_ACCESS__PARAMETER_ACCESS);
 
 		// Create enums
 		aomModifierEEnum = createEEnum(AOM_MODIFIER);
@@ -946,6 +1085,13 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 		initEAttribute(getAOMMethod_LOC(), ecorePackage.getEInt(), "LOC", null, 0, 1, AOMMethod.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAOMMethod_Static(), ecorePackage.getEBoolean(), "static", null, 0, 1, AOMMethod.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAOMMethod_Constructor(), ecorePackage.getEBoolean(), "constructor", null, 0, 1, AOMMethod.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAOMMethod_Synchronized(), ecorePackage.getEBoolean(), "synchronized", "false", 0, 1, AOMMethod.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAOMMethod_SuperMethodInvocation(), ecorePackage.getEBoolean(), "superMethodInvocation", "false", 0, 1, AOMMethod.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAOMMethod_SuperFieldAccess(), ecorePackage.getEBoolean(), "superFieldAccess", "false", 0, 1, AOMMethod.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAOMMethod_ContainsFieldAssignment(), ecorePackage.getEBoolean(), "containsFieldAssignment", "false", 0, 1, AOMMethod.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAOMMethod_Getter(), this.getAOMField(), null, "getter", null, 0, 1, AOMMethod.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAOMMethod_Setter(), this.getAOMField(), null, "setter", null, 0, 1, AOMMethod.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAOMMethod_Delegate(), this.getAOMMethod(), null, "delegate", null, 0, 1, AOMMethod.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(aomScopeEClass, AOMScope.class, "AOMScope", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAOMScope_Variables(), this.getAOMLocalVariable(), this.getAOMLocalVariable_Owner(), "variables", null, 0, -1, AOMScope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -953,11 +1099,13 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 		initEReference(getAOMScope_StaticMethodCalls(), theStaticmodelPackage.getStaticMethodCall(), theStaticmodelPackage.getStaticMethodCall_Caller(), "staticMethodCalls", null, 0, -1, AOMScope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAOMScope_DynamicMethodCalls(), theDynamicmodelPackage.getDynamicMethodCall(), theDynamicmodelPackage.getDynamicMethodCall_Caller(), "dynamicMethodCalls", null, 0, -1, AOMScope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAOMScope_StaticFieldAccesses(), theStaticmodelPackage.getStaticFieldAccess(), theStaticmodelPackage.getStaticFieldAccess_AccessingScope(), "staticFieldAccesses", null, 0, -1, AOMScope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAOMScope_LocalVariableAccesses(), this.getAOMLocalVariableAccess(), this.getAOMLocalVariableAccess_AccessingScope(), "localVariableAccesses", null, 0, -1, AOMScope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(aomParameterEClass, AOMParameter.class, "AOMParameter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAOMParameter_Owner(), this.getAOMMethod(), this.getAOMMethod_Parameters(), "owner", null, 0, 1, AOMParameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(aomVariableDefEClass, AOMVariableDef.class, "AOMVariableDef", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getAOMVariableDef_Referer(), this.getAOMLocalVariableAccess(), this.getAOMLocalVariableAccess_AccessedVariableDef(), "referer", null, 0, -1, AOMVariableDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(aomLocalVariableEClass, AOMLocalVariable.class, "AOMLocalVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAOMLocalVariable_Owner(), this.getAOMScope(), this.getAOMScope_Variables(), "owner", null, 0, 1, AOMLocalVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -970,6 +1118,11 @@ public class StructurePackageImpl extends EPackageImpl implements StructurePacka
 
 		initEClass(indexedElementEClass, IndexedElement.class, "IndexedElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getIndexedElement_Index(), ecorePackage.getEInt(), "index", null, 0, 1, IndexedElement.class, !IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(aomLocalVariableAccessEClass, AOMLocalVariableAccess.class, "AOMLocalVariableAccess", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getAOMLocalVariableAccess_AccessedVariableDef(), this.getAOMVariableDef(), this.getAOMVariableDef_Referer(), "accessedVariableDef", null, 0, 1, AOMLocalVariableAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAOMLocalVariableAccess_AccessingScope(), this.getAOMScope(), this.getAOMScope_LocalVariableAccesses(), "accessingScope", null, 0, 1, AOMLocalVariableAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAOMLocalVariableAccess_ParameterAccess(), ecorePackage.getEBoolean(), "parameterAccess", null, 0, 1, AOMLocalVariableAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(aomModifierEEnum, AOMModifier.class, "AOMModifier");

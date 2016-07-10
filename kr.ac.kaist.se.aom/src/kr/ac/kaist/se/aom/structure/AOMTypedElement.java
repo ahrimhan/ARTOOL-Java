@@ -16,10 +16,10 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMTypedElement#getType <em>Type</em>}</li>
  * </ul>
- * </p>
  *
  * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMTypedElement()
  * @model abstract="true"

@@ -14,10 +14,10 @@ package kr.ac.kaist.se.aom.structure;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMNamedElement#getName <em>Name</em>}</li>
  * </ul>
- * </p>
  *
  * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMNamedElement()
  * @model abstract="true"

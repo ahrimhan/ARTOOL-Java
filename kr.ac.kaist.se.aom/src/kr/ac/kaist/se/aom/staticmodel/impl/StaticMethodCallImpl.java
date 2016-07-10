@@ -28,6 +28,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.staticmodel.impl.StaticMethodCallImpl#getCaller <em>Caller</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.staticmodel.impl.StaticMethodCallImpl#getCallee <em>Callee</em>}</li>
@@ -36,7 +37,6 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
  *   <li>{@link kr.ac.kaist.se.aom.staticmodel.impl.StaticMethodCallImpl#getColumnNumber <em>Column Number</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.staticmodel.impl.StaticMethodCallImpl#getFileName <em>File Name</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

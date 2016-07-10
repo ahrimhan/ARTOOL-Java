@@ -20,6 +20,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.staticmodel.StaticMethodCall#getCaller <em>Caller</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.staticmodel.StaticMethodCall#getCallee <em>Callee</em>}</li>
@@ -28,7 +29,6 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
  *   <li>{@link kr.ac.kaist.se.aom.staticmodel.StaticMethodCall#getColumnNumber <em>Column Number</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.staticmodel.StaticMethodCall#getFileName <em>File Name</em>}</li>
  * </ul>
- * </p>
  *
  * @see kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage#getStaticMethodCall()
  * @model

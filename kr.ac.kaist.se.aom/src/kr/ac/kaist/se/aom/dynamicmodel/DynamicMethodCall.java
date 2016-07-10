@@ -19,6 +19,7 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall#getCaller <em>Caller</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall#getCallee <em>Callee</em>}</li>
@@ -27,7 +28,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall#getStatic <em>Static</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.dynamicmodel.DynamicMethodCall#getTid <em>Tid</em>}</li>
  * </ul>
- * </p>
  *
  * @see kr.ac.kaist.se.aom.dynamicmodel.DynamicmodelPackage#getDynamicMethodCall()
  * @model

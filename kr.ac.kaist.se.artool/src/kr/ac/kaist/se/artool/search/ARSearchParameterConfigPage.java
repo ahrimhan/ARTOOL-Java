@@ -1,26 +1,30 @@
-package kr.ac.kaist.se.artool.engine;
+package kr.ac.kaist.se.artool.search;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import kr.ac.kaist.se.artool.search.ARSearchMain;
-import kr.ac.kaist.se.artool.search.ARSearchMain.CandidateSelectionType;
-
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+import org.osgi.service.prefs.BackingStoreException;
+
+import kr.ac.kaist.se.artool.Activator;
+import kr.ac.kaist.se.artool.search.ARSearchMain.CandidateSelectionType;
 
 public class ARSearchParameterConfigPage extends WizardPage {
 
@@ -32,8 +36,6 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	
 	
 	
-//	private Combo fitnessFunction;
-	private int fitnessSelectionBits = 0;
 	private String[] fitnessFunctionItems = {
 			"EPM (Entitiy Placement Metric)",
 //			"QMOOD-Reusability",
@@ -43,10 +45,7 @@ public class ARSearchParameterConfigPage extends WizardPage {
 			"MPC (Message Passing Coupling)",
 			"Connectivity"
 	};
-	
-	
-	private int searchTechniqueBits = 0;
-	
+		
 	private String[] searchTechniqueItems = {
 			"First-ascent hill-climbing",
 			"Steepest-ascent hill-climbing",
@@ -56,27 +55,54 @@ public class ARSearchParameterConfigPage extends WizardPage {
 			"Multiple-restart hill-climbing",
 			*/
 	};
-
-	
-	private int candidateSelectionBits = 0;
 	
 	private String[] candidateSelectionItems = {
 			"Random",
-			//"External Dependency",
-			"Delta Table"
+			"Delta Table",
+			"Exhaustive"
 	};
 	
-	private Text maxIterationCount;
-	private Text maxCandidateCount;
-	private Text saMaxPermissibleIdelIteration;
-	
-	//private Button useDeltaTableButton;
+	private int fitnessSelectionBits = 0;
+	private int searchTechniqueBits = 0;
+	private int candidateSelectionBits = 0;
 
+	private int maxIterationCount;
+	private int maxCandidateCount;
+	private int saMaxPermissibleIdelIteration;
+	
+	public void saveSettings() {
+		// saves plugin preferences at the workspace level
+		IEclipsePreferences prefs =
+				InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID); // does all the above behind the scenes
+
+		prefs.putInt("fitnessSelectionBits", fitnessSelectionBits);
+		prefs.putInt("searchTechniqueBits", searchTechniqueBits);
+		prefs.putInt("candidateSelectionBits", candidateSelectionBits);
+		prefs.putInt("maxIterationCount", maxIterationCount);
+		prefs.putInt("maxCandidateCount", maxCandidateCount);
+		prefs.putInt("saMaxPermissibleIdelIteration", saMaxPermissibleIdelIteration);
+		try {
+			prefs.flush();
+		} catch(BackingStoreException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void loadSettings() {
+		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
+
+		fitnessSelectionBits = prefs.getInt("fitnessSelectionBits", 0xffff);
+		searchTechniqueBits = prefs.getInt("searchTechniqueBits", 0xffff);
+		candidateSelectionBits = prefs.getInt("candidateSelectionBits", 0xffff);
+		maxIterationCount = prefs.getInt("maxIterationCount", 100);
+		maxCandidateCount = prefs.getInt("maxCandidateCount", 1000);
+		saMaxPermissibleIdelIteration = prefs.getInt("saMaxPermissibleIdelIteration", 500);
+	}
+	
 	@Override
 	public void createControl(Composite parent) {
 		// create the composite to hold the widgets
 		Composite globalComposite = new Composite(parent, SWT.NONE);
-		fitnessSelectionBits = 0;
 		// create the desired layout for this wizard page
 		GridLayout gl1 = new GridLayout();
 		gl1.numColumns = 1;
@@ -93,12 +119,6 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		composite.setLayout(gl);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		// create the widgets and their grid data objects
-		// Date of travel
-//		new Label(composite, SWT.NONE).setText("Fitness Function:");
-//		fitnessFunction = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.DROP_DOWN);
-//		fitnessFunction.setItems(fitnessFunctionItems);
-//		fitnessFunction.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 	    Group group1 = new Group(composite, SWT.SHADOW_IN);
 		GridData gridDataGroup1 = new GridData(GridData.FILL_HORIZONTAL);
@@ -111,6 +131,10 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	    	final int j = i;
 	    	Button btn = new Button(group1, SWT.CHECK);
 	    	btn.setText(fitnessFunctionItems[i]);
+	    	
+	    	if( (fitnessSelectionBits & (1 << j)) != 0 )	    	
+	    		btn.setSelection(true);
+	    	
 	    	btn.addSelectionListener(new SelectionListener(){
 	    		@Override
 	    		public void widgetDefaultSelected(SelectionEvent e) {
@@ -122,9 +146,6 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	    			fitnessSelectionBits ^= 1 << j;
 	    		}
 	    	});
-	    	btn.setSelection(true);
-	    	
-	    	fitnessSelectionBits |= 1 << j;
 	    }
 	    
 	    
@@ -142,6 +163,10 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	    	final int j = i;
 	    	Button btn = new Button(group1, SWT.CHECK);
 	    	btn.setText(searchTechniqueItems[i]);
+	    	
+	    	if( (searchTechniqueBits & (1 << j)) != 0 )	    	
+	    		btn.setSelection(true);
+	    	
 	    	btn.addSelectionListener(new SelectionListener(){
 	    		@Override
 	    		public void widgetDefaultSelected(SelectionEvent e) {
@@ -153,9 +178,6 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	    			searchTechniqueBits ^= 1 << j;
 	    		}
 	    	});
-	    	btn.setSelection(true);
-	    	
-	    	searchTechniqueBits |= 1 << j;
 	    }
 	    
 	    
@@ -177,6 +199,10 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	    	final int j = i;
 	    	Button btn = new Button(group1, SWT.CHECK);
 	    	btn.setText(candidateSelectionItems[i]);
+	    	
+	    	if( (candidateSelectionBits & (1 << j)) != 0 )	    	
+	    		btn.setSelection(true);
+	    	
 	    	btn.addSelectionListener(new SelectionListener(){
 	    		@Override
 	    		public void widgetDefaultSelected(SelectionEvent e) {
@@ -188,12 +214,9 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	    			candidateSelectionBits ^= 1 << j;
 	    		}
 	    	});
-	    	btn.setSelection(true);
 	    	
-	    	candidateSelectionBits |= 1 << j;
+
 	    }
-	    
-	    
 	    
 	    
 	    composite = new Group(globalComposite, SWT.SHADOW_IN);
@@ -201,66 +224,85 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		composite.setLayout(gl);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
+		VerifyListener verifyListener = new VerifyListener()
+		{
+			@Override
+			public void verifyText(VerifyEvent e) {
+				String string = e.text;
+				char[] chars = new char[string.length()];
+				string.getChars(0, chars.length, chars, 0);
+				for (int i = 0; i < chars.length; i++) {
+					if (!('0' <= chars[i] && chars[i] <= '9')) {
+						e.doit = false;
+						return;
+					}
+				}	
+			}	
+		};
+		
 		
 		new Label(composite, SWT.NONE).setText("Max Iteraction Count:");
-		maxIterationCount = new Text(composite, SWT.BORDER | SWT.SINGLE);
-		maxIterationCount.setMessage("Set Max-Iteration Counts. Default is 1000");
-		maxIterationCount.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		maxIterationCount.addListener(SWT.Verify, new Listener() {
-	        public void handleEvent(Event e) {
-	          String string = e.text;
-	          char[] chars = new char[string.length()];
-	          string.getChars(0, chars.length, chars, 0);
-	          for (int i = 0; i < chars.length; i++) {
-	            if (!('0' <= chars[i] && chars[i] <= '9')) {
-	              e.doit = false;
-	              return;
-	            }
-	          }
-	        }
-	      });
-		
+		Text maxIterationCountText = new Text(composite, SWT.BORDER | SWT.SINGLE);
+		maxIterationCountText.setMessage("Set Max-Iteration Counts. Default is 1000");
+		maxIterationCountText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		maxIterationCountText.setText(Integer.toString(maxIterationCount));
+		maxIterationCountText.addVerifyListener(verifyListener);
+		maxIterationCountText.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				Text text = (Text)e.widget;
+				try
+				{
+					maxIterationCount = Integer.parseInt(text.toString());
+				}
+				catch(Exception ex)
+				{
+					ex.printStackTrace();
+				}
+			}
+		});
 		
 		new Label(composite, SWT.NONE).setText("Max Candidates Count:");
-		maxCandidateCount = new Text(composite, SWT.BORDER | SWT.SINGLE);
-		maxCandidateCount.setMessage("Set Max-Candidate Counts. Default is 100");
-		maxCandidateCount.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		maxCandidateCount.addListener(SWT.Verify, new Listener() {
-	        public void handleEvent(Event e) {
-	          String string = e.text;
-	          char[] chars = new char[string.length()];
-	          string.getChars(0, chars.length, chars, 0);
-	          for (int i = 0; i < chars.length; i++) {
-	            if (!('0' <= chars[i] && chars[i] <= '9')) {
-	              e.doit = false;
-	              return;
-	            }
-	          }
-	        }
-	      });
-		
+		Text maxCandidateCountText = new Text(composite, SWT.BORDER | SWT.SINGLE);
+		maxCandidateCountText.setMessage("Set Max-Candidate Counts. Default is 100");
+		maxCandidateCountText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		maxCandidateCountText.setText(Integer.toString(maxCandidateCount));
+		maxCandidateCountText.addVerifyListener(verifyListener);
+		maxCandidateCountText.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				Text text = (Text)e.widget;
+				try
+				{
+					maxCandidateCount = Integer.parseInt(text.toString());
+				}
+				catch(Exception ex)
+				{
+					ex.printStackTrace();
+				}
+			}
+		});
 		
 		new Label(composite, SWT.NONE).setText("(SA) Permissible Idle Iteration Count:");
-		saMaxPermissibleIdelIteration = new Text(composite, SWT.BORDER | SWT.SINGLE);
-		saMaxPermissibleIdelIteration.setMessage("Set Max Permissible Idle Iterations. Default is 500");
-		saMaxPermissibleIdelIteration.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		saMaxPermissibleIdelIteration.addListener(SWT.Verify, new Listener() {
-	        public void handleEvent(Event e) {
-	          String string = e.text;
-	          char[] chars = new char[string.length()];
-	          string.getChars(0, chars.length, chars, 0);
-	          for (int i = 0; i < chars.length; i++) {
-	            if (!('0' <= chars[i] && chars[i] <= '9')) {
-	              e.doit = false;
-	              return;
-	            }
-	          }
-	        }
-	      });
-		
+		Text saMaxPermissibleIdelIterationText = new Text(composite, SWT.BORDER | SWT.SINGLE);
+		saMaxPermissibleIdelIterationText.setMessage("Set Max Permissible Idle Iterations. Default is 500");
+		saMaxPermissibleIdelIterationText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		saMaxPermissibleIdelIterationText.setText(Integer.toString(saMaxPermissibleIdelIteration));
+		saMaxPermissibleIdelIterationText.addVerifyListener(verifyListener);
+		saMaxPermissibleIdelIterationText.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				Text text = (Text)e.widget;
+				try
+				{
+					saMaxPermissibleIdelIteration = Integer.parseInt(text.toString());
+				}
+				catch(Exception ex)
+				{
+					ex.printStackTrace();
+				}
+			}
+		});
 		
 		/*
 		useDeltaTableButton = new Button(composite, SWT.CHECK);
@@ -356,11 +398,11 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		}
 		
 		
-		if( (searchTechniqueBits & (1 << 3)) != 0 )
-		{
-			type = ARSearchMain.SearchTechType.SELECT_FIRST_RESTART;
-			typeList.add(type);
-		}
+//		if( (searchTechniqueBits & (1 << 3)) != 0 )
+//		{
+//			type = ARSearchMain.SearchTechType.SELECT_FIRST_RESTART;
+//			typeList.add(type);
+//		}
 	
 		
 		return typeList;
@@ -385,58 +427,27 @@ public class ARSearchParameterConfigPage extends WizardPage {
 			typeList.add(type);
 		}
 		
+		if( (candidateSelectionBits & (1 << 2)) != 0 )
+		{
+			type = CandidateSelectionType.EXHAUSTIVE;
+			typeList.add(type);
+		}
 		
 		return typeList;
 	}
 
 
 	public int getMaxCandidateCount() {
-		int ret = 100;
-		
-		try
-		{
-			ret = Integer.parseInt(maxCandidateCount.getText());
-		}
-		catch(Exception e)
-		{
-			ret = 100;
-		}
-		
-		
-		return ret;
+		return maxCandidateCount;
 	}
 
 
-	public int getMaxIterationCount() {
-		int ret = 1000;
-		
-		try
-		{
-			ret = Integer.parseInt(maxIterationCount.getText());
-		}
-		catch(Exception e)
-		{
-			ret = 1000;
-		}
-		
-		
-		return ret;	
+	public int getMaxIterationCount() {		
+		return maxIterationCount;	
 	}
 
 
-	public int getSAPermissibleIdleIteration() {
-		int ret = 500;
-		
-		try
-		{
-			ret = Integer.parseInt(saMaxPermissibleIdelIteration.getText());
-		}
-		catch(Exception e)
-		{
-			ret = 500;
-		}
-		
-		
-		return ret;	
+	public int getSAPermissibleIdleIteration() {		
+		return saMaxPermissibleIdelIteration;	
 	}
 }

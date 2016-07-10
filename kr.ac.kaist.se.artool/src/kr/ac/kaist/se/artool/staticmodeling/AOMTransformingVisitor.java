@@ -5,27 +5,16 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import kr.ac.kaist.se.aom.AbstractObjectModel;
-import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
-import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
-import kr.ac.kaist.se.aom.staticmodel.StaticmodelFactory;
-import kr.ac.kaist.se.aom.structure.AOMClass;
-import kr.ac.kaist.se.aom.structure.AOMField;
-import kr.ac.kaist.se.aom.structure.AOMLocalVariable;
-import kr.ac.kaist.se.aom.structure.AOMMethod;
-import kr.ac.kaist.se.aom.structure.AOMModifier;
-import kr.ac.kaist.se.aom.structure.AOMParameter;
-import kr.ac.kaist.se.aom.structure.AOMScope;
-import kr.ac.kaist.se.aom.structure.AOMType;
-import kr.ac.kaist.se.aom.structure.StructureFactory;
-
 import org.eclipse.jdt.core.Signature;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ConstructorInvocation;
+import org.eclipse.jdt.core.dom.EnumDeclaration;
+import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.IBinding;
@@ -36,16 +25,36 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.Name;
+import org.eclipse.jdt.core.dom.PostfixExpression;
+import org.eclipse.jdt.core.dom.PrefixExpression;
+import org.eclipse.jdt.core.dom.PrefixExpression.Operator;
 import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
 import org.eclipse.jdt.core.dom.SuperFieldAccess;
+import org.eclipse.jdt.core.dom.SuperMethodInvocation;
+import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+
+import kr.ac.kaist.se.aom.AbstractObjectModel;
+import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
+import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
+import kr.ac.kaist.se.aom.staticmodel.StaticmodelFactory;
+import kr.ac.kaist.se.aom.structure.AOMClass;
+import kr.ac.kaist.se.aom.structure.AOMField;
+import kr.ac.kaist.se.aom.structure.AOMLocalVariable;
+import kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess;
+import kr.ac.kaist.se.aom.structure.AOMMethod;
+import kr.ac.kaist.se.aom.structure.AOMModifier;
+import kr.ac.kaist.se.aom.structure.AOMParameter;
+import kr.ac.kaist.se.aom.structure.AOMScope;
+import kr.ac.kaist.se.aom.structure.AOMType;
+import kr.ac.kaist.se.aom.structure.StructureFactory;
 
 public class AOMTransformingVisitor extends ASTVisitor {
 
@@ -147,7 +156,7 @@ public class AOMTransformingVisitor extends ASTVisitor {
 	{
 		private AOMScope scope;
 		private AbstractObjectModel aom;
-
+		private TypeDeclaration parentTypeDecl;
 		
 		private MethodVisitor()
 		{
@@ -155,7 +164,7 @@ public class AOMTransformingVisitor extends ASTVisitor {
 		}
 		
 		private static MethodVisitor instance;
-		public static MethodVisitor getInstance(AbstractObjectModel aom, AOMScope scope)
+		public static MethodVisitor getInstance(AbstractObjectModel aom, AOMScope scope, TypeDeclaration parentTypeDecl)
 		{
 			if( instance == null )
 			{
@@ -163,10 +172,24 @@ public class AOMTransformingVisitor extends ASTVisitor {
 			}
 			instance.scope = scope;
 			instance.aom = aom;
+			instance.parentTypeDecl = parentTypeDecl;
+			scope.getOwner().setSuperFieldAccess(false);
+			scope.getOwner().setSuperMethodInvocation(false);
+			scope.getOwner().setContainsFieldAssignment(false);
 			
 			return instance;
 		}
 		
+		
+		
+		@Override
+		public boolean visit(SuperMethodInvocation node)
+		{
+			scope.getOwner().setSuperMethodInvocation(true);
+			return super.visit(node);
+		}
+		
+		@Override
 		public boolean visit(MethodInvocation node)
 		{
 			ITypeBinding typeBinding = null;
@@ -268,8 +291,77 @@ public class AOMTransformingVisitor extends ASTVisitor {
 		}
 		
 		
+		private void setupContainsFieldAssignments(Expression lhs)
+		{
+			if( lhs instanceof Name )
+			{
+				Name name = (Name)lhs;
+				IBinding binding = name.resolveBinding();
+				if( binding instanceof IVariableBinding )
+				{
+					IVariableBinding ivb = (IVariableBinding)binding;
+					if( ivb.getDeclaringClass() != null )
+					{
+						ITypeBinding tb1 = ivb.getDeclaringClass().getErasure();
+						ITypeBinding curTb = parentTypeDecl.resolveBinding().getErasure();
+						
+						while ( curTb != null )
+						{
+							if( tb1.isEqualTo(curTb) )
+							{
+								scope.getOwner().setContainsFieldAssignment(true);
+							}
+							curTb = curTb.getSuperclass();
+						}			
+					}
+				}
+			}
+			else if( lhs instanceof FieldAccess )
+			{
+				FieldAccess fa = (FieldAccess)lhs;
+				if( fa.getExpression() instanceof ThisExpression )
+				{
+					scope.getOwner().setContainsFieldAssignment(true);
+				}
+				
+			}
+			else if( lhs instanceof SuperFieldAccess )
+			{
+				scope.getOwner().setContainsFieldAssignment(true);
+			}
+		}
 		
-		
+		@Override
+		public boolean visit(Assignment node) {
+			Expression lhs = node.getLeftHandSide();
+			
+			setupContainsFieldAssignments(lhs);
+			
+			return super.visit(node);
+		}
+
+		@Override
+		public boolean visit(PostfixExpression node) {
+			Expression expr = node.getOperand();
+			
+			setupContainsFieldAssignments(expr);
+			
+			return super.visit(node);
+		}
+
+		@Override
+		public boolean visit(PrefixExpression node) {
+			Expression expr = node.getOperand();
+			
+			if( node.getOperator() == Operator.DECREMENT ||
+					node.getOperator() == Operator.INCREMENT )
+			{
+				setupContainsFieldAssignments(expr);
+			}
+			
+			return super.visit(node);
+		}
+
 		public boolean visit(FieldAccess node)
 		{
 			ITypeBinding typeBinding = null;
@@ -308,6 +400,7 @@ public class AOMTransformingVisitor extends ASTVisitor {
 		
 		public boolean visit(SuperFieldAccess node)
 		{
+			scope.getOwner().setSuperFieldAccess(true);
 			scope.getVariableBindings().add(node.resolveFieldBinding());
 			return super.visit(node);
 		}
@@ -317,7 +410,7 @@ public class AOMTransformingVisitor extends ASTVisitor {
 			_visitName(node);
 			return super.visit(node);
 		}
-		
+
 		
 		public boolean visit(QualifiedName node)
 		{
@@ -352,6 +445,14 @@ public class AOMTransformingVisitor extends ASTVisitor {
 					fieldAccess.setColumnNumber(cu.getColumnNumber(node.getStartPosition()));
 					fieldAccess.setFileName(cu.getTypeRoot().getPath().lastSegment());
 					
+				} 
+				else if( !varBinding.isEnumConstant() )
+				{
+					AOMLocalVariableAccess lva = StructureFactory.eINSTANCE.createAOMLocalVariableAccess();
+					lva.setParameterAccess(varBinding.isParameter());
+					lva.setTypeBinding(null);
+					lva.setVariableBinding(varBinding);
+					lva.setAccessingScope(scope);
 				}
 //				scope.getVariableBindings().add((IVariableBinding)binding);
 			}
@@ -413,8 +514,7 @@ public class AOMTransformingVisitor extends ASTVisitor {
 		aomMethod.setAbstract(Modifier.isAbstract(node.getModifiers()));
 		aomMethod.setStatic(Modifier.isStatic(node.getModifiers()));
 		aomMethod.setPublicEntity(Modifier.isPublic(node.getModifiers()));
-		
-		
+		aomMethod.setSynchronized(Modifier.isSynchronized(node.getModifiers()));
 		aomMethod.setConstructor(node.isConstructor());
 		
 		if( node.isConstructor() )
@@ -506,9 +606,10 @@ public class AOMTransformingVisitor extends ASTVisitor {
 			Block block = node.getBody();
 			AOMScope scope = StructureFactory.eINSTANCE.createAOMScope();
 			aomMethod.setOwnedScope(scope);
-			MethodVisitor mv = MethodVisitor.getInstance(aom, scope);
+			MethodVisitor mv = MethodVisitor.getInstance(aom, scope, parentType);
 			block.accept(mv);
 		}
+		
 		
 		return false;
 	}
@@ -531,6 +632,7 @@ public class AOMTransformingVisitor extends ASTVisitor {
 		aomClass.setAnonymousClass(false);
 		aomClass.setInnerClass(node.isMemberTypeDeclaration());
 		aomClass.setInterface(node.isInterface());
+		
 		aomClass.setStatic(Modifier.isStatic(node.getModifiers()));
 		aomClass.setModifier( Modifier.isPublic(node.getModifiers()) ? AOMModifier.PUBLIC :
 			(Modifier.isPrivate(node.getModifiers()) ? AOMModifier.PRIVATE :
@@ -551,6 +653,12 @@ public class AOMTransformingVisitor extends ASTVisitor {
 		return super.visit(node);
 	}
 	
+	@Override
+	public boolean visit(EnumDeclaration node)
+	{
+		// We do not create enum as AOMClass
+		return super.visit(node);
+	}
 	
 	public static String getClassName(TypeDeclaration type)
 	{

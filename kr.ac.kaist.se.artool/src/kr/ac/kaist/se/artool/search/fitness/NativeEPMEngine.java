@@ -3,9 +3,7 @@ package kr.ac.kaist.se.artool.search.fitness;
 public class NativeEPMEngine {
 	static
 	{
-		System.err.println("Native EPM Engine loading....");
 		System.loadLibrary("libNativeEPMEngine.dylib");
-		System.err.println("Native EPM Engine loading complete.");
 	}
 
 	private long context;

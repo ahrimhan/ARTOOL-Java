@@ -79,6 +79,13 @@
         <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMMethod/LOC"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMMethod/static"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMMethod/constructor"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMMethod/synchronized"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMMethod/superMethodInvocation"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMMethod/superFieldAccess"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMMethod/containsFieldAssignment"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMMethod/getter"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMMethod/setter"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMMethod/delegate"/>
       </genClasses>
       <genClasses ecoreClass="aom.ecore#//structure/AOMScope">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/variables"/>
@@ -86,11 +93,15 @@
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/staticMethodCalls"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/dynamicMethodCalls"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/staticFieldAccesses"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMScope/localVariableAccesses"/>
       </genClasses>
       <genClasses ecoreClass="aom.ecore#//structure/AOMParameter">
         <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMParameter/owner"/>
       </genClasses>
-      <genClasses image="false" ecoreClass="aom.ecore#//structure/AOMVariableDef"/>
+      <genClasses image="false" ecoreClass="aom.ecore#//structure/AOMVariableDef">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//structure/AOMVariableDef/referer"/>
+      </genClasses>
       <genClasses ecoreClass="aom.ecore#//structure/AOMLocalVariable">
         <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMLocalVariable/owner"/>
       </genClasses>
@@ -101,6 +112,12 @@
       </genClasses>
       <genClasses image="false" ecoreClass="aom.ecore#//structure/IndexedElement">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/IndexedElement/index"/>
+      </genClasses>
+      <genClasses ecoreClass="aom.ecore#//structure/AOMLocalVariableAccess">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference aom.ecore#//structure/AOMLocalVariableAccess/accessedVariableDef"/>
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference aom.ecore#//structure/AOMLocalVariableAccess/accessingScope"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute aom.ecore#//structure/AOMLocalVariableAccess/parameterAccess"/>
       </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Staticmodel" basePackage="kr.ac.kaist.se.aom" resource="XMI"

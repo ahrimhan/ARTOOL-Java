@@ -22,6 +22,7 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMMethod#getParameters <em>Parameters</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMMethod#getOwner <em>Owner</em>}</li>
@@ -38,8 +39,14 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMMethod#getLOC <em>LOC</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMMethod#isStatic <em>Static</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMMethod#isConstructor <em>Constructor</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.AOMMethod#isSynchronized <em>Synchronized</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.AOMMethod#isSuperMethodInvocation <em>Super Method Invocation</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.AOMMethod#isSuperFieldAccess <em>Super Field Access</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.AOMMethod#isContainsFieldAssignment <em>Contains Field Assignment</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.AOMMethod#getGetter <em>Getter</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.AOMMethod#getSetter <em>Setter</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.AOMMethod#getDelegate <em>Delegate</em>}</li>
  * </ul>
- * </p>
  *
  * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMMethod()
  * @model
@@ -409,6 +416,192 @@ public interface AOMMethod extends AOMNamedElement, AOMTypedElement, MeasurableE
 	 * @generated
 	 */
 	void setConstructor(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Synchronized</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Synchronized</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Synchronized</em>' attribute.
+	 * @see #setSynchronized(boolean)
+	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMMethod_Synchronized()
+	 * @model default="false"
+	 * @generated
+	 */
+	boolean isSynchronized();
+
+	/**
+	 * Sets the value of the '{@link kr.ac.kaist.se.aom.structure.AOMMethod#isSynchronized <em>Synchronized</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Synchronized</em>' attribute.
+	 * @see #isSynchronized()
+	 * @generated
+	 */
+	void setSynchronized(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Super Method Invocation</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Super Method Invocation</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Super Method Invocation</em>' attribute.
+	 * @see #setSuperMethodInvocation(boolean)
+	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMMethod_SuperMethodInvocation()
+	 * @model default="false"
+	 * @generated
+	 */
+	boolean isSuperMethodInvocation();
+
+	/**
+	 * Sets the value of the '{@link kr.ac.kaist.se.aom.structure.AOMMethod#isSuperMethodInvocation <em>Super Method Invocation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Super Method Invocation</em>' attribute.
+	 * @see #isSuperMethodInvocation()
+	 * @generated
+	 */
+	void setSuperMethodInvocation(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Super Field Access</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Super Field Access</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Super Field Access</em>' attribute.
+	 * @see #setSuperFieldAccess(boolean)
+	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMMethod_SuperFieldAccess()
+	 * @model default="false"
+	 * @generated
+	 */
+	boolean isSuperFieldAccess();
+
+	/**
+	 * Sets the value of the '{@link kr.ac.kaist.se.aom.structure.AOMMethod#isSuperFieldAccess <em>Super Field Access</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Super Field Access</em>' attribute.
+	 * @see #isSuperFieldAccess()
+	 * @generated
+	 */
+	void setSuperFieldAccess(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Contains Field Assignment</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Contains Field Assignment</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Contains Field Assignment</em>' attribute.
+	 * @see #setContainsFieldAssignment(boolean)
+	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMMethod_ContainsFieldAssignment()
+	 * @model default="false"
+	 * @generated
+	 */
+	boolean isContainsFieldAssignment();
+
+	/**
+	 * Sets the value of the '{@link kr.ac.kaist.se.aom.structure.AOMMethod#isContainsFieldAssignment <em>Contains Field Assignment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Contains Field Assignment</em>' attribute.
+	 * @see #isContainsFieldAssignment()
+	 * @generated
+	 */
+	void setContainsFieldAssignment(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Getter</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Getter</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Getter</em>' reference.
+	 * @see #setGetter(AOMField)
+	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMMethod_Getter()
+	 * @model
+	 * @generated
+	 */
+	AOMField getGetter();
+
+	/**
+	 * Sets the value of the '{@link kr.ac.kaist.se.aom.structure.AOMMethod#getGetter <em>Getter</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Getter</em>' reference.
+	 * @see #getGetter()
+	 * @generated
+	 */
+	void setGetter(AOMField value);
+
+	/**
+	 * Returns the value of the '<em><b>Setter</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Setter</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Setter</em>' reference.
+	 * @see #setSetter(AOMField)
+	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMMethod_Setter()
+	 * @model
+	 * @generated
+	 */
+	AOMField getSetter();
+
+	/**
+	 * Sets the value of the '{@link kr.ac.kaist.se.aom.structure.AOMMethod#getSetter <em>Setter</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Setter</em>' reference.
+	 * @see #getSetter()
+	 * @generated
+	 */
+	void setSetter(AOMField value);
+
+	/**
+	 * Returns the value of the '<em><b>Delegate</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Delegate</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Delegate</em>' reference.
+	 * @see #setDelegate(AOMMethod)
+	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMMethod_Delegate()
+	 * @model
+	 * @generated
+	 */
+	AOMMethod getDelegate();
+
+	/**
+	 * Sets the value of the '{@link kr.ac.kaist.se.aom.structure.AOMMethod#getDelegate <em>Delegate</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Delegate</em>' reference.
+	 * @see #getDelegate()
+	 * @generated
+	 */
+	void setDelegate(AOMMethod value);
 
 	public HashMap<IVariableBinding, AOMParameter> getVarBinding2AOMParameter();
 

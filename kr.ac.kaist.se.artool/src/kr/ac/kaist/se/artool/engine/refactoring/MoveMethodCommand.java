@@ -2,7 +2,10 @@ package kr.ac.kaist.se.artool.engine.refactoring;
 
 import java.util.Vector;
 
+import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
+import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMClass;
+import kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 
 public class MoveMethodCommand implements RefactoringCommand {
@@ -134,6 +137,8 @@ public class MoveMethodCommand implements RefactoringCommand {
 		return ret;
 	}
 	
+
+    
 	private static AOMMethod findOverriding(AOMClass c, AOMMethod m)
 	{
 		Vector<AOMClass> queue = new Vector<AOMClass>(c.getAncestor());

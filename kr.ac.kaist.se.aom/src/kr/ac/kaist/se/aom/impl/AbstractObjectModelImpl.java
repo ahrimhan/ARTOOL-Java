@@ -30,12 +30,12 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.impl.AbstractObjectModelImpl#getMeasuredDataSet <em>Measured Data Set</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.impl.AbstractObjectModelImpl#getClasses <em>Classes</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.impl.AbstractObjectModelImpl#getExternalTypes <em>External Types</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

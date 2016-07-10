@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.dynamicmodel.impl.DynamicMethodCallImpl#getCaller <em>Caller</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.dynamicmodel.impl.DynamicMethodCallImpl#getCallee <em>Callee</em>}</li>
@@ -39,7 +40,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link kr.ac.kaist.se.aom.dynamicmodel.impl.DynamicMethodCallImpl#getStatic <em>Static</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.dynamicmodel.impl.DynamicMethodCallImpl#getTid <em>Tid</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

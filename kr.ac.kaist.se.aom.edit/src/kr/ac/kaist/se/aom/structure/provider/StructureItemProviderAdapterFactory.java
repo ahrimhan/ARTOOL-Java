@@ -236,6 +236,29 @@ public class StructureItemProviderAdapterFactory extends StructureAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected AOMLocalVariableAccessItemProvider aomLocalVariableAccessItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createAOMLocalVariableAccessAdapter() {
+		if (aomLocalVariableAccessItemProvider == null) {
+			aomLocalVariableAccessItemProvider = new AOMLocalVariableAccessItemProvider(this);
+		}
+
+		return aomLocalVariableAccessItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -341,6 +364,7 @@ public class StructureItemProviderAdapterFactory extends StructureAdapterFactory
 		if (aomParameterItemProvider != null) aomParameterItemProvider.dispose();
 		if (aomLocalVariableItemProvider != null) aomLocalVariableItemProvider.dispose();
 		if (aomExternalTypeItemProvider != null) aomExternalTypeItemProvider.dispose();
+		if (aomLocalVariableAccessItemProvider != null) aomLocalVariableAccessItemProvider.dispose();
 	}
 
 }

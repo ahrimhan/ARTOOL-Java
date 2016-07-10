@@ -6,17 +6,22 @@
  */
 package kr.ac.kaist.se.aom.structure.impl;
 
+import java.util.Collection;
 import kr.ac.kaist.se.aom.structure.AOMLocalVariable;
+import kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess;
 import kr.ac.kaist.se.aom.structure.AOMNamedElement;
 import kr.ac.kaist.se.aom.structure.AOMScope;
 import kr.ac.kaist.se.aom.structure.StructurePackage;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,11 +29,12 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMLocalVariableImpl#getName <em>Name</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMLocalVariableImpl#getReferer <em>Referer</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMLocalVariableImpl#getOwner <em>Owner</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -52,6 +58,16 @@ public class AOMLocalVariableImpl extends AOMTypedElementImpl implements AOMLoca
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getReferer() <em>Referer</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getReferer()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<AOMLocalVariableAccess> referer;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -91,6 +107,18 @@ public class AOMLocalVariableImpl extends AOMTypedElementImpl implements AOMLoca
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, StructurePackage.AOM_LOCAL_VARIABLE__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<AOMLocalVariableAccess> getReferer() {
+		if (referer == null) {
+			referer = new EObjectWithInverseResolvingEList<AOMLocalVariableAccess>(AOMLocalVariableAccess.class, this, StructurePackage.AOM_LOCAL_VARIABLE__REFERER, StructurePackage.AOM_LOCAL_VARIABLE_ACCESS__ACCESSED_VARIABLE_DEF);
+		}
+		return referer;
 	}
 
 	/**
@@ -139,9 +167,12 @@ public class AOMLocalVariableImpl extends AOMTypedElementImpl implements AOMLoca
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case StructurePackage.AOM_LOCAL_VARIABLE__REFERER:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getReferer()).basicAdd(otherEnd, msgs);
 			case StructurePackage.AOM_LOCAL_VARIABLE__OWNER:
 				if (eInternalContainer() != null)
 					msgs = eBasicRemoveFromContainer(msgs);
@@ -158,6 +189,8 @@ public class AOMLocalVariableImpl extends AOMTypedElementImpl implements AOMLoca
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case StructurePackage.AOM_LOCAL_VARIABLE__REFERER:
+				return ((InternalEList<?>)getReferer()).basicRemove(otherEnd, msgs);
 			case StructurePackage.AOM_LOCAL_VARIABLE__OWNER:
 				return basicSetOwner(null, msgs);
 		}
@@ -188,6 +221,8 @@ public class AOMLocalVariableImpl extends AOMTypedElementImpl implements AOMLoca
 		switch (featureID) {
 			case StructurePackage.AOM_LOCAL_VARIABLE__NAME:
 				return getName();
+			case StructurePackage.AOM_LOCAL_VARIABLE__REFERER:
+				return getReferer();
 			case StructurePackage.AOM_LOCAL_VARIABLE__OWNER:
 				return getOwner();
 		}
@@ -199,11 +234,16 @@ public class AOMLocalVariableImpl extends AOMTypedElementImpl implements AOMLoca
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case StructurePackage.AOM_LOCAL_VARIABLE__NAME:
 				setName((String)newValue);
+				return;
+			case StructurePackage.AOM_LOCAL_VARIABLE__REFERER:
+				getReferer().clear();
+				getReferer().addAll((Collection<? extends AOMLocalVariableAccess>)newValue);
 				return;
 			case StructurePackage.AOM_LOCAL_VARIABLE__OWNER:
 				setOwner((AOMScope)newValue);
@@ -223,6 +263,9 @@ public class AOMLocalVariableImpl extends AOMTypedElementImpl implements AOMLoca
 			case StructurePackage.AOM_LOCAL_VARIABLE__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case StructurePackage.AOM_LOCAL_VARIABLE__REFERER:
+				getReferer().clear();
+				return;
 			case StructurePackage.AOM_LOCAL_VARIABLE__OWNER:
 				setOwner((AOMScope)null);
 				return;
@@ -240,6 +283,8 @@ public class AOMLocalVariableImpl extends AOMTypedElementImpl implements AOMLoca
 		switch (featureID) {
 			case StructurePackage.AOM_LOCAL_VARIABLE__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case StructurePackage.AOM_LOCAL_VARIABLE__REFERER:
+				return referer != null && !referer.isEmpty();
 			case StructurePackage.AOM_LOCAL_VARIABLE__OWNER:
 				return getOwner() != null;
 		}

@@ -89,6 +89,15 @@ public interface StructureFactory extends EFactory {
 	AOMExternalType createAOMExternalType();
 
 	/**
+	 * Returns a new object of class '<em>AOM Local Variable Access</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>AOM Local Variable Access</em>'.
+	 * @generated
+	 */
+	AOMLocalVariableAccess createAOMLocalVariableAccess();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

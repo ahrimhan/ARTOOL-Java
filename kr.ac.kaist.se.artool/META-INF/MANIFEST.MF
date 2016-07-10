@@ -10,20 +10,20 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.core;bundle-version="3.5.2",
  org.eclipse.jface.text;bundle-version="3.5.2",
  org.eclipse.ui.ide;bundle-version="3.6.1",
- org.eclipse.gmf.runtime.common.core;bundle-version="1.4.0",
- org.eclipse.gmf.runtime.emf.core;bundle-version="1.4.1",
- org.eclipse.gmf.runtime.emf.commands.core;bundle-version="1.4.0",
+ org.eclipse.gmf.runtime.common.core,
+ org.eclipse.gmf.runtime.emf.core,
+ org.eclipse.gmf.runtime.emf.commands.core,
  kr.ac.kaist.se.aom;bundle-version="1.0.0",
  org.eclipse.debug.core,
  org.eclipse.jdt.launching;bundle-version="3.5.100",
  org.eclipse.debug.ui,
  org.eclipse.core.variables;bundle-version="3.2.400",
- org.eclipse.emf.ecoretools.tabbedproperties;bundle-version="0.8.0",
  org.eclipse.jdt.ui;bundle-version="3.6.1",
  org.eclipse.ui.editors;bundle-version="3.6.1",
  kr.ac.kaist.se.aom.edit;bundle-version="1.0.0",
- org.eclipse.xsd;bundle-version="2.6.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+ org.eclipse.xsd;bundle-version="2.6.0",
+ kr.ac.kaist.se.deltatable;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: lib/javassist.jar,
  .,
  lib/ubigraph.jar,
@@ -64,7 +64,8 @@ Bundle-ClassPath: lib/javassist.jar,
  liblog/log4j-taglib-2.3.jar,
  liblog/log4j-web-2.3.jar,
  lib/commons-math3-3.5.jar,
- lib/guava-18.0.jar
+ lib/guava-18.0.jar,
+ conf/
 Bundle-ActivationPolicy: lazy
 Bundle-NativeCode: lib/libNativeEPMEngine.dylib
 

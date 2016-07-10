@@ -74,6 +74,13 @@ public class AOMMethodItemProvider
 			addLOCPropertyDescriptor(object);
 			addStaticPropertyDescriptor(object);
 			addConstructorPropertyDescriptor(object);
+			addSynchronizedPropertyDescriptor(object);
+			addSuperMethodInvocationPropertyDescriptor(object);
+			addSuperFieldAccessPropertyDescriptor(object);
+			addContainsFieldAssignmentPropertyDescriptor(object);
+			addGetterPropertyDescriptor(object);
+			addSetterPropertyDescriptor(object);
+			addDelegatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -453,6 +460,160 @@ public class AOMMethodItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Synchronized feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSynchronizedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AOMMethod_synchronized_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AOMMethod_synchronized_feature", "_UI_AOMMethod_type"),
+				 StructurePackage.Literals.AOM_METHOD__SYNCHRONIZED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Super Method Invocation feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSuperMethodInvocationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AOMMethod_superMethodInvocation_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AOMMethod_superMethodInvocation_feature", "_UI_AOMMethod_type"),
+				 StructurePackage.Literals.AOM_METHOD__SUPER_METHOD_INVOCATION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Super Field Access feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSuperFieldAccessPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AOMMethod_superFieldAccess_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AOMMethod_superFieldAccess_feature", "_UI_AOMMethod_type"),
+				 StructurePackage.Literals.AOM_METHOD__SUPER_FIELD_ACCESS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Contains Field Assignment feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addContainsFieldAssignmentPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AOMMethod_containsFieldAssignment_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AOMMethod_containsFieldAssignment_feature", "_UI_AOMMethod_type"),
+				 StructurePackage.Literals.AOM_METHOD__CONTAINS_FIELD_ASSIGNMENT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Getter feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addGetterPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AOMMethod_getter_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AOMMethod_getter_feature", "_UI_AOMMethod_type"),
+				 StructurePackage.Literals.AOM_METHOD__GETTER,
+				 true,
+				 false,
+				 false,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Setter feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSetterPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AOMMethod_setter_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AOMMethod_setter_feature", "_UI_AOMMethod_type"),
+				 StructurePackage.Literals.AOM_METHOD__SETTER,
+				 true,
+				 false,
+				 false,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Delegate feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDelegatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AOMMethod_delegate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AOMMethod_delegate_feature", "_UI_AOMMethod_type"),
+				 StructurePackage.Literals.AOM_METHOD__DELEGATE,
+				 true,
+				 false,
+				 false,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -532,6 +693,13 @@ public class AOMMethodItemProvider
 			case StructurePackage.AOM_METHOD__LOC:
 			case StructurePackage.AOM_METHOD__STATIC:
 			case StructurePackage.AOM_METHOD__CONSTRUCTOR:
+			case StructurePackage.AOM_METHOD__SYNCHRONIZED:
+			case StructurePackage.AOM_METHOD__SUPER_METHOD_INVOCATION:
+			case StructurePackage.AOM_METHOD__SUPER_FIELD_ACCESS:
+			case StructurePackage.AOM_METHOD__CONTAINS_FIELD_ASSIGNMENT:
+			case StructurePackage.AOM_METHOD__GETTER:
+			case StructurePackage.AOM_METHOD__SETTER:
+			case StructurePackage.AOM_METHOD__DELEGATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case StructurePackage.AOM_METHOD__PARAMETERS:

@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
-import kr.ac.kaist.se.artool.engine.ARSearchWizard;
 import kr.ac.kaist.se.artool.util.CommandExecutionOperation;
 
 import org.eclipse.core.commands.ExecutionException;

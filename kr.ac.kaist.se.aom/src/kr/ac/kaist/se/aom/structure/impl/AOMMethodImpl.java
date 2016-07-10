@@ -18,6 +18,7 @@ import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.staticmodel.StaticmodelPackage;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMEntity;
+import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.aom.structure.AOMParameter;
 import kr.ac.kaist.se.aom.structure.AOMScope;
@@ -48,6 +49,7 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getType <em>Type</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getMeasuredDataSet <em>Measured Data Set</em>}</li>
@@ -69,8 +71,14 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getLOC <em>LOC</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#isStatic <em>Static</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#isConstructor <em>Constructor</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#isSynchronized <em>Synchronized</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#isSuperMethodInvocation <em>Super Method Invocation</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#isSuperFieldAccess <em>Super Field Access</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#isContainsFieldAssignment <em>Contains Field Assignment</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getGetter <em>Getter</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getSetter <em>Setter</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.impl.AOMMethodImpl#getDelegate <em>Delegate</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -354,6 +362,116 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 	 * @ordered
 	 */
 	protected static final int CONSTRUCTOR_EFLAG = 1 << 11;
+
+	/**
+	 * The default value of the '{@link #isSynchronized() <em>Synchronized</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSynchronized()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean SYNCHRONIZED_EDEFAULT = false;
+
+	/**
+	 * The flag representing the value of the '{@link #isSynchronized() <em>Synchronized</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSynchronized()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int SYNCHRONIZED_EFLAG = 1 << 12;
+
+	/**
+	 * The default value of the '{@link #isSuperMethodInvocation() <em>Super Method Invocation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSuperMethodInvocation()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean SUPER_METHOD_INVOCATION_EDEFAULT = false;
+
+	/**
+	 * The flag representing the value of the '{@link #isSuperMethodInvocation() <em>Super Method Invocation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSuperMethodInvocation()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int SUPER_METHOD_INVOCATION_EFLAG = 1 << 13;
+
+	/**
+	 * The default value of the '{@link #isSuperFieldAccess() <em>Super Field Access</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSuperFieldAccess()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean SUPER_FIELD_ACCESS_EDEFAULT = false;
+
+	/**
+	 * The flag representing the value of the '{@link #isSuperFieldAccess() <em>Super Field Access</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSuperFieldAccess()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int SUPER_FIELD_ACCESS_EFLAG = 1 << 14;
+
+	/**
+	 * The default value of the '{@link #isContainsFieldAssignment() <em>Contains Field Assignment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isContainsFieldAssignment()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean CONTAINS_FIELD_ASSIGNMENT_EDEFAULT = false;
+
+	/**
+	 * The flag representing the value of the '{@link #isContainsFieldAssignment() <em>Contains Field Assignment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isContainsFieldAssignment()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int CONTAINS_FIELD_ASSIGNMENT_EFLAG = 1 << 15;
+
+	/**
+	 * The cached value of the '{@link #getGetter() <em>Getter</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGetter()
+	 * @generated
+	 * @ordered
+	 */
+	protected AOMField getter;
+
+	/**
+	 * The cached value of the '{@link #getSetter() <em>Setter</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSetter()
+	 * @generated
+	 * @ordered
+	 */
+	protected AOMField setter;
+
+	/**
+	 * The cached value of the '{@link #getDelegate() <em>Delegate</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDelegate()
+	 * @generated
+	 * @ordered
+	 */
+	protected AOMMethod delegate;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -715,6 +833,204 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isSynchronized() {
+		return (eFlags & SYNCHRONIZED_EFLAG) != 0;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSynchronized(boolean newSynchronized) {
+		boolean oldSynchronized = (eFlags & SYNCHRONIZED_EFLAG) != 0;
+		if (newSynchronized) eFlags |= SYNCHRONIZED_EFLAG; else eFlags &= ~SYNCHRONIZED_EFLAG;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructurePackage.AOM_METHOD__SYNCHRONIZED, oldSynchronized, newSynchronized));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSuperMethodInvocation() {
+		return (eFlags & SUPER_METHOD_INVOCATION_EFLAG) != 0;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSuperMethodInvocation(boolean newSuperMethodInvocation) {
+		boolean oldSuperMethodInvocation = (eFlags & SUPER_METHOD_INVOCATION_EFLAG) != 0;
+		if (newSuperMethodInvocation) eFlags |= SUPER_METHOD_INVOCATION_EFLAG; else eFlags &= ~SUPER_METHOD_INVOCATION_EFLAG;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructurePackage.AOM_METHOD__SUPER_METHOD_INVOCATION, oldSuperMethodInvocation, newSuperMethodInvocation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSuperFieldAccess() {
+		return (eFlags & SUPER_FIELD_ACCESS_EFLAG) != 0;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSuperFieldAccess(boolean newSuperFieldAccess) {
+		boolean oldSuperFieldAccess = (eFlags & SUPER_FIELD_ACCESS_EFLAG) != 0;
+		if (newSuperFieldAccess) eFlags |= SUPER_FIELD_ACCESS_EFLAG; else eFlags &= ~SUPER_FIELD_ACCESS_EFLAG;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructurePackage.AOM_METHOD__SUPER_FIELD_ACCESS, oldSuperFieldAccess, newSuperFieldAccess));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isContainsFieldAssignment() {
+		return (eFlags & CONTAINS_FIELD_ASSIGNMENT_EFLAG) != 0;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setContainsFieldAssignment(boolean newContainsFieldAssignment) {
+		boolean oldContainsFieldAssignment = (eFlags & CONTAINS_FIELD_ASSIGNMENT_EFLAG) != 0;
+		if (newContainsFieldAssignment) eFlags |= CONTAINS_FIELD_ASSIGNMENT_EFLAG; else eFlags &= ~CONTAINS_FIELD_ASSIGNMENT_EFLAG;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructurePackage.AOM_METHOD__CONTAINS_FIELD_ASSIGNMENT, oldContainsFieldAssignment, newContainsFieldAssignment));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AOMField getGetter() {
+		if (getter != null && getter.eIsProxy()) {
+			InternalEObject oldGetter = (InternalEObject)getter;
+			getter = (AOMField)eResolveProxy(oldGetter);
+			if (getter != oldGetter) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, StructurePackage.AOM_METHOD__GETTER, oldGetter, getter));
+			}
+		}
+		return getter;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AOMField basicGetGetter() {
+		return getter;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setGetter(AOMField newGetter) {
+		AOMField oldGetter = getter;
+		getter = newGetter;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructurePackage.AOM_METHOD__GETTER, oldGetter, getter));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AOMField getSetter() {
+		if (setter != null && setter.eIsProxy()) {
+			InternalEObject oldSetter = (InternalEObject)setter;
+			setter = (AOMField)eResolveProxy(oldSetter);
+			if (setter != oldSetter) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, StructurePackage.AOM_METHOD__SETTER, oldSetter, setter));
+			}
+		}
+		return setter;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AOMField basicGetSetter() {
+		return setter;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSetter(AOMField newSetter) {
+		AOMField oldSetter = setter;
+		setter = newSetter;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructurePackage.AOM_METHOD__SETTER, oldSetter, setter));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AOMMethod getDelegate() {
+		if (delegate != null && delegate.eIsProxy()) {
+			InternalEObject oldDelegate = (InternalEObject)delegate;
+			delegate = (AOMMethod)eResolveProxy(oldDelegate);
+			if (delegate != oldDelegate) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, StructurePackage.AOM_METHOD__DELEGATE, oldDelegate, delegate));
+			}
+		}
+		return delegate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AOMMethod basicGetDelegate() {
+		return delegate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDelegate(AOMMethod newDelegate) {
+		AOMMethod oldDelegate = delegate;
+		delegate = newDelegate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructurePackage.AOM_METHOD__DELEGATE, oldDelegate, delegate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EList<AOMParameter> getParameters() {
 		if (parameters == null) {
 			parameters = new EObjectContainmentWithInverseEList<AOMParameter>(AOMParameter.class, this, StructurePackage.AOM_METHOD__PARAMETERS, StructurePackage.AOM_PARAMETER__OWNER);
@@ -1000,6 +1316,23 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 				return isStatic();
 			case StructurePackage.AOM_METHOD__CONSTRUCTOR:
 				return isConstructor();
+			case StructurePackage.AOM_METHOD__SYNCHRONIZED:
+				return isSynchronized();
+			case StructurePackage.AOM_METHOD__SUPER_METHOD_INVOCATION:
+				return isSuperMethodInvocation();
+			case StructurePackage.AOM_METHOD__SUPER_FIELD_ACCESS:
+				return isSuperFieldAccess();
+			case StructurePackage.AOM_METHOD__CONTAINS_FIELD_ASSIGNMENT:
+				return isContainsFieldAssignment();
+			case StructurePackage.AOM_METHOD__GETTER:
+				if (resolve) return getGetter();
+				return basicGetGetter();
+			case StructurePackage.AOM_METHOD__SETTER:
+				if (resolve) return getSetter();
+				return basicGetSetter();
+			case StructurePackage.AOM_METHOD__DELEGATE:
+				if (resolve) return getDelegate();
+				return basicGetDelegate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1077,6 +1410,27 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 			case StructurePackage.AOM_METHOD__CONSTRUCTOR:
 				setConstructor((Boolean)newValue);
 				return;
+			case StructurePackage.AOM_METHOD__SYNCHRONIZED:
+				setSynchronized((Boolean)newValue);
+				return;
+			case StructurePackage.AOM_METHOD__SUPER_METHOD_INVOCATION:
+				setSuperMethodInvocation((Boolean)newValue);
+				return;
+			case StructurePackage.AOM_METHOD__SUPER_FIELD_ACCESS:
+				setSuperFieldAccess((Boolean)newValue);
+				return;
+			case StructurePackage.AOM_METHOD__CONTAINS_FIELD_ASSIGNMENT:
+				setContainsFieldAssignment((Boolean)newValue);
+				return;
+			case StructurePackage.AOM_METHOD__GETTER:
+				setGetter((AOMField)newValue);
+				return;
+			case StructurePackage.AOM_METHOD__SETTER:
+				setSetter((AOMField)newValue);
+				return;
+			case StructurePackage.AOM_METHOD__DELEGATE:
+				setDelegate((AOMMethod)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1149,6 +1503,27 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 			case StructurePackage.AOM_METHOD__CONSTRUCTOR:
 				setConstructor(CONSTRUCTOR_EDEFAULT);
 				return;
+			case StructurePackage.AOM_METHOD__SYNCHRONIZED:
+				setSynchronized(SYNCHRONIZED_EDEFAULT);
+				return;
+			case StructurePackage.AOM_METHOD__SUPER_METHOD_INVOCATION:
+				setSuperMethodInvocation(SUPER_METHOD_INVOCATION_EDEFAULT);
+				return;
+			case StructurePackage.AOM_METHOD__SUPER_FIELD_ACCESS:
+				setSuperFieldAccess(SUPER_FIELD_ACCESS_EDEFAULT);
+				return;
+			case StructurePackage.AOM_METHOD__CONTAINS_FIELD_ASSIGNMENT:
+				setContainsFieldAssignment(CONTAINS_FIELD_ASSIGNMENT_EDEFAULT);
+				return;
+			case StructurePackage.AOM_METHOD__GETTER:
+				setGetter((AOMField)null);
+				return;
+			case StructurePackage.AOM_METHOD__SETTER:
+				setSetter((AOMField)null);
+				return;
+			case StructurePackage.AOM_METHOD__DELEGATE:
+				setDelegate((AOMMethod)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1201,6 +1576,20 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 				return ((eFlags & STATIC_EFLAG) != 0) != STATIC_EDEFAULT;
 			case StructurePackage.AOM_METHOD__CONSTRUCTOR:
 				return ((eFlags & CONSTRUCTOR_EFLAG) != 0) != CONSTRUCTOR_EDEFAULT;
+			case StructurePackage.AOM_METHOD__SYNCHRONIZED:
+				return ((eFlags & SYNCHRONIZED_EFLAG) != 0) != SYNCHRONIZED_EDEFAULT;
+			case StructurePackage.AOM_METHOD__SUPER_METHOD_INVOCATION:
+				return ((eFlags & SUPER_METHOD_INVOCATION_EFLAG) != 0) != SUPER_METHOD_INVOCATION_EDEFAULT;
+			case StructurePackage.AOM_METHOD__SUPER_FIELD_ACCESS:
+				return ((eFlags & SUPER_FIELD_ACCESS_EFLAG) != 0) != SUPER_FIELD_ACCESS_EDEFAULT;
+			case StructurePackage.AOM_METHOD__CONTAINS_FIELD_ASSIGNMENT:
+				return ((eFlags & CONTAINS_FIELD_ASSIGNMENT_EFLAG) != 0) != CONTAINS_FIELD_ASSIGNMENT_EDEFAULT;
+			case StructurePackage.AOM_METHOD__GETTER:
+				return getter != null;
+			case StructurePackage.AOM_METHOD__SETTER:
+				return setter != null;
+			case StructurePackage.AOM_METHOD__DELEGATE:
+				return delegate != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1303,6 +1692,14 @@ public class AOMMethodImpl extends AOMNamedElementImpl implements AOMMethod {
 		result.append((eFlags & STATIC_EFLAG) != 0);
 		result.append(", constructor: ");
 		result.append((eFlags & CONSTRUCTOR_EFLAG) != 0);
+		result.append(", synchronized: ");
+		result.append((eFlags & SYNCHRONIZED_EFLAG) != 0);
+		result.append(", superMethodInvocation: ");
+		result.append((eFlags & SUPER_METHOD_INVOCATION_EFLAG) != 0);
+		result.append(", superFieldAccess: ");
+		result.append((eFlags & SUPER_FIELD_ACCESS_EFLAG) != 0);
+		result.append(", containsFieldAssignment: ");
+		result.append((eFlags & CONTAINS_FIELD_ASSIGNMENT_EFLAG) != 0);
 		result.append(')');
 		return result.toString();
 	}

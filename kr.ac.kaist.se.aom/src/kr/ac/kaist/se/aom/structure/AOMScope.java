@@ -24,14 +24,15 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMScope#getVariables <em>Variables</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMScope#getOwner <em>Owner</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMScope#getStaticMethodCalls <em>Static Method Calls</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMScope#getDynamicMethodCalls <em>Dynamic Method Calls</em>}</li>
  *   <li>{@link kr.ac.kaist.se.aom.structure.AOMScope#getStaticFieldAccesses <em>Static Field Accesses</em>}</li>
+ *   <li>{@link kr.ac.kaist.se.aom.structure.AOMScope#getLocalVariableAccesses <em>Local Variable Accesses</em>}</li>
  * </ul>
- * </p>
  *
  * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMScope()
  * @model
@@ -137,6 +138,24 @@ public interface AOMScope extends EObject {
 	 * @generated
 	 */
 	EList<StaticFieldAccess> getStaticFieldAccesses();
+
+	/**
+	 * Returns the value of the '<em><b>Local Variable Accesses</b></em>' containment reference list.
+	 * The list contents are of type {@link kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess}.
+	 * It is bidirectional and its opposite is '{@link kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess#getAccessingScope <em>Accessing Scope</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Local Variable Accesses</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Local Variable Accesses</em>' containment reference list.
+	 * @see kr.ac.kaist.se.aom.structure.StructurePackage#getAOMScope_LocalVariableAccesses()
+	 * @see kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess#getAccessingScope
+	 * @model opposite="accessingScope" containment="true"
+	 * @generated
+	 */
+	EList<AOMLocalVariableAccess> getLocalVariableAccesses();
 
 	List<IVariableBinding> getVariableBindings();
 	

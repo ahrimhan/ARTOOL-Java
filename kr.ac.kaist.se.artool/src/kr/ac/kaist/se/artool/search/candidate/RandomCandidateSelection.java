@@ -12,13 +12,11 @@ import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
 
 public class RandomCandidateSelection implements CandidateSelection {
 	private AbstractObjectModel aom;
-	private Random random;
 	private Vector<AOMMethod> methodList;
 	
 	public RandomCandidateSelection(AbstractObjectModel aom)
 	{
 		this.aom = aom;
-		this.random = new Random(System.currentTimeMillis());
 		
 		this.methodList = new Vector<AOMMethod>();
 		
@@ -38,21 +36,21 @@ public class RandomCandidateSelection implements CandidateSelection {
 		*/
 	}
 	
-	public MoveMethodCommand getRandomMoveMethodCommand()
-	{
-		MoveMethodCommand newMMC = null;
 	
-		int ci = random.nextInt(aom.getClasses().size());
-		int mi = random.nextInt(methodList.size());
-		newMMC = new MoveMethodCommand(methodList.elementAt(mi), aom.getClasses().get(ci));
-		
-		return newMMC;
+	public Vector<AOMMethod> getMethodList()
+	{
+		return methodList;
+	}
+	
+	public AbstractObjectModel getAOM()
+	{
+		return aom;
 	}
 	
 	
 	@Override
 	public CandidateIterator getCandidateIterator(int maxCandidateCount) {
-		RandomCandidateIterator rci = new RandomCandidateIterator(this, maxCandidateCount); 
+		RandomCandidateIterator rci = new RandomCandidateIterator(this, maxCandidateCount, 1000); 
 		return rci;
 	}
 }

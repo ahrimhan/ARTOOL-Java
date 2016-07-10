@@ -16,10 +16,10 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link kr.ac.kaist.se.aom.MeasurableElement#getMeasuredDataSet <em>Measured Data Set</em>}</li>
  * </ul>
- * </p>
  *
  * @see kr.ac.kaist.se.aom.AomPackage#getMeasurableElement()
  * @model interface="true" abstract="true"
