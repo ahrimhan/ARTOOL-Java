@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Deltatable
+Bundle-SymbolicName: kr.ac.kaist.se.deltatable
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: kr.ac.kaist.se.deltatable.Activator
+Require-Bundle: org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .,
+ lib/ojalgo-40.0.0-SNAPSHOT.jar,
+ lib/ojalgo-40.0.0-SNAPSHOT-sources.jar,
+ lib/ojalgo-40.0.0-SNAPSHOT-javadoc.jar,
+ jni/
+Export-Package: kr.ac.kaist.se.deltatable,
+ kr.ac.kaist.se.deltatable.model
+Bundle-NativeCode: jni/libfastdelta.dylib
