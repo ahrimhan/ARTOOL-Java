@@ -10,111 +10,115 @@ import kr.ac.kaist.se.aom.structure.AOMMethod;
 public class MoveMethodApplicabilityChecker
 {
 	
-	private AOMMethod movingMethod;
-	private AOMClass targetClass;
 	
 	private MoveMethodApplicabilityChecker()
 	{
 	}
 		
 	public static boolean isApplicable(AOMMethod movingMethod, AOMClass targetClass)
+	{	
+		return isApplicableForGivenMethod(movingMethod) && isApplicableForTargetClass(movingMethod, targetClass);
+	}
+	/*
+	if(!isSynchronized() && 
+			!containsSuperMethodInvocation() && 
+			!overridesMethod() && 
+			!containsFieldAssignment() && 
+			!isTargetClassAnInterface() &&
+			validTargetObject() && 
+//			!oneToManyRelationshipWithTargetClass() && 
+//			!containsAssignmentToTargetClassVariable() && // Strange condition...
+			!containsMethodCallWithThisExpressionAsArgument() && 
+//			!isTargetClassAnEnum() &&  // In our model, AOMClass cannot be enum
+//			!isSourceClassATestClass() && // test???
+			true
+			)
 	{
-		MoveMethodApplicabilityChecker instance = new MoveMethodApplicabilityChecker();
-		instance.movingMethod = movingMethod;
-		instance.targetClass = targetClass;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+	*/
+	
+	public static boolean isApplicableForTargetClass(AOMMethod movingMethod, AOMClass targetClass)
+	{
+		if( isTargetClassAnInterface(targetClass) )
+		{
+			return false;
+		}
 		
-		return instance._isApplicable();
+		if( !validTargetObject(movingMethod, targetClass) )
+		{
+			return false;
+		}
+		
+		return true;
 	}
 	
-	private boolean _isApplicable() {
+	public static boolean isApplicableForGivenMethod(AOMMethod movingMethod) {
 		
-		if( isSynchronized() )
+		if( isSynchronized(movingMethod) )
 		{
 			return false;
 		}
 		
-		if( containsSuperMethodInvocation() )
+		if( containsSuperMethodInvocation(movingMethod) )
 		{
 			return false;
 		}
 		
-		if( overridesMethod() )
+		if( overridesMethod(movingMethod) )
 		{
 			return false;
 		}
 		
-		if( containsFieldAssignment() )
+		if( containsFieldAssignment(movingMethod) )
 		{
 			return false;
 		}
 		
-		if( isTargetClassAnInterface() )
-		{
-			return false;
-		}
+	
 		
-		if( !validTargetObject() )
-		{
-			return false;
-		}
-		
-		if( containsMethodCallWithThisExpressionAsArgument() )
+		if( containsMethodCallWithThisExpressionAsArgument(movingMethod) )
 		{
 			return false;
 		}
 		
 		return true;
 		
-		/*
-    	if(!isSynchronized() && 
-    			!containsSuperMethodInvocation() && 
-    			!overridesMethod() && 
-    			!containsFieldAssignment() && 
-    			!isTargetClassAnInterface() &&
-    			validTargetObject() && 
-//    			!oneToManyRelationshipWithTargetClass() && 
-//    			!containsAssignmentToTargetClassVariable() && // Strange condition...
-    			!containsMethodCallWithThisExpressionAsArgument() && 
-//    			!isTargetClassAnEnum() &&  // In our model, AOMClass cannot be enum
-//    			!isSourceClassATestClass() && // test???
-    			true
-    			)
-    	{
-    		return true;
-    	}
-    	else
-    	{
-    		return false;
-    	}
-    	*/
+
     }
+	
+	
     
-    private boolean isSynchronized()
+    private static boolean isSynchronized(AOMMethod movingMethod)
     {
     	return movingMethod.isSynchronized();
     }
     
-    private boolean containsSuperMethodInvocation()
+    private static boolean containsSuperMethodInvocation(AOMMethod movingMethod)
     {
     	return movingMethod.isSuperMethodInvocation() || movingMethod.isSuperFieldAccess();
     }
     
-    private boolean overridesMethod()
+    private static boolean overridesMethod(AOMMethod movingMethod)
     {
     	return movingMethod.getOverriding() != null;
     }
     
-    private boolean containsFieldAssignment()
+    private static boolean containsFieldAssignment(AOMMethod movingMethod)
     {
     	return movingMethod.isContainsFieldAssignment();
     }
     
-    private boolean isTargetClassAnInterface()
+    private static boolean isTargetClassAnInterface(AOMClass targetClass)
     {
     	return targetClass.isInterface();
     }
     
-    private boolean isFamilyClass(AOMClass ancestorOrSelf, AOMClass descendant)
+    private static boolean isFamilyClass(AOMClass ancestorOrSelf, AOMClass descendant)
     {
     	AOMClass curClass = descendant; 
     	
@@ -134,7 +138,7 @@ public class MoveMethodApplicabilityChecker
     	return false;
     }
     
-    private boolean validTargetObject()
+    private static boolean validTargetObject(AOMMethod movingMethod, AOMClass targetClass)
     {
     	if( movingMethod.getOwnedScope() != null )
     	{
@@ -177,7 +181,7 @@ public class MoveMethodApplicabilityChecker
     	return false;
     }
 
-    private boolean containsMethodCallWithThisExpressionAsArgument()
+    private static boolean containsMethodCallWithThisExpressionAsArgument(AOMMethod movingMethod)
     {
     	// TODO: In this time, let's ignore this condition.
     	return false;

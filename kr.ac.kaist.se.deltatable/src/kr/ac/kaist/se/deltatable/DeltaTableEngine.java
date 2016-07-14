@@ -5,19 +5,16 @@ public class DeltaTableEngine {
 		System.loadLibrary("libfastdelta.dylib");
 	}
 	
-	public static synchronized DeltaTableEngine getInstance(DeltaTableInfo info, MoveMethodValidityChecker checker)
+	public static synchronized DeltaTableEngine getInstance(DeltaTableInfo info)
 	{
-		DeltaTableEngine ret = new DeltaTableEngine(checker);
+		DeltaTableEngine ret = new DeltaTableEngine();
 		ret.initialize(info);
 		info.dispose();
 		return ret;
 	}
-	
-	private MoveMethodValidityChecker checker;
-	
-	private DeltaTableEngine(MoveMethodValidityChecker checker)
+		
+	private DeltaTableEngine()
 	{
-		this.checker = checker;
 	}
 	
 	private native void initialize(DeltaTableInfo info);
@@ -29,24 +26,11 @@ public class DeltaTableEngine {
 	
 	public DeltaTableEntryIterator getTopK(int k)
 	{
+		System.err.println("TopK:" + k);
 		long iteratorNativeHandle = _getTopK(k);
 		DeltaTableEntryIterator ret = DeltaTableEntryIterator.getInstance(iteratorNativeHandle);
 		return ret;
 	}
 	
     public native void dispose();
-    
-    public boolean moveMethodValidityCheck(int entityIdx, int toClassIdx)
-    {
-    	try
-    	{
-	    	if( checker == null) return true;    	
-	    	return checker.check(entityIdx, toClassIdx);
-    	}
-    	catch(Exception ex)
-    	{
-    		ex.printStackTrace();
-    		return false;
-    	}
-    }
 }

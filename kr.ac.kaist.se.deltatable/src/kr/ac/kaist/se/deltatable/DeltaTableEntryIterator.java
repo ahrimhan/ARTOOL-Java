@@ -47,7 +47,7 @@ public class DeltaTableEntryIterator {
     		return null;
     	}
     	
-    	System.err.println("entry:" + entry.deltaValue);
+//    	System.err.println("entry:" + entry.deltaValue);
     	
     	return entry;
     }

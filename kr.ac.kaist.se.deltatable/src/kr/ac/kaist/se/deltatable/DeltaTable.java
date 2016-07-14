@@ -21,12 +21,18 @@ public class DeltaTable<CT, ET> {
 	}
 	
 	
-	public static <CT, ET> DeltaTable<CT, ET> getInstance(BulkDTSystem<CT, ET> bulkSystem, MoveMethodValidityChecker checker)
+	public static <CT, ET> DeltaTable<CT, ET> getInstance(BulkDTSystem<CT, ET> bulkSystem)
 	{
 		DeltaTable<CT, ET> dt = new DeltaTable<CT, ET>(bulkSystem.getObjectLayer());
+		int possibleMoveCount = 0;
 		DeltaTableInfo info = DeltaTableInfo.getInstance(bulkSystem.getObjectLayer().getClassSize(), bulkSystem.getObjectLayer().getEntitySize(),
-				bulkSystem.getObjectLayer().getMethodSize());
+				bulkSystem.getObjectLayer().getMethodSize(), possibleMoveCount);
 
+		if( possibleMoveCount == 0 )
+		{
+			throw new UnsupportedOperationException();
+		}
+		
 		for( DTLink<ET> link : bulkSystem.getLinks() )
 		{
 			int fromEntityIdx = link.getFrom().getIndex();
@@ -56,7 +62,7 @@ public class DeltaTable<CT, ET> {
 			info.addMembership(membership.getEntity().getIndex(), membership.getClazz().getIndex());
 		}
 	
-		dt.engine = DeltaTableEngine.getInstance(info, checker);
+		dt.engine = DeltaTableEngine.getInstance(info);
 		return dt;
 	}
 	

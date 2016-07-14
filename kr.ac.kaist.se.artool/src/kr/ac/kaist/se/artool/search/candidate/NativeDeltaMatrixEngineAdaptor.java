@@ -7,11 +7,9 @@ import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.SystemEntitySet;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodApplicabilityChecker;
-import kr.ac.kaist.se.deltatable.DeltaTable;
 import kr.ac.kaist.se.deltatable.DeltaTableEngine;
 import kr.ac.kaist.se.deltatable.DeltaTableEntryIterator;
 import kr.ac.kaist.se.deltatable.DeltaTableInfo;
-import kr.ac.kaist.se.deltatable.MoveMethodValidityChecker;
 
 public class NativeDeltaMatrixEngineAdaptor implements DeltaMatrixEngine {
 
@@ -32,7 +30,7 @@ public class NativeDeltaMatrixEngineAdaptor implements DeltaMatrixEngine {
 //		dt = DeltaTable.getInstance(bulkSystem);
 		
 		
-		DeltaTableInfo info = DeltaTableInfo.getInstance(ses.classes.size(), ses.entities.size(), ses.methods.size());
+		DeltaTableInfo info = DeltaTableInfo.getInstance(ses.classes.size(), ses.entities.size(), ses.methods.size(), ses.methodsPossibleToMove.size());
 		
 		for( AOMMethod method : ses.methods )
 		{
@@ -65,17 +63,27 @@ public class NativeDeltaMatrixEngineAdaptor implements DeltaMatrixEngine {
 		{
 			info.addMembership(field.getIndex(), field.getOwner().getIndex());
 		}
-	
-		engine = DeltaTableEngine.getInstance(info, new MoveMethodValidityChecker() {
+		
+		
+		for( int i = 0; i < ses.methods.size(); i++ )
+		{
+			AOMMethod movingMethod = ses.methods.get(i);
 			
-			@Override
-			public boolean check(int entityIdx, int toClassIdx) {
-				AOMClass targetClass = ses.classes.get(toClassIdx);
-				AOMMethod movingMethod = ses.methods.get(entityIdx);
-				
-				return MoveMethodApplicabilityChecker.isApplicable(movingMethod, targetClass);
+			if( MoveMethodApplicabilityChecker.isApplicableForGivenMethod(movingMethod) )
+			{	
+				for( int j = 0; j < ses.classes.size(); j++ )
+				{	
+					AOMClass targetClass = ses.classes.get(j);	
+					if( movingMethod.getOwner() != targetClass &&
+							MoveMethodApplicabilityChecker.isApplicableForTargetClass(movingMethod, targetClass) )
+					{
+						info.possibleMoveMethod(i, j);
+					}
+				}
 			}
-		});
+		}
+		
+		engine = DeltaTableEngine.getInstance(info);
 	}
 	
 	@Override
@@ -85,9 +93,10 @@ public class NativeDeltaMatrixEngineAdaptor implements DeltaMatrixEngine {
 
 	@Override
 	public CandidateIterator getCandidateIterator(int maxCandidateCount) {
+		
 		engine.eval();
 		
-		DeltaTableEntryIterator iterator = engine.getTopK(100);
+		DeltaTableEntryIterator iterator = engine.getTopK(maxCandidateCount);
 		return new NativeDeltaMatrixCandidateIteratorAdaptor(ses, iterator);
 	}
 

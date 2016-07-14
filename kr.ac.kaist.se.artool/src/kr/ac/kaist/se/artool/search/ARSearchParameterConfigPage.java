@@ -66,9 +66,9 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	private int searchTechniqueBits = 0;
 	private int candidateSelectionBits = 0;
 
-	private int maxIterationCount;
-	private int maxCandidateCount;
-	private int saMaxPermissibleIdelIteration;
+	private String maxIterationCountStr;
+	private String maxCandidateCountStr;
+	private String saMaxPermissibleIdelIterationStr;
 	
 	public void saveSettings() {
 		// saves plugin preferences at the workspace level
@@ -78,9 +78,9 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		prefs.putInt("fitnessSelectionBits", fitnessSelectionBits);
 		prefs.putInt("searchTechniqueBits", searchTechniqueBits);
 		prefs.putInt("candidateSelectionBits", candidateSelectionBits);
-		prefs.putInt("maxIterationCount", maxIterationCount);
-		prefs.putInt("maxCandidateCount", maxCandidateCount);
-		prefs.putInt("saMaxPermissibleIdelIteration", saMaxPermissibleIdelIteration);
+		prefs.put("maxIterationCount", maxIterationCountStr);
+		prefs.put("maxCandidateCount", maxCandidateCountStr);
+		prefs.put("saMaxPermissibleIdelIteration", saMaxPermissibleIdelIterationStr);
 		try {
 			prefs.flush();
 		} catch(BackingStoreException e) {
@@ -94,9 +94,9 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		fitnessSelectionBits = prefs.getInt("fitnessSelectionBits", 0xffff);
 		searchTechniqueBits = prefs.getInt("searchTechniqueBits", 0xffff);
 		candidateSelectionBits = prefs.getInt("candidateSelectionBits", 0xffff);
-		maxIterationCount = prefs.getInt("maxIterationCount", 100);
-		maxCandidateCount = prefs.getInt("maxCandidateCount", 1000);
-		saMaxPermissibleIdelIteration = prefs.getInt("saMaxPermissibleIdelIteration", 500);
+		maxIterationCountStr = prefs.get("maxIterationCount", "100");
+		maxCandidateCountStr = prefs.get("maxCandidateCount", "1000");
+		saMaxPermissibleIdelIterationStr = prefs.get("saMaxPermissibleIdelIteration", "500");
 	}
 	
 	@Override
@@ -228,13 +228,19 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		{
 			@Override
 			public void verifyText(VerifyEvent e) {
-				String string = e.text;
-				char[] chars = new char[string.length()];
-				string.getChars(0, chars.length, chars, 0);
-				for (int i = 0; i < chars.length; i++) {
-					if (!('0' <= chars[i] && chars[i] <= '9')) {
-						e.doit = false;
-						return;
+				String typedString = e.text;
+				char[] typedChars = new char[typedString.length()];
+				typedString.getChars(0, typedChars.length, typedChars, 0);
+				
+				System.err.println("typedString:"+typedString);
+				
+				for (int i = 0; i < typedChars.length; i++) {
+					if (!(('0' <= typedChars[i] && typedChars[i] <= '9'))) {
+						if( !(i == 0 && e.start == 0 && typedChars[i] == '-') )
+						{
+							e.doit = false;
+							return;
+						}
 					}
 				}	
 			}	
@@ -245,20 +251,13 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		Text maxIterationCountText = new Text(composite, SWT.BORDER | SWT.SINGLE);
 		maxIterationCountText.setMessage("Set Max-Iteration Counts. Default is 1000");
 		maxIterationCountText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		maxIterationCountText.setText(Integer.toString(maxIterationCount));
+		maxIterationCountText.setText(maxIterationCountStr);
 		maxIterationCountText.addVerifyListener(verifyListener);
 		maxIterationCountText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				Text text = (Text)e.widget;
-				try
-				{
-					maxIterationCount = Integer.parseInt(text.toString());
-				}
-				catch(Exception ex)
-				{
-					ex.printStackTrace();
-				}
+				maxIterationCountStr = text.getText();
 			}
 		});
 		
@@ -266,20 +265,13 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		Text maxCandidateCountText = new Text(composite, SWT.BORDER | SWT.SINGLE);
 		maxCandidateCountText.setMessage("Set Max-Candidate Counts. Default is 100");
 		maxCandidateCountText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		maxCandidateCountText.setText(Integer.toString(maxCandidateCount));
+		maxCandidateCountText.setText(maxCandidateCountStr);
 		maxCandidateCountText.addVerifyListener(verifyListener);
 		maxCandidateCountText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				Text text = (Text)e.widget;
-				try
-				{
-					maxCandidateCount = Integer.parseInt(text.toString());
-				}
-				catch(Exception ex)
-				{
-					ex.printStackTrace();
-				}
+				maxCandidateCountStr = text.getText();	
 			}
 		});
 		
@@ -287,20 +279,13 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		Text saMaxPermissibleIdelIterationText = new Text(composite, SWT.BORDER | SWT.SINGLE);
 		saMaxPermissibleIdelIterationText.setMessage("Set Max Permissible Idle Iterations. Default is 500");
 		saMaxPermissibleIdelIterationText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		saMaxPermissibleIdelIterationText.setText(Integer.toString(saMaxPermissibleIdelIteration));
+		saMaxPermissibleIdelIterationText.setText(saMaxPermissibleIdelIterationStr);
 		saMaxPermissibleIdelIterationText.addVerifyListener(verifyListener);
 		saMaxPermissibleIdelIterationText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				Text text = (Text)e.widget;
-				try
-				{
-					saMaxPermissibleIdelIteration = Integer.parseInt(text.toString());
-				}
-				catch(Exception ex)
-				{
-					ex.printStackTrace();
-				}
+				saMaxPermissibleIdelIterationStr = text.getText();
 			}
 		});
 		
@@ -438,16 +423,17 @@ public class ARSearchParameterConfigPage extends WizardPage {
 
 
 	public int getMaxCandidateCount() {
-		return maxCandidateCount;
+		System.err.println("<<" + maxCandidateCountStr + ">>");
+		return Integer.parseInt(maxCandidateCountStr);
 	}
 
 
 	public int getMaxIterationCount() {		
-		return maxIterationCount;	
+		return Integer.parseInt(maxIterationCountStr);	
 	}
 
 
 	public int getSAPermissibleIdleIteration() {		
-		return saMaxPermissibleIdelIteration;	
+		return Integer.parseInt(saMaxPermissibleIdelIterationStr);	
 	}
 }
