@@ -42,7 +42,7 @@ public class ExhaustiveCandidateSelection implements CandidateSelection {
 			
 			for( AOMClass clazz : aom.getClasses() )
 			{
-				if( MoveMethodApplicabilityChecker.isApplicableForTargetClass(method, clazz) )
+				if( clazz != method.getOwner() && MoveMethodApplicabilityChecker.isApplicableForTargetClass(method, clazz) )
 				{
 					candidateList.add(new MoveMethodCommand(method, clazz));
 					if( maxCandidateCount > 0 && candidateList.size() > maxCandidateCount )
@@ -59,6 +59,7 @@ public class ExhaustiveCandidateSelection implements CandidateSelection {
 		}
 		
 		System.err.println("ExhaustiveCandidateSelection: ready to action!!!");
+		System.err.println("Candidate Count:" + candidateList.size());
 	}
 	
 	public Vector<AOMMethod> getMethodList()

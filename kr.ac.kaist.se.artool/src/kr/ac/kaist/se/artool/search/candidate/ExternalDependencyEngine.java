@@ -38,8 +38,7 @@ public class ExternalDependencyEngine extends JavaDeltaMatrixEngine {
 
 			@Override
 			public int compare(MoveMethodCommand o1, MoveMethodCommand o2) {
-				float dd = o1.getDeltaValue() - o2.getDeltaValue();
-				if( dd < 0 )
+				if( o1.getDeltaValue().compareTo(o2.getDeltaValue()) < 0 )
 				{
 					return -1;
 				}
@@ -64,7 +63,7 @@ public class ExternalDependencyEngine extends JavaDeltaMatrixEngine {
 					//if( dm.get(i,  j) < 0 )
 					{
 						
-						MoveMethodCommand mmc = new MoveMethodCommand(method, clazz, (float)(-1 * em.get(i, j)));
+						MoveMethodCommand mmc = new MoveMethodCommand(method, clazz, new SingleDeltaValue((float)(-1 * em.get(i, j))));
 						mmcSet.add(mmc);
 					}
 				}

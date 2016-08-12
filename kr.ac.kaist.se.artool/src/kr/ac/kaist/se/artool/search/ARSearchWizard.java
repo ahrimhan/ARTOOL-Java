@@ -35,6 +35,7 @@ public class ARSearchWizard extends Wizard {
 	private IFile selectedFile;
 
 	private List<FitnessType> fitnessTypeList;
+	private List<FitnessType> multiFitnessTypeList;
 
 	private List<SearchTechType> searchTechTypeList;
 
@@ -82,6 +83,7 @@ public class ARSearchWizard extends Wizard {
 		affectedFileList.add(selectedFile);
 		
 		fitnessTypeList = paramConfigPage.getFitnessType();
+		multiFitnessTypeList = paramConfigPage.getMultiFitnessType();
 		searchTechTypeList = paramConfigPage.getSearchTechType();
 		candidateSelectionTypeList = paramConfigPage.getCandidateSelectionType();
 		//useDeltaTable = paramConfigPage.useDeltaTable();
@@ -114,7 +116,7 @@ public class ARSearchWizard extends Wizard {
 						{
 							for(CandidateSelectionType candidateSelectionType: candidateSelectionTypeList )
 							{
-								ARSearchMain.getInstance().run(caseIdx, selectedFile.getProject().getName(), timestamp, aom, fitnessType, searchTechType, candidateSelectionType, maxIterationCount, maxCandidateCount, saMaxPermissibleIdleIteration, monitor);
+								ARSearchMain.getInstance().run(caseIdx, selectedFile.getProject().getName(), timestamp, aom, fitnessType, multiFitnessTypeList, searchTechType, candidateSelectionType, maxIterationCount, maxCandidateCount, saMaxPermissibleIdleIteration, monitor);
 								caseIdx++;
 							}
 						}

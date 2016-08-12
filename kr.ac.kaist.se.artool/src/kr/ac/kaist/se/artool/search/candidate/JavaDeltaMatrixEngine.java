@@ -2,10 +2,8 @@ package kr.ac.kaist.se.artool.search.candidate;
 
 import java.sql.Timestamp;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -19,8 +17,6 @@ import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.SystemEntitySet;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
-import kr.ac.kaist.se.artool.search.MoveMethodEventListener;
-import kr.ac.kaist.se.artool.search.fitness.EPMEngine.EPMHelper;
 import no.uib.cipr.matrix.DenseMatrix;
 import no.uib.cipr.matrix.Matrix;
 import no.uib.cipr.matrix.MatrixEntry;
@@ -47,8 +43,7 @@ public class JavaDeltaMatrixEngine implements DeltaMatrixEngine {
 
 			@Override
 			public int compare(MoveMethodCommand o1, MoveMethodCommand o2) {
-				float dd = o1.getDeltaValue() - o2.getDeltaValue();
-				if( dd < 0 )
+				if( o1.getDeltaValue().compareTo(o2.getDeltaValue()) < 0 )
 				{
 					return -1;
 				}
@@ -287,7 +282,7 @@ public class JavaDeltaMatrixEngine implements DeltaMatrixEngine {
 						//if( dm.get(i,  j) < 0 )
 						{
 							
-							MoveMethodCommand mmc = new MoveMethodCommand(method, clazz, (float)(dm.get(i, j) / (iim.get(i, j) + 1)) );
+							MoveMethodCommand mmc = new MoveMethodCommand(method, clazz, new SingleDeltaValue((float)(dm.get(i, j) / (iim.get(i, j) + 1))) );
 							mmcSet.add(mmc);
 
 							if( mmcSet.size() > (1000 / executorPoolSize) )

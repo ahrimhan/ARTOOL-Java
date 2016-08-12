@@ -1,5 +1,7 @@
 package kr.ac.kaist.se.deltatable;
 
+import java.util.Vector;
+
 public class DeltaTableEntryIterator {
 
 	
@@ -35,7 +37,8 @@ public class DeltaTableEntryIterator {
     {
     	public int toClassIdx;
     	public int entityIdx;
-    	public float deltaValue;
+    	public float rmsDeltaValue;
+    	public float[] deltaValueList;
     }
     
     public DeltaTableEntry next()

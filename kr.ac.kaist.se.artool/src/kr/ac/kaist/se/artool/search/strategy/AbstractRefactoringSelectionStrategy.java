@@ -3,23 +3,20 @@ package kr.ac.kaist.se.artool.search.strategy;
 import java.util.Comparator;
 
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
+import kr.ac.kaist.se.artool.search.fitness.value.FitnessValue;
 
 public abstract class AbstractRefactoringSelectionStrategy {
 
-	protected double initialFitness;
-	protected double prevFitness;
-	protected Comparator<MoveMethodCommand> comparator;
+	protected FitnessValue initialFitnessValue;
 	
 	
-	public AbstractRefactoringSelectionStrategy(float initialFitness, Comparator<MoveMethodCommand> comparator)
+	public AbstractRefactoringSelectionStrategy(FitnessValue initialFitnessValue)
 	{
-		this.initialFitness = initialFitness;
-		this.prevFitness = initialFitness;
-		this.comparator = comparator;
+		this.initialFitnessValue = initialFitnessValue;
 	}
 	
-	public abstract boolean next(MoveMethodCommand obj);
-	public abstract MoveMethodCommand done();
+	public abstract boolean next(FitnessValue fitnessValue);
+	public abstract FitnessValue done();
 	
 	public abstract boolean restrictCandidateCount();
 }

@@ -13,11 +13,13 @@ import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.SystemEntitySet;
 import kr.ac.kaist.se.artool.search.MoveMethodEventListener;
+import kr.ac.kaist.se.artool.search.fitness.value.AtomicFitnessValue;
+import kr.ac.kaist.se.artool.search.fitness.value.SmallerBetterFitnessValue;
 import no.uib.cipr.matrix.DenseVector;
 import no.uib.cipr.matrix.Matrix;
 import no.uib.cipr.matrix.sparse.LinkedSparseMatrix;
 
-public class EPMEngine extends FitnessFunction implements MoveMethodEventListener {
+public class EPMEngine extends AtomicFitnessFunction implements MoveMethodEventListener {
 	private Matrix membershipMatrix;
 	private SystemEntitySet sts;	
 	private no.uib.cipr.matrix.Vector oneVector;
@@ -203,9 +205,8 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 		}
 	}
 	
-	
-	public float calculate()
-	{
+	@Override
+	public AtomicFitnessValue calculateAtomic() {	
 		Matrix intersectMatrix = getIntersectMatrix();
 		
 		no.uib.cipr.matrix.Vector rowSumColVector = new DenseVector(sts.entities.size());
@@ -249,13 +250,13 @@ public class EPMEngine extends FitnessFunction implements MoveMethodEventListene
 		
 		epm = epm / sts.entities.size();
 		
-		return epm;
+		return new SmallerBetterFitnessValue(epm);
+
 	}
 	
-	public boolean isBiggerValueMeantBetterFitness()
-	{
-		return false;
-	}
+
+	
+	
 	
 	public void moveMethodPerformed(AOMClass fromClass, AOMMethod method, AOMClass toClass, boolean isRollbackAction)
 	{

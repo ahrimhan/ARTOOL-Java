@@ -65,6 +65,8 @@ public class NativeDeltaMatrixEngineAdaptor implements DeltaMatrixEngine {
 		}
 		
 		
+		int possibleMoveMethodCount = 0;
+		
 		for( int i = 0; i < ses.methods.size(); i++ )
 		{
 			AOMMethod movingMethod = ses.methods.get(i);
@@ -78,10 +80,13 @@ public class NativeDeltaMatrixEngineAdaptor implements DeltaMatrixEngine {
 							MoveMethodApplicabilityChecker.isApplicableForTargetClass(movingMethod, targetClass) )
 					{
 						info.possibleMoveMethod(i, j);
+						possibleMoveMethodCount++;
 					}
 				}
 			}
 		}
+		
+		System.err.println("Possible Candidate Count:" + possibleMoveMethodCount);
 		
 		engine = DeltaTableEngine.getInstance(info);
 	}

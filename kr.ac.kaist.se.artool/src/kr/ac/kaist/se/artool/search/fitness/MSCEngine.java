@@ -2,9 +2,10 @@ package kr.ac.kaist.se.artool.search.fitness;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
-import kr.ac.kaist.se.artool.search.fitness.QMoodEngine.TYPE;
+import kr.ac.kaist.se.artool.search.fitness.value.AtomicFitnessValue;
+import kr.ac.kaist.se.artool.search.fitness.value.BiggerBetterFitnessValue;
 
-public class MSCEngine extends FitnessFunction {
+public class MSCEngine extends AtomicFitnessFunction {
 	private MinimalBasicMetricSuite bms;
 	private AbstractObjectModel aom;
 	
@@ -22,7 +23,7 @@ public class MSCEngine extends FitnessFunction {
 	
 	
 	@Override
-	public float calculate() {
+	public AtomicFitnessValue calculateAtomic() {
 		int methodSize;
 		int attrSize;
 		float ret = 0;
@@ -51,7 +52,7 @@ public class MSCEngine extends FitnessFunction {
 		
 		ret = ret / div;
 		
-		return ret;
+		return new BiggerBetterFitnessValue(ret);
 	}
 	
 	public boolean isBiggerValueMeantBetterFitness()

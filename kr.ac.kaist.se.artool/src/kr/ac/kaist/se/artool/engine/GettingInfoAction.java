@@ -4,13 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
-import kr.ac.kaist.se.aom.AbstractObjectModel;
-import kr.ac.kaist.se.artool.search.fitness.ConnectivityEngine;
-import kr.ac.kaist.se.artool.search.fitness.EPMEngine;
-import kr.ac.kaist.se.artool.search.fitness.MPCEngine;
-import kr.ac.kaist.se.artool.search.fitness.NativeEPMEngineAdapter;
-import kr.ac.kaist.se.artool.util.CommandExecutionOperation;
-
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IAdaptable;
@@ -29,6 +22,13 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
+
+import kr.ac.kaist.se.aom.AbstractObjectModel;
+import kr.ac.kaist.se.artool.search.fitness.ConnectivityEngine;
+import kr.ac.kaist.se.artool.search.fitness.MPCEngine;
+import kr.ac.kaist.se.artool.search.fitness.NativeEPMEngineAdapter;
+import kr.ac.kaist.se.artool.search.fitness.value.FitnessValue;
+import kr.ac.kaist.se.artool.util.CommandExecutionOperation;
 
 public class GettingInfoAction implements IObjectActionDelegate {
 
@@ -77,14 +77,20 @@ public class GettingInfoAction implements IObjectActionDelegate {
 					IProgressMonitor monitor, IAdaptable info)
 					throws ExecutionException {
 				try {
+					
+					FitnessValue fitnessValue;
+					
 					ConnectivityEngine ce = new ConnectivityEngine(aom);
-					System.out.println("Connectivity, " + ce.calculate());
+					fitnessValue = ce.calculate();
+					System.out.println("Connectivity, " + fitnessValue.toString());
 					
 					NativeEPMEngineAdapter nepme = new NativeEPMEngineAdapter(ses);
-					System.out.println("Native EPM, " + nepme.calculate());
+					fitnessValue = nepme.calculate();;
+					System.out.println("Native EPM, " + fitnessValue.toString());
 					
 					MPCEngine mpce = new MPCEngine(aom);
-					System.out.println("MPC, " + mpce.calculate());			
+					fitnessValue = mpce.calculate();;
+					System.out.println("MPC, " + fitnessValue.toString());			
 				} finally {
 					monitor.done();
 				}

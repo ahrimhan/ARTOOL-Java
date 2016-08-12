@@ -1,47 +1,57 @@
 package kr.ac.kaist.se.artool.search.strategy;
 
-import java.util.Comparator;
-
-import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
+import kr.ac.kaist.se.artool.search.fitness.value.AtomicFitnessValue;
+import kr.ac.kaist.se.artool.search.fitness.value.FitnessValue;
 
 public class FirstPositiveFitnessSelectionStrategy extends
 		AbstractRefactoringSelectionStrategy {
 	
 	
-	private MoveMethodCommand prevCmd = null;
-	private MoveMethodCommand retCmd = null;
+	private FitnessValue prevValue = null;
+	private FitnessValue retValue = null;
 	private int iteration = 0;
 	
-	public FirstPositiveFitnessSelectionStrategy(float prevFitness, Comparator<MoveMethodCommand> comparator) {
-		super(prevFitness, comparator);
+	public FirstPositiveFitnessSelectionStrategy(FitnessValue initialFitnessValue) {
+		super(initialFitnessValue);
+		
+		if( initialFitnessValue instanceof AtomicFitnessValue )
+		{
+			this.prevValue = (AtomicFitnessValue) initialFitnessValue;
+		}
+		else
+		{
+			throw new RuntimeException("Not atomic fitness value");
+		
+		}
 	}
 
 	@Override
-	public synchronized boolean next(MoveMethodCommand obj) {
-		System.err.print("[" + iteration + "] first positive fitness selection...: " + obj.fitness);
+	public synchronized boolean next(FitnessValue obj) {
+		System.err.print("[" + iteration + "] first positive fitness selection...: " + obj.toString());
 
-		if( prevCmd == null || comparator.compare(prevCmd, obj) < 0 )
+		if( prevValue.compareTo(obj) < 0 )
 		{
 			System.err.println(" Selected");
-			prevCmd = obj;
-			retCmd = obj;
+			prevValue = obj;
+			retValue = obj;
 			return false;
 		}
-		
+
 		System.err.println(" Not Selected");
 		return true;
 	}
 
 	@Override
-	public MoveMethodCommand done() {
-		MoveMethodCommand mmc = retCmd;
+	public FitnessValue done() {
 		
-		if( retCmd != null )
+		
+		FitnessValue mmc = retValue;
+		
+		if( mmc != null )
 		{
-			prevFitness = retCmd.fitness;
-			System.err.println("[" + iteration + "] selected!!!: " + retCmd.fitness);
+			System.err.println("[" + iteration + "] selected!!!: " + retValue.toString());
 			iteration++;
-			retCmd = null;
+			retValue = null;
 		}
 		else
 		{

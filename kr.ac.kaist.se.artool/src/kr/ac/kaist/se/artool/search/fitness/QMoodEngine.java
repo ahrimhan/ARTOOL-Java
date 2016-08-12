@@ -2,9 +2,10 @@ package kr.ac.kaist.se.artool.search.fitness;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
-import kr.ac.kaist.se.artool.engine.StatusLogger;
+import kr.ac.kaist.se.artool.search.fitness.value.AtomicFitnessValue;
+import kr.ac.kaist.se.artool.search.fitness.value.BiggerBetterFitnessValue;
 
-public class QMoodEngine extends FitnessFunction {
+public class QMoodEngine extends AtomicFitnessFunction {
 	private MinimalBasicMetricSuite bms;
 	
 	public enum TYPE
@@ -38,11 +39,11 @@ public class QMoodEngine extends FitnessFunction {
 		currentCIS = 0;
 		currentNOM = 0;
 		
-		int countDCC = 0;
+//		int countDCC = 0;
 		int countCAM = 0;
-		int countNOP = 0;
-		int countCIS = 0;
-		int countNOM = 0;
+//		int countNOP = 0;
+//		int countCIS = 0;
+//		int countNOM = 0;
 		
 		
 		for( AOMClass clazz : aom.getClasses() )
@@ -101,10 +102,7 @@ public class QMoodEngine extends FitnessFunction {
 		return MinimalBasicMetricSuite.getFloat(obj);
 	}
 	
-	@SuppressWarnings("unused")
-	public float calculate()
-			//, PrintStream ps)
-	{
+	public AtomicFitnessValue calculateAtomic() {	
 		float[] qmood = new float[countOfType];
 	
 		bms.measure(aom, false, false);
@@ -159,12 +157,8 @@ public class QMoodEngine extends FitnessFunction {
 		//System.err.print("Delta Orig\t");
 		//StatusLogger.getInstance().printDeltaWithOriginal();
 		
-		return qmood[type.ordinal()];
-			
+		return new BiggerBetterFitnessValue(qmood[type.ordinal()]);
+
 	}
 	
-	public boolean isBiggerValueMeantBetterFitness()
-	{
-		return true;
-	}
 }

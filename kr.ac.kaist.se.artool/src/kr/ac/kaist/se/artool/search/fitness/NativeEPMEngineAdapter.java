@@ -8,9 +8,11 @@ import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.SystemEntitySet;
 import kr.ac.kaist.se.artool.search.MoveMethodEventListener;
+import kr.ac.kaist.se.artool.search.fitness.value.AtomicFitnessValue;
+import kr.ac.kaist.se.artool.search.fitness.value.SmallerBetterFitnessValue;
 
 
-public class NativeEPMEngineAdapter extends FitnessFunction implements MoveMethodEventListener {
+public class NativeEPMEngineAdapter extends AtomicFitnessFunction implements MoveMethodEventListener {
 
   
     private SystemEntitySet ses;
@@ -87,12 +89,7 @@ public class NativeEPMEngineAdapter extends FitnessFunction implements MoveMetho
 	}
 
 	@Override
-	public float calculate() {
-		return nee.calculateFitness();
-	}
-
-	@Override
-	public boolean isBiggerValueMeantBetterFitness() {
-		return false;
+	public AtomicFitnessValue calculateAtomic() {
+		return new SmallerBetterFitnessValue(nee.calculateFitness());
 	}
 }

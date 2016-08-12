@@ -2,8 +2,10 @@ package kr.ac.kaist.se.artool.search.fitness;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
+import kr.ac.kaist.se.artool.search.fitness.value.AtomicFitnessValue;
+import kr.ac.kaist.se.artool.search.fitness.value.SmallerBetterFitnessValue;
 
-public class MPCEngine extends FitnessFunction {
+public class MPCEngine extends AtomicFitnessFunction {
 	private MinimalBasicMetricSuite bms;
 	private AbstractObjectModel aom;
 	
@@ -20,7 +22,7 @@ public class MPCEngine extends FitnessFunction {
 	
 	
 	@Override
-	public float calculate() {
+	public AtomicFitnessValue calculateAtomic() {
 		float mpcTotal = 0;
 		int mpcCount = 0;
 		
@@ -34,7 +36,10 @@ public class MPCEngine extends FitnessFunction {
 		}
 		
 		float ret = mpcTotal/mpcCount;
-		return ret;
+		
+		
+		return new SmallerBetterFitnessValue(ret);
+
 	}
 	
 	

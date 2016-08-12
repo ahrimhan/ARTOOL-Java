@@ -1,8 +1,8 @@
 package kr.ac.kaist.se.artool.search;
 
 import java.io.IOException;
+import java.util.List;
 
-import org.apache.log4j.xml.DOMConfigurator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -20,7 +20,7 @@ public class ARSearchMain {
 	
 	public enum FitnessType
 	{
-		FLEXIBILITY, REUSABILITY, UNDERSTANDABILITY, EPM, MPC, MSC, CONNECTIVITY
+		FLEXIBILITY, REUSABILITY, UNDERSTANDABILITY, EPM, MPC, MSC, CONNECTIVITY, PARETO_COMPOSITE
 	}
 	
 	public enum SearchTechType
@@ -52,6 +52,7 @@ public class ARSearchMain {
 			String timestamp, 
 			AbstractObjectModel originalAOM, 
 			FitnessType fitnessType, 
+			List<FitnessType> multiFitnessTypeList,
 			SearchTechType searchType, 
 			CandidateSelectionType candidateSelectionType, 
 			int max_iteration, 
@@ -91,7 +92,7 @@ public class ARSearchMain {
 		
 		monitor.setTaskName(project + " " + candidateMode + " " + searchTypeStr + " " + fitnessTypeStr);
 		
-		ARSearchWorker worker = new ARSearchWorker(originalAOM, fitnessType, searchType, candidateSelectionType, max_iteration, max_candidate_selection, saMaxPermissibleIdleIteration, candidateLogger, selectionLogger);
+		ARSearchWorker worker = new ARSearchWorker(originalAOM, fitnessType, multiFitnessTypeList, searchType, candidateSelectionType, max_iteration, max_candidate_selection, saMaxPermissibleIdleIteration, candidateLogger, selectionLogger);
 		worker.run(monitor);
 	}
 	

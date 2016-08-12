@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.common.collect.Sets;
+
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
@@ -11,8 +13,6 @@ import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMField;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.aom.structure.AOMParameter;
-
-import com.google.common.collect.Sets;
 
 public class MinimalBasicMetricSuite {
 
@@ -40,7 +40,7 @@ public class MinimalBasicMetricSuite {
 	}
 	
 	
-	private HashSet<AOMClass> visitedClasses = new HashSet<AOMClass>();
+//	private HashSet<AOMClass> visitedClasses = new HashSet<AOMClass>();
 	
 	
 	
@@ -103,6 +103,7 @@ public class MinimalBasicMetricSuite {
 		
 		int camcMethodParameterCount = 0;
 		
+		@SuppressWarnings("unchecked")
 		HashSet<AOMField>[] mscFieldList = new HashSet[clazz.getMethods().size()];
 		
 		if( connectivity && clazz.getMethods().size() > 0 )
@@ -113,6 +114,7 @@ public class MinimalBasicMetricSuite {
 				connCheckField[i] = 0;	
 			}
 			
+			@SuppressWarnings("unused")
 			Vector<AOMMethod> calleeMethods = new Vector<AOMMethod>(); 
 					
 			int ii= 0; 

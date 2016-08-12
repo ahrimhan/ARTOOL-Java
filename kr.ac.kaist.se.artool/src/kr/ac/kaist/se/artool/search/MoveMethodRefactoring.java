@@ -27,18 +27,8 @@ public class MoveMethodRefactoring {
 	}
 	
 	
-	public boolean doAction(MoveMethodCommand action)
+	public boolean doAction(MoveMethodCommand action, boolean commit)
 	{
-		/*
-		for( MoveMethodCommand mmc : history )
-		{
-			if( mmc.isIdenticalOrReversal(action) )
-			{
-				return false;
-			}
-		}
-		*/
-		
 		try
 		{
 			if( action.doCommand() > 0 )
@@ -47,7 +37,15 @@ public class MoveMethodRefactoring {
 				{
 					listener.moveMethodPerformed(action.getFromClass(), action.getMethod(), action.getToClass(), false);
 				}
-				history.push(action);
+				
+				if( commit )
+				{
+					action.commit();
+				}
+				else
+				{
+					history.push(action);
+				}
 				return true;
 			}
 		}

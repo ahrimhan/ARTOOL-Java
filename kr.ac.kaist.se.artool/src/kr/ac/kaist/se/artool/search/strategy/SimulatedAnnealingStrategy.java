@@ -1,16 +1,16 @@
 package kr.ac.kaist.se.artool.search.strategy;
 
-import java.util.Comparator;
 import java.util.Random;
 
-import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
+import kr.ac.kaist.se.artool.search.fitness.value.AtomicFitnessValue;
+import kr.ac.kaist.se.artool.search.fitness.value.FitnessValue;
 
 public class SimulatedAnnealingStrategy extends
 		AbstractRefactoringSelectionStrategy {
 	
-	private MoveMethodCommand prevCmd = null;
-	private MoveMethodCommand bestCmd = null;
-	
+	private AtomicFitnessValue prevValue = null;
+	private AtomicFitnessValue bestValue = null;
+	private AtomicFitnessValue initValue = null;
 	
 	private double temperature = 0;
 	private double coolingRate = 0.0025;
@@ -20,54 +20,61 @@ public class SimulatedAnnealingStrategy extends
 	private int iterationCount = 0;
 	private int maxIterationCount = 0;
 	
-	public SimulatedAnnealingStrategy(float initFitness, Comparator<MoveMethodCommand> comparator, int maxIterationCount) {
-		super(initFitness, comparator);
+	public SimulatedAnnealingStrategy(FitnessValue initialFitnessValue, int maxIterationCount) {
+		super(initialFitnessValue);
 		
 		random = new Random(System.currentTimeMillis());
 		isSetInitialTemperature = false;
-		bestCmd = null;
+		bestValue = null;
+		initValue = (AtomicFitnessValue) initialFitnessValue;
 		
 		this.maxIterationCount = maxIterationCount;
 		
 		System.err.println("SimulatedAnnealingStrategy");
 	}
 	
-	private double acceptanceProbability(MoveMethodCommand prevCmd, MoveMethodCommand newCmd, double temperature)
+	private double acceptanceProbability(AtomicFitnessValue prevValue, AtomicFitnessValue newValue, double temperature)
 	{
-		if( prevCmd == null || comparator.compare(prevCmd, newCmd) < 0 )
+		if( prevValue == null || prevValue.compareTo(newValue) < 0 )
 		{
 			return 2;
 		}
 		else
 		{
-			//return Math.exp(-(prevCmd.fitness - newCmd.fitness) / temperature);
-			if( newCmd.fitness < prevCmd.fitness )
-			{
-				return Math.exp((newCmd.fitness - prevCmd.fitness) / temperature);
-			}
-			else
-			{
-				return Math.exp((prevCmd.fitness - newCmd.fitness) / temperature);
-			}
+			return Math.exp(-(prevValue.distance(newValue)) / temperature);
+//			if( newValue.compareTo(prevValue) < 0 )
+//			{
+//				return Math.exp((newValue.getValue() - prevValue.getValue()) / temperature);
+//			}
+//			else
+//			{
+//				return Math.exp((prevValue.getValue() - newValue.getValue()) / temperature);
+//			}
 		}
 	}
 
 	@Override
-	public boolean next(MoveMethodCommand newCmd) {
+	public boolean next(FitnessValue vv) {
 		boolean ret = true;
 		
+		if( !(vv instanceof AtomicFitnessValue) )
+		{
+			throw new RuntimeException("Not atomic fitness Value");
+		}
+		
+		AtomicFitnessValue newValue = (AtomicFitnessValue)vv;
 		
 		if( !isSetInitialTemperature )
 		{
-			temperature = -1 * Math.abs(newCmd.fitness - initialFitness) / Math.log(initialProbability);
+			temperature = -1 * newValue.distance(initValue) / Math.log(initialProbability);
 			isSetInitialTemperature = true;
 		}
 		
-		if( random.nextDouble() < acceptanceProbability(prevCmd, newCmd, temperature) )
+		if( random.nextDouble() < acceptanceProbability(prevValue, newValue, temperature) )
 		{
-			prevCmd = newCmd;
+			prevValue = newValue;
 			ret = false;
-			bestCmd = newCmd;
+			bestValue = newValue;
 		}
 		else if( iterationCount < maxIterationCount ) 
 		{
@@ -88,15 +95,11 @@ public class SimulatedAnnealingStrategy extends
 	}
 
 	@Override
-	public MoveMethodCommand done() {
-		MoveMethodCommand mmc = bestCmd;
-		bestCmd = null;
+	public FitnessValue done() {
+		FitnessValue mmc = bestValue;
 		
+		bestValue = null;
 		
-		if( bestCmd != null )
-		{
-			System.err.println("SA:fitness:" + bestCmd.fitness);
-		}
 		return mmc;
 	}
 	

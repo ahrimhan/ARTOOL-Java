@@ -1,6 +1,6 @@
 package kr.ac.kaist.se.artool.search;
 
-import java.util.Comparator;
+import java.util.List;
 
 import org.apache.logging.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -19,12 +19,15 @@ import kr.ac.kaist.se.artool.search.candidate.DeltaMatrixEngine;
 import kr.ac.kaist.se.artool.search.candidate.ExhaustiveCandidateSelection;
 import kr.ac.kaist.se.artool.search.candidate.NativeDeltaMatrixEngineAdaptor;
 import kr.ac.kaist.se.artool.search.candidate.RandomCandidateSelection;
+import kr.ac.kaist.se.artool.search.fitness.AtomicFitnessFunction;
 import kr.ac.kaist.se.artool.search.fitness.ConnectivityEngine;
 import kr.ac.kaist.se.artool.search.fitness.EPMEngine;
 import kr.ac.kaist.se.artool.search.fitness.FitnessFunction;
 import kr.ac.kaist.se.artool.search.fitness.MPCEngine;
 import kr.ac.kaist.se.artool.search.fitness.MSCEngine;
+import kr.ac.kaist.se.artool.search.fitness.ParetoEngine;
 import kr.ac.kaist.se.artool.search.fitness.QMoodEngine;
+import kr.ac.kaist.se.artool.search.fitness.value.FitnessValue;
 import kr.ac.kaist.se.artool.search.strategy.AbstractRefactoringSelectionStrategy;
 import kr.ac.kaist.se.artool.search.strategy.BestFitnessSelectionStrategy;
 import kr.ac.kaist.se.artool.search.strategy.FirstPositiveFitnessSelectionStrategy;
@@ -38,7 +41,8 @@ public class ARSearchWorker {
 	private int max_iteration;
 	private int max_candidate_selection;
 	private int saMaxPermissibleIdleIteration;
-	
+	private List<FitnessType> multiFitnessTypeList;
+
 
 	private Logger candidateLogger;
 	private Logger selectionLogger;
@@ -49,6 +53,7 @@ public class ARSearchWorker {
 	public ARSearchWorker(
 			AbstractObjectModel originalAOM, 
 			FitnessType fitnessType, 
+			List<FitnessType> multiFitnessTypeList,
 			SearchTechType searchType, 
 			CandidateSelectionType candidateSelectionType, 
 			int max_iteration, 
@@ -60,6 +65,7 @@ public class ARSearchWorker {
 	{
 		this.aom = EcoreUtil.copy(originalAOM);
 		this.fitnessType = fitnessType;
+		this.multiFitnessTypeList = multiFitnessTypeList;
 		this.searchType = searchType;
 		this.candidateSelectionType = candidateSelectionType;
 		this.max_iteration = max_iteration;
@@ -100,9 +106,9 @@ public class ARSearchWorker {
 		}
 	}
 	
-	private FitnessFunction setupFitnessFunction()
+	private AtomicFitnessFunction setupAtomicFitnessFunction(FitnessType fitnessType)
 	{
-		FitnessFunction fitnessFunction;
+		AtomicFitnessFunction fitnessFunction;
 		
 		switch( fitnessType )
 		{
@@ -137,55 +143,47 @@ public class ARSearchWorker {
 		
 		return fitnessFunction;
 	}
+
 	
-	private Comparator<MoveMethodCommand> setupMoveMethodComparator(FitnessFunction fitnessFunction) {
+	private FitnessFunction setupFitnessFunction()
+	{
+		FitnessFunction fitnessFunction;
 		
-		Comparator<MoveMethodCommand> comparator;
+		switch( fitnessType )
+		{
+		case PARETO_COMPOSITE:
+			ParetoEngine paretoEngine = new ParetoEngine();
+			for( FitnessType multiFitnessType : multiFitnessTypeList )
+			{
+				paretoEngine.addFitnessFunction(setupAtomicFitnessFunction(multiFitnessType));
+			}
+			fitnessFunction = paretoEngine;
+			break;
+		default:
+			fitnessFunction = setupAtomicFitnessFunction(fitnessType);
 		
-		if( fitnessFunction.isBiggerValueMeantBetterFitness() )
-		{
-			comparator = new Comparator<MoveMethodCommand>(){
-				
-				@Override
-				public int compare(MoveMethodCommand o1, MoveMethodCommand o2) {
-					if( o1.fitness > o2.fitness ) return 1;
-					else if( o1.fitness < o2.fitness ) return -1;
-					else return 0;
-				}
-			};
-		}
-		else
-		{
-			comparator = new Comparator<MoveMethodCommand>(){
-				
-				@Override
-				public int compare(MoveMethodCommand o1, MoveMethodCommand o2) {
-					if( o1.fitness < o2.fitness ) return 1;
-					else if( o1.fitness > o2.fitness ) return -1;
-					else return 0;
-				}
-			};	
 		}
 		
-		return comparator;
+		return fitnessFunction;
 	}
 	
-	private AbstractRefactoringSelectionStrategy setupStrategy(float prevFitness, Comparator<MoveMethodCommand> comparator)
+	
+	private AbstractRefactoringSelectionStrategy setupStrategy(FitnessValue initialFitnessValue)
 	{
 		AbstractRefactoringSelectionStrategy strategy = null;
 		
 		switch( searchType )
 		{
 		case SELECT_BEST:
-			strategy = new BestFitnessSelectionStrategy(prevFitness, comparator);
+			strategy = new BestFitnessSelectionStrategy(initialFitnessValue);
 			break;
 		case SELECT_FIRST:
-			strategy = new FirstPositiveFitnessSelectionStrategy(prevFitness, comparator);
+			strategy = new FirstPositiveFitnessSelectionStrategy(initialFitnessValue);
 			break;
 		case SELECT_FIRST_RESTART:
 			throw new RuntimeException("Not Yet Implemented");
 		case SIMULATED_ANNEALING:
-			strategy = new SimulatedAnnealingStrategy(prevFitness, comparator, saMaxPermissibleIdleIteration);
+			strategy = new SimulatedAnnealingStrategy(initialFitnessValue, saMaxPermissibleIdleIteration);
 		}
 		
 		return strategy;
@@ -206,24 +204,27 @@ public class ARSearchWorker {
 		{
 			mmc = candidateIterator.getNextCandidate();
 			
-			if( mmr.doAction(mmc) )
+			if( mmr.doAction(mmc, false) )
 			{
-				mmc.fitness = fitnessFunction.calculate();
-				candidateLogger.debug("{}, {}, {}, {}, {}, {}", iteration, idx, mmc.toString(), fitnessType.toString(), mmc.fitness, mmc.getDeltaValue());
-				shouldBreak = !strategy.next(mmc);
+				FitnessValue fitnessValue = fitnessFunction.calculate();
+				mmc.fitnessValue = fitnessValue;
+				fitnessValue.ownedCommand = mmc;
+				candidateLogger.debug("{}, {}, {}, {}, {}, {}", iteration, idx, mmc.toString(), fitnessType.toString(), fitnessValue, mmc.getDeltaValue());
+				shouldBreak = !strategy.next(fitnessValue);
 				mmr.undoAction();
 			}
 		}	
 		
-		return strategy.done();
+		FitnessValue selectedValue = strategy.done();
+		
+		return selectedValue == null ? null : selectedValue.ownedCommand;
 	}
 	
 	public void run(IProgressMonitor monitor)
 	{		
 		FitnessFunction fitnessFunction = setupFitnessFunction();
-		Comparator<MoveMethodCommand> comparator = setupMoveMethodComparator(fitnessFunction);		
-		float initialFitness = fitnessFunction.calculate();
-		AbstractRefactoringSelectionStrategy strategy = setupStrategy(initialFitness, comparator);
+		FitnessValue initialFitnessValue = fitnessFunction.calculate();
+		AbstractRefactoringSelectionStrategy strategy = setupStrategy(initialFitnessValue);
 		CandidateSelection candidateSelection = setupCandidateSelection(strategy, fitnessFunction);
 
 		StatusLogger.getInstance().openOriginalPhase();
@@ -236,8 +237,8 @@ public class ARSearchWorker {
 			selectedCommand = selectMoveMethodCommand(iteration, candidateSelection, fitnessFunction, strategy);
 			if( selectedCommand == null ) break;
 			selectionLogger.info("{}, {}, {}, {}, {}", iteration, selectedCommand.toString(), fitnessType.toString(), 
-					selectedCommand.fitness, selectedCommand.getDeltaValue());	
-			mmr.doAction(selectedCommand);
+					selectedCommand.fitnessValue, selectedCommand.getDeltaValue());	
+			mmr.doAction(selectedCommand, true);
 			monitor.worked(1);
 		}
 		

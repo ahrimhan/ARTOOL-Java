@@ -37,9 +37,8 @@ public class NativeDeltaMatrixCandidateIteratorAdaptor implements
 		AOMMethod movingMethod = ses.methods.get(entry.entityIdx);
 		AOMClass targetClass = ses.classes.get(entry.toClassIdx);
 		
-		MoveMethodCommand mmc = new MoveMethodCommand(movingMethod, targetClass, entry.deltaValue);
+		MoveMethodCommand mmc = new MoveMethodCommand(movingMethod, targetClass, new CompositeDeltaValue(entry.deltaValueList));
 		
 		return mmc;
 	}
-
 }

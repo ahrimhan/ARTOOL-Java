@@ -5,51 +5,54 @@ import java.util.Comparator;
 import java.util.Vector;
 
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
+import kr.ac.kaist.se.artool.search.fitness.value.AtomicFitnessValue;
+import kr.ac.kaist.se.artool.search.fitness.value.FitnessValue;
 
 public class BestFitnessSelectionStrategy extends
 		AbstractRefactoringSelectionStrategy {
 
-	private Vector<MoveMethodCommand> commandList = new Vector<MoveMethodCommand>();
-	private MoveMethodCommand prevCmd = null;
+	private Vector<FitnessValue> valueList = new Vector<FitnessValue>();
+	private FitnessValue prevValue = null;
 	
-	public BestFitnessSelectionStrategy(float prevFitness, Comparator<MoveMethodCommand> comparator) {
-		super(prevFitness, comparator);
+	public BestFitnessSelectionStrategy(FitnessValue initialFitnessValue) {
+		super(initialFitnessValue);
+		
+		prevValue = initialFitnessValue;
 	}
 
 	@Override
-	public synchronized boolean next(MoveMethodCommand obj) {
-		commandList.addElement(obj);
+	public synchronized boolean next(FitnessValue obj) {
+		valueList.addElement(obj);
 		return true;
 	}
 
 	@Override
-	public MoveMethodCommand done() {
+	public FitnessValue done() {
 		
-		MoveMethodCommand cmd = null;
+		FitnessValue value = null;
 		
 		try
 		{
-			cmd = Collections.max(commandList, comparator);
+			value = Collections.max(valueList);
 			
-			if( prevCmd == null || comparator.compare(prevCmd, cmd) < 0 )
+			if( prevValue.compareTo(value) < 0 )
 			{
-				prevFitness = cmd.fitness;
-				prevCmd = cmd;
+				prevValue = value;
 			}
 			else
 			{
-				cmd = null;
+				value = null;
 			}
 		}
 		catch(Exception ex)
 		{
-			cmd = null;
+			value = null;
 		}
 		
 		
-		commandList.clear();
+		valueList.clear();
 		
-		return cmd;
+		return value;
 	}
 	
 	@Override

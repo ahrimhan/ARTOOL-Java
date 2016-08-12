@@ -2,11 +2,10 @@ package kr.ac.kaist.se.artool.engine.refactoring;
 
 import java.util.Vector;
 
-import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
-import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMClass;
-import kr.ac.kaist.se.aom.structure.AOMLocalVariableAccess;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
+import kr.ac.kaist.se.artool.search.candidate.DeltaValue;
+import kr.ac.kaist.se.artool.search.fitness.value.FitnessValue;
 
 public class MoveMethodCommand implements RefactoringCommand {
 
@@ -17,7 +16,7 @@ public class MoveMethodCommand implements RefactoringCommand {
 	private AOMMethod originalOverriding;
 	
 	
-	private float deltaValue;
+	private DeltaValue deltaValue;
 	
 	public MoveMethodCommand(AOMMethod movingMethod, AOMClass targetClass)
 	{
@@ -33,10 +32,10 @@ public class MoveMethodCommand implements RefactoringCommand {
 			this.originalClass = movingMethod.getOwner();
 			this.originalOverriding = movingMethod.getOverriding();
 		}
-		this.deltaValue = 0;
+		this.deltaValue = null;
 	}
 	
-	public MoveMethodCommand(AOMMethod movingMethod, AOMClass targetClass, float d)
+	public MoveMethodCommand(AOMMethod movingMethod, AOMClass targetClass, DeltaValue deltaValue)
 	{
 		this.movingMethod = movingMethod;
 		this.targetClass = targetClass;
@@ -50,12 +49,12 @@ public class MoveMethodCommand implements RefactoringCommand {
 			this.originalClass = movingMethod.getOwner();
 			this.originalOverriding = movingMethod.getOverriding();
 		}		
-		this.deltaValue = d;
+		this.deltaValue = deltaValue;
 	}
 	
-	public float fitness;
+	public FitnessValue fitnessValue;
 	
-	public float getDeltaValue()
+	public DeltaValue getDeltaValue()
 	{
 		return deltaValue;
 	}
@@ -173,24 +172,6 @@ public class MoveMethodCommand implements RefactoringCommand {
 	public double doCommand() throws RefactoringException {
 		did = false;
 		
-		/*
-		try
-		{
-			for( AOMMethod lm : targetClass.getMethods() )
-			{
-				if( isIdenticalMethod(lm, movingMethod) )
-				{
-					throw new RefactoringException(targetClass.getFqdn() + " already has a method which has the same name and signature");
-				}
-			}
-		}
-		catch(Throwable ex)
-		{
-//			ex.printStackTrace();
-			return 0;
-		}
-		*/
-		
 		if( targetClass.getMethods().contains(movingMethod) )
 		{
 			return 0;
@@ -200,6 +181,7 @@ public class MoveMethodCommand implements RefactoringCommand {
 		overriding = findOverriding(targetClass, movingMethod);
 		movingMethod.setOverriding(overriding);
 		movingMethod.setOwner(targetClass);
+		
 		did = true;
 		
 		return 1;
@@ -215,4 +197,20 @@ public class MoveMethodCommand implements RefactoringCommand {
 		}
 	}
 
+
+	public void commit() 
+	{
+		did = false;
+		
+		if( movingMethod == null )
+		{
+			this.originalClass = null;
+			this.originalOverriding = null;
+		}
+		else
+		{
+			this.originalClass = movingMethod.getOwner();
+			this.originalOverriding = movingMethod.getOverriding();
+		}	
+	}
 }

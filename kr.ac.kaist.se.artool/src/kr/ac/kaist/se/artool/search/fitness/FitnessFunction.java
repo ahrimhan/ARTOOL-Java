@@ -1,8 +1,9 @@
 package kr.ac.kaist.se.artool.search.fitness;
 
+import kr.ac.kaist.se.artool.search.fitness.value.FitnessValue;
+
 public abstract class FitnessFunction {
-	public abstract float calculate();
-	public abstract boolean isBiggerValueMeantBetterFitness();
+	public abstract FitnessValue calculate();
 	
 	public double getCohesiveFactor()
 	{

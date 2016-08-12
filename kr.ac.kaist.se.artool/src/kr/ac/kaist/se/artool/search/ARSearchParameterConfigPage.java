@@ -18,6 +18,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -38,14 +39,15 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	
 	private String[] fitnessFunctionItems = {
 			"EPM (Entitiy Placement Metric)",
-//			"QMOOD-Reusability",
-//			"QMOOD-Flexibility",
-//			"QMOOD-Understandability",
 			"MSC (Message Similiarity Cohesion)",
 			"MPC (Message Passing Coupling)",
 			"Connectivity"
+//			"QMOOD-Reusability",
+//			"QMOOD-Flexibility",
+//			"QMOOD-Understandability",
 	};
-		
+			
+	
 	private String[] searchTechniqueItems = {
 			"First-ascent hill-climbing",
 			"Steepest-ascent hill-climbing",
@@ -57,7 +59,6 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	};
 	
 	private String[] candidateSelectionItems = {
-			"Random",
 			"Delta Table",
 			"Exhaustive"
 	};
@@ -65,10 +66,12 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	private int fitnessSelectionBits = 0;
 	private int searchTechniqueBits = 0;
 	private int candidateSelectionBits = 0;
+	private int multiObjectiveBits = 0;
 
 	private String maxIterationCountStr;
 	private String maxCandidateCountStr;
 	private String saMaxPermissibleIdelIterationStr;
+	private Group multiObjectiveGroup;
 	
 	public void saveSettings() {
 		// saves plugin preferences at the workspace level
@@ -78,6 +81,7 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		prefs.putInt("fitnessSelectionBits", fitnessSelectionBits);
 		prefs.putInt("searchTechniqueBits", searchTechniqueBits);
 		prefs.putInt("candidateSelectionBits", candidateSelectionBits);
+		prefs.putInt("multiObjectiveBits", multiObjectiveBits);
 		prefs.put("maxIterationCount", maxIterationCountStr);
 		prefs.put("maxCandidateCount", maxCandidateCountStr);
 		prefs.put("saMaxPermissibleIdelIteration", saMaxPermissibleIdelIterationStr);
@@ -91,46 +95,90 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	public void loadSettings() {
 		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
 
-		fitnessSelectionBits = prefs.getInt("fitnessSelectionBits", 0xffff);
-		searchTechniqueBits = prefs.getInt("searchTechniqueBits", 0xffff);
-		candidateSelectionBits = prefs.getInt("candidateSelectionBits", 0xffff);
+		fitnessSelectionBits = prefs.getInt("fitnessSelectionBits", 0);
+		searchTechniqueBits = prefs.getInt("searchTechniqueBits", 0);
+		candidateSelectionBits = prefs.getInt("candidateSelectionBits", 0);
+		multiObjectiveBits = prefs.getInt("multiObjectiveBits", 0);
 		maxIterationCountStr = prefs.get("maxIterationCount", "100");
 		maxCandidateCountStr = prefs.get("maxCandidateCount", "1000");
 		saMaxPermissibleIdelIterationStr = prefs.get("saMaxPermissibleIdelIteration", "500");
 	}
 	
+	private static void setEnabledChildren(Control ctrl, boolean enabled)
+	{
+		ctrl.setEnabled(enabled);
+		
+		if (ctrl instanceof Composite) {
+			Composite comp = (Composite) ctrl;
+			for (Control c : comp.getChildren())
+				setEnabledChildren(c, enabled);
+		}	
+	}
+	
 	@Override
 	public void createControl(Composite parent) {
+		Group group1;
+		GridData gridDataGroup1;
+		gridDataGroup1 = new GridData(GridData.FILL_HORIZONTAL);
+		gridDataGroup1.horizontalSpan = 1;
+		
+		GridData gridDataGroupV1;
+		gridDataGroupV1 = new GridData(GridData.FILL_BOTH);
+		gridDataGroupV1.horizontalSpan = 2;
+		
+		GridData gridDataGroup2;
+		gridDataGroup2 = new GridData(GridData.FILL_HORIZONTAL);
+		gridDataGroup2.horizontalSpan = 2;
+		
+		
+		GridData gridDataGroupV2;
+		gridDataGroupV2 = new GridData(GridData.FILL_BOTH);
+		gridDataGroupV2.horizontalSpan = 2;
+		
 		// create the composite to hold the widgets
 		Composite globalComposite = new Composite(parent, SWT.NONE);
 		// create the desired layout for this wizard page
 		GridLayout gl1 = new GridLayout();
 		gl1.numColumns = 1;
+		parent.setLayout(gl1);
 		globalComposite.setLayout(gl1);
+		globalComposite.setLayoutData(gridDataGroupV1);
 		
 		
-		GridLayout gl = new GridLayout();
+		GridLayout gl2 = new GridLayout();
 		int ncol = 2;
-		gl.numColumns = ncol;
+		gl2.numColumns = ncol;
 		
 		
 		Group composite = new Group(globalComposite, SWT.SHADOW_IN);
 		composite.setText("Experiment Conditions");
-		composite.setLayout(gl);
-		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		composite.setLayout(gl1);
+		composite.setLayoutData(gridDataGroupV1);
+			
 		
 		
-	    Group group1 = new Group(composite, SWT.SHADOW_IN);
-		GridData gridDataGroup1 = new GridData(GridData.FILL_HORIZONTAL);
-		gridDataGroup1.horizontalSpan = ncol;
-		group1.setLayoutData(gridDataGroup1);
+
+//		Group singleValueFitness = new Group(composite, SWT.SHADOW_IN);
+		
+		
+	    group1 = new Group(composite, SWT.SHADOW_IN);
+		group1.setLayoutData(gridDataGroupV1);
 	    group1.setText("Fitness Function:");
-	    group1.setLayout(new RowLayout(SWT.VERTICAL));
+	    group1.setLayout(gl2);
 	    for( int i = 0; i < fitnessFunctionItems.length; i++ )
 	    {
 	    	final int j = i;
 	    	Button btn = new Button(group1, SWT.CHECK);
 	    	btn.setText(fitnessFunctionItems[i]);
+	    	if( fitnessFunctionItems.length % 2 == 1 &&
+	    			(i+1) == fitnessFunctionItems.length )
+	    	{
+	    		btn.setLayoutData(gridDataGroup2);
+	    	}
+	    	else
+	    	{
+		    	btn.setLayoutData(gridDataGroup1);
+	    	}
 	    	
 	    	if( (fitnessSelectionBits & (1 << j)) != 0 )	    	
 	    		btn.setSelection(true);
@@ -148,12 +196,80 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	    	});
 	    }
 	    
+
+    	
+	    Button paretoBtn = new Button(group1, SWT.CHECK);
+	    paretoBtn.setText("Pareto Optimization");
+	    paretoBtn.setLayoutData(gridDataGroup2);
+
+
+    		
+	    multiObjectiveGroup = new Group(group1, SWT.SHADOW_IN);
 	    
+
+		gridDataGroup2 = new GridData(GridData.FILL_HORIZONTAL);
+		gridDataGroup2.horizontalSpan = 2;
+//		group1.setLayoutData(gridDataGroup1);
+//	    group1.setText("Pareto front:");
+		multiObjectiveGroup.setLayoutData(gridDataGroup2);
+		multiObjectiveGroup.setLayout(gl2);
+    	paretoBtn.setSelection(multiObjectiveBits != 0);
+
+	    for( int i = 0; i < fitnessFunctionItems.length; i++ )
+	    {
+	    	final int j = i;
+	    	Button btn = new Button(multiObjectiveGroup, SWT.CHECK);
+	    	btn.setText(fitnessFunctionItems[i]);
+	    	btn.setLayoutData(gridDataGroup1);
+	    	if( (multiObjectiveBits & (1 << j)) != 0 )
+	    	{
+	    		btn.setSelection(true);
+	    	}
+	    	
+	    	
+	    	btn.addSelectionListener(new SelectionListener(){
+	    		@Override
+	    		public void widgetDefaultSelected(SelectionEvent e) {
+	    			multiObjectiveBits ^= 1 << j; 
+	    		}
+	    		
+	    		@Override
+	    		public void widgetSelected(SelectionEvent e) {
+	    			multiObjectiveBits ^= 1 << j;
+	    		}
+	    	});
+	    }
 	    
+    	if( (fitnessSelectionBits & (1 << 31)) != 0 )
+    	{
+    		paretoBtn.setSelection(true);
+    		setEnabledChildren(multiObjectiveGroup, true);
+    	}
+    	else
+    	{
+    		paretoBtn.setSelection(false);
+    		setEnabledChildren(multiObjectiveGroup, false);
+    	}
+    	
+    	paretoBtn.addSelectionListener(new SelectionListener(){
+    		@Override
+    		public void widgetDefaultSelected(SelectionEvent e) {
+    			fitnessSelectionBits ^= 1 << 31; 
+    			setEnabledChildren(multiObjectiveGroup, !multiObjectiveGroup.getEnabled());
+    		}
+    		
+    		@Override
+    		public void widgetSelected(SelectionEvent e) {
+    			fitnessSelectionBits ^= 1 << 31;
+    			setEnabledChildren(multiObjectiveGroup, !multiObjectiveGroup.getEnabled());
+    		}
+    	});
+	    
+
 	    
 	    group1 = new Group(composite, SWT.SHADOW_IN);
 		gridDataGroup1 = new GridData(GridData.FILL_HORIZONTAL);
-		gridDataGroup1.horizontalSpan = ncol;
+		gridDataGroup1.horizontalSpan = 1;
 		group1.setLayoutData(gridDataGroup1);
 		
 	    group1.setText("Search Technique:");
@@ -181,19 +297,13 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	    }
 	    
 	    
-//		new Label(composite, SWT.NONE).setText("Candidate Selection:");
-//		candidateSelection = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.DROP_DOWN);
-//		candidateSelection.setItems(candidateSelectionItems);
-//		candidateSelection.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//	    candidateSelection.select(0);
-	    
 	    group1 = new Group(composite, SWT.SHADOW_IN);
 		gridDataGroup1 = new GridData(GridData.FILL_HORIZONTAL);
-		gridDataGroup1.horizontalSpan = ncol;
+		gridDataGroup1.horizontalSpan = 1;
 		group1.setLayoutData(gridDataGroup1);
 		
 	    group1.setText("Candidate Selection:");
-	    group1.setLayout(new RowLayout(SWT.VERTICAL));
+	    group1.setLayout(gl2);
 	    for( int i = 0; i < candidateSelectionItems.length; i++ )
 	    {
 	    	final int j = i;
@@ -221,7 +331,7 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	    
 	    composite = new Group(globalComposite, SWT.SHADOW_IN);
 		composite.setText("Experiment Parameter");
-		composite.setLayout(gl);
+		composite.setLayout(gl1);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		VerifyListener verifyListener = new VerifyListener()
@@ -318,24 +428,6 @@ public class ARSearchParameterConfigPage extends WizardPage {
 			typeList.add(type);
 		}
 		
-//		if( (fitnessSelectionBits & (1 << 1)) != 0 )
-//		{
-//			type = ARSearchMain.FitnessType.REUSABILITY;
-//			typeList.add(type);
-//		}
-//		
-//		if( (fitnessSelectionBits & (1 << 2)) != 0 )
-//		{
-//			type = ARSearchMain.FitnessType.FLEXIBILITY;
-//			typeList.add(type);
-//		}
-//		
-//		if( (fitnessSelectionBits & (1 << 3)) != 0 )
-//		{
-//			type = ARSearchMain.FitnessType.UNDERSTANDABILITY;
-//			typeList.add(type);
-//		}
-		
 		if( (fitnessSelectionBits & (1 << 1)) != 0 )
 		{
 			type = ARSearchMain.FitnessType.MSC;
@@ -349,6 +441,44 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		}
 
 		if( (fitnessSelectionBits & (1 << 3)) != 0 )
+		{
+			type = ARSearchMain.FitnessType.CONNECTIVITY;
+			typeList.add(type);
+		}
+		
+		if( (fitnessSelectionBits & (1 << 31)) != 0 )
+		{
+			type = ARSearchMain.FitnessType.PARETO_COMPOSITE;
+			typeList.add(type);
+		}
+		
+		return typeList;
+	}
+	
+	public List<ARSearchMain.FitnessType> getMultiFitnessType()
+	{
+		ARSearchMain.FitnessType type;
+		List<ARSearchMain.FitnessType> typeList = new LinkedList<ARSearchMain.FitnessType>();
+
+		if( (multiObjectiveBits & (1 << 0)) != 0 )
+		{
+			type = ARSearchMain.FitnessType.EPM;
+			typeList.add(type);
+		}
+		
+		if( (multiObjectiveBits & (1 << 1)) != 0 )
+		{
+			type = ARSearchMain.FitnessType.MSC;
+			typeList.add(type);
+		}
+		
+		if( (multiObjectiveBits & (1 << 2)) != 0 )
+		{
+			type = ARSearchMain.FitnessType.MPC;
+			typeList.add(type);
+		}
+
+		if( (multiObjectiveBits & (1 << 3)) != 0 )
 		{
 			type = ARSearchMain.FitnessType.CONNECTIVITY;
 			typeList.add(type);
@@ -400,19 +530,19 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		List<ARSearchMain.CandidateSelectionType> typeList = new LinkedList<ARSearchMain.CandidateSelectionType>();
 		
 		
-		if( (candidateSelectionBits & (1 << 0)) != 0 )
-		{
-			type = CandidateSelectionType.RANDOM;
-			typeList.add(type);
-		}
+//		if( (candidateSelectionBits & (1 << 0)) != 0 )
+//		{
+//			type = CandidateSelectionType.RANDOM;
+//			typeList.add(type);
+//		}
 		
-		if( (candidateSelectionBits & (1 << 1)) != 0 )
+		if( (candidateSelectionBits & (1 << 0)) != 0 )
 		{
 			type = CandidateSelectionType.DELTA;
 			typeList.add(type);
 		}
 		
-		if( (candidateSelectionBits & (1 << 2)) != 0 )
+		if( (candidateSelectionBits & (1 << 1)) != 0 )
 		{
 			type = CandidateSelectionType.EXHAUSTIVE;
 			typeList.add(type);
@@ -423,7 +553,6 @@ public class ARSearchParameterConfigPage extends WizardPage {
 
 
 	public int getMaxCandidateCount() {
-		System.err.println("<<" + maxCandidateCountStr + ">>");
 		return Integer.parseInt(maxCandidateCountStr);
 	}
 
