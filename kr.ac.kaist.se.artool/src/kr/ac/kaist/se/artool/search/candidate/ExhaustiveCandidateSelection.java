@@ -1,27 +1,24 @@
 package kr.ac.kaist.se.artool.search.candidate;
 
-import java.util.Collections;
 import java.util.Vector;
 
 import kr.ac.kaist.se.aom.AbstractObjectModel;
 import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
-import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodApplicabilityChecker;
-import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
 
 public class ExhaustiveCandidateSelection implements CandidateSelection {
 
 	private AbstractObjectModel aom;
 	private Vector<AOMMethod> methodList;
-	private Vector<MoveMethodCommand> candidateList;
-	private boolean shuffle;
 	
-	public ExhaustiveCandidateSelection(AbstractObjectModel aom, int maxCandidateCount)
+	public void setMethodList(Vector<AOMMethod> methodList) {
+		this.methodList = methodList;
+	}
+
+	public ExhaustiveCandidateSelection(AbstractObjectModel aom)
 	{
 		this.aom = aom;
 		this.methodList = new Vector<AOMMethod>();
-		this.candidateList = new Vector<MoveMethodCommand>();
-		this.shuffle = maxCandidateCount >= 0;
 		
 		System.err.println("ExhaustiveCandidateSelection: preparing...!!!");
 		
@@ -33,33 +30,10 @@ public class ExhaustiveCandidateSelection implements CandidateSelection {
 			}
 		}
 		
-		for( AOMMethod method : methodList )
-		{
-			if( !MoveMethodApplicabilityChecker.isApplicableForGivenMethod(method) )
-			{
-				continue;
-			}
-			
-			for( AOMClass clazz : aom.getClasses() )
-			{
-				if( clazz != method.getOwner() && MoveMethodApplicabilityChecker.isApplicableForTargetClass(method, clazz) )
-				{
-					candidateList.add(new MoveMethodCommand(method, clazz));
-					if( maxCandidateCount > 0 && candidateList.size() > maxCandidateCount )
-					{
-						break;
-					}
-				}
-			}
-			
-			if( maxCandidateCount > 0 && candidateList.size() > maxCandidateCount )
-			{
-				break;
-			}
-		}
-		
-		System.err.println("ExhaustiveCandidateSelection: ready to action!!!");
-		System.err.println("Candidate Count:" + candidateList.size());
+
+//		
+//		System.err.println("ExhaustiveCandidateSelection: ready to action!!!");
+//		System.err.println("Candidate Count:" + candidateList.size());
 	}
 	
 	public Vector<AOMMethod> getMethodList()
@@ -74,11 +48,7 @@ public class ExhaustiveCandidateSelection implements CandidateSelection {
 	
 	@Override
 	public CandidateIterator getCandidateIterator(int maxCandidateCount) {
-		if( shuffle )
-		{
-			Collections.shuffle(candidateList);
-		}
-		ExhaustiveCandidateIterator sci = new ExhaustiveCandidateIterator(candidateList.iterator()); 
+		ExhaustiveCandidateIterator sci = new ExhaustiveCandidateIterator(this, maxCandidateCount); 
 		return sci;
 	}
 

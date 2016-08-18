@@ -80,7 +80,7 @@ public class ARSearchWorker {
 
 	}
 	
-	private CandidateSelection setupCandidateSelection(AbstractRefactoringSelectionStrategy strategy, FitnessFunction fitnessFunction)
+	private CandidateSelection setupCandidateSelection(FitnessFunction fitnessFunction)
 	{
 		DeltaMatrixEngine dmEngine = null;
 
@@ -100,7 +100,7 @@ public class ARSearchWorker {
 		case RANDOM:
 			return new RandomCandidateSelection(aom);
 		case EXHAUSTIVE:
-			return new ExhaustiveCandidateSelection(aom, strategy.restrictCandidateCount() ? max_candidate_selection : -1);
+			return new ExhaustiveCandidateSelection(aom);
 		default:
 			throw new RuntimeException("Waaaagh!!!!");
 		}
@@ -225,7 +225,7 @@ public class ARSearchWorker {
 		FitnessFunction fitnessFunction = setupFitnessFunction();
 		FitnessValue initialFitnessValue = fitnessFunction.calculate();
 		AbstractRefactoringSelectionStrategy strategy = setupStrategy(initialFitnessValue);
-		CandidateSelection candidateSelection = setupCandidateSelection(strategy, fitnessFunction);
+		CandidateSelection candidateSelection = setupCandidateSelection(fitnessFunction);
 
 		StatusLogger.getInstance().openOriginalPhase();
 		int iteration = 0;
