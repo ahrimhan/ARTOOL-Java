@@ -121,15 +121,15 @@ public class NativeDeltaMatrixEngineAdaptor implements DeltaMatrixEngine {
 
 	@Override
 	public CandidateIterator getCandidateIterator(int maxCandidateCount) {
-		printMemStat("Before Eval");
+//		printMemStat("Before Eval");
 		engine.eval();
-		printMemStat("After Eval");
+//		printMemStat("After Eval");
 		DeltaTableEntryIterator iterator = engine.getTopK(maxCandidateCount);
-		printMemStat("After getTopK");
+//		printMemStat("After getTopK");
 
 		
 		CandidateIterator ret = new NativeDeltaMatrixCandidateIteratorAdaptor(ses, iterator);
-		printMemStat("After Create CandidateIterator");
+//		printMemStat("After Create CandidateIterator");
 
 		
 		return ret;
