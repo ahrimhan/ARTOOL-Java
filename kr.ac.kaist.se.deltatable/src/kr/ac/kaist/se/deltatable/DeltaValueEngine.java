@@ -9,7 +9,6 @@ public class DeltaValueEngine {
 	{
 		DeltaValueEngine ret = new DeltaValueEngine();
 		ret.initialize(info);
-		info.dispose();
 		return ret;
 	}
 	
@@ -27,5 +26,11 @@ public class DeltaValueEngine {
 	public native float getExtractClassDValue(int sourceClassIdx, int[] entityIndices);
 	
 	
-    public native void dispose();
+    private native void dispose();
+    
+    @Override
+    public void finalize()
+    {
+    	dispose();
+    }
 }

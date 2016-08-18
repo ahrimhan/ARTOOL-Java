@@ -26,5 +26,11 @@ public class DeltaTableInfo {
 	
     private long nativeHandle;
     
-    public native void dispose();
+    private native void dispose();
+    
+    @Override
+    public void finalize()
+    {
+    	dispose();
+    }
 }

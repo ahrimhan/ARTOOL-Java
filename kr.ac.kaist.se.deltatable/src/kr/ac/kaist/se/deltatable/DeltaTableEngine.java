@@ -9,7 +9,6 @@ public class DeltaTableEngine {
 	{
 		DeltaTableEngine ret = new DeltaTableEngine();
 		ret.initialize(info);
-		info.dispose();
 		return ret;
 	}
 		
@@ -32,5 +31,11 @@ public class DeltaTableEngine {
 		return ret;
 	}
 	
-    public native void dispose();
+    private native void dispose();
+    
+    @Override
+    public void finalize()
+    {
+    	dispose();
+    }
 }
