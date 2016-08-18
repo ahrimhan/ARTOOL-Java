@@ -41,4 +41,9 @@ public class NativeDeltaMatrixCandidateIteratorAdaptor implements
 		
 		return mmc;
 	}
+
+	@Override
+	public void dispose() {
+		nativeIterator.dispose();
+	}
 }

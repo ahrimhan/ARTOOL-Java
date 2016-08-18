@@ -9,6 +9,7 @@ public class DeltaValueEngine {
 	{
 		DeltaValueEngine ret = new DeltaValueEngine();
 		ret.initialize(info);
+		info.dispose();
 		return ret;
 	}
 	

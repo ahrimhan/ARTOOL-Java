@@ -67,4 +67,11 @@ public class ExhaustiveCandidateIterator implements CandidateIterator {
 		return mmc;
 	}
 
+
+	@Override
+	public void dispose() {
+		candidateList.clear();
+		candidateIterator = null;
+	}
+
 }

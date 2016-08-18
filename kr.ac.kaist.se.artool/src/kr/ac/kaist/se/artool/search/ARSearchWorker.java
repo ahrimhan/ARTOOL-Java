@@ -215,6 +215,8 @@ public class ARSearchWorker {
 			}
 		}	
 		
+		candidateIterator.dispose();
+		
 		FitnessValue selectedValue = strategy.done();
 		
 		return selectedValue == null ? null : selectedValue.ownedCommand;
@@ -240,6 +242,8 @@ public class ARSearchWorker {
 					selectedCommand.fitnessValue, selectedCommand.getDeltaValue());	
 			mmr.doAction(selectedCommand, true);
 			monitor.worked(1);
+			
+			Runtime.getRuntime().gc();
 		}
 		
 		monitor.worked(max_iteration - iteration);

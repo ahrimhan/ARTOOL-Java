@@ -89,4 +89,10 @@ public class RandomCandidateIterator implements CandidateIterator {
 		return mmc;
 	}
 
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

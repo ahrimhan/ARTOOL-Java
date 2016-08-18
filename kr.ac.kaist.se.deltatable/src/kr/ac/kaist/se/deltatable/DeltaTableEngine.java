@@ -9,6 +9,7 @@ public class DeltaTableEngine {
 	{
 		DeltaTableEngine ret = new DeltaTableEngine();
 		ret.initialize(info);
+		info.dispose();
 		return ret;
 	}
 		

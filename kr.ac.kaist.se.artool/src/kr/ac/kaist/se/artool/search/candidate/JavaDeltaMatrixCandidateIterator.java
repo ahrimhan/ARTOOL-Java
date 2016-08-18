@@ -38,4 +38,13 @@ public class JavaDeltaMatrixCandidateIterator implements CandidateIterator {
 		dme.markAsUsed(ret);
 		return ret;
 	}
+
+
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 }

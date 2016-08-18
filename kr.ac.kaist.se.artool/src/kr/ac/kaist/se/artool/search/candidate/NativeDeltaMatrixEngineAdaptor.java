@@ -95,14 +95,44 @@ public class NativeDeltaMatrixEngineAdaptor implements DeltaMatrixEngine {
 	public void moveMethodPerformed(AOMClass fromClass, AOMMethod method, AOMClass toClass, boolean isRollbackAction) {
 		engine.move(method.getIndex(), fromClass.getIndex(), toClass.getIndex());
 	}
+	
+	public void printMemStat(String header)
+	{
+		float mb =  1024.0f; 
+		 
+		// get Runtime instance
+		Runtime instance = Runtime.getRuntime();
+ 
+		System.out.println("[" + header + "] ***** Heap utilization statistics [KB] *****\n");
+ 
+		// available memory
+		System.out.println("Total Memory: " + instance.totalMemory() / mb);
+ 
+		// free memory
+		System.out.println("Free Memory: " + instance.freeMemory() / mb);
+ 
+		// used memory
+		System.out.println("Used Memory: "
+				+ (instance.totalMemory() - instance.freeMemory()) / mb);
+ 
+		// Maximum available memory
+		System.out.println("Max Memory: " + instance.maxMemory() / mb);
+	}
 
 	@Override
 	public CandidateIterator getCandidateIterator(int maxCandidateCount) {
-		
+		printMemStat("Before Eval");
 		engine.eval();
-		
+		printMemStat("After Eval");
 		DeltaTableEntryIterator iterator = engine.getTopK(maxCandidateCount);
-		return new NativeDeltaMatrixCandidateIteratorAdaptor(ses, iterator);
+		printMemStat("After getTopK");
+
+		
+		CandidateIterator ret = new NativeDeltaMatrixCandidateIteratorAdaptor(ses, iterator);
+		printMemStat("After Create CandidateIterator");
+
+		
+		return ret;
 	}
 
 	@Override

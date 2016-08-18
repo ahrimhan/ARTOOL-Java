@@ -19,13 +19,8 @@ public class DeltaTableEntryIterator {
     private long nativeHandle;
     private native int _hasNext();
     private native int _next(DeltaTableEntry entry);
-    private native void dispose();
+    public native void dispose();
     
-    @Override
-    public void finalize()
-    {
-    	dispose();
-    }
     
     public boolean hasNext()
     {
