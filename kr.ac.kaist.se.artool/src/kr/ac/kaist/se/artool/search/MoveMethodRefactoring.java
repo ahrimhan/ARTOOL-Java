@@ -41,6 +41,7 @@ public class MoveMethodRefactoring {
 				if( commit )
 				{
 					action.commit();
+					history.clear();
 				}
 				else
 				{
