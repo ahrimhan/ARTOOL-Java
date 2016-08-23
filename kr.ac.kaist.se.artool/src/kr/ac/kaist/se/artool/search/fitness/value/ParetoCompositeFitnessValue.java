@@ -3,12 +3,18 @@ package kr.ac.kaist.se.artool.search.fitness.value;
 import java.util.Vector;
 
 public class ParetoCompositeFitnessValue extends FitnessValue {
-
+	public static final int INCOMPARABLE = 0xffffff;
+	
 	private Vector<AtomicFitnessValue> valueList = new Vector<AtomicFitnessValue>();
 	
 	public ParetoCompositeFitnessValue()
 	{
 		
+	}
+	
+	public Vector<AtomicFitnessValue> getValueList()
+	{
+		return valueList;
 	}
 	
 	public void addValue(AtomicFitnessValue value)
@@ -38,20 +44,22 @@ public class ParetoCompositeFitnessValue extends FitnessValue {
 		ParetoCompositeFitnessValue v = (ParetoCompositeFitnessValue)f;
 		if( v.valueList.size() != valueList.size() ) throw new RuntimeException("Different size composite fitness");
 		
-		int score = 0;
-		
-		// XXX: TODO
+		int less = 0;
+		int greater = 0;
 		
 		for( int i = 0; i < valueList.size(); i++ )
 		{
-			score += valueList.get(i).compareTo(v.valueList.get(i));
+			int res = valueList.get(i).compareTo(v.valueList.get(i));
+			
+			if( res < 0 ) less++;
+			if( res > 0 ) greater++;
 		}
 		
-//		int ret = score > 0 ? 1 : (score < 0 ? -1 : 0 ); 
+		if( greater == 0 && less > 0 ) return -1;
+		if( greater > 0 && less == 0 ) return 1;
+		if( greater == 0 && less == 0 ) return 0;
 		
-		int ret = score == valueList.size() ? 1 : (score == (-valueList.size()) ? -1 : 0);
-		
-		return ret;
+		return INCOMPARABLE;
 	}
 
 	@Override

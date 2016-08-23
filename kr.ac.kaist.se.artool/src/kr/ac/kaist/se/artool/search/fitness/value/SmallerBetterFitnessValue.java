@@ -15,4 +15,14 @@ public class SmallerBetterFitnessValue extends AtomicFitnessValue {
 		else if( value > o.value ) return -1;
 		else return 0;
 	}
+
+	@Override
+	public AtomicFitnessValue getMaxInstance() {
+		return new SmallerBetterFitnessValue(Float.NEGATIVE_INFINITY);
+	}
+
+	@Override
+	public AtomicFitnessValue getMinInstance() {
+		return new SmallerBetterFitnessValue(Float.POSITIVE_INFINITY);
+	}
 }

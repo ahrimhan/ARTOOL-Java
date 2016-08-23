@@ -10,4 +10,5 @@ public abstract class AtomicFitnessFunction extends FitnessFunction {
 	}
 
 	protected abstract AtomicFitnessValue calculateAtomic();
+	
 }

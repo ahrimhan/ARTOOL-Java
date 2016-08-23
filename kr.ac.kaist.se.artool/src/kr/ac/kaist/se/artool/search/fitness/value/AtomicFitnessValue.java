@@ -19,4 +19,7 @@ public abstract class AtomicFitnessValue extends FitnessValue {
 		AtomicFitnessValue v = (AtomicFitnessValue)f;
 		return value > v.value ? value - v.value : v.value - value;
 	}
+	
+	public abstract AtomicFitnessValue getMaxInstance();
+	public abstract AtomicFitnessValue getMinInstance();
 }

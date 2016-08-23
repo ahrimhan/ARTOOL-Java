@@ -30,15 +30,17 @@ public class CompositeDeltaValue extends DeltaValue {
 		
 		if( cdv.array.length != array.length ) throw new RuntimeException("Array size is not matched");
 		
-		int count = 0;
+		boolean less = false;
+		boolean greater = false;
 		
 		for( int i = 0; i < array.length; i++ )
 		{
-			count += array[i] > cdv.array[i] ? 1 : (array[i] < cdv.array[i] ? -1 : 0); 
+			less = array[i] < cdv.array[i] ? true : less;
+			greater = array[i] > cdv.array[i] ? true : greater; 
 		}
 		
-		if( count == array.length ) return 1;
-		else if( count == (-array.length) ) return -1;
+		if( !greater && less ) return -1;
+		if( !less && greater ) return 1;
 		
 		return 0;
 	}
