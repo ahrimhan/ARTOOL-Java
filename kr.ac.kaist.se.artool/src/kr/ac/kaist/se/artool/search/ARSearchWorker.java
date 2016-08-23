@@ -83,19 +83,18 @@ public class ARSearchWorker {
 	private CandidateSelection setupCandidateSelection(FitnessFunction fitnessFunction)
 	{
 		DeltaMatrixEngine dmEngine = null;
-
+//		dmEngine = new JavaDeltaMatrixEngine(ses);
+		dmEngine = new NativeDeltaMatrixEngineAdaptor(ses);
+		mmr.addListener(dmEngine);
+		if( dmEngine != null )
+		{
+			dmEngine.setAdjust(true);
+			dmEngine.setCohesiveFactorRate(fitnessFunction.getCouplingFactor(), fitnessFunction.getCohesiveFactor());
+		}
+		
 		switch( candidateSelectionType )
 		{
 		case DELTA:
-//			dmEngine = new JavaDeltaMatrixEngine(ses);
-			dmEngine = new NativeDeltaMatrixEngineAdaptor(ses);
-			mmr.addListener(dmEngine);
-			if( dmEngine != null )
-			{
-				dmEngine.setAdjust(true);
-				dmEngine.setCohesiveFactorRate(fitnessFunction.getCouplingFactor(), fitnessFunction.getCohesiveFactor());
-			}
-			
 			return dmEngine;
 		case RANDOM:
 			return new RandomCandidateSelection(aom);
