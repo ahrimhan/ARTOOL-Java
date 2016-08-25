@@ -32,10 +32,10 @@ public class MoveMethodRefactoring {
 		try
 		{
 			if( action.doCommand() > 0 )
-			{
+			{	
 				for( MoveMethodEventListener listener : listenerList )
 				{
-					listener.moveMethodPerformed(action.getFromClass(), action.getMethod(), action.getToClass(), false);
+					listener.moveMethodPerformed(action.getFromClass(), action.getMethod(), action.getToClass(), false, !commit);
 				}
 				
 				if( commit )
@@ -67,7 +67,7 @@ public class MoveMethodRefactoring {
 			action.undoCommand();
 			for( MoveMethodEventListener listener : listenerList )
 			{
-				listener.moveMethodPerformed(action.getToClass(), action.getMethod(), action.getFromClass(), true);
+				listener.moveMethodPerformed(action.getToClass(), action.getMethod(), action.getFromClass(), true, false);
 			}
 		} catch (RefactoringException e) {
 			// TODO Auto-generated catch block

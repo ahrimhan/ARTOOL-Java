@@ -258,7 +258,7 @@ public class EPMEngine extends AtomicFitnessFunction implements MoveMethodEventL
 	
 	
 	
-	public void moveMethodPerformed(AOMClass fromClass, AOMMethod method, AOMClass toClass, boolean isRollbackAction)
+	public void moveMethodPerformed(AOMClass fromClass, AOMMethod method, AOMClass toClass, boolean isRollbackAction, boolean isVirtualMove)
 	{
 		membershipMatrix.set(method.getIndex(), fromClass.getIndex(), 0);
 		membershipMatrix.set(method.getIndex(), toClass.getIndex(), 1);

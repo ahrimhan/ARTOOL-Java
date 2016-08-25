@@ -92,7 +92,9 @@ public class NativeDeltaMatrixEngineAdaptor implements DeltaMatrixEngine {
 	}
 	
 	@Override
-	public void moveMethodPerformed(AOMClass fromClass, AOMMethod method, AOMClass toClass, boolean isRollbackAction) {
+	public void moveMethodPerformed(AOMClass fromClass, AOMMethod method, AOMClass toClass, boolean isRollbackAction, boolean isVirtualMove) {
+		if( isVirtualMove ) return;
+		
 		engine.move(method.getIndex(), fromClass.getIndex(), toClass.getIndex());
 	}
 	

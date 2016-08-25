@@ -84,7 +84,7 @@ public class NativeEPMEngineAdapter extends AtomicFitnessFunction implements Mov
 
 	@Override
 	public void moveMethodPerformed(AOMClass fromClass, AOMMethod method,
-			AOMClass toClass, boolean isRollbackAction) {
+			AOMClass toClass, boolean isRollbackAction, boolean isVirtualMove) {
 		nee.moveMethod(fromClass.getIndex(), method.getIndex(), toClass.getIndex());
 	}
 

@@ -360,8 +360,10 @@ public class JavaDeltaMatrixEngine implements DeltaMatrixEngine {
 	}
 	
 	@Override
-	public void moveMethodPerformed(AOMClass fromClass, AOMMethod method, AOMClass toClass, boolean isRollbackAction)
+	public void moveMethodPerformed(AOMClass fromClass, AOMMethod method, AOMClass toClass, boolean isRollbackAction, boolean isVirtualMove)
 	{
+		if( isVirtualMove ) return;
+		
 		membershipMatrix.set(method.getIndex(), fromClass.getIndex(), 0);
 		membershipMatrix.set(method.getIndex(), toClass.getIndex(), 1);
 		
