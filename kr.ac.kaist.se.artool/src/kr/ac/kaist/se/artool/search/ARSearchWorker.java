@@ -21,10 +21,10 @@ import kr.ac.kaist.se.artool.search.candidate.NativeDeltaMatrixEngineAdaptor;
 import kr.ac.kaist.se.artool.search.candidate.RandomCandidateSelection;
 import kr.ac.kaist.se.artool.search.fitness.AtomicFitnessFunction;
 import kr.ac.kaist.se.artool.search.fitness.ConnectivityEngine;
-import kr.ac.kaist.se.artool.search.fitness.EPMEngine;
 import kr.ac.kaist.se.artool.search.fitness.FitnessFunction;
 import kr.ac.kaist.se.artool.search.fitness.MPCEngine;
 import kr.ac.kaist.se.artool.search.fitness.MSCEngine;
+import kr.ac.kaist.se.artool.search.fitness.NativeEPMEngineAdapter;
 import kr.ac.kaist.se.artool.search.fitness.ParetoEngine;
 import kr.ac.kaist.se.artool.search.fitness.QMoodEngine;
 import kr.ac.kaist.se.artool.search.fitness.value.FitnessValue;
@@ -112,8 +112,8 @@ public class ARSearchWorker {
 		switch( fitnessType )
 		{
 		case EPM:
-//			NativeEPMEngineAdapter epmEngine = new NativeEPMEngineAdapter(ses);
-			EPMEngine epmEngine = new EPMEngine(ses);
+			NativeEPMEngineAdapter epmEngine = new NativeEPMEngineAdapter(ses);
+//			EPMEngine epmEngine = new EPMEngine(ses);
 			fitnessFunction = epmEngine;
 			mmr.addListener(epmEngine);
 			break;
