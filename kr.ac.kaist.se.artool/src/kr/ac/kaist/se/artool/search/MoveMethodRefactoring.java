@@ -67,7 +67,7 @@ public class MoveMethodRefactoring {
 			action.undoCommand();
 			for( MoveMethodEventListener listener : listenerList )
 			{
-				listener.moveMethodPerformed(action.getToClass(), action.getMethod(), action.getFromClass(), true, false);
+				listener.moveMethodPerformed(action.getToClass(), action.getMethod(), action.getFromClass(), true, true);
 			}
 		} catch (RefactoringException e) {
 			// TODO Auto-generated catch block

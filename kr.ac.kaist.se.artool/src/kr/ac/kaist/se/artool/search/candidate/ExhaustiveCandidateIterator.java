@@ -31,10 +31,10 @@ public class ExhaustiveCandidateIterator implements CandidateIterator {
 				if( clazz != method.getOwner() && MoveMethodApplicabilityChecker.isApplicableForTargetClass(method, clazz) )
 				{
 					candidateList.add(new MoveMethodCommand(method, clazz));
-					if( maxCandidateCount > 0 && candidateList.size() > maxCandidateCount )
-					{
-						break;
-					}
+//					if( maxCandidateCount > 0 && candidateList.size() > maxCandidateCount )
+//					{
+//						break;
+//					}
 				}
 			}
 		}
