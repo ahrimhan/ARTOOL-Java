@@ -46,6 +46,8 @@ public class ARSearchWizard extends Wizard {
 
 	private int maxCandidateCount; 
 	
+	private int timeLimitForIteration;
+	
 	private int saMaxPermissibleIdleIteration;
 
 	public ARSearchWizard(IFile selectedFile) {
@@ -89,6 +91,7 @@ public class ARSearchWizard extends Wizard {
 		//useDeltaTable = paramConfigPage.useDeltaTable();
 		maxIterationCount = paramConfigPage.getMaxIterationCount();
 		maxCandidateCount = paramConfigPage.getMaxCandidateCount();
+		timeLimitForIteration = paramConfigPage.getTimeLimitForIteration();
 		saMaxPermissibleIdleIteration = paramConfigPage.getSAPermissibleIdleIteration();
 		
 		AbstractTransactionalCommand command = new AbstractTransactionalCommand(
@@ -116,7 +119,7 @@ public class ARSearchWizard extends Wizard {
 						{
 							for(CandidateSelectionType candidateSelectionType: candidateSelectionTypeList )
 							{
-								ARSearchMain.getInstance().run(caseIdx, selectedFile.getProject().getName(), timestamp, aom, fitnessType, multiFitnessTypeList, searchTechType, candidateSelectionType, maxIterationCount, maxCandidateCount, saMaxPermissibleIdleIteration, monitor);
+								ARSearchMain.getInstance().run(caseIdx, selectedFile.getProject().getName(), timestamp, aom, fitnessType, multiFitnessTypeList, searchTechType, candidateSelectionType, maxIterationCount, maxCandidateCount, saMaxPermissibleIdleIteration, timeLimitForIteration, monitor);
 								caseIdx++;
 							}
 						}

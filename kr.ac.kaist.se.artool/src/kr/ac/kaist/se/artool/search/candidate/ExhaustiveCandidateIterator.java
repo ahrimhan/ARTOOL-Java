@@ -15,7 +15,7 @@ public class ExhaustiveCandidateIterator implements CandidateIterator {
 	private int maxCandidateCount;
 	private int count;
 	
-	public ExhaustiveCandidateIterator(ExhaustiveCandidateSelection selection, int maxCandidateCount)
+	public ExhaustiveCandidateIterator(ExhaustiveCandidateSelection selection, int maxCandidateCount, boolean shuffle)
 	{
 		candidateList = new Vector<MoveMethodCommand>();
 		
@@ -39,7 +39,7 @@ public class ExhaustiveCandidateIterator implements CandidateIterator {
 			}
 		}
 		
-		if( maxCandidateCount > 0 )
+		if( maxCandidateCount > 0 || shuffle)
 		{
 			Collections.shuffle(candidateList);
 		}

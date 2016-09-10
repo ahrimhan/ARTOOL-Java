@@ -49,7 +49,7 @@ public class RandomCandidateSelection implements CandidateSelection {
 	
 	
 	@Override
-	public CandidateIterator getCandidateIterator(int maxCandidateCount) {
+	public CandidateIterator getCandidateIterator(int maxCandidateCount, boolean shuffle) {
 		RandomCandidateIterator rci = new RandomCandidateIterator(this, maxCandidateCount, 1000); 
 		return rci;
 	}
