@@ -41,6 +41,7 @@ public class ARSearchWorker {
 	private int max_iteration;
 	private int max_candidate_selection;
 	private int saMaxPermissibleIdleIteration;
+	private long timeLimitForIterationInMillis;
 	private List<FitnessType> multiFitnessTypeList;
 
 
@@ -59,6 +60,7 @@ public class ARSearchWorker {
 			int max_iteration, 
 			int max_candidate_selection, 
 			int saMaxPermissibleIdleIteration,
+			int timeLimitForIteration,
 			Logger candidateLogger,
 			Logger selectionLogger
 			)
@@ -71,6 +73,7 @@ public class ARSearchWorker {
 		this.max_iteration = max_iteration;
 		this.max_candidate_selection = max_candidate_selection;
 		this.saMaxPermissibleIdleIteration = saMaxPermissibleIdleIteration;
+		this.timeLimitForIterationInMillis = timeLimitForIteration * 1000;
 		this.candidateLogger = candidateLogger;
 		this.selectionLogger = selectionLogger;
 		ses = new SystemEntitySet(aom);
@@ -197,7 +200,10 @@ public class ARSearchWorker {
 		boolean shouldBreak = false;
 		MoveMethodCommand mmc = null;
 		CandidateIterator candidateIterator = 
-				candidateSelection.getCandidateIterator(strategy.restrictCandidateCount() ? max_candidate_selection : -1);
+				candidateSelection.getCandidateIterator(strategy.restrictCandidateCount() ? max_candidate_selection : -1,
+						timeLimitForIterationInMillis > 0);
+
+		long startTimeMillis = System.currentTimeMillis();
 
 		for( idx = 0; candidateIterator.hasNext() && !shouldBreak; idx++  )
 		{
@@ -211,6 +217,11 @@ public class ARSearchWorker {
 				candidateLogger.debug("{}, {}, {}, {}, {}, {}", iteration, idx, mmc.toString(), fitnessType.toString(), fitnessValue, mmc.getDeltaValue());
 				shouldBreak = !strategy.next(fitnessValue);
 				mmr.undoAction();
+			}
+			
+			if( (System.currentTimeMillis() - startTimeMillis) > timeLimitForIterationInMillis )
+			{
+				break;
 			}
 		}	
 		
@@ -232,6 +243,8 @@ public class ARSearchWorker {
 		int iteration = 0;
 		MoveMethodCommand selectedCommand = null;
 		
+		
+		
 		for(iteration = 0; iteration < max_iteration; iteration++ )
 		{
 			monitor.subTask(iteration + "/" + max_iteration);
@@ -243,6 +256,8 @@ public class ARSearchWorker {
 			monitor.worked(1);
 			
 			Runtime.getRuntime().gc();
+			
+			
 		}
 		
 		monitor.worked(max_iteration - iteration);

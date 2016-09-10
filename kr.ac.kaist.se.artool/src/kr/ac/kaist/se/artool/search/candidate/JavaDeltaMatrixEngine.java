@@ -435,7 +435,7 @@ public class JavaDeltaMatrixEngine implements DeltaMatrixEngine {
 
 
 	@Override
-	public CandidateIterator getCandidateIterator(int maxCandidateCount) {
+	public CandidateIterator getCandidateIterator(int maxCandidateCount, boolean shuffle) {
 		return new JavaDeltaMatrixCandidateIterator(this, getPositiveRefactorings(), maxCandidateCount);
 	}
 }

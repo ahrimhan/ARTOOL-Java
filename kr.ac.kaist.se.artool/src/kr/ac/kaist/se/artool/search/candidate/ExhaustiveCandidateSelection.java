@@ -47,8 +47,8 @@ public class ExhaustiveCandidateSelection implements CandidateSelection {
 	}
 	
 	@Override
-	public CandidateIterator getCandidateIterator(int maxCandidateCount) {
-		ExhaustiveCandidateIterator sci = new ExhaustiveCandidateIterator(this, maxCandidateCount); 
+	public CandidateIterator getCandidateIterator(int maxCandidateCount, boolean shuffle) {
+		ExhaustiveCandidateIterator sci = new ExhaustiveCandidateIterator(this, maxCandidateCount, shuffle); 
 		return sci;
 	}
 

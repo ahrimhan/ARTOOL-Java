@@ -70,6 +70,7 @@ public class ARSearchParameterConfigPage extends WizardPage {
 
 	private String maxIterationCountStr;
 	private String maxCandidateCountStr;
+	private String timeLimitForIteration;
 	private String saMaxPermissibleIdelIterationStr;
 	private Group multiObjectiveGroup;
 	
@@ -85,6 +86,7 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		prefs.put("maxIterationCount", maxIterationCountStr);
 		prefs.put("maxCandidateCount", maxCandidateCountStr);
 		prefs.put("saMaxPermissibleIdelIteration", saMaxPermissibleIdelIterationStr);
+		prefs.put("timeLimitForIteration", timeLimitForIteration);
 		try {
 			prefs.flush();
 		} catch(BackingStoreException e) {
@@ -102,6 +104,7 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		maxIterationCountStr = prefs.get("maxIterationCount", "100");
 		maxCandidateCountStr = prefs.get("maxCandidateCount", "1000");
 		saMaxPermissibleIdelIterationStr = prefs.get("saMaxPermissibleIdelIteration", "500");
+		timeLimitForIteration = prefs.get("timeLimitForIteration", "-1");
 	}
 	
 	private static void setEnabledChildren(Control ctrl, boolean enabled)
@@ -385,19 +388,38 @@ public class ARSearchParameterConfigPage extends WizardPage {
 			}
 		});
 		
-		new Label(composite, SWT.NONE).setText("(SA) Permissible Idle Iteration Count:");
+		
+		new Label(composite, SWT.NONE).setText("Time limit for a iteration (in sec):");
 		Text saMaxPermissibleIdelIterationText = new Text(composite, SWT.BORDER | SWT.SINGLE);
-		saMaxPermissibleIdelIterationText.setMessage("Set Max Permissible Idle Iterations. Default is 500");
+		saMaxPermissibleIdelIterationText.setMessage("Set time limit for a iteration");
 		saMaxPermissibleIdelIterationText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		saMaxPermissibleIdelIterationText.setText(saMaxPermissibleIdelIterationStr);
+		saMaxPermissibleIdelIterationText.setText(timeLimitForIteration);
 		saMaxPermissibleIdelIterationText.addVerifyListener(verifyListener);
 		saMaxPermissibleIdelIterationText.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				Text text = (Text)e.widget;
+				timeLimitForIteration = text.getText();
+			}
+		});
+		
+		
+		new Label(composite, SWT.NONE).setText("(SA) Permissible Idle Iteration Count:");
+		Text timeLimitForIterationText = new Text(composite, SWT.BORDER | SWT.SINGLE);
+		timeLimitForIterationText.setMessage("Set Max Permissible Idle Iterations. Default is 500");
+		timeLimitForIterationText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		timeLimitForIterationText.setText(saMaxPermissibleIdelIterationStr);
+		timeLimitForIterationText.addVerifyListener(verifyListener);
+		timeLimitForIterationText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				Text text = (Text)e.widget;
 				saMaxPermissibleIdelIterationStr = text.getText();
 			}
 		});
+		
+		
+		
 		
 		/*
 		useDeltaTableButton = new Button(composite, SWT.CHECK);
@@ -564,5 +586,10 @@ public class ARSearchParameterConfigPage extends WizardPage {
 
 	public int getSAPermissibleIdleIteration() {		
 		return Integer.parseInt(saMaxPermissibleIdelIterationStr);	
+	}
+	
+	public int getTimeLimitForIteration()
+	{
+		return Integer.parseInt(timeLimitForIteration);
 	}
 }

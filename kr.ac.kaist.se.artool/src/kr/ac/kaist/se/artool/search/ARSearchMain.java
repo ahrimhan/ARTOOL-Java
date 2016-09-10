@@ -58,6 +58,7 @@ public class ARSearchMain {
 			int max_iteration, 
 			int max_candidate_selection, 
 			int saMaxPermissibleIdleIteration, 
+			int timeLimitForIteration,
 			IProgressMonitor monitor) throws IOException
 	{	
 		String candidateMode = candidateSelectionType.name().toLowerCase();
@@ -92,7 +93,7 @@ public class ARSearchMain {
 		
 		monitor.setTaskName(project + " " + candidateMode + " " + searchTypeStr + " " + fitnessTypeStr);
 		
-		ARSearchWorker worker = new ARSearchWorker(originalAOM, fitnessType, multiFitnessTypeList, searchType, candidateSelectionType, max_iteration, max_candidate_selection, saMaxPermissibleIdleIteration, candidateLogger, selectionLogger);
+		ARSearchWorker worker = new ARSearchWorker(originalAOM, fitnessType, multiFitnessTypeList, searchType, candidateSelectionType, max_iteration, max_candidate_selection, saMaxPermissibleIdleIteration, timeLimitForIteration, candidateLogger, selectionLogger);
 		worker.run(monitor);
 	}
 	

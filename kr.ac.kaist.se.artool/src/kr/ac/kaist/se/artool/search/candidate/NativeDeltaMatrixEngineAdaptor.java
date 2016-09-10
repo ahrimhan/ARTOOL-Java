@@ -122,7 +122,7 @@ public class NativeDeltaMatrixEngineAdaptor implements DeltaMatrixEngine {
 	}
 
 	@Override
-	public CandidateIterator getCandidateIterator(int maxCandidateCount) {
+	public CandidateIterator getCandidateIterator(int maxCandidateCount, boolean shuffle) {
 //		printMemStat("Before Eval");
 		engine.eval();
 //		printMemStat("After Eval");
