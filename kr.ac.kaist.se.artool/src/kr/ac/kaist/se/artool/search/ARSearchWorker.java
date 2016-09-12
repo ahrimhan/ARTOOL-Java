@@ -219,7 +219,7 @@ public class ARSearchWorker {
 				mmr.undoAction();
 			}
 			
-			if( (System.currentTimeMillis() - startTimeMillis) > timeLimitForIterationInMillis )
+			if( timeLimitForIterationInMillis > 0 && (System.currentTimeMillis() - startTimeMillis) > timeLimitForIterationInMillis )
 			{
 				break;
 			}
