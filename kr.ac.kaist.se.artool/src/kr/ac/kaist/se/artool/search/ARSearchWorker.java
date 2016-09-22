@@ -229,6 +229,11 @@ public class ARSearchWorker {
 		
 		FitnessValue selectedValue = strategy.done();
 		
+		if( selectedValue != null )
+		{
+			System.err.println("Fitness:" + selectedValue.toString());
+		}
+		
 		return selectedValue == null ? null : selectedValue.ownedCommand;
 	}
 	

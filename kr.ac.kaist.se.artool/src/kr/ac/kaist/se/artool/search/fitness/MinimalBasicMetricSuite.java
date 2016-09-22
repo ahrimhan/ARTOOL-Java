@@ -28,7 +28,7 @@ public class MinimalBasicMetricSuite {
 	public static final String MPC = "MPC";
 	public static final String MSC = "MSC";
 	public static final String CONN = "CONN";
-
+//	public static final String RAW_CONN = "RAW_CONN";
 	
 	
 	
@@ -106,7 +106,10 @@ public class MinimalBasicMetricSuite {
 		@SuppressWarnings("unchecked")
 		HashSet<AOMField>[] mscFieldList = new HashSet[clazz.getMethods().size()];
 		
-		if( connectivity && clazz.getMethods().size() > 0 )
+		
+		_initializeMetric(clazz, CONN, (float)0);
+
+		if( connectivity && clazz.getMethods().size() > 1 )
 		{
 			int[] connCheckField = new int[clazz.getMethods().size() * clazz.getMethods().size()];
 			for( int i = 0 ; i < connCheckField.length; i++ )
@@ -125,7 +128,7 @@ public class MinimalBasicMetricSuite {
 				{
 					for( StaticMethodCall call : method.getOwnedScope().getStaticMethodCalls() )
 					{
-						if( call.getCallee().getOwner() == clazz )
+						if( call.getCallee() != method && call.getCallee().getOwner() == clazz )
 						{
 							int calleeIndex = clazz.getMethods().indexOf(call.getCallee());
 							connCheckField[ii * clazz.getMethods().size() + calleeIndex] = 1;
@@ -139,7 +142,8 @@ public class MinimalBasicMetricSuite {
 						{
 							for( StaticFieldAccess sfa2 : sfa.getAccessedField().getStaticReferer() )
 							{
-								if( sfa != sfa2 && sfa2.getAccessingScope().getOwner().getOwner() == clazz )
+								if( sfa != sfa2 && sfa2.getAccessingScope().getOwner() != method 
+										&& sfa2.getAccessingScope().getOwner().getOwner() == clazz )
 								{
 									int calleeIndex = clazz.getMethods().indexOf(sfa2.getAccessingScope().getOwner());
 									connCheckField[ii * clazz.getMethods().size() + calleeIndex] = 1;
@@ -159,7 +163,8 @@ public class MinimalBasicMetricSuite {
 				total  += connCheckField[i];
 			}
 			
-			float connectivityValue = ((float)total) / connCheckField.length;
+			float connectivityValue = ((float)total);
+					
 			
 			_initializeMetric(clazz, CONN, connectivityValue);
 		}

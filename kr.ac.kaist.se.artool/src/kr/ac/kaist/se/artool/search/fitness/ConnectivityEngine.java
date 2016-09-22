@@ -25,9 +25,11 @@ public class ConnectivityEngine extends AtomicFitnessFunction {
 	@Override
 	public AtomicFitnessValue calculateAtomic() {
 		float ret = 0;
-		float div = 0;
+		float total_conn = 0;
+		float total_methodCount = 0;
 		int methodSize;
 		int attrSize;
+		
 		
 		bms.measure(aom, false, true);
 
@@ -37,20 +39,26 @@ public class ConnectivityEngine extends AtomicFitnessFunction {
 			
 			if( conn >= 0 )
 			{
-				methodSize = clazz.getMethods().size();
-				attrSize = clazz.getFields().size();
-				
-				if( methodSize > 0 )
-				{
-					ret +=  attrSize * methodSize * (methodSize - 1) * conn;
-					div += attrSize * methodSize * (methodSize - 1);
-				}
+				ret += conn / (clazz.getMethods().size() * (clazz.getMethods().size() - 1));
+				total_conn += conn;
+				total_methodCount += clazz.getMethods().size();
+//				methodSize = clazz.getMethods().size();
+//				attrSize = clazz.getFields().size();
+//				
+//				if( methodSize > 0 )
+//				{
+//					ret +=  attrSize * methodSize * (methodSize - 1) * conn;
+//					div += attrSize * methodSize * (methodSize - 1);
+//				}
 			}
 		}
 		
 		//System.err.println("Total:" + aom.getClasses().size() + " mscCount:" + mscCount + " negCount:" + negCount);
 		
-		ret = ret / div;
+//		ret = ret / aom.getClasses().size();
+		System.err.println("[ConnectivityEngine] Total Connection:" + total_conn);
+		System.err.println("[ConnectivityEngine] Total Method Count:" + total_methodCount);
+		System.err.println("[ConnectivityEngine] Connectivity:" + ret);
 		
 		return new BiggerBetterFitnessValue(ret);
 	}
