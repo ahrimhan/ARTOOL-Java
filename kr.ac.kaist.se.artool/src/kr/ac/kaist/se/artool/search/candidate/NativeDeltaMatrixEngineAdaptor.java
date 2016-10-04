@@ -95,7 +95,29 @@ public class NativeDeltaMatrixEngineAdaptor implements DeltaMatrixEngine {
 	public void moveMethodPerformed(AOMClass fromClass, AOMMethod method, AOMClass toClass, boolean isRollbackAction, boolean isVirtualMove) {
 		if( isVirtualMove ) return;
 		
+		
+		DeltaTableInfo info = DeltaTableInfo.getInstance(ses.classes.size(), ses.entities.size(), ses.methods.size(), ses.methodsPossibleToMove.size());
+
+		
 		engine.move(method.getIndex(), fromClass.getIndex(), toClass.getIndex());
+		
+		for( int i = 0; i < ses.methods.size(); i++ )
+		{
+			AOMMethod movingMethod = ses.methods.get(i);
+			
+			if( MoveMethodApplicabilityChecker.isApplicableForGivenMethod(movingMethod) )
+			{	
+				for( int j = 0; j < ses.classes.size(); j++ )
+				{	
+					AOMClass targetClass = ses.classes.get(j);	
+					if( movingMethod.getOwner() != targetClass &&
+							MoveMethodApplicabilityChecker.isApplicableForTargetClass(movingMethod, targetClass) )
+					{
+						info.possibleMoveMethod(i, j);
+					}
+				}
+			}
+		}
 	}
 	
 	public void printMemStat(String header)

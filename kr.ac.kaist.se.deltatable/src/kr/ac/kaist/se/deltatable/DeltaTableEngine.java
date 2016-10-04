@@ -24,6 +24,15 @@ public class DeltaTableEngine {
 	public native void eval();
 	public native long _getTopK(int k);
 	
+	
+	public void updatePossibleMatrix(DeltaTableInfo info)
+	{
+		_updatePossibleMatrix(info);
+		info.dispose();
+	}
+	
+	private native void _updatePossibleMatrix(DeltaTableInfo info);
+	
 	public DeltaTableEntryIterator getTopK(int k)
 	{
 		System.err.println("TopK:" + k);
