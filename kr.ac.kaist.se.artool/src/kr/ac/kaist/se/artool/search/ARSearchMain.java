@@ -81,9 +81,13 @@ public class ARSearchMain {
 		
 		String fitnessTypeStr = fitnessType.name().toLowerCase();
 
-		
-		System.setProperty("candidate_filename", baseLogPath + timestamp + "/" + caseIdx + "-" + project + "-" + candidateMode + "-" + searchTypeStr + "-" + fitnessTypeStr + "/candidate.log");
-		System.setProperty("selection_filename", baseLogPath + timestamp + "/" + caseIdx + "-" + project + "-" + candidateMode + "-" + searchTypeStr + "-" + fitnessTypeStr + "/selection.log");
+		String projectSimplename = project.equals("org.eclipse.jgit") ? "jgit" : project;
+		projectSimplename = projectSimplename.equals("apache-ant") ? "ant" : projectSimplename;
+		String candidateCount = max_candidate_selection > 0 ? Integer.toString(max_candidate_selection) : "ul";
+		String rootDirName = "XX-" + projectSimplename + "-" + candidateCount + "-" + timestamp; 
+				
+		System.setProperty("candidate_filename", baseLogPath + rootDirName + "/" + caseIdx + "-" + projectSimplename + "-" + candidateMode + "-" + searchTypeStr + "-" + fitnessTypeStr + "/candidate.log");
+		System.setProperty("selection_filename", baseLogPath + rootDirName + "/" + caseIdx + "-" + projectSimplename + "-" + candidateMode + "-" + searchTypeStr + "-" + fitnessTypeStr + "/selection.log");
 		org.apache.logging.log4j.core.LoggerContext ctx =
 			    (org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false);
 		ctx.reconfigure();

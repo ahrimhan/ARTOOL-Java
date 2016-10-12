@@ -18,4 +18,9 @@ public class SingleDeltaValue extends DeltaValue {
 		SingleDeltaValue sdv = (SingleDeltaValue)o;
 		return d > sdv.d ? 1 : (d < sdv.d ? -1 : 0);
 	}
+	
+	public float getActualValue()
+	{
+		return d;
+	}
 }

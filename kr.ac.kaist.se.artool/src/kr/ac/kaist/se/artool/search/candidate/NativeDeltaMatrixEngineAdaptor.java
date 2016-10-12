@@ -1,5 +1,7 @@
 package kr.ac.kaist.se.artool.search.candidate;
 
+import java.util.Collection;
+
 import kr.ac.kaist.se.aom.staticmodel.StaticFieldAccess;
 import kr.ac.kaist.se.aom.staticmodel.StaticMethodCall;
 import kr.ac.kaist.se.aom.structure.AOMClass;
@@ -11,16 +13,23 @@ import kr.ac.kaist.se.deltatable.DeltaTableEngine;
 import kr.ac.kaist.se.deltatable.DeltaTableEntryIterator;
 import kr.ac.kaist.se.deltatable.DeltaTableInfo;
 
+
+    
 public class NativeDeltaMatrixEngineAdaptor implements DeltaMatrixEngine {
 
 	private SystemEntitySet ses;
 //	private DeltaTable<AOMClass, AOMEntity> dt;
 	    
 	private DeltaTableEngine engine;
+	private DeltaCandidateManager entireCandidates;
+	private int prevMaxCandidateCount = 0;
 	
 	public NativeDeltaMatrixEngineAdaptor(SystemEntitySet ses)
 	{
 		this.ses = ses;
+		
+		entireCandidates = new DeltaCandidateManager(ses);
+		
 //		
 //		BulkDTSystem<AOMClass, AOMEntity> bulkSystem = new BulkDTSystem<AOMClass, AOMEntity>();
 //		
@@ -80,6 +89,7 @@ public class NativeDeltaMatrixEngineAdaptor implements DeltaMatrixEngine {
 							MoveMethodApplicabilityChecker.isApplicableForTargetClass(movingMethod, targetClass) )
 					{
 						info.possibleMoveMethod(i, j);
+						entireCandidates.addCandidate(i, j);
 						possibleMoveMethodCount++;
 					}
 				}
@@ -95,28 +105,24 @@ public class NativeDeltaMatrixEngineAdaptor implements DeltaMatrixEngine {
 	public void moveMethodPerformed(AOMClass fromClass, AOMMethod method, AOMClass toClass, boolean isRollbackAction, boolean isVirtualMove) {
 		if( isVirtualMove ) return;
 		
+		engine.move(method.getIndex(), fromClass.getIndex(), toClass.getIndex());
 		
 		DeltaTableInfo info = DeltaTableInfo.getInstance(ses.classes.size(), ses.entities.size(), ses.methods.size(), ses.methodsPossibleToMove.size());
 
-		
-		engine.move(method.getIndex(), fromClass.getIndex(), toClass.getIndex());
-		
-		for( int i = 0; i < ses.methods.size(); i++ )
+		if( prevMaxCandidateCount < 0 )
 		{
-			AOMMethod movingMethod = ses.methods.get(i);
+			Collection<DeltaCandidate> deltaCandidateList = entireCandidates.getList();
 			
-			if( MoveMethodApplicabilityChecker.isApplicableForGivenMethod(movingMethod) )
-			{	
-				for( int j = 0; j < ses.classes.size(); j++ )
-				{	
-					AOMClass targetClass = ses.classes.get(j);	
-					if( movingMethod.getOwner() != targetClass &&
-							MoveMethodApplicabilityChecker.isApplicableForTargetClass(movingMethod, targetClass) )
-					{
-						info.possibleMoveMethod(i, j);
-					}
+			for( DeltaCandidate dc : deltaCandidateList )
+			{
+				if( dc.getFitnessDiffValue() == null )
+				{
+					info.possibleMoveMethod(dc.getEntityIdx(), dc.getToClassIdx());
 				}
 			}
+			
+			engine.updatePossibleMatrix(info);
+			entireCandidates.invalidateCandidate(method.getIndex(), toClass.getIndex());
 		}
 	}
 	
@@ -152,10 +158,11 @@ public class NativeDeltaMatrixEngineAdaptor implements DeltaMatrixEngine {
 //		printMemStat("After getTopK");
 
 		
-		CandidateIterator ret = new NativeDeltaMatrixCandidateIteratorAdaptor(ses, iterator);
+		CandidateIterator ret = new NativeDeltaMatrixCandidateIteratorAdaptor(ses, iterator, entireCandidates, maxCandidateCount);
 //		printMemStat("After Create CandidateIterator");
 
-		
+		this.prevMaxCandidateCount = maxCandidateCount;
+
 		return ret;
 	}
 

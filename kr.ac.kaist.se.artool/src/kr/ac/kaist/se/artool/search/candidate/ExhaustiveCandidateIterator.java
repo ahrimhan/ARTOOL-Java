@@ -8,6 +8,7 @@ import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodApplicabilityChecker;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
+import kr.ac.kaist.se.artool.search.fitness.value.FitnessValue;
 
 public class ExhaustiveCandidateIterator implements CandidateIterator {
 	private Vector<MoveMethodCommand> candidateList;
@@ -19,6 +20,7 @@ public class ExhaustiveCandidateIterator implements CandidateIterator {
 	{
 		candidateList = new Vector<MoveMethodCommand>();
 		
+
 		for( AOMMethod method : selection.getMethodList() )
 		{
 			if( !MoveMethodApplicabilityChecker.isApplicableForGivenMethod(method) )
@@ -26,15 +28,12 @@ public class ExhaustiveCandidateIterator implements CandidateIterator {
 				continue;
 			}
 			
+	
 			for( AOMClass clazz : selection.getAOM().getClasses() )
 			{
 				if( clazz != method.getOwner() && MoveMethodApplicabilityChecker.isApplicableForTargetClass(method, clazz) )
 				{
 					candidateList.add(new MoveMethodCommand(method, clazz));
-//					if( maxCandidateCount > 0 && candidateList.size() > maxCandidateCount )
-//					{
-//						break;
-//					}
 				}
 			}
 		}
@@ -72,6 +71,12 @@ public class ExhaustiveCandidateIterator implements CandidateIterator {
 	public void dispose() {
 		candidateList.clear();
 		candidateIterator = null;
+	}
+	
+	@Override
+	public void feedback(MoveMethodCommand mmc, FitnessValue prevValue, FitnessValue current)
+	{
+		
 	}
 
 }

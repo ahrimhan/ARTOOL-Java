@@ -2,6 +2,10 @@ package kr.ac.kaist.se.artool.search.fitness.value;
 
 import java.util.Vector;
 
+import kr.ac.kaist.se.artool.search.candidate.CompositeDeltaValue;
+import kr.ac.kaist.se.artool.search.candidate.DeltaValue;
+import kr.ac.kaist.se.artool.search.candidate.SingleDeltaValue;
+
 public class ParetoCompositeFitnessValue extends FitnessValue {
 	public static final int INCOMPARABLE = 0xffffff;
 	
@@ -92,5 +96,28 @@ public class ParetoCompositeFitnessValue extends FitnessValue {
 		}
 		
 		return sb.toString();
+	}
+	
+	@Override
+	public DeltaValue diffWith(FitnessValue newOne) {
+		if( newOne instanceof ParetoCompositeFitnessValue )
+		{
+			ParetoCompositeFitnessValue vv = (ParetoCompositeFitnessValue)newOne;
+			if( vv.valueList.size() != valueList.size() ) throw new RuntimeException("Different size composite fitness");
+			
+			float[] diffValueArray = new float[valueList.size()];
+			
+			for( int i = 0; i < valueList.size(); i++ )
+			{
+				SingleDeltaValue sdv = (SingleDeltaValue)valueList.get(i).diffWith(vv.valueList.get(i));
+				diffValueArray[i] = sdv.getActualValue();
+			}
+			
+			return new CompositeDeltaValue(diffValueArray);
+		}
+		
+		
+		
+		throw new RuntimeException("Different type of fitness value");
 	}
 }

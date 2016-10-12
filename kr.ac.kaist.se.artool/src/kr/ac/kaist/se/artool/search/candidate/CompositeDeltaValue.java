@@ -8,6 +8,11 @@ public class CompositeDeltaValue extends DeltaValue {
 		this.array = array;
 	}
 	
+	public float[] getArray()
+	{
+		return array;
+	}
+	
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
@@ -41,7 +46,36 @@ public class CompositeDeltaValue extends DeltaValue {
 		
 		if( !greater && less ) return -1;
 		if( !less && greater ) return 1;
+		if( !less && !greater ) return 0;
 		
-		return 0;
+		
+		double rms = 0;
+		double cdvRMS = 0;
+		
+		for( int i = 0; i < array.length; i++ )
+		{
+			if( array[i] < 0 )
+			{
+				rms += array[i] * array[i];
+			}
+			
+			if( cdv.array[i] < 0 )
+			{
+				cdvRMS += cdv.array[i] * cdv.array[i];
+			}
+		}
+		
+		if( rms < cdvRMS )
+		{
+			return -1;
+		}
+		else if( rms > cdvRMS )
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 }

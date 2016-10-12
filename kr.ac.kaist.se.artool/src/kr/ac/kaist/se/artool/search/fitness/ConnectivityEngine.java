@@ -55,10 +55,10 @@ public class ConnectivityEngine extends AtomicFitnessFunction {
 		
 		//System.err.println("Total:" + aom.getClasses().size() + " mscCount:" + mscCount + " negCount:" + negCount);
 		
-//		ret = ret / aom.getClasses().size();
-		System.err.println("[ConnectivityEngine] Total Connection:" + total_conn);
-		System.err.println("[ConnectivityEngine] Total Method Count:" + total_methodCount);
-		System.err.println("[ConnectivityEngine] Connectivity:" + ret);
+		ret = ret / aom.getClasses().size();
+//		System.err.println("[ConnectivityEngine] Total Connection:" + total_conn);
+//		System.err.println("[ConnectivityEngine] Total Method Count:" + total_methodCount);
+//		System.err.println("[ConnectivityEngine] Connectivity:" + ret);
 		
 		return new BiggerBetterFitnessValue(ret);
 	}

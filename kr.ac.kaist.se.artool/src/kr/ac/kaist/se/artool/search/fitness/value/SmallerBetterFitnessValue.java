@@ -1,5 +1,8 @@
 package kr.ac.kaist.se.artool.search.fitness.value;
 
+import kr.ac.kaist.se.artool.search.candidate.DeltaValue;
+import kr.ac.kaist.se.artool.search.candidate.SingleDeltaValue;
+
 public class SmallerBetterFitnessValue extends AtomicFitnessValue {
 
 	public SmallerBetterFitnessValue(float value)
@@ -24,5 +27,18 @@ public class SmallerBetterFitnessValue extends AtomicFitnessValue {
 	@Override
 	public AtomicFitnessValue getMinInstance() {
 		return new SmallerBetterFitnessValue(Float.POSITIVE_INFINITY);
+	}
+	
+	@Override
+	public DeltaValue diffWith(FitnessValue newOne) {
+		if( newOne instanceof SmallerBetterFitnessValue )
+		{
+			SmallerBetterFitnessValue vv = (SmallerBetterFitnessValue)newOne;
+			
+			return new SingleDeltaValue(vv.value - value);
+		}
+		
+		
+		throw new RuntimeException("Different type of fitness value");
 	}
 }

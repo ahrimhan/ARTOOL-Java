@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
+import kr.ac.kaist.se.artool.search.fitness.value.FitnessValue;
 
 public class JavaDeltaMatrixCandidateIterator implements CandidateIterator {
 	private JavaDeltaMatrixEngine dme;
@@ -46,5 +47,11 @@ public class JavaDeltaMatrixCandidateIterator implements CandidateIterator {
 		
 	}
 	
+	@Override
+	public void feedback(MoveMethodCommand mmc, FitnessValue prevValue, FitnessValue current)
+	{
+		
+	}
+
 	
 }

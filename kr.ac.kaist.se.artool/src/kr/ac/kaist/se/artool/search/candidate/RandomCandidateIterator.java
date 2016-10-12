@@ -6,6 +6,7 @@ import kr.ac.kaist.se.aom.structure.AOMClass;
 import kr.ac.kaist.se.aom.structure.AOMMethod;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodApplicabilityChecker;
 import kr.ac.kaist.se.artool.engine.refactoring.MoveMethodCommand;
+import kr.ac.kaist.se.artool.search.fitness.value.FitnessValue;
 
 public class RandomCandidateIterator implements CandidateIterator {
 	private RandomCandidateSelection rcs;
@@ -92,6 +93,12 @@ public class RandomCandidateIterator implements CandidateIterator {
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void feedback(MoveMethodCommand mmc, FitnessValue prevValue, FitnessValue current)
+	{
 		
 	}
 

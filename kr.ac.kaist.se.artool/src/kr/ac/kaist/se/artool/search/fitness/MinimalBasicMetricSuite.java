@@ -61,6 +61,18 @@ public class MinimalBasicMetricSuite {
 			i[0] = intValue;
 		}
 	}
+
+	public void _initializeMetric(AOMClass clazz, String s, long longValue)
+	{
+		if( clazz.getMeasuredDataSet().get(s) == null )
+			clazz.getMeasuredDataSet().put(s, new long[] { longValue });
+		else
+		{
+			long[] i = (long[])clazz.getMeasuredDataSet().get(s);
+			i[0] = longValue;
+		}
+	}
+
 	
 	public void _initializeMetric(AOMMethod method, String s, int intValue)
 	{
@@ -99,8 +111,8 @@ public class MinimalBasicMetricSuite {
 		HashSet<AOMClass> camcTotalSet = new HashSet<AOMClass>();
 		HashSet<AOMClass> camcMethodSet =  new HashSet<AOMClass>();
 		
-		HashSet<AOMMethod> mpcSet = new HashSet<AOMMethod>();
-		
+//		HashSet<AOMMethod> mpcSet = new HashSet<AOMMethod>();
+		long mpcCount = 0;
 		int camcMethodParameterCount = 0;
 		
 		@SuppressWarnings("unchecked")
@@ -195,7 +207,8 @@ public class MinimalBasicMetricSuite {
 				{
 					if( call.getCallee().getOwner() != clazz )
 					{
-						mpcSet.add(call.getCallee());
+//						mpcSet.add(call.getCallee());
+						mpcCount++;
 					}
 				}
 			}
@@ -283,7 +296,7 @@ public class MinimalBasicMetricSuite {
 		}
 		
 		_initializeMetric(clazz, CAM, camc);
-		_initializeMetric(clazz, MPC, mpcSet.size());
+		_initializeMetric(clazz, MPC, mpcCount);
 		
 		
 		for( AOMField field : clazz.getFields() )
@@ -309,6 +322,19 @@ public class MinimalBasicMetricSuite {
 			throw new RuntimeException("not int[]");
 		}
 		return ((int[])obj)[0];
+	}
+	
+	public static long getLong(Object obj)
+	{
+		if( obj == null  )
+		{
+			return 0;
+		}
+		if( !(obj instanceof long[]) )
+		{
+			throw new RuntimeException("not long[]");
+		}
+		return ((long[])obj)[0];
 	}
 	
 	public static float getFloat(Object obj)

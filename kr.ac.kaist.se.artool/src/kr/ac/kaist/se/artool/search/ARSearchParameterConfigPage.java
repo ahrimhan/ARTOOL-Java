@@ -1,7 +1,10 @@
 package kr.ac.kaist.se.artool.search;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -359,6 +362,29 @@ public class ARSearchParameterConfigPage extends WizardPage {
 			}	
 		};
 		
+
+		VerifyListener verifyNumberListListener = new VerifyListener()
+		{
+			@Override
+			public void verifyText(VerifyEvent e) {
+				String typedString = e.text;
+				char[] typedChars = new char[typedString.length()];
+				typedString.getChars(0, typedChars.length, typedChars, 0);
+				
+				System.err.println("typedString:"+typedString);
+				
+				for (int i = 0; i < typedChars.length; i++) {
+					if (!(('0' <= typedChars[i] && typedChars[i] <= '9') || typedChars[i] == ',')) {
+						if( !(i == 0 && e.start == 0 && typedChars[i] == '-') )
+						{
+							e.doit = false;
+							return;
+						}
+					}
+				}	
+			}	
+		};
+		
 		
 		new Label(composite, SWT.NONE).setText("Max Iteraction Count:");
 		Text maxIterationCountText = new Text(composite, SWT.BORDER | SWT.SINGLE);
@@ -379,7 +405,7 @@ public class ARSearchParameterConfigPage extends WizardPage {
 		maxCandidateCountText.setMessage("Set Max-Candidate Counts. Default is 100");
 		maxCandidateCountText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		maxCandidateCountText.setText(maxCandidateCountStr);
-		maxCandidateCountText.addVerifyListener(verifyListener);
+		maxCandidateCountText.addVerifyListener(verifyNumberListListener);
 		maxCandidateCountText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -574,8 +600,18 @@ public class ARSearchParameterConfigPage extends WizardPage {
 	}
 
 
-	public int getMaxCandidateCount() {
-		return Integer.parseInt(maxCandidateCountStr);
+	public List<Integer> getMaxCandidateCountList() {
+		ArrayList<Integer> ret = new ArrayList<Integer>();
+		
+		Pattern p = Pattern.compile("-?\\d+");
+		Matcher m = p.matcher(maxCandidateCountStr);
+		while (m.find()) {
+			ret.add(Integer.parseInt(m.group()));
+		}
+		
+		System.out.println(ret);
+		
+		return ret;
 	}
 
 

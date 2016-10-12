@@ -59,14 +59,20 @@ public class NativeEPMEngineAdapter extends AtomicFitnessFunction implements Mov
 				for(StaticFieldAccess sfa : method.getOwnedScope().getStaticFieldAccesses() )
 				{
 //					entityMatrix.set(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
-					nee.setInitialLinkMatrix(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
-//					nee.setInitialLinkMatrix(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
+					if( sfa.getAccessedField().getIndex() != method.getIndex() )
+					{
+						nee.setInitialLinkMatrix(sfa.getAccessedField().getIndex(), method.getIndex(), 1);
+						nee.setInitialLinkMatrix(method.getIndex(), sfa.getAccessedField().getIndex(), 1);
+					}
 				}
 
 				for(StaticMethodCall smc : method.getOwnedScope().getStaticMethodCalls() )
 				{
 //					entityMatrix.set(method.getIndex(), smc.getCallee().getIndex(), 1);
-					nee.setInitialLinkMatrix(method.getIndex(), smc.getCallee().getIndex(), 1);
+					if( method.getIndex() != smc.getCallee().getIndex() )
+					{
+						nee.setInitialLinkMatrix(method.getIndex(), smc.getCallee().getIndex(), 1);
+					}
 				}
 			}
 		}		

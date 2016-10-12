@@ -51,6 +51,9 @@ public class ARSearchWorker {
 	private SystemEntitySet ses;
 	private MoveMethodRefactoring mmr;
 	
+	private FitnessValue prevFitnessValue;
+	private int searchedCandidateCountOnPrevIteration;
+	
 	public ARSearchWorker(
 			AbstractObjectModel originalAOM, 
 			FitnessType fitnessType, 
@@ -76,6 +79,7 @@ public class ARSearchWorker {
 		this.timeLimitForIterationInMillis = timeLimitForIteration * 1000;
 		this.candidateLogger = candidateLogger;
 		this.selectionLogger = selectionLogger;
+		searchedCandidateCountOnPrevIteration = 0;
 		ses = new SystemEntitySet(aom);
 		mmr = new MoveMethodRefactoring(aom);
 
@@ -213,6 +217,9 @@ public class ARSearchWorker {
 			{
 				FitnessValue fitnessValue = fitnessFunction.calculate();
 				mmc.fitnessValue = fitnessValue;
+				
+				candidateIterator.feedback(mmc, prevFitnessValue, fitnessValue);
+				
 				fitnessValue.ownedCommand = mmc;
 				candidateLogger.debug("{}, {}, {}, {}, {}, {}", iteration, idx, mmc.toString(), fitnessType.toString(), fitnessValue, mmc.getDeltaValue());
 				shouldBreak = !strategy.next(fitnessValue);
@@ -225,16 +232,26 @@ public class ARSearchWorker {
 			}
 		}	
 		
+		searchedCandidateCountOnPrevIteration = idx;
+		
 		candidateIterator.dispose();
 		
 		FitnessValue selectedValue = strategy.done();
 		
 		if( selectedValue != null )
 		{
+			prevFitnessValue = selectedValue;
 			System.err.println("Fitness:" + selectedValue.toString());
 		}
 		
-		return selectedValue == null ? null : selectedValue.ownedCommand;
+		MoveMethodCommand selectedCommand = selectedValue == null ? null : selectedValue.ownedCommand;
+		
+		if( selectedValue != null )
+		{
+			selectedValue.ownedCommand = null;
+		}
+		
+		return selectedCommand;
 	}
 	
 	public void run(IProgressMonitor monitor)
@@ -244,18 +261,29 @@ public class ARSearchWorker {
 		AbstractRefactoringSelectionStrategy strategy = setupStrategy(initialFitnessValue);
 		CandidateSelection candidateSelection = setupCandidateSelection(fitnessFunction);
 
+		
+		prevFitnessValue = initialFitnessValue;
+		
 		StatusLogger.getInstance().openOriginalPhase();
 		int iteration = 0;
 		MoveMethodCommand selectedCommand = null;
 		
-		
+
+		if( iteration == 0 )
+		{
+			selectionLogger.info("{}, {}, {}, {}, {}, {}", 0, 0, "Initial State", fitnessType.toString(), 
+					initialFitnessValue, 0);	
+		}
 		
 		for(iteration = 0; iteration < max_iteration; iteration++ )
 		{
 			monitor.subTask(iteration + "/" + max_iteration);
-			selectedCommand = selectMoveMethodCommand(iteration, candidateSelection, fitnessFunction, strategy);
+			selectedCommand = selectMoveMethodCommand(iteration + 1, candidateSelection, fitnessFunction, strategy);
 			if( selectedCommand == null ) break;
-			selectionLogger.info("{}, {}, {}, {}, {}", iteration, selectedCommand.toString(), fitnessType.toString(), 
+			
+			selectionLogger.info("{}, {}, {}, {}, {}, {}", 
+					iteration + 1, searchedCandidateCountOnPrevIteration, 
+					selectedCommand.toString(), fitnessType.toString(), 
 					selectedCommand.fitnessValue, selectedCommand.getDeltaValue());	
 			mmr.doAction(selectedCommand, true);
 			monitor.worked(1);

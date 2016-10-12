@@ -44,7 +44,7 @@ public class ARSearchWizard extends Wizard {
 
 	private int maxIterationCount;
 
-	private int maxCandidateCount; 
+	private List<Integer> maxCandidateCountList; 
 	
 	private int timeLimitForIteration;
 	
@@ -90,7 +90,7 @@ public class ARSearchWizard extends Wizard {
 		candidateSelectionTypeList = paramConfigPage.getCandidateSelectionType();
 		//useDeltaTable = paramConfigPage.useDeltaTable();
 		maxIterationCount = paramConfigPage.getMaxIterationCount();
-		maxCandidateCount = paramConfigPage.getMaxCandidateCount();
+		maxCandidateCountList = paramConfigPage.getMaxCandidateCountList();
 		timeLimitForIteration = paramConfigPage.getTimeLimitForIteration();
 		saMaxPermissibleIdleIteration = paramConfigPage.getSAPermissibleIdleIteration();
 		
@@ -111,16 +111,19 @@ public class ARSearchWizard extends Wizard {
 					monitor.beginTask("Search Refactoring, CEMF(" + aom.getClasses().size() + "," + ses.entities.size() + "," + ses.methods.size() + "," + ses.fields.size() + ")", 
 							fitnessTypeList.size() * searchTechTypeList.size() * candidateSelectionTypeList.size() * maxIterationCount);
 					
-					int caseIdx = 10;
-					
-					for(FitnessType fitnessType : fitnessTypeList )
+					for( int maxCandidateCount : maxCandidateCountList )
 					{
-						for(SearchTechType searchTechType: searchTechTypeList )
+						int caseIdx = 10;
+					
+						for(FitnessType fitnessType : fitnessTypeList )
 						{
-							for(CandidateSelectionType candidateSelectionType: candidateSelectionTypeList )
+							for(SearchTechType searchTechType: searchTechTypeList )
 							{
-								ARSearchMain.getInstance().run(caseIdx, selectedFile.getProject().getName(), timestamp, aom, fitnessType, multiFitnessTypeList, searchTechType, candidateSelectionType, maxIterationCount, maxCandidateCount, saMaxPermissibleIdleIteration, timeLimitForIteration, monitor);
-								caseIdx++;
+								for(CandidateSelectionType candidateSelectionType: candidateSelectionTypeList )
+								{
+									ARSearchMain.getInstance().run(caseIdx, selectedFile.getProject().getName(), timestamp, aom, fitnessType, multiFitnessTypeList, searchTechType, candidateSelectionType, maxIterationCount, maxCandidateCount, saMaxPermissibleIdleIteration, timeLimitForIteration, monitor);
+									caseIdx++;
+								}
 							}
 						}
 					}

@@ -20,25 +20,31 @@ public class MPCEngine extends AtomicFitnessFunction {
 		return MinimalBasicMetricSuite.getInt(obj);
 	}
 	
+	public static long getLong(Object obj)
+	{
+		return MinimalBasicMetricSuite.getLong(obj);
+	}
+	
+	
 	
 	@Override
 	public AtomicFitnessValue calculateAtomic() {
-		float mpcTotal = 0;
+		long mpcTotal = 0;
 		int mpcCount = 0;
 		
 		bms.measure(aom, false, false);
 
 		for( AOMClass clazz : aom.getClasses() )
 		{
-			int mpc = getInt(clazz.getMeasuredDataSet().get(MinimalBasicMetricSuite.MPC));
+			long mpc = getLong(clazz.getMeasuredDataSet().get(MinimalBasicMetricSuite.MPC));
 			mpcTotal += mpc;
-			mpcCount++;
+			mpcCount += clazz.getMethods().size();
 		}
 		
-		float ret = mpcTotal/mpcCount;
+		double ret = (double)mpcTotal / aom.getClasses().size();
 		
 		
-		return new SmallerBetterFitnessValue(ret);
+		return new SmallerBetterFitnessValue((float)ret);
 
 	}
 	
