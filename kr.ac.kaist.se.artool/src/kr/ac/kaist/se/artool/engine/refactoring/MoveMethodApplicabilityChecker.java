@@ -44,6 +44,7 @@ public class MoveMethodApplicabilityChecker
 	
 	public static boolean isApplicableForTargetClass(AOMMethod movingMethod, AOMClass targetClass)
 	{
+		// 3.2.1 - 4
 		if( isTargetClassAnInterface(targetClass) )
 		{
 			return false;
@@ -58,26 +59,29 @@ public class MoveMethodApplicabilityChecker
 	}
 	
 	public static boolean isApplicableForGivenMethod(AOMMethod movingMethod) {
-		
+		// 3.2.2 - 4
 		if( isSynchronized(movingMethod) )
 		{
 			return false;
 		}
 		
+		// 3.2.1 - 3
 		if( containsSuperMethodInvocation(movingMethod) )
 		{
 			return false;
 		}
 		
+		// 3.2.2 - 2
 		if( overridesMethod(movingMethod) )
 		{
 			return false;
 		}
 		
-		if( containsFieldAssignment(movingMethod) )
-		{
-			return false;
-		}
+		// 3.2.3 - 1
+		//if( containsFieldAssignment(movingMethod) )
+		//{
+		//	return false;
+		//}
 		
 	
 		
@@ -144,6 +148,7 @@ public class MoveMethodApplicabilityChecker
     	{
     		for( AOMLocalVariableAccess lva : movingMethod.getOwnedScope().getLocalVariableAccesses() )
     		{
+    			// 3.2.2 - 3
     			if( lva.isParameterAccess() && lva.getAccessedVariableDef() != null && lva.getAccessedVariableDef().getType() == targetClass )
     			{
     				return true;
@@ -152,6 +157,7 @@ public class MoveMethodApplicabilityChecker
     		
     		for( StaticFieldAccess sfa : movingMethod.getOwnedScope().getStaticFieldAccesses() )
     		{
+    			// 3.2.2 - 3
     			if( sfa.getAccessedField() != null && 
     					isFamilyClass(sfa.getAccessedField().getOwner(), movingMethod.getOwner()) &&
     					sfa.getAccessedField().getType() == targetClass )
