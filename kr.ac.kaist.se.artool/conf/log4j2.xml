@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="debug" strict="true" name="XMLConfigTest"
                packages="org.apache.logging.log4j.test">
-               <!--
+               
   <Properties>
-    <Property name="candidate_filename">/Users/igsong/log/candidate.log</Property>
-    <Property name="selection_filename">/Users/igsong/log/selection.log</Property>
+    <Property name="iteration_time_file">/Users/igsong/log/iteration_time.log</Property>
   </Properties>
-  -->
+  
   <Filter type="ThresholdFilter" level="trace"/>
  
   <Appenders>
@@ -37,6 +36,12 @@
         <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}, %m%n</Pattern>
       </Layout>
     </Appender>
+    <Appender type="File" name="IterationTimeFile" fileName="${sys:iteration_time_file}">
+      <Layout type="PatternLayout">
+        <!--<Pattern>%d %p %C{1.} [%t] %m%n</Pattern>-->
+        <!--<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}, %m%n</Pattern>-->
+      </Layout>
+    </Appender>
     <Appender type="List" name="List">
     </Appender>
   </Appenders>
@@ -52,6 +57,10 @@
 
     <Logger name="Selection" level="debug" additivity="false">
       <AppenderRef ref="SelectionFile"/>
+    </Logger>
+    
+    <Logger name="IterationTime" level="debug" additivity="true">
+      <AppenderRef ref="IterationTimeFile"/>
     </Logger>
  
   </Loggers>

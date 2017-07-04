@@ -53,10 +53,12 @@ public class ARSearchWorker {
 	
 	private FitnessValue prevFitnessValue;
 	private int searchedCandidateCountOnPrevIteration;
+	private String projectSimplename;
+	private Logger iterationTimeLogger;
 	
 	public ARSearchWorker(
 			AbstractObjectModel originalAOM, 
-			FitnessType fitnessType, 
+			String projectSimplename, FitnessType fitnessType, 
 			List<FitnessType> multiFitnessTypeList,
 			SearchTechType searchType, 
 			CandidateSelectionType candidateSelectionType, 
@@ -65,11 +67,12 @@ public class ARSearchWorker {
 			int saMaxPermissibleIdleIteration,
 			int timeLimitForIteration,
 			Logger candidateLogger,
-			Logger selectionLogger
+			Logger selectionLogger, Logger iterationTimeLogger
 			)
 	{
 		this.aom = EcoreUtil.copy(originalAOM);
 		this.fitnessType = fitnessType;
+		this.projectSimplename = projectSimplename;
 		this.multiFitnessTypeList = multiFitnessTypeList;
 		this.searchType = searchType;
 		this.candidateSelectionType = candidateSelectionType;
@@ -79,6 +82,7 @@ public class ARSearchWorker {
 		this.timeLimitForIterationInMillis = timeLimitForIteration * 1000;
 		this.candidateLogger = candidateLogger;
 		this.selectionLogger = selectionLogger;
+		this.iterationTimeLogger = iterationTimeLogger;
 		searchedCandidateCountOnPrevIteration = 0;
 		ses = new SystemEntitySet(aom);
 		mmr = new MoveMethodRefactoring(aom);
@@ -198,14 +202,12 @@ public class ARSearchWorker {
 	private MoveMethodCommand selectMoveMethodCommand(int iteration, 
 			CandidateSelection candidateSelection, 
 			FitnessFunction fitnessFunction, 
-			AbstractRefactoringSelectionStrategy strategy)
+			AbstractRefactoringSelectionStrategy strategy, CandidateIterator candidateIterator)
 	{
 		int idx = 0;
 		boolean shouldBreak = false;
 		MoveMethodCommand mmc = null;
-		CandidateIterator candidateIterator = 
-				candidateSelection.getCandidateIterator(strategy.restrictCandidateCount() ? max_candidate_selection : -1,
-						timeLimitForIterationInMillis > 0);
+
 
 		long startTimeMillis = System.currentTimeMillis();
 
@@ -260,7 +262,7 @@ public class ARSearchWorker {
 		FitnessValue initialFitnessValue = fitnessFunction.calculate();
 		AbstractRefactoringSelectionStrategy strategy = setupStrategy(initialFitnessValue);
 		CandidateSelection candidateSelection = setupCandidateSelection(fitnessFunction);
-
+		
 		
 		prevFitnessValue = initialFitnessValue;
 		
@@ -277,9 +279,20 @@ public class ARSearchWorker {
 		
 		for(iteration = 0; iteration < max_iteration; iteration++ )
 		{
-			monitor.subTask(iteration + "/" + max_iteration);
-			selectedCommand = selectMoveMethodCommand(iteration + 1, candidateSelection, fitnessFunction, strategy);
+			long timestamp1 = System.currentTimeMillis(); 
+
+			monitor.subTask(iteration + "/" + max_iteration); 
+			
+			CandidateIterator candidateIterator = 
+					candidateSelection.getCandidateIterator(strategy.restrictCandidateCount() ? max_candidate_selection : -1,
+							timeLimitForIterationInMillis > 0);
+			
+			long timestamp2 = System.currentTimeMillis(); 
+
+			selectedCommand = selectMoveMethodCommand(iteration + 1, candidateSelection, fitnessFunction, strategy, candidateIterator);
 			if( selectedCommand == null ) break;
+			
+			long timestamp3 = System.currentTimeMillis();
 			
 			selectionLogger.info("{}, {}, {}, {}, {}, {}", 
 					iteration + 1, searchedCandidateCountOnPrevIteration, 
@@ -288,8 +301,17 @@ public class ARSearchWorker {
 			mmr.doAction(selectedCommand, true);
 			monitor.worked(1);
 			
+			long timestamp4 = System.currentTimeMillis();
+			
 			Runtime.getRuntime().gc();
 			
+			long timestamp5 = System.currentTimeMillis();
+			
+			
+			
+			iterationTimeLogger.info("{}, {}, {}, {}, {}, {}, {}, {}, {}, {}", 
+					projectSimplename, fitnessType.name().toLowerCase(), max_candidate_selection, candidateSelectionType.name().toLowerCase(), iteration + 1,
+					timestamp2 - timestamp1, timestamp3 - timestamp2, timestamp4 - timestamp3, timestamp5 - timestamp4, timestamp5 - timestamp1);
 			
 		}
 		

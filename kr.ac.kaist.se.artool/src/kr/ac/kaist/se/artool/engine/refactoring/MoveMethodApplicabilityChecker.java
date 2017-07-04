@@ -78,10 +78,10 @@ public class MoveMethodApplicabilityChecker
 		}
 		
 		// 3.2.3 - 1
-		//if( containsFieldAssignment(movingMethod) )
-		//{
-		//	return false;
-		//}
+		if( containsFieldAssignment(movingMethod) )
+		{
+			return false;
+		}
 		
 	
 		
@@ -91,8 +91,6 @@ public class MoveMethodApplicabilityChecker
 		}
 		
 		return true;
-		
-
     }
 	
 	

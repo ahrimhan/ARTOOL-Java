@@ -86,18 +86,32 @@ public class ARSearchMain {
 		String candidateCount = max_candidate_selection > 0 ? Integer.toString(max_candidate_selection) : "ul";
 		String rootDirName = "XX-" + projectSimplename + "-" + candidateCount + "-" + timestamp; 
 				
-		System.setProperty("candidate_filename", baseLogPath + rootDirName + "/" + caseIdx + "-" + projectSimplename + "-" + candidateMode + "-" + searchTypeStr + "-" + fitnessTypeStr + "/candidate.log");
-		System.setProperty("selection_filename", baseLogPath + rootDirName + "/" + caseIdx + "-" + projectSimplename + "-" + candidateMode + "-" + searchTypeStr + "-" + fitnessTypeStr + "/selection.log");
+		StringBuilder fitnessTypeDetailStrBuilder = new StringBuilder(fitnessTypeStr);
+		
+		if( fitnessType == FitnessType.PARETO_COMPOSITE )
+		{
+			for( FitnessType detailFitnessType : multiFitnessTypeList )
+			{
+				fitnessTypeDetailStrBuilder.append('_');
+				fitnessTypeDetailStrBuilder.append(detailFitnessType.name().toLowerCase());
+			}
+		}
+		
+		String fitnessTypeDetailStr = fitnessTypeDetailStrBuilder.toString();
+		
+		System.setProperty("candidate_filename", baseLogPath + rootDirName + "/" + caseIdx + "-" + projectSimplename + "-" + candidateMode + "-" + searchTypeStr + "-" + fitnessTypeDetailStr + "/candidate.log");
+		System.setProperty("selection_filename", baseLogPath + rootDirName + "/" + caseIdx + "-" + projectSimplename + "-" + candidateMode + "-" + searchTypeStr + "-" + fitnessTypeDetailStr + "/selection.log");
 		org.apache.logging.log4j.core.LoggerContext ctx =
 			    (org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false);
 		ctx.reconfigure();
 		
 		Logger candidateLogger = LogManager.getLogger("Candidate");
 		Logger selectionLogger = LogManager.getLogger("Selection");
+		Logger iterationTimeLogger = LogManager.getLogger("IterationTime");
 		
 		monitor.setTaskName(project + " " + candidateMode + " " + searchTypeStr + " " + fitnessTypeStr);
 		
-		ARSearchWorker worker = new ARSearchWorker(originalAOM, fitnessType, multiFitnessTypeList, searchType, candidateSelectionType, max_iteration, max_candidate_selection, saMaxPermissibleIdleIteration, timeLimitForIteration, candidateLogger, selectionLogger);
+		ARSearchWorker worker = new ARSearchWorker(originalAOM, projectSimplename, fitnessType, multiFitnessTypeList, searchType, candidateSelectionType, max_iteration, max_candidate_selection, saMaxPermissibleIdleIteration, timeLimitForIteration, candidateLogger, selectionLogger, iterationTimeLogger);
 		worker.run(monitor);
 	}
 	
